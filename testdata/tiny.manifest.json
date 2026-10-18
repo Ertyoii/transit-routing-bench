@@ -1,0 +1,14 @@
+{
+  "schema_version": "0.1",
+  "id": "tiny-v1",
+  "kind": "original_synthetic",
+  "source": "Original invented timetable; no operator data",
+  "created_utc": "2026-10-17T14:11:59Z",
+  "license": "CC0-1.0",
+  "license_file": "LICENSE.synthetic.txt",
+  "license_sha256": "f19676686dd1eade85fd0fb4b14961c7e46676d5671f546d7ac95a0a0a4c634b",
+  "data_file": "tiny.json",
+  "data_sha256": "82e5fc2cbdb6460605599ba3da9d59b04c98825a977101e5a96dfa5e7fbef5d7",
+  "seed": 0,
+  "generator": "hand-authored-v1 (not random)"
+}

@@ -1,0 +1,7 @@
+Original synthetic routing fixture data created for this project, 2026-10-17.
+To the extent copyright applies to these invented facts, the fixture data is
+made available under CC0 1.0 Universal:
+https://creativecommons.org/publicdomain/zero/1.0/
+No real transit operator timetable, geography, route or service is represented.
+This dedication covers the original synthetic fixtures only, not project code
+or future third-party source material.

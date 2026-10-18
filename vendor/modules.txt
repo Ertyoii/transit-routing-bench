@@ -1,0 +1,26 @@
+# github.com/ertyoii/transit-routing-go v0.1.0-pre.2
+## explicit; go 1.27.0
+github.com/ertyoii/transit-routing-go/comparison
+github.com/ertyoii/transit-routing-go/corech
+github.com/ertyoii/transit-routing-go/csa
+github.com/ertyoii/transit-routing-go/eacsa
+github.com/ertyoii/transit-routing-go/gtfs
+github.com/ertyoii/transit-routing-go/model
+github.com/ertyoii/transit-routing-go/paper
+github.com/ertyoii/transit-routing-go/presentation
+github.com/ertyoii/transit-routing-go/profilecsa
+github.com/ertyoii/transit-routing-go/profilequery
+github.com/ertyoii/transit-routing-go/raptor
+github.com/ertyoii/transit-routing-go/recommend
+github.com/ertyoii/transit-routing-go/selection
+github.com/ertyoii/transit-routing-go/strictjson
+github.com/ertyoii/transit-routing-go/tad
+github.com/ertyoii/transit-routing-go/transfer
+github.com/ertyoii/transit-routing-go/tripbased
+github.com/ertyoii/transit-routing-go/ultra
+github.com/ertyoii/transit-routing-go/validate
+github.com/ertyoii/transit-routing-go/walking
+github.com/ertyoii/transit-routing-go/walking/graph
+github.com/ertyoii/transit-routing-go/walking/httpapi
+github.com/ertyoii/transit-routing-go/walking/osm
+github.com/ertyoii/transit-routing-go/walking/transit
