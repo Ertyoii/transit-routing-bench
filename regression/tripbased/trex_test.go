@@ -169,8 +169,20 @@ func TestTREXOwnershipTimeAndBatchOrder(t *testing.T) {
 		t.Fatal(e)
 	}
 	after := y.Snapshot()
-	before.Phases = nil
-	after.Phases = nil
+	// Builds cannot reproduce elapsed time or allocator measurements. Compare
+	// every semantic field and work counter, including the newly exposed level
+	// telemetry and phase work, while excluding only those measurements.
+	for _, snapshot := range []*tripbased.TREXSnapshot{&before, &after} {
+		for name, phase := range snapshot.Phases {
+			phase.ElapsedNS = 0
+			phase.AllocatedBytes = 0
+			snapshot.Phases[name] = phase
+		}
+		for i := range snapshot.Stats.Levels {
+			snapshot.Stats.Levels[i].ElapsedNS = 0
+			snapshot.Stats.Levels[i].AllocatedBytes = 0
+		}
+	}
 	if !reflect.DeepEqual(before, after) {
 		t.Fatal("input-order-dependent index")
 	}
