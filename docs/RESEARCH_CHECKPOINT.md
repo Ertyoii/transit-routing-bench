@@ -27,6 +27,10 @@ The CC0 scoped fixture has a zero-access query whose feasible arrival is 30, a b
 
 Preparation-unavailable slots are `not_run_preparation_unavailable`. T-REX distinguishes `unsupported_cap_certificate`, `incomplete_ranked_work`, `incomplete_verification`, correctness mismatch and successful complete/empty results. These rejected/incomplete states cannot claim route completeness. The process-level `success` flag means no malformed output/unknown adapter failure was detected; it does not mean every requested query was supported or completed. Forced-deadline passes remain separate from measured repetitions.
 
+Preparation is classified before slot formatting. Unexpected constructor/adapter/configuration failures set `preparation.process_fatal=true`, `success=false` and exit nonzero after retaining every not-run slot. Typed context cancellation/deadline, explicit capability declines and declared resource-exhaustion/guard errors have `preparation.expected_skip=true` and retain their nonfatal policy. A malformed configuration mentioning a budget is a failure, not evidence of exhaustion. Unrecognized preparation errors fail by default. `go test -mod=vendor ./cmd/familybench -run '^TestPreparationProcessOutcomes$' -count=1` exercises the real source-bound CLI for the two reported v4 failures, invalid budgets, partial TP, deadline and capability controls. The independent v4 review returned NO PUBLISH for this defect; the repaired snapshot requires re-review.
+
+The capped verifier shares no ranked search/pruning logic, but derives from the benchmark oracle. Agreement with that same oracle is not a second independent verification; literal expected witnesses and separately authored witness checks remain important.
+
 ## Historical results and limits
 
 The [aggregate status report](../results/checkpoint-20261020/RESULTS_AND_STATUS.md), JSON matrix, CSV and evidence identities preserve successful short-load results as well as failed/incomplete T-REX and TP qualification. Historic metrics bind separately measured sources. Final composed-source tests do not remeasure that matrix, and this tiny smoke reproduction is not a performance qualification.

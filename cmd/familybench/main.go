@@ -118,6 +118,32 @@ func status(e error) string {
 		return "routing_error"
 	}
 }
+
+// Preparation is a process outcome even when every query slot is not run.
+// Default to failure; only declared capability/deadline/resource declines are
+// expected skips. In particular, mentioning a budget in invalid configuration
+// is not evidence that a valid preparation exhausted that budget.
+func preparationOutcome(err error) (string, bool) {
+	if err == nil {
+		return "complete", false
+	}
+	if errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded) {
+		return "deadline", false
+	}
+	s := strings.ToLower(err.Error())
+	if strings.Contains(s, "capability:") {
+		return "unsupported_semantics", false
+	}
+	if strings.Contains(s, "invalid") || strings.Contains(s, "requires") || strings.Contains(s, "required") {
+		return "routing_error", true
+	}
+	if strings.Contains(s, "budget") && strings.Contains(s, "exhausted") ||
+		strings.Contains(s, "incomplete:") && (strings.Contains(s, "budget") || strings.Contains(s, "guard") || strings.Contains(s, "limit")) {
+		return "incomplete_budget", false
+	}
+	return "routing_error", true
+}
+
 func run() error {
 	dp := flag.String("dataset", "", "normalized data")
 	fixture := flag.String("fixture", "", "pinned original-synthetic manifest; alternative to dataset and queries")
@@ -273,11 +299,12 @@ func run() error {
 	}
 	prepNS := time.Since(t).Nanoseconds()
 	if prepErr == nil && (ctx.Err() != nil || prepNS > prepTimeout.Nanoseconds()) {
-		prepErr = fmt.Errorf("preparation deadline exceeded")
+		prepErr = fmt.Errorf("preparation deadline exceeded: %w", context.DeadlineExceeded)
 	}
 	cancel()
 	runtime.ReadMemStats(&after)
-	prep := map[string]any{"elapsed_ns": prepNS, "allocated_bytes": after.TotalAlloc - before.TotalAlloc, "complete": prepErr == nil, "status": status(prepErr), "error": fmt.Sprint(prepErr), "resources": experiment.SnapshotResources()}
+	prepStatus, preparationFatal := preparationOutcome(prepErr)
+	prep := map[string]any{"elapsed_ns": prepNS, "allocated_bytes": after.TotalAlloc - before.TotalAlloc, "complete": prepErr == nil, "status": prepStatus, "expected_skip": prepErr != nil && !preparationFatal, "process_fatal": preparationFatal, "error": fmt.Sprint(prepErr), "resources": experiment.SnapshotResources()}
 	if r.cost != nil {
 		prep["index_cost_summary"] = r.cost()
 	}
@@ -305,7 +332,7 @@ func run() error {
 	fmt.Println(*alg, "preparation", prepNS, "ns", prepErr)
 	summaries := []any{}
 	qps := []float64{}
-	fatal := false
+	fatal := preparationFatal
 	finalize := func(i item, raw rawResult, sub time.Time, b int, core *int64, start, done int64, ctx context.Context, limit time.Duration) record {
 		z := record{item: i, Raw: raw.Journeys, Final: []model.Validated{}, Display: map[int]presentation.Result{}, Detail: raw.Detail, Batch: b, CoreNS: core, ServiceStart: start, SearchDone: done, ValidationStart: time.Since(sub).Nanoseconds()}
 		if z.Raw == nil {
@@ -570,6 +597,9 @@ func run() error {
 		return e
 	}
 	if fatal {
+		if preparationFatal {
+			return fmt.Errorf("preparation failed; artifacts retained: %w", prepErr)
+		}
 		return fmt.Errorf("invalid result or adapter failure; retained")
 	}
 	return nil

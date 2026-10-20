@@ -152,7 +152,7 @@
       "whole_process_peak_cgroup_bytes": 3999670272,
       "separate_preprocessing_sample": {
         "evidence_id": "tp-v9-multisource-handoff",
-        "review": "pending_independent_review",
+        "review": "independent_retained_witness_accounting_arithmetic_acceptance_only",
         "selected_sources": 10,
         "strata": 5,
         "profiles_complete": 2838,
@@ -234,7 +234,7 @@
         "raw_feasible": 7,
         "reference_witnesses_replayed": 27,
         "public_outputs_unchanged": true,
-        "review": "pending",
+        "review": "independent_retained_diagnostic_witness_acceptance_only",
         "not_an_additional_qualification_pass": true
       },
       "public_adapter": "trex_static_caps_mandatory_verified_experimental",
@@ -362,7 +362,7 @@
   },
   "schema_version": 1,
   "scope": "Every family advertised by the verified public baseline plus named current campaign variants. This is not an assertion that all historical experiments are included.",
-  "snapshot": "2026-10-20: scoped stages composed; subsequent TP v9 sample/T-REX v7 diagnosis independent review remains pending until evidence arrives.",
+  "snapshot": "2026-10-20: v4 review accepts retained TP sampled arithmetic/accounting and T-REX diagnosis within scope; preparation-failure repair awaits independent re-review.",
   "supporting_components": [
     "walking providers, full-itinerary validator, selection/presentation, bounded tiny oracle and measurement infrastructure are supporting components, not additional algorithm-family speed claims."
   ],

@@ -113,13 +113,19 @@
       "id": "trex-cap-diagnosis-v7-handoff",
       "bytes": 3364,
       "sha256": "eb0d63756a59a1b52bc93b5135650af8d25a89688bb0ae664416dd4f7fdf51af",
-      "review_status": "pending_independent_review"
+      "review_status": "independent_retained_diagnostic_witness_acceptance_only"
     },
     {
       "id": "tp-v9-multisource-handoff",
       "sha256": "502bf06802c29fdc8c54ea1d207180f14123ea8e5164e7c03602d177d7829513",
       "bytes": 2796,
-      "review_status": "pending_independent_review"
+      "review_status": "independent_retained_witness_accounting_arithmetic_acceptance_only"
+    },
+    {
+      "id": "release-v4-independent-review",
+      "bytes": 9428,
+      "sha256": "519384f427e2b501a7bb1102a4fdbed28a637ab147a8ce0a7138c0332942ecfb",
+      "review_status": "no_publish_P2_process_accounting; scoped_source_metrics_and_retained_diagnostics_accepted"
     }
   ]
 }
