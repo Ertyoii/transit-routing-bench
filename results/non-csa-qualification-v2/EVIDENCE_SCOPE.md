@@ -1,0 +1,9 @@
+# Evidence and source scope
+
+This source checkout includes aggregate measurements, immutable input/evidence hashes and finite native test results. The complete local packet remains separately retained:67 files,17,214,416 bytes before its manifest. Its exact manifest is included as `locally-retained-packet-manifest.json`; those listed raw files are not bundled. Every original128 request and78 warm slot per method, full raw/final itineraries, original-validator checks, attempt/preparation journals and the scoped TP readiness progress remain in that reviewed local packet. The247MB global progress remains a separate locally retained hash-bound file.
+
+No operator timetable, full frequency-expanded model, OSM graph, real-data query roster or raw witness collection is distributed in this source checkout. Input hashes identify evidence and confer no redistribution rights. Full-model timings cannot be reproduced from this checkout alone. The included synthetic fixtures and native tests remain independently runnable offline using the vendored dependency.
+
+`summary-writer-snapshot.json` preserves the exact aggregate writer snapshot, including its historical review-pending fields. The independent local metric/privacy review and later native addendum supersede those workflow-status fields without changing its measurements. `public-native-20261020.json` records routing390 and benchmark850 passed test records with recorded exit0 on the exact runtime source hashes. The earlier combined timeout and missing-exit attempt remain incomplete. These are finite race checks, not new scientific measurements or proof of bug freedom.
+
+The public source revision and measured instrumented artifact are separately identified. No artifact timing is inherited by the clean public binary. This checkpoint remains local and unpushed. Confidence intervals, general demand/SLA qualification, CI workflow coverage and country/accessibility expansion remain unmet.

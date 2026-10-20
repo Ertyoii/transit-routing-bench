@@ -1,6 +1,6 @@
 # Transit routing benchmark harness
 
-Independent finite-instance oracles, regression checks and reproducible measurement tools for [transit-routing-go](https://github.com/ertyoii/transit-routing-go). Original code and documentation are [MIT licensed](LICENSE). Only original synthetic data is included, under its separate CC0 notice. See [data and third-party boundaries](THIRD_PARTY_NOTICES.md).
+Independent finite-instance oracles, regression checks and reproducible measurement tools for [transit-routing-go](https://github.com/ertyoii/transit-routing-go). Original code and documentation are [MIT licensed](LICENSE). Bundled input fixtures are original synthetic data, under their separate CC0 notices. Aggregate reports summarize local model experiments whose inputs are excluded. See [data and third-party boundaries](THIRD_PARTY_NOTICES.md).
 
 Requires Go 1.27.x. The routing dependency is vendored with an exact version, commit and per-file hashes in `routing.lock.json`. The harness rejects missing, modified or extra vendor files. This is a reproducibility binding, not a signed attestation.
 
@@ -25,7 +25,7 @@ The local strict-identity CSA and independent-request shared scan are research c
 
 `cmd/familybench` records complete raw/final/display witnesses, resources, preparation and core/response/batch boundaries for supported adapters. Profile, transfer-aware, Core-CH and ULTRA commands retain separate entrypoints. `candidateprobe` requires explicitly supplied data and cases; no real-world cases are bundled.
 
-Read [the evaluation protocol](docs/EVALUATION.md). Aggregate historical results and their limits are in [the research checkpoint](results/checkpoint-20261020/RESULTS_AND_STATUS.md). Raw full-model reports, operator timetables, OSM extracts/graphs, private screenshots and derived real-data queries are excluded. You must establish data rights and record input hashes before supplying any external dataset. A source's software MIT license does not automatically license its timetable data.
+Read [the evaluation protocol](docs/EVALUATION.md). Aggregate historical results and their limits are in [the research checkpoint](results/checkpoint-20261020/RESULTS_AND_STATUS.md). Operator timetables, full model inputs, OSM extracts/graphs and private screenshots are excluded. The non-CSA aggregate report hash-binds a separately retained local packet; model-derived query sets and raw witness records are excluded from this source checkout. You must establish data rights and record input hashes before supplying any external dataset. A source's software MIT license does not automatically license its timetable data.
 
 ## Research checkpoint reproduction
 
@@ -36,3 +36,7 @@ sh scripts/reproduce-checkpoint.sh /absolute/path/to/new-smoke-directory
 ```
 
 The Python 3 wrapper builds a source-bound binary and checks nine isolated tiny synthetic runs, complete raw/final witnesses, valid-empty versus declined/not-run outcomes and forced deadlines. It requires no keys, signup or network. It is functionality evidence, not a load benchmark or reproduction of excluded full-model inputs.
+
+## Non-CSA qualification v2
+
+The [instrumented aggregate report](results/non-csa-qualification-v2/RESULTS_AND_STATUS.md) records outcome denominators, constructor/resource costs and bounded negative results. Its [evidence scope](results/non-csa-qualification-v2/EVIDENCE_SCOPE.md) identifies the separately retained raw packet and subsequent native check status. Scoped retained TP completed the26-query panel plus78 warm calls; fixed-cap ranked T-REX certified0/26. Global TP construction remained incomplete at180 seconds. These are artifact measurements, with no timing inheritance to this clean public source. Confidence intervals remain unmet.

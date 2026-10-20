@@ -14,14 +14,17 @@ import (
 // scopedConfig is explicit experiment input. It has no hidden production-sized
 // defaults and never derives a looser walking cap from the query roster.
 type scopedConfig struct {
-	TripBased  *tripbased.Config                         `json:"trip_based,omitempty"`
-	Flash      *tripbased.FlashConfig                    `json:"flash,omitempty"`
-	Sparse     *ultra.SparseConfig                       `json:"ultra_sparse,omitempty"`
-	ULTRA      *ultra.CappedConfig                       `json:"ultra,omitempty"`
-	ULTRAQuery *ultra.Limits                             `json:"ultra_query,omitempty"`
-	Patterns   *tripbased.DestinationCappedPatternConfig `json:"patterns,omitempty"`
-	TREX       *tripbased.TREXConfig                     `json:"trex,omitempty"`
-	Verify     *tripbased.TREXStaticCapVerifyLimits      `json:"verification,omitempty"`
+	TripBased            *tripbased.Config                           `json:"trip_based,omitempty"`
+	Flash                *tripbased.FlashConfig                      `json:"flash,omitempty"`
+	Sparse               *ultra.SparseConfig                         `json:"ultra_sparse,omitempty"`
+	ULTRA                *ultra.CappedConfig                         `json:"ultra,omitempty"`
+	ULTRAQuery           *ultra.Limits                               `json:"ultra_query,omitempty"`
+	Patterns             *tripbased.DestinationCappedPatternConfig   `json:"patterns,omitempty"`
+	TREX                 *tripbased.TREXConfig                       `json:"trex,omitempty"`
+	Verify               *tripbased.TREXStaticCapVerifyLimits        `json:"verification,omitempty"`
+	SourceDomainPatterns *tripbased.DestinationSourceDomainConfig    `json:"source_domain_patterns,omitempty"`
+	TFixedTransferCap    *int64                                      `json:"trex_fixed_transfer_cap,omitempty"`
+	VerifyPreparation    *tripbased.TREXRawVerifierPreparationLimits `json:"verification_preparation,omitempty"`
 }
 
 var scopedNames = []string{
@@ -31,6 +34,8 @@ var scopedNames = []string{
 	"flash_tb_static_stop_pair_suffix_flags_role_caps_v1",
 	"tp_destination_fixed_caps_experimental",
 	"trex_static_caps_mandatory_verified_experimental",
+	tpSourceDomainName,
+	trexDefinedProbeName,
 }
 
 func isScoped(name string) bool {
@@ -103,7 +108,7 @@ func trexOutcome(r tripbased.TREXStaticCapResult, err error) error {
 func prepareScoped(ctx context.Context, d model.Dataset, name string, cfg scopedConfig) (*router, error) {
 	r := &router{kind: "pareto", config: cfg}
 	present := 0
-	for _, v := range []bool{cfg.TripBased != nil, cfg.Flash != nil, cfg.ULTRA != nil, cfg.Sparse != nil, cfg.Patterns != nil, cfg.TREX != nil} {
+	for _, v := range []bool{cfg.TripBased != nil, cfg.Flash != nil, cfg.ULTRA != nil, cfg.Sparse != nil, cfg.Patterns != nil, cfg.TREX != nil, cfg.SourceDomainPatterns != nil} {
 		if v {
 			present++
 		}
@@ -111,11 +116,17 @@ func prepareScoped(ctx context.Context, d model.Dataset, name string, cfg scoped
 	if present != 1 {
 		return r, fmt.Errorf("scoped config requires exactly one algorithm configuration")
 	}
+	if err := validateQualificationV2Selection(name, cfg); err != nil {
+		return r, err
+	}
 	if (cfg.ULTRAQuery != nil && cfg.ULTRA == nil && cfg.Sparse == nil) || (cfg.Verify != nil && cfg.TREX == nil) {
 		return r, fmt.Errorf("query/verification configuration does not match the selected algorithm")
 	}
 	if err := validateScopedPreparation(d, cfg); err != nil {
 		return r, err
+	}
+	if name == tpSourceDomainName || name == trexDefinedProbeName {
+		return r, prepareQualificationV2(ctx, d, name, cfg, r)
 	}
 	switch name {
 	case "trip_based_capped":

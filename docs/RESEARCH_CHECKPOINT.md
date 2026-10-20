@@ -19,6 +19,8 @@ Run `sh scripts/reproduce-checkpoint.sh /absolute/path/to/new-directory` from th
 
 Scoped adapters require explicit `-scoped-config` input with exactly one algorithm configuration. Walking caps come from queries; they are never silently widened. T-REX requires positive verification limits. The named FLASH adapter rejects retained-profile policies so experimental TP support cannot change the qualified adapter's meaning.
 
+Two separately named [non-CSA qualification v2 adapters](NON_CSA_QUALIFICATION_V2.md) add an explicit retained TP origin domain and fixed-transfer-cap ranked T-REX with defined-probe verification. Their configuration, completion and cost units are distinct. The [instrumented campaign report](../results/non-csa-qualification-v2/RESULTS_AND_STATUS.md) records scoped positive and bounded negative results, with [subsequent native status](../results/non-csa-qualification-v2/EVIDENCE_SCOPE.md). Confidence intervals, general full-model/production qualification and repository CI/workflow coverage remain unmet.
+
 The CC0 scoped fixture has a zero-access query whose feasible arrival is 30, a broader-access query whose arrival is 20, and an unreachable query. The unrestricted ranked T-REX candidate hides the narrow query's feasible slower route and must decline with cleared output. Independent bounded enumeration demonstrates the hidden route. The routing module also contains equal-objective and other walking-role counterexamples.
 
 ## Evidence and outcomes

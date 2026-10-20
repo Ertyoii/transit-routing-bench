@@ -27,6 +27,7 @@ derived-database obligations require a source-specific distribution assessment.
 The Vorld Singapore GTFS project's software MIT notice is retained separately.
 Its NOTICE distinguishes LTA, SimplyGo, SBS Transit and community inputs; it is
 not a blanket permission to redistribute schedules or modeled data. No such
-source or derived data is included here. Frequency models are not exact/live
+timetable, frequency-expanded model or derived graph is included here. Aggregate
+measurements and input hashes do not supply or relicense those inputs. Frequency models are not exact/live
 departure schedules. Any future dataset release needs its own rights review,
 attribution, provenance and immutable hashes.

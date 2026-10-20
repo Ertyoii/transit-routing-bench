@@ -13,6 +13,24 @@ import (
 // or a replacement for the library's dataset/capability checks. Keep these
 // exposed configuration requirements aligned with the pinned vendor contract.
 func validateScopedPreparation(d model.Dataset, c scopedConfig) error {
+	if c.SourceDomainPatterns != nil {
+		v := c.SourceDomainPatterns.Retained
+		if err := validateFlashPreparation(d, v.Scope.Patterns.Profile); err != nil {
+			return err
+		}
+		if v.MaxPendingSegments <= 0 || v.MaxSourceSeeds <= 0 {
+			return fmt.Errorf("positive retained source-domain preparation limits required")
+		}
+	}
+	if c.TFixedTransferCap != nil && *c.TFixedTransferCap < 0 {
+		return fmt.Errorf("fixed transfer walking cap must be nonnegative")
+	}
+	if c.VerifyPreparation != nil {
+		v := *c.VerifyPreparation
+		if v.MaxRows <= 0 || v.MaxWork <= 0 || v.MaxPayloadBytes <= 0 {
+			return fmt.Errorf("positive raw verifier preparation limits required")
+		}
+	}
 	if c.Flash != nil {
 		if err := validateFlashPreparation(d, *c.Flash); err != nil {
 			return err

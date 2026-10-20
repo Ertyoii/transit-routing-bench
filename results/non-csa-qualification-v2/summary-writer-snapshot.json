@@ -1,0 +1,389 @@
+{
+  "ci_requirement": "explicitly unmet; fixed26 metadata panel and three within-process repeats do not establish inferential population confidence intervals",
+  "claims_excluded": [
+    "clean public binary timing inheritance",
+    "stable or historical/fresh-versus-warm speedup",
+    "network-demand population",
+    "production tail or throughput",
+    "SLA",
+    "global exhaustive optimality",
+    "strict identity top-k"
+  ],
+  "no_new_algorithm_rerun_or_model_execution": true,
+  "original_denominator_per_method": 128,
+  "outside_primary_not_run_per_method": 102,
+  "packet_independent_review": "pending",
+  "planned_warm_per_method": 78,
+  "runs": {
+    "domain-retained": {
+      "constructor_cost_sum": {
+        "allocated_bytes": 48665231640,
+        "elapsed_ns": 147546579113
+      },
+      "domains_complete": 16,
+      "domains_requested": 16,
+      "initial_attempted": 26,
+      "initial_status_counts": {
+        "complete_agreed_empty": 1,
+        "complete_validated_agreed_transit": 25,
+        "not_run": 102
+      },
+      "instrumented_artifact_measurements": true,
+      "observed_cgroup_peak_bytes": 2341281792,
+      "origin_sweeps": 18,
+      "original": 128,
+      "outside_primary_not_run": 102,
+      "planned_warm": 78,
+      "readiness_groups": 3613,
+      "resource_bounds": {
+        "constructor_deadline_seconds": 30,
+        "container_cpus": 4,
+        "container_memory_bytes": 8000000000,
+        "go_memory_target_bytes": 6000000000,
+        "host_deadline_seconds": 360,
+        "monitor_interval_ms": 100,
+        "own_process_watchdog_seconds": 315,
+        "preparation_deadline_seconds": 30,
+        "process_deadline_seconds": 300,
+        "query_deadline_seconds": 5,
+        "soft_memory_ceiling_bytes": 6500000000,
+        "test_deadline_seconds": 330,
+        "validation_deadline_seconds": 5
+      },
+      "retained_live_union_heap_range_bytes": [
+        1882566232,
+        1892500552
+      ],
+      "run_id": "domain-retained-v2-002",
+      "runtime": {
+        "go_version": "go1.27.2",
+        "goarch": "arm64",
+        "gomaxprocs": 4,
+        "goos": "linux",
+        "num_cpu": 10
+      },
+      "selected": 26,
+      "standalone_index_memory": false,
+      "warm_attempted": 78,
+      "warm_not_run": 0,
+      "warm_status_counts": {
+        "complete_agreed_empty": 3,
+        "complete_validated_agreed_transit": 75
+      },
+      "whole_run_elapsed_seconds_including_cleanup": 151.96510287490673,
+      "whole_run_timing_scope": "host enclosure makespan including preparation, queries/evidence/cleanup; never divided by query count as latency"
+    },
+    "global-retained": {
+      "all_source_forecast_supported": false,
+      "constructor_cost": {
+        "allocated_bytes": 4195858640,
+        "elapsed_ns": 180006417874
+      },
+      "finalization_reached": false,
+      "globally_complete_index": false,
+      "initial_attempted": 0,
+      "initial_status_counts": {
+        "not_run": 128
+      },
+      "instrumented_artifact_measurements": true,
+      "observed_cgroup_peak_bytes": 3164844032,
+      "original": 128,
+      "origins_completed": 181,
+      "origins_required": 5449,
+      "origins_started": 182,
+      "outside_primary_not_run": 102,
+      "planned_warm": 78,
+      "readiness_completed": 105211,
+      "readiness_offered": 105212,
+      "resource_bounds": {
+        "constructor_deadline_seconds": 180,
+        "container_cpus": 4,
+        "container_memory_bytes": 8000000000,
+        "go_memory_target_bytes": 6000000000,
+        "host_deadline_seconds": 270,
+        "monitor_interval_ms": 100,
+        "own_process_watchdog_seconds": 245,
+        "preparation_deadline_seconds": 30,
+        "process_deadline_seconds": 240,
+        "query_deadline_seconds": 5,
+        "soft_memory_ceiling_bytes": 6500000000,
+        "test_deadline_seconds": 250,
+        "validation_deadline_seconds": 5
+      },
+      "run_id": "tp-global-feasibility-v2-001",
+      "runtime": {
+        "go_version": "go1.27.2",
+        "goarch": "arm64",
+        "gomaxprocs": 4,
+        "goos": "linux",
+        "num_cpu": 10
+      },
+      "search_calls": 0,
+      "selected": 26,
+      "warm_attempted": 0,
+      "warm_not_run": 78,
+      "warm_status_counts": {
+        "not_run": 78
+      },
+      "whole_run_elapsed_seconds_including_cleanup": 182.52907291683368,
+      "whole_run_timing_scope": "host enclosure makespan including preparation, queries/evidence/cleanup; never divided by query count as latency"
+    },
+    "reference-raptor": {
+      "constructor_cost": {
+        "allocated_bytes": 857341808,
+        "elapsed_ns": 391912375
+      },
+      "initial_attempted": 26,
+      "initial_status_counts": {
+        "complete_validated_empty_reference_pending": 1,
+        "complete_validated_transit_reference_pending": 25,
+        "not_run": 102
+      },
+      "instrumented_artifact_measurements": true,
+      "observed_cgroup_peak_bytes": 658366464,
+      "original": 128,
+      "outside_primary_not_run": 102,
+      "planned_warm": 78,
+      "resource_bounds": {
+        "constructor_deadline_seconds": 30,
+        "container_cpus": 4,
+        "container_memory_bytes": 8000000000,
+        "go_memory_target_bytes": 6000000000,
+        "host_deadline_seconds": 240,
+        "monitor_interval_ms": 100,
+        "own_process_watchdog_seconds": 195,
+        "preparation_deadline_seconds": 30,
+        "process_deadline_seconds": 180,
+        "query_deadline_seconds": 5,
+        "soft_memory_ceiling_bytes": 6500000000,
+        "test_deadline_seconds": 210,
+        "validation_deadline_seconds": 5
+      },
+      "run_id": "reference-raptor-v2-002",
+      "runtime": {
+        "go_version": "go1.27.2",
+        "goarch": "arm64",
+        "gomaxprocs": 4,
+        "goos": "linux",
+        "num_cpu": 10
+      },
+      "selected": 26,
+      "warm_attempted": 0,
+      "warm_not_run": 78,
+      "warm_status_counts": {
+        "not_run": 78
+      },
+      "whole_run_elapsed_seconds_including_cleanup": 2.9467880420852453,
+      "whole_run_timing_scope": "host enclosure makespan including preparation, queries/evidence/cleanup; never divided by query count as latency"
+    },
+    "reference-tripbased": {
+      "constructor_cost": {
+        "allocated_bytes": 1672258976,
+        "elapsed_ns": 1122750459
+      },
+      "initial_attempted": 26,
+      "initial_status_counts": {
+        "complete_validated_empty_reference_pending": 1,
+        "complete_validated_transit_reference_pending": 25,
+        "not_run": 102
+      },
+      "instrumented_artifact_measurements": true,
+      "observed_cgroup_peak_bytes": 1465348096,
+      "original": 128,
+      "outside_primary_not_run": 102,
+      "planned_warm": 78,
+      "resource_bounds": {
+        "constructor_deadline_seconds": 30,
+        "container_cpus": 4,
+        "container_memory_bytes": 8000000000,
+        "go_memory_target_bytes": 6000000000,
+        "host_deadline_seconds": 240,
+        "monitor_interval_ms": 100,
+        "own_process_watchdog_seconds": 195,
+        "preparation_deadline_seconds": 30,
+        "process_deadline_seconds": 180,
+        "query_deadline_seconds": 5,
+        "soft_memory_ceiling_bytes": 6500000000,
+        "test_deadline_seconds": 210,
+        "validation_deadline_seconds": 5
+      },
+      "run_id": "reference-tripbased-v2-002",
+      "runtime": {
+        "go_version": "go1.27.2",
+        "goarch": "arm64",
+        "gomaxprocs": 4,
+        "goos": "linux",
+        "num_cpu": 10
+      },
+      "selected": 26,
+      "warm_attempted": 0,
+      "warm_not_run": 78,
+      "warm_status_counts": {
+        "not_run": 78
+      },
+      "whole_run_elapsed_seconds_including_cleanup": 4.000525292009115,
+      "whole_run_timing_scope": "host enclosure makespan including preparation, queries/evidence/cleanup; never divided by query count as latency"
+    },
+    "trex-fixed-cap": {
+      "accepted_usable_queries": 0,
+      "actual_capture_counts": {
+        "ranked_search": 26,
+        "raw_enumeration": 20
+      },
+      "actual_probe_category_sums": {
+        "connection_rows": 58282369,
+        "footpath_rows": 2668429,
+        "metadata_probes": 16959616,
+        "probes": 80000000,
+        "rule_rows": 2089586
+      },
+      "actual_word_counts": {
+        "ranked_search": 27,
+        "raw_enumeration": 28
+      },
+      "checker_and_raw_preparation_cost": {
+        "allocated_bytes": 935255888,
+        "elapsed_ns": 476930667
+      },
+      "complete_ranked_frontier_matches_diagnostic_only": 20,
+      "constructor_cost": {
+        "allocated_bytes": 28906533488,
+        "elapsed_ns": 188421733920
+      },
+      "declines": {
+        "ranked_search_or_original_resource_guard": 6,
+        "verification_incomplete": 20
+      },
+      "future_mitigation": "proposal only: independently safe departure/boarding-budget candidate indexing/filtering, preserving raw rules/resources/staying aboard/order and fail-closed policy; not implemented or measured",
+      "initial_attempted": 26,
+      "initial_status_counts": {
+        "not_run": 102,
+        "search_failure": 26
+      },
+      "instrumented_artifact_measurements": true,
+      "observed_cgroup_peak_bytes": 5007941632,
+      "original": 128,
+      "outside_primary_not_run": 102,
+      "partial_raw_frontier_matches_not_acceptance": 3,
+      "planned_warm": 78,
+      "raw_preparation_stats": {
+        "ordered_sha256": "ac61c2e2b1501b423a11c3acae90262f4a442c623a61661089fc6f312311247b",
+        "payload_bytes": 31222571,
+        "rows": 291940,
+        "work": 302840
+      },
+      "resource_bounds": {
+        "constructor_deadline_seconds": 360,
+        "container_cpus": 4,
+        "container_memory_bytes": 8000000000,
+        "go_memory_target_bytes": 6000000000,
+        "host_deadline_seconds": 660,
+        "monitor_interval_ms": 100,
+        "own_process_watchdog_seconds": 615,
+        "preparation_deadline_seconds": 30,
+        "process_deadline_seconds": 600,
+        "query_deadline_seconds": 5,
+        "soft_memory_ceiling_bytes": 6500000000,
+        "test_deadline_seconds": 630,
+        "validation_deadline_seconds": 5
+      },
+      "run_id": "trex-fixed-cap-v2-002",
+      "runtime": {
+        "go_version": "go1.27.2",
+        "goarch": "arm64",
+        "gomaxprocs": 4,
+        "goos": "linux",
+        "num_cpu": 10
+      },
+      "selected": 26,
+      "shadow_totals": "incomplete lower bounds; not legacy full-scan equivalents",
+      "successful_query_latency": null,
+      "warm_attempted": 0,
+      "warm_not_run": 78,
+      "warm_status_counts": {
+        "not_run": 78
+      },
+      "whole_run_elapsed_seconds_including_cleanup": 193.0478883748874,
+      "whole_run_timing_scope": "host enclosure makespan including preparation, queries/evidence/cleanup; never divided by query count as latency"
+    }
+  },
+  "schema": "non-csa-qualification-results-packet-v2-draft",
+  "scientific_status": "global bounded negative, both references, domain panel and T bounded negative independently accepted within their declared scopes",
+  "selected_per_method": 26,
+  "status": "draft; writer-independent metric/privacy packet review required before promotion",
+  "tp_across_query_three_warm_median_pipeline": {
+    "max_ns": 427833,
+    "median_ns": 217083,
+    "n": 26,
+    "nearest_rank_p95_ns": 356750,
+    "raw_ns": [
+      69375,
+      106958,
+      108333,
+      112792,
+      114500,
+      116375,
+      118875,
+      126916,
+      130625,
+      147791,
+      154583,
+      159458,
+      210208,
+      223959,
+      233417,
+      247917,
+      252667,
+      258458,
+      275250,
+      276333,
+      279583,
+      287708,
+      293125,
+      333375,
+      356750,
+      427833
+    ]
+  },
+  "tp_initial_pipeline": {
+    "max_ns": 534791,
+    "median_ns": 235229,
+    "n": 26,
+    "nearest_rank_p95_ns": 494292,
+    "raw_ns": [
+      115125,
+      118292,
+      131500,
+      134708,
+      137125,
+      141625,
+      150667,
+      161084,
+      163625,
+      166834,
+      168041,
+      199291,
+      220625,
+      249833,
+      263833,
+      286708,
+      295417,
+      319417,
+      324458,
+      326041,
+      378958,
+      409166,
+      475417,
+      487584,
+      494292,
+      534791
+    ]
+  },
+  "validation_scope": "Packet writer checked all offered ledgers, raw/check correspondence, identities/elementary metrics, recorded-metric frontiers, T word-stream checksums/counts and exact closed copies. Full model was not opened/replayed; original-validator model-level validity remains supported by reviewed native checker and independent closed-evidence audits.",
+  "writer_checks": {
+    "distinct_reference_and_tp_initial_frontiers_equal": 26,
+    "initial_attempts_checked": 104,
+    "raw_word_check_correspondence": 259,
+    "warm_attempts_checked": 78
+  }
+}

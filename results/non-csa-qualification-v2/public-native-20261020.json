@@ -1,0 +1,142 @@
+{
+  "CI_workflow_coverage": "unmet",
+  "benchmark": {
+    "command": [
+      "go",
+      "test",
+      "-json",
+      "-race",
+      "-mod=vendor",
+      "-p=1",
+      "-count=1",
+      "-timeout=160s",
+      "./..."
+    ],
+    "completion_sha256": "6f99a9341a7e67887406c3b453d796baa78fbe4fbaa2fa382890d04ac94d2e32",
+    "elapsed_seconds": 144.71437379089184,
+    "exit_code": 0,
+    "file_map_sha256": "60ef4c53a64bc8c5d8e823381c59bfa5dfbed0bd83d46e3cb81a274672be3f16",
+    "go_exit_sha256": "4e2faea56efc363b658ec86c0e338d67b807bbec6bfac2fd3d48c9bffd2346d0",
+    "owned_group_quiet": true,
+    "source_hash": "26574d823f7a8d2de55ecbacf92621a384a24f3ee306044fbd791704128eef6f",
+    "source_unchanged": true,
+    "stdout_sha256": "2397e8430ffad59e34c6d268fa4d5826f2a25a00eb7b10acdf0a56a66d28e648",
+    "tests": {
+      "fail_records": 0,
+      "non_json_line_numbers": [],
+      "package_passes": [
+        "github.com/ertyoii/transit-routing-bench/cmd/familybench",
+        "github.com/ertyoii/transit-routing-bench/evaluation",
+        "github.com/ertyoii/transit-routing-bench/experiment",
+        "github.com/ertyoii/transit-routing-bench/fixtures",
+        "github.com/ertyoii/transit-routing-bench/oracle",
+        "github.com/ertyoii/transit-routing-bench/regression/boundedreview",
+        "github.com/ertyoii/transit-routing-bench/regression/comparison",
+        "github.com/ertyoii/transit-routing-bench/regression/corech",
+        "github.com/ertyoii/transit-routing-bench/regression/csa",
+        "github.com/ertyoii/transit-routing-bench/regression/earlyreview",
+        "github.com/ertyoii/transit-routing-bench/regression/gtfs",
+        "github.com/ertyoii/transit-routing-bench/regression/mcraptor",
+        "github.com/ertyoii/transit-routing-bench/regression/model",
+        "github.com/ertyoii/transit-routing-bench/regression/paper",
+        "github.com/ertyoii/transit-routing-bench/regression/presentation",
+        "github.com/ertyoii/transit-routing-bench/regression/profilequery",
+        "github.com/ertyoii/transit-routing-bench/regression/recommend",
+        "github.com/ertyoii/transit-routing-bench/regression/selection",
+        "github.com/ertyoii/transit-routing-bench/regression/strictjson",
+        "github.com/ertyoii/transit-routing-bench/regression/tad",
+        "github.com/ertyoii/transit-routing-bench/regression/transfer",
+        "github.com/ertyoii/transit-routing-bench/regression/tripbased",
+        "github.com/ertyoii/transit-routing-bench/regression/ultra",
+        "github.com/ertyoii/transit-routing-bench/regression/validate",
+        "github.com/ertyoii/transit-routing-bench/regression/walking"
+      ],
+      "package_skips": [
+        "github.com/ertyoii/transit-routing-bench/cmd/candidateprobe",
+        "github.com/ertyoii/transit-routing-bench/cmd/corechbench",
+        "github.com/ertyoii/transit-routing-bench/cmd/csabench",
+        "github.com/ertyoii/transit-routing-bench/cmd/fixturecheck",
+        "github.com/ertyoii/transit-routing-bench/cmd/flashbench",
+        "github.com/ertyoii/transit-routing-bench/cmd/gtfsimport",
+        "github.com/ertyoii/transit-routing-bench/cmd/legproof",
+        "github.com/ertyoii/transit-routing-bench/cmd/mcbench",
+        "github.com/ertyoii/transit-routing-bench/cmd/profilebench",
+        "github.com/ertyoii/transit-routing-bench/cmd/querygen",
+        "github.com/ertyoii/transit-routing-bench/cmd/routebench",
+        "github.com/ertyoii/transit-routing-bench/cmd/sourcehash",
+        "github.com/ertyoii/transit-routing-bench/cmd/stpbench",
+        "github.com/ertyoii/transit-routing-bench/cmd/tadbench",
+        "github.com/ertyoii/transit-routing-bench/cmd/tbbench",
+        "github.com/ertyoii/transit-routing-bench/cmd/tpbench",
+        "github.com/ertyoii/transit-routing-bench/cmd/transitbench",
+        "github.com/ertyoii/transit-routing-bench/cmd/trexbench",
+        "github.com/ertyoii/transit-routing-bench/cmd/ultrabench",
+        "github.com/ertyoii/transit-routing-bench/cmd/walkingparity"
+      ],
+      "pass_records": 850,
+      "required_tests_missing_pass": [],
+      "skip_records": 0,
+      "unterminated": []
+    }
+  },
+  "checked_utc": "2026-10-20T13:36:50.939390+00:00",
+  "final_attempt": "detached-final-v1",
+  "limits": "Finite race tests do not establish bug freedom, model performance, inferential confidence intervals or SLA.",
+  "platform": {
+    "GOMAXPROCS": 2,
+    "architecture": "arm64",
+    "go_version": "go1.27.2",
+    "package_parallelism": 1,
+    "system": "Darwin"
+  },
+  "prior_attempts": [
+    {
+      "benchmark_phase": "killed by combined whole-run watchdog; incomplete",
+      "id": "20261020T124328Z-17d3d82f",
+      "routing_phase": "PASS",
+      "status": "FAILED_OR_INCOMPLETE"
+    },
+    {
+      "id": "20261020T125219Z-benchmark-3c739f17",
+      "reason": "No durable Go/wrapper exit; completed-looking logs cannot establish exit0.",
+      "status": "EVIDENCE_INCOMPLETE"
+    }
+  ],
+  "routing": {
+    "command": [
+      "go",
+      "test",
+      "-json",
+      "-race",
+      "-p=1",
+      "-count=1",
+      "-timeout=120s",
+      "./..."
+    ],
+    "commit": "b102816018b1db87304c751f2cd601a2abe4057a",
+    "exit_code": 0,
+    "phase_elapsed_seconds": 67.53001420898363,
+    "scope": "This routing phase passed; its original combined wrapper later timed out during benchmark tests.",
+    "source_hash": "3036b6dc1d0ec90c694015113225c077b8432c8484b2f84e32a1870693e35df5",
+    "tests": {
+      "fail_records": 0,
+      "non_json_line_numbers": [],
+      "package_passes": [
+        "github.com/ertyoii/transit-routing-go/internal/capverify",
+        "github.com/ertyoii/transit-routing-go/raptor",
+        "github.com/ertyoii/transit-routing-go/tripbased",
+        "github.com/ertyoii/transit-routing-go/walking",
+        "github.com/ertyoii/transit-routing-go/walking/graph",
+        "github.com/ertyoii/transit-routing-go/walking/httpapi",
+        "github.com/ertyoii/transit-routing-go/walking/osm",
+        "github.com/ertyoii/transit-routing-go/walking/transit"
+      ],
+      "pass_records": 390,
+      "required_tests_missing_pass": [],
+      "skip_records": 0
+    }
+  },
+  "schema": "public-native-check-addendum-v1",
+  "scientific_model_rerun": false,
+  "status": "PASS_FOR_EXACT_SOURCE_HASHES"
+}
