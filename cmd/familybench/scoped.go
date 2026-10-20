@@ -114,6 +114,9 @@ func prepareScoped(ctx context.Context, d model.Dataset, name string, cfg scoped
 	if (cfg.ULTRAQuery != nil && cfg.ULTRA == nil && cfg.Sparse == nil) || (cfg.Verify != nil && cfg.TREX == nil) {
 		return r, fmt.Errorf("query/verification configuration does not match the selected algorithm")
 	}
+	if err := validateScopedPreparation(d, cfg); err != nil {
+		return r, err
+	}
 	switch name {
 	case "trip_based_capped":
 		if cfg.TripBased == nil {

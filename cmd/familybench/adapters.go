@@ -28,6 +28,14 @@ var names = []string{"csa_arrival_single", "csa_arrival_shared", "csa_score_sing
 
 func prepare(ctx context.Context, d model.Dataset, name string, k, maxLabels, maxTransfers, maxWork, maxWitnesses int) (*router, error) {
 	r := &router{kind: "pareto"}
+	// Validate exposed flags before any constructor can decline on a tighter
+	// resource guard. A decline must not hide malformed later-stage settings.
+	usesLabels := name == "mc_raptor" || name == "mc_raptor_early" || name == "csa_arrival_single" || name == "csa_arrival_shared" || name == "csa_score_single" || name == "csa_score_shared"
+	usesTransfers := name == "trip_based" || name == "flash_tb" || name == "transfer_patterns" || name == "scalable_tp" || name == "trex"
+	usesWork := usesTransfers && name != "trip_based" || name == "mc_raptor" || name == "mc_raptor_early"
+	if usesLabels && maxLabels <= 0 || usesTransfers && maxTransfers <= 0 || usesWork && maxWork <= 0 {
+		return r, fmt.Errorf("positive preparation/query flags required")
+	}
 	cc := csa.Config{ExactTopK: k, MaxLabels: maxLabels, MaxJourneys: k}
 	fc := tripbased.FlashConfig{Cells: 8, MaxBoardings: 4, Limits: tripbased.FlashLimits{MaxStops: 10000, MaxTrips: 100000, MaxClosurePaths: 1000000, MaxWalkSettled: 2000000, MaxTransfers: maxTransfers, MaxRuns: 200000, MaxWork: maxWork, MaxFlagBytes: 100000000, MaxWitnesses: maxWitnesses, MaxQuerySegments: 1000000}}
 	pc := tripbased.PatternConfig{Profile: fc, MaxPatterns: 2000000, MaxNodes: 4000000, MaxEdges: 6000000, MaxDirectEntries: 5000000, MaxBuildWork: maxWork, MaxQueryWork: 2000000, MaxQueryLabels: 1000000}

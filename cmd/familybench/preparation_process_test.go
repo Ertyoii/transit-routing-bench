@@ -39,8 +39,29 @@ func TestPreparationProcessOutcomes(t *testing.T) {
 		{"misleading-adapter-name", "capability: incomplete: budget exhausted", "", "routing_error", "unknown algorithm", false},
 		{"mismatched-config", "trip_based_capped", "flash", "routing_error", "trip_based configuration required", false},
 		{"invalid-budget-config", "trip_based_capped", "invalid", "routing_error", "invalid preparation/budget configuration", false},
+
+		{"tp-zero-stops", "tp_destination_fixed_caps_experimental", "tp-zero-stops", "routing_error", "invalid FLASH preparation configuration", false},
+		{"tp-negative-stops", "tp_destination_fixed_caps_experimental", "tp-negative-stops", "routing_error", "invalid FLASH preparation configuration", false},
+		{"tp-zero-trips", "tp_destination_fixed_caps_experimental", "tp-zero-trips", "routing_error", "invalid FLASH preparation configuration", false},
+		{"tp-negative-trips", "tp_destination_fixed_caps_experimental", "tp-negative-trips", "routing_error", "invalid FLASH preparation configuration", false},
+		{"tp-masked-flash-budget", "tp_destination_fixed_caps_experimental", "tp-masked-flash-budget", "routing_error", "invalid FLASH preparation configuration", false},
+		{"flash-masked-suffix", "flash_tb_static_stop_pair_suffix_flags_role_caps_v1", "flash-masked-suffix", "routing_error", "invalid FLASH preparation configuration", false},
+		{"flash-masked-snapshot", "flash_tb_static_stop_pair_suffix_flags_role_caps_v1", "flash-masked-snapshot", "routing_error", "invalid FLASH preparation configuration", false},
+		{"trex-partition-coverage", "trex_static_caps_mandatory_verified_experimental", "trex-partition-coverage", "routing_error", "invalid T-REX partition", false},
+		{"trex-partition-leaf", "trex_static_caps_mandatory_verified_experimental", "trex-partition-leaf", "routing_error", "invalid T-REX partition", false},
+		{"trex-masked-partition", "trex_static_caps_mandatory_verified_experimental", "trex-masked-partition", "routing_error", "invalid T-REX partition", false},
+		{"trex-masked-verification", "trex_static_caps_mandatory_verified_experimental", "trex-masked-verification", "routing_error", "positive verification limits required", false},
+		{"ultra-invalid-query", "ultra_transfer_complete_capped", "ultra-invalid-query", "routing_error", "positive ULTRA query limits required", false},
+		{"ultra-masked-query", "ultra_transfer_complete_capped", "ultra-masked-query", "routing_error", "positive ULTRA query limits required", false},
+		{"subset-masked-query", "ultra_cap_safe_stay_witness_subset_v1", "subset-masked-query", "routing_error", "positive ULTRA query limits required", false},
+		{"legacy-masked-budget", "transfer_patterns", "", "routing_error", "positive preparation/query flags required", false},
+		{"tp-network-budget", "tp_destination_fixed_caps_experimental", "tp-network-budget", "incomplete_budget", "network size guard", true},
+		{"flash-network-budget", "flash_tb_static_stop_pair_suffix_flags_role_caps_v1", "flash-network-budget", "incomplete_budget", "network size budget", true},
+		{"trex-network-budget", "trex_static_caps_mandatory_verified_experimental", "trex-network-budget", "incomplete_budget", "size", true},
+		{"ultra-preparation-budget", "ultra_transfer_complete_capped", "ultra-preparation-budget", "incomplete_budget", "budget", true},
 		{"partial-tp", "tp_destination_fixed_caps_experimental", "tp-partial", "incomplete_budget", "source guard", true},
 		{"preparation-deadline", "trip_based_capped", "tb", "deadline", "deadline", true},
+		{"capability-with-diagnostic-id", "raptor", "", "unsupported_semantics", "unknown_invalid", true},
 		{"unsupported-capability", "trex_static_caps_mandatory_verified_experimental", "trex", "unsupported_semantics", "capability:", true},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
@@ -50,6 +71,10 @@ func TestPreparationProcessOutcomes(t *testing.T) {
 				"-out-dir", out, "-warmups", "0", "-repetitions", "1", "-batch-size", "3"}
 			if tc.config != "" {
 				config := filepath.Join("testdata/scoped-config", tc.config+".json")
+				if strings.Contains(tc.config, "-") && tc.config != "tp-partial" {
+					config = filepath.Join(dir, "configuration.json")
+					writeProcessInput(t, config, stagedPreparationInput(t, tc.config))
+				}
 				if tc.config == "invalid" {
 					value := scopedInput(t, "tb")
 					value.TripBased.MaxTransfers = 0
@@ -58,14 +83,24 @@ func TestPreparationProcessOutcomes(t *testing.T) {
 				}
 				args = append(args, "-scoped-config", config)
 			}
+			if tc.name == "legacy-masked-budget" {
+				args = append(args, "-max-work", "1", "-max-transfers", "0")
+			}
 			if tc.name == "preparation-deadline" {
 				args = append(args, "-prep-timeout", "1ns")
 			}
-			if tc.name == "unsupported-capability" {
+			if tc.name == "unsupported-capability" || tc.name == "capability-with-diagnostic-id" {
 				bundle := scopedFixture(t)
 				// A valid type-0 recommendation is outside this constructor's
 				// declared static type-2/type-3 profile, not malformed input.
-				bundle.Dataset.Transfers = append(bundle.Dataset.Transfers, model.TransferRule{ID: "recommended", FromStop: "O", ToStop: "A", Type: 0})
+				if tc.name == "unsupported-capability" {
+					bundle.Dataset.Transfers = append(bundle.Dataset.Transfers, model.TransferRule{ID: "recommended", FromStop: "O", ToStop: "A", Type: 0})
+				} else {
+					// Zero-duration service is valid model input outside paper's
+					// positive-time profile. Its ID is data, not an error class.
+					bundle.Dataset.Connections[0].ID = "unknown_invalid"
+					bundle.Dataset.Connections[0].Arrival = bundle.Dataset.Connections[0].Departure
+				}
 				dataset, queries := filepath.Join(dir, "data.json"), filepath.Join(dir, "queries.json")
 				data := writeProcessInput(t, dataset, bundle.Dataset)
 				items := []map[string]any{}
@@ -89,10 +124,12 @@ func TestPreparationProcessOutcomes(t *testing.T) {
 			var summary struct {
 				Success     bool `json:"success"`
 				Preparation struct {
-					Complete bool            `json:"complete"`
-					Status   string          `json:"status"`
-					Error    string          `json:"error"`
-					Cost     json.RawMessage `json:"index_cost_summary"`
+					Complete     bool            `json:"complete"`
+					ExpectedSkip bool            `json:"expected_skip"`
+					ProcessFatal bool            `json:"process_fatal"`
+					Status       string          `json:"status"`
+					Error        string          `json:"error"`
+					Cost         json.RawMessage `json:"index_cost_summary"`
 				} `json:"preparation"`
 				Passes []struct {
 					Requested int            `json:"requested"`
@@ -107,7 +144,7 @@ func TestPreparationProcessOutcomes(t *testing.T) {
 			if tc.wantSuccess {
 				wantExit = 0
 			}
-			if exit != wantExit || summary.Success != tc.wantSuccess || summary.Preparation.Complete || summary.Preparation.Status != tc.status || !strings.Contains(summary.Preparation.Error, tc.cause) {
+			if exit != wantExit || summary.Success != tc.wantSuccess || summary.Preparation.Complete || summary.Preparation.ExpectedSkip != tc.wantSuccess || summary.Preparation.ProcessFatal == tc.wantSuccess || summary.Preparation.Status != tc.status || !strings.Contains(summary.Preparation.Error, tc.cause) {
 				t.Errorf("process outcome: exit=%d success=%v preparation=%+v; want exit=%d success=%v status=%s\n%s", exit, summary.Success, summary.Preparation, wantExit, tc.wantSuccess, tc.status, output)
 			}
 			if len(summary.Passes) != 2 {
@@ -185,4 +222,70 @@ func readProcessOutput(t *testing.T, path string, value any) {
 	if err := json.Unmarshal(data, value); err != nil {
 		t.Fatal(err)
 	}
+}
+
+// Supply malformed nested configuration alongside a valid tight construction
+// budget: the process must reject configuration before accepting a resource skip.
+func stagedPreparationInput(t *testing.T, name string) scopedConfig {
+	t.Helper()
+	base := strings.Split(name, "-")[0]
+	if base == "subset" {
+		base = "ultra-subset"
+	}
+	if base == "ultra" {
+		base = "ultra-control"
+	}
+	v := scopedInput(t, base)
+	switch name {
+	case "tp-zero-stops":
+		v.Patterns.Patterns.Profile.Limits.MaxStops = 0
+	case "tp-negative-stops":
+		v.Patterns.Patterns.Profile.Limits.MaxStops = -1
+	case "tp-zero-trips":
+		v.Patterns.Patterns.Profile.Limits.MaxTrips = 0
+	case "tp-negative-trips":
+		v.Patterns.Patterns.Profile.Limits.MaxTrips = -1
+	case "tp-masked-flash-budget":
+		v.Patterns.Patterns.Profile.Limits.MaxStops = 1
+		v.Patterns.Patterns.Profile.Limits.MaxTransfers = 0
+	case "flash-masked-suffix":
+		v.Flash.Limits.MaxStops = 1
+		v.Flash.Limits.MaxSuffixBytes = 0
+	case "flash-masked-snapshot":
+		v.Flash.Limits.MaxStops = 1
+		v.Flash.Limits.MaxSnapshotTransfers = 0
+	case "trex-partition-coverage", "trex-masked-partition":
+		v.TREX.Partition = map[string]int{"O": -1}
+		if name == "trex-masked-partition" {
+			v.TREX.Limits.MaxStops = 1
+		}
+	case "trex-partition-leaf":
+		v.TREX.Partition = map[string]int{}
+		for _, s := range scopedFixture(t).Dataset.Stops {
+			v.TREX.Partition[s.ID] = 0
+		}
+		v.TREX.Partition["O"] = -1
+	case "trex-masked-verification":
+		v.TREX.Limits.MaxStops = 1
+		v.Verify.MaxStates = 0
+	case "ultra-invalid-query", "ultra-masked-query":
+		v.ULTRAQuery.MaxRuns = 0
+		if name == "ultra-masked-query" {
+			v.ULTRA.Limits.MaxRuns = 1
+		}
+	case "subset-masked-query":
+		v.ULTRAQuery.MaxOutputLegs = -1
+		v.Sparse.Capped.Limits.MaxRuns = 1
+	case "tp-network-budget":
+		v.Patterns.Patterns.Profile.Limits.MaxStops = 1
+	case "flash-network-budget":
+		v.Flash.Limits.MaxStops = 1
+	case "trex-network-budget":
+		v.TREX.Limits.MaxStops = 1
+	case "ultra-preparation-budget":
+		v.ULTRA.Limits.MaxRuns = 1
+	default:
+		t.Fatalf("unknown staged preparation input %s", name)
+	}
+	return v
 }
