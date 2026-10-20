@@ -1,0 +1,16 @@
+method,adapter,qps,repetitions,offered,valid,transit,empty,unknown,within_200ms,within_500ms,p99_low_ms,p99_high_ms,transit_p99_low_ms,transit_p99_high_ms,whole_preparation_low_s,whole_preparation_high_s,peak_cgroup_bytes,evidence_id
+Dense McRAPTOR EP,mc_raptor_early,5,3,450,450,298,152,0,450,450,93.681,97.646,92.954042,97.646,1.424251459,1.468702501,731672576,dense-summary
+Dense McRAPTOR EP,mc_raptor_early,10,3,900,900,611,289,0,900,900,79.4645,85.324833,79.792083,85.85675,1.402328417,1.571330834,756592640,dense-summary
+Dense McRAPTOR EP,mc_raptor_early,20,3,1800,1800,1208,592,0,1800,1800,67.233917,71.110667,66.389584,71.110667,1.450034125,1.556447792,786980864,dense-summary
+Dense RAPTOR EP,raptor_early,5,3,450,450,298,152,0,450,450,72.500917,80.351542,74.030291,84.118,1.438435334,1.582624834,760975360,dense-summary
+Dense RAPTOR EP,raptor_early,10,3,900,900,611,289,0,900,900,69.232416,71.461459,69.232416,70.950042,1.416895626,1.455550876,740179968,dense-summary
+Dense RAPTOR EP,raptor_early,20,3,1800,1800,1208,592,0,1800,1800,47.844,51.922708,46.122416,51.922708,1.462771126,1.506865167,791654400,dense-summary
+Capped ordinary Trip-Based,trip_based_capped,5,3,450,450,298,152,0,450,450,112.019666,118.780666,,,2.463103668,2.566391959,2542878720,tb-summary
+Capped ordinary Trip-Based,trip_based_capped,10,3,900,900,611,289,0,900,900,91.636334,115.628459,,,2.456444918,2.52491221,2789523456,tb-summary
+Capped ordinary Trip-Based,trip_based_capped,20,3,1800,1800,1208,592,0,1800,1800,89.285417,91.525791,,,2.444447293,2.554675084,2816884736,tb-summary
+ULTRA safe pruning subset,ultra_cap_safe_stay_witness_subset_v1,5,3,450,450,298,152,0,450,450,70.186375,72.513416,68.362208,76.660666,1.505631709,1.529462376,828624896,ultra-summary
+ULTRA safe pruning subset,ultra_cap_safe_stay_witness_subset_v1,10,3,900,900,611,289,0,900,900,66.089458,69.3305,66.089458,69.3305,1.485699084,1.555295459,788832256,ultra-summary
+ULTRA safe pruning subset,ultra_cap_safe_stay_witness_subset_v1,20,3,1800,1800,1208,592,0,1800,1800,46.217167,49.865958,48.079667,49.865958,1.487614834,1.500238375,743727104,ultra-summary
+FLASH conservative suffix flags,flash_tb_static_stop_pair_suffix_flags_role_caps_v1,5,3,450,450,298,152,0,450,450,179.501334,187.661917,179.501334,192.628709,9.214130546,10.131027338,4032237568,flash-summary-corrected
+FLASH conservative suffix flags,flash_tb_static_stop_pair_suffix_flags_role_caps_v1,10,3,900,900,611,289,0,898,900,176.874416,185.6375,177.7345,182.615709,9.259325672,9.921797212,4036005888,flash-summary-corrected
+FLASH conservative suffix flags,flash_tb_static_stop_pair_suffix_flags_role_caps_v1,20,3,1800,1800,1208,592,0,1799,1800,161.113958,171.302708,160.235166,171.302708,9.628354004,9.949960755,4369170432,flash-summary-corrected

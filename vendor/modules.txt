@@ -1,10 +1,11 @@
-# github.com/ertyoii/transit-routing-go v0.1.0-pre.2
+# github.com/ertyoii/transit-routing-go v0.1.0-pre.3
 ## explicit; go 1.27.0
 github.com/ertyoii/transit-routing-go/comparison
 github.com/ertyoii/transit-routing-go/corech
 github.com/ertyoii/transit-routing-go/csa
 github.com/ertyoii/transit-routing-go/eacsa
 github.com/ertyoii/transit-routing-go/gtfs
+github.com/ertyoii/transit-routing-go/internal/capverify
 github.com/ertyoii/transit-routing-go/model
 github.com/ertyoii/transit-routing-go/paper
 github.com/ertyoii/transit-routing-go/presentation

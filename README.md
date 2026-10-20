@@ -25,4 +25,14 @@ The local strict-identity CSA and independent-request shared scan are research c
 
 `cmd/familybench` records complete raw/final/display witnesses, resources, preparation and core/response/batch boundaries for supported adapters. Profile, transfer-aware, Core-CH and ULTRA commands retain separate entrypoints. `candidateprobe` requires explicitly supplied data and cases; no real-world cases are bundled.
 
-Read [the evaluation protocol](docs/EVALUATION.md). No real-data benchmark reports, operator timetables, OSM extracts/graphs, private screenshots or derived real-data queries are included. You must establish data rights and record input hashes before supplying any external dataset. A source's software MIT license does not automatically license its timetable data.
+Read [the evaluation protocol](docs/EVALUATION.md). Aggregate historical results and their limits are in [the research checkpoint](results/checkpoint-20261020/RESULTS_AND_STATUS.md). Raw full-model reports, operator timetables, OSM extracts/graphs, private screenshots and derived real-data queries are excluded. You must establish data rights and record input hashes before supplying any external dataset. A source's software MIT license does not automatically license its timetable data.
+
+## Research checkpoint reproduction
+
+The scoped familybench adapters cover capped ordinary TB, capped ULTRA control/safe subset, static-role-cap FLASH, experimental fixed-cap TP and mandatory-verified static-cap T-REX. Dense RAPTOR/McRAPTOR retain their named Early Pruning adapters. Read [adapter configuration and outcome contracts](docs/RESEARCH_CHECKPOINT.md).
+
+```sh
+sh scripts/reproduce-checkpoint.sh /absolute/path/to/new-smoke-directory
+```
+
+The Python 3 wrapper builds a source-bound binary and checks nine isolated tiny synthetic runs, complete raw/final witnesses, valid-empty versus declined/not-run outcomes and forced deadlines. It requires no keys, signup or network. It is functionality evidence, not a load benchmark or reproduction of excluded full-model inputs.

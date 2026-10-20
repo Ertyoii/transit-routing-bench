@@ -1,0 +1,371 @@
+{
+  "entries": [
+    {
+      "contract": "arrival / boardings representative frontier",
+      "current_campaign_status": "reviewed_scoped_short_load",
+      "evidence_id": "dense-acceptance",
+      "id": "raptor_early",
+      "load_cells": 9,
+      "long_duration_or_production_sla": false,
+      "measured_empty": 1033,
+      "measured_offered": 3150,
+      "measured_transit": 2117,
+      "measured_unknown": 0,
+      "measured_valid": 3150,
+      "name": "Dense RAPTOR EP",
+      "per_panel_reference": {
+        "empty": 42,
+        "transit": 86
+      },
+      "review": "independent_scoped_acceptance",
+      "unique_query_panel": 128,
+      "valid_within_200ms": 3150,
+      "valid_within_500ms": 3150,
+      "implementation_integrated": true
+    },
+    {
+      "contract": "arrival / boardings / walking representative frontier",
+      "current_campaign_status": "reviewed_scoped_short_load",
+      "evidence_id": "dense-acceptance",
+      "id": "mc_raptor_early",
+      "load_cells": 9,
+      "long_duration_or_production_sla": false,
+      "measured_empty": 1033,
+      "measured_offered": 3150,
+      "measured_transit": 2117,
+      "measured_unknown": 0,
+      "measured_valid": 3150,
+      "name": "Dense McRAPTOR EP",
+      "per_panel_reference": {
+        "empty": 42,
+        "transit": 86
+      },
+      "review": "independent_scoped_acceptance",
+      "unique_query_panel": 128,
+      "valid_within_200ms": 3150,
+      "valid_within_500ms": 3150,
+      "implementation_integrated": true
+    },
+    {
+      "contract": "unranked arrival / boardings representative frontier",
+      "current_campaign_status": "reviewed_scoped_short_load",
+      "evidence_id": "tb-review",
+      "id": "trip_based_capped",
+      "load_cells": 9,
+      "long_duration_or_production_sla": false,
+      "measured_empty": 1033,
+      "measured_offered": 3150,
+      "measured_transit": 2117,
+      "measured_unknown": 0,
+      "measured_valid": 3150,
+      "name": "Capped ordinary Trip-Based",
+      "per_panel_reference": {
+        "empty": 42,
+        "transit": 86
+      },
+      "review": "independent_scoped_acceptance",
+      "unique_query_panel": 128,
+      "valid_within_200ms": 3150,
+      "valid_within_500ms": 3150,
+      "implementation_integrated": true
+    },
+    {
+      "contract": "arrival / boardings representative frontier; sufficient pruning certificates only",
+      "current_campaign_status": "reviewed_scoped_short_load",
+      "evidence_id": "ultra-acceptance",
+      "id": "ultra_cap_safe_stay_witness_subset_v1",
+      "load_cells": 9,
+      "long_duration_or_production_sla": false,
+      "measured_empty": 1033,
+      "measured_offered": 3150,
+      "measured_transit": 2117,
+      "measured_unknown": 0,
+      "measured_valid": 3150,
+      "name": "ULTRA safe pruning subset",
+      "per_panel_reference": {
+        "empty": 42,
+        "transit": 86
+      },
+      "review": "independent_scoped_acceptance",
+      "unique_query_panel": 128,
+      "valid_within_200ms": 3150,
+      "valid_within_500ms": 3150,
+      "implementation_integrated": true
+    },
+    {
+      "contract": "unranked arrival / boardings representative frontier; complete transfer superset and conservative destination flags",
+      "current_campaign_status": "reviewed_scoped_short_load",
+      "evidence_id": "flash-correction-review",
+      "id": "flash_tb_static_stop_pair_suffix_flags_role_caps_v1",
+      "load_cells": 9,
+      "long_duration_or_production_sla": false,
+      "measured_empty": 1033,
+      "measured_offered": 3150,
+      "measured_transit": 2117,
+      "measured_unknown": 0,
+      "measured_valid": 3150,
+      "name": "FLASH conservative suffix flags",
+      "per_panel_reference": {
+        "empty": 42,
+        "transit": 86
+      },
+      "review": "independent_scoped_acceptance",
+      "unique_query_panel": 128,
+      "valid_within_200ms": 3147,
+      "valid_within_500ms": 3150,
+      "implementation_integrated": true
+    },
+    {
+      "complete_walking_pairs": 14611,
+      "contract": "arrival / boardings representative frontier",
+      "current_campaign_status": "functional_control_only",
+      "evidence_id": "ultra-acceptance",
+      "id": "ultra_transfer_complete_capped",
+      "load_cells": 0,
+      "native_attempts": 384,
+      "native_empty": 126,
+      "native_transit": 258,
+      "native_valid": 384,
+      "review": "independent_scoped_acceptance",
+      "implementation_integrated": true
+    },
+    {
+      "completed_native_profiles": 1450,
+      "completed_sources": 1,
+      "constructor_cumulative_allocated_bytes": 33571115824,
+      "constructor_seconds": 61.344710028,
+      "contract": "fixed destination + fixed role-cap arrival / boardings representatives",
+      "current_campaign_status": "global_preprocessing_incomplete",
+      "evidence_id": "tp-v8-handoff",
+      "external_certified_empty": null,
+      "external_certified_transit": null,
+      "external_queries_attempted": 0,
+      "external_queries_not_run": 128,
+      "failed_native_profiles": 0,
+      "id": "tp_fixed_destination_caps_v8",
+      "native_profile_seconds": 55.858550646,
+      "patterns": 12,
+      "representative_multisource_runtime_sample": true,
+      "review": "independent_scoped_telemetry_and_accounting_acceptance",
+      "total_sources": 5449,
+      "transfer_visits": 5815467802,
+      "whole_process_peak_cgroup_bytes": 3999670272,
+      "separate_preprocessing_sample": {
+        "evidence_id": "tp-v9-multisource-handoff",
+        "review": "pending_independent_review",
+        "selected_sources": 10,
+        "strata": 5,
+        "profiles_complete": 2838,
+        "independent_witnesses": 44,
+        "global_index_complete": false,
+        "external_attempts": 0,
+        "external_not_run_slots": 1280,
+        "unique_external_queries": 128,
+        "source_wall_estimate_hours": 8.996611009674028,
+        "approximate_planning_interval_hours": [
+          7.395245121368175,
+          10.59797689797988
+        ],
+        "common_setup_median_seconds": 5.332480065,
+        "final_incidence_measured": false,
+        "full_memory_qualified": false,
+        "pilot_in_estimator": false,
+        "all_source_build_started": false
+      },
+      "public_adapter": "tp_destination_fixed_caps_experimental",
+      "implementation_integrated": true
+    },
+    {
+      "attempted": 384,
+      "both_attempts_scheduled": 768,
+      "budget_failure_classification": "incomplete; no correctness mismatch established by budget exhaustion",
+      "cap_failure_classification": "certificate_coverage_failure_all_11_have_feasible_reference_routes",
+      "certified_empty": 0,
+      "certified_throughput": 0,
+      "certified_transit": 0,
+      "checker_preparation_seconds": 0.385524083,
+      "construction_complete": true,
+      "constructor_seconds": 265.107137871,
+      "contract": "ranked/static-rule search plus sufficient capped-representative certificate and mandatory verifier",
+      "current_campaign_status": "complete_index_no_certified_answers",
+      "decline_is_no_route": false,
+      "declined": 384,
+      "evidence_id": "trex-v6-qualification-handoff",
+      "full_index_certificate_preparation_seconds": 265.71383658,
+      "id": "trex_static_capped_certified_v6",
+      "not_run": 0,
+      "passes": 3,
+      "per_pass_declines": {
+        "mandatory_verifier_scan_budget": 76,
+        "ranked_work_budget": 41,
+        "unrestricted_representative_walking_cap": 11
+      },
+      "per_pass_reference_strata": {
+        "mandatory_verifier_scan_budget": {
+          "empty": 35,
+          "transit": 41
+        },
+        "ranked_work_budget": {
+          "empty": 7,
+          "transit": 34
+        },
+        "unrestricted_representative_walking_cap": {
+          "empty": 0,
+          "transit": 11
+        }
+      },
+      "prior_attempt": {
+        "attempted": 0,
+        "not_run": 384,
+        "reason": "memory cancellation preparing additional checker after complete index",
+        "scheduled_slots": 384
+      },
+      "review": "independent_scoped_storage_and_accounting_acceptance_qualification_failed",
+      "success_conditioned_latency_quantiles": null,
+      "unique_queries": 128,
+      "valid_within_200ms": 0,
+      "valid_within_500ms": 0,
+      "whole_process_peak_cgroup_bytes": 6383960064,
+      "separate_cap_diagnosis": {
+        "queries": 11,
+        "feasible_subset_equals_reference": 6,
+        "reference_objective_missing_from_raw": 5,
+        "raw_witnesses": 20,
+        "raw_feasible": 7,
+        "reference_witnesses_replayed": 27,
+        "public_outputs_unchanged": true,
+        "review": "pending",
+        "not_an_additional_qualification_pass": true
+      },
+      "public_adapter": "trex_static_caps_mandatory_verified_experimental",
+      "implementation_integrated": true
+    },
+    {
+      "contract": "earliest arrival",
+      "current_campaign_status": "no_current_campaign_result_admitted",
+      "id": "eacsa",
+      "note": "Public research kernel; no new current full-panel/load evidence admitted by this draft.",
+      "numeric_campaign_counts": null,
+      "review": "published_source_scope_only"
+    },
+    {
+      "contract": "strict finite identity top-k, cap strata, explicitly incomplete heuristic modes",
+      "current_campaign_status": "no_current_campaign_result_admitted",
+      "id": "csa_public_controls",
+      "note": "Public independently authored research controls; no private implementation equivalence or private campaign claims.",
+      "numeric_campaign_counts": null,
+      "review": "published_source_scope_only"
+    },
+    {
+      "contract": "departure-time profile under declared bounded model",
+      "current_campaign_status": "no_current_campaign_result_admitted",
+      "id": "profilecsa",
+      "note": "Existing public scope retained; no current full-panel/load claim.",
+      "numeric_campaign_counts": null,
+      "review": "published_source_scope_only"
+    },
+    {
+      "contract": "RAPTOR/McRAPTOR departure-time profile variants",
+      "current_campaign_status": "no_current_campaign_result_admitted",
+      "id": "profilequery",
+      "note": "Existing public scope retained; no current full-panel/load claim.",
+      "numeric_campaign_counts": null,
+      "review": "published_source_scope_only"
+    },
+    {
+      "contract": "legacy static Trip-Based contract",
+      "current_campaign_status": "no_current_campaign_result_admitted",
+      "id": "tripbased_legacy",
+      "note": "Guarded narrower scope; do not conflate with rule-aware capped ordinary Trip-Based.",
+      "numeric_campaign_counts": null,
+      "review": "published_source_scope_only"
+    },
+    {
+      "contract": "bounded static FLASH adaptation",
+      "current_campaign_status": "no_current_campaign_result_admitted",
+      "id": "flash_legacy",
+      "note": "Do not inherit current conservative suffix-flag qualification automatically.",
+      "numeric_campaign_counts": null,
+      "review": "published_source_scope_only"
+    },
+    {
+      "contract": "bounded static transfer patterns",
+      "current_campaign_status": "no_current_campaign_result_admitted",
+      "id": "transfer_patterns_legacy",
+      "note": "Do not infer all-source completion from fixed-destination v8 prefix.",
+      "numeric_campaign_counts": null,
+      "review": "published_source_scope_only"
+    },
+    {
+      "contract": "bounded static scalable TP adaptations",
+      "current_campaign_status": "no_current_campaign_result_admitted",
+      "id": "scalable_transfer_patterns",
+      "note": "No complete current all-source Singapore index/query campaign admitted.",
+      "numeric_campaign_counts": null,
+      "review": "published_source_scope_only"
+    },
+    {
+      "contract": "transfer-aware finite model",
+      "current_campaign_status": "no_current_campaign_result_admitted",
+      "id": "transfer_aware_dijkstra",
+      "note": "Public source/finite checks retained; current matrix supplies no new query/load numbers.",
+      "numeric_campaign_counts": null,
+      "review": "published_source_scope_only"
+    },
+    {
+      "contract": "transfer accelerator",
+      "current_campaign_status": "no_current_campaign_result_admitted",
+      "id": "core_ch",
+      "note": "Not a complete timetable router; no standalone route-latency comparison.",
+      "numeric_campaign_counts": null,
+      "review": "published_source_scope_only"
+    }
+  ],
+  "global_exclusions": [
+    "Exact/live timetable or physical accessibility claims",
+    "Regional validation beyond Singapore",
+    "Universal algorithm ranking or causal speedup from separate campaigns",
+    "Strict identity top-k claims for Pareto representative algorithms",
+    "Bug-freedom guarantees",
+    "Publication of raw operator/derived data or private host identity"
+  ],
+  "null_semantics": "null means no certified/observed value admitted, not zero or no-route.",
+  "query_model": {
+    "dataset_sha256": "bb65c87ce6d82ed7fefe8a9a366b54830a005b75bc1fa3bfe404b9cb781efe6a",
+    "feasibility_transfer_buffer_seconds": 0,
+    "intermediate_walk_seconds": 900,
+    "kind": "unofficial frequency-modeled Singapore bus and rail; approximate directed walking",
+    "max_legs": 1024,
+    "ordinary_access_egress_seconds": 600,
+    "ordinary_direct_walk_seconds": 900,
+    "ordinary_max_boardings": 4,
+    "ordinary_queries": 118,
+    "ordinary_total_walk_seconds": 3900,
+    "presentation_transfer_penalty_seconds": 300,
+    "query_count": 128,
+    "query_roster_sha256": "bfc77e71508ee0ada70d5d506708e08d07ab7def631a79c4e2c382a2fb71ad0f",
+    "reference_empty": 42,
+    "reference_transit": 86,
+    "service_date": "2026-10-16",
+    "targeted_access_egress_direct_seconds": 0,
+    "targeted_max_boardings_distribution": {
+      "1": 1,
+      "2": 9
+    },
+    "targeted_queries": 10,
+    "targeted_total_walk_seconds": 900,
+    "timezone": "Asia/Singapore",
+    "window_seconds": [
+      25200,
+      32400
+    ]
+  },
+  "schema_version": 1,
+  "scope": "Every family advertised by the verified public baseline plus named current campaign variants. This is not an assertion that all historical experiments are included.",
+  "snapshot": "2026-10-20: scoped stages composed; subsequent TP v9 sample/T-REX v7 diagnosis independent review remains pending until evidence arrives.",
+  "supporting_components": [
+    "walking providers, full-itinerary validator, selection/presentation, bounded tiny oracle and measurement infrastructure are supporting components, not additional algorithm-family speed claims."
+  ],
+  "composition_status": "Scoped public implementations integrated; historical stages measured separately.",
+  "composition_measurement_caveat": "Source stages were measured separately. Final composed source has no new full-model timing campaign."
+}

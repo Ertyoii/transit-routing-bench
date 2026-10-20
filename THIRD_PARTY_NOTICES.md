@@ -14,7 +14,7 @@ copied code. This is a source inventory, not a claim that algorithm ideas or
 every possible external data source share the project code license.
 
 No operator timetable, OSM extract, derived walking graph, real-data query set,
-benchmark output, screenshot, private system information or production-system
+raw full-model benchmark output, screenshot, private system information or production-system
 report is bundled. The local CSA controls are independently authored research
 implementations; no equivalence to any external production system is claimed.
 

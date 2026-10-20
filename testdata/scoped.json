@@ -1,0 +1,130 @@
+{
+  "dataset": {
+    "schema_version": "0.2",
+    "id": "original-synthetic-cap-hidden-v1",
+    "time_zone": "Asia/Singapore",
+    "service_date": "2026-10-16",
+    "data_kind": "original_synthetic",
+    "window": {
+      "start": 0,
+      "end": 40
+    },
+    "stops": [
+      {
+        "id": "O",
+        "accessible": "yes"
+      },
+      {
+        "id": "A",
+        "accessible": "yes"
+      },
+      {
+        "id": "B",
+        "accessible": "yes"
+      },
+      {
+        "id": "D",
+        "accessible": "yes"
+      }
+    ],
+    "trips": [
+      {
+        "id": "fast",
+        "accessible": "yes"
+      },
+      {
+        "id": "slow",
+        "accessible": "yes"
+      }
+    ],
+    "connections": [
+      {
+        "id": "fast-0",
+        "trip_id": "fast",
+        "sequence": 0,
+        "from": "A",
+        "to": "D",
+        "departure": 10,
+        "arrival": 20,
+        "pickup": true,
+        "dropoff": true
+      },
+      {
+        "id": "slow-0",
+        "trip_id": "slow",
+        "sequence": 0,
+        "from": "O",
+        "to": "D",
+        "departure": 15,
+        "arrival": 30,
+        "pickup": true,
+        "dropoff": true
+      }
+    ],
+    "footpaths": [
+      {
+        "id": "oa",
+        "from": "O",
+        "to": "A",
+        "duration": 5,
+        "accessible": "yes"
+      }
+    ]
+  },
+  "queries": [
+    {
+      "origin": "O",
+      "destination": "D",
+      "departure": 0,
+      "latest_arrival": 40,
+      "transfer_buffer": 0,
+      "max_walk_seconds": 20,
+      "max_boardings": 2,
+      "max_legs": 32,
+      "accessible_only": false,
+      "walking_limits": {
+        "access_seconds": 0,
+        "egress_seconds": 0,
+        "transfer_seconds": 10,
+        "direct_seconds": 0
+      },
+      "id": "cap-hidden"
+    },
+    {
+      "origin": "O",
+      "destination": "D",
+      "departure": 0,
+      "latest_arrival": 40,
+      "transfer_buffer": 0,
+      "max_walk_seconds": 20,
+      "max_boardings": 2,
+      "max_legs": 32,
+      "accessible_only": false,
+      "walking_limits": {
+        "access_seconds": 10,
+        "egress_seconds": 0,
+        "transfer_seconds": 10,
+        "direct_seconds": 0
+      },
+      "id": "broader-access"
+    },
+    {
+      "origin": "B",
+      "destination": "D",
+      "departure": 0,
+      "latest_arrival": 40,
+      "transfer_buffer": 0,
+      "max_walk_seconds": 20,
+      "max_boardings": 2,
+      "max_legs": 32,
+      "accessible_only": false,
+      "walking_limits": {
+        "access_seconds": 0,
+        "egress_seconds": 0,
+        "transfer_seconds": 10,
+        "direct_seconds": 0
+      },
+      "id": "unreachable"
+    }
+  ]
+}

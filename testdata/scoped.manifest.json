@@ -1,0 +1,14 @@
+{
+  "schema_version": "0.2",
+  "id": "scoped-adapters-v1",
+  "kind": "original_synthetic",
+  "source": "Original invented four-stop/two-trip timetable; no operator input or real query payload",
+  "created_utc": "2026-10-19T00:00:00Z",
+  "license": "CC0-1.0",
+  "license_file": "LICENSE.synthetic.txt",
+  "license_sha256": "f19676686dd1eade85fd0fb4b14961c7e46676d5671f546d7ac95a0a0a4c634b",
+  "data_file": "scoped.json",
+  "data_sha256": "d960df4a93d8c73d4edc8dd505ee3c6cd97d9a968c2e9a27a0d89a24d85e5c78",
+  "seed": 7,
+  "generator": "hand-authored-cap-hidden-v1"
+}

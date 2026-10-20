@@ -1,0 +1,125 @@
+{
+  "purpose": "Aggregate-claim provenance only; source payloads and local paths are not bundled. Hashes are identities, not public download guarantees or signed attestations.",
+  "sources": [
+    {
+      "bytes": 2162,
+      "id": "published-baseline-verification",
+      "review_status": "historical_publication_verified",
+      "sha256": "89b76ea355f041cf611af97f83be7011d05d55f26e6c690d41a3582c4d7198f2"
+    },
+    {
+      "bytes": 611,
+      "id": "dense-acceptance",
+      "review_status": "independently_accepted_scoped",
+      "sha256": "56f531e66fa06106ba5ed14fb7c74c8bfafb7e798c692800604c29d8c962e1b9"
+    },
+    {
+      "bytes": 6197,
+      "id": "dense-results",
+      "review_status": "independently_accepted_scoped",
+      "sha256": "bf8db1549a9caabcd0af31f7ecb122c86178cd8b0277c4ee737cc14c80ada74d"
+    },
+    {
+      "bytes": 325293,
+      "id": "dense-summary",
+      "review_status": "independently_accepted_scoped",
+      "sha256": "811ee09d5cc642c0cf6418f3e825fcc6e2de07dd5ae768a311549c83ed80bb6d"
+    },
+    {
+      "bytes": 2202,
+      "id": "tb-results",
+      "review_status": "independently_reviewed_scoped",
+      "sha256": "e0c1655fa0d0e7f972abb2c8f170b66267194c870dc4ed7617a5848049d28762"
+    },
+    {
+      "bytes": 66819,
+      "id": "tb-summary",
+      "review_status": "independently_reviewed_scoped",
+      "sha256": "caaac4ec6bb9fdeda41b0b1f390e3aee3a91af6344d51231ebffb338d328f4b0"
+    },
+    {
+      "bytes": 4250,
+      "id": "ultra-acceptance",
+      "review_status": "independently_accepted_scoped",
+      "sha256": "1d7d8e57708a5e65fcf63ecc1ea617b30bec8de07706a9e1fce35f8c041425fa"
+    },
+    {
+      "bytes": 45289009,
+      "id": "ultra-summary",
+      "review_status": "independently_accepted_scoped",
+      "sha256": "d5577e805c6db98fd92d5a96baeddcd28559c632667cc3e0c07c96ebd3d1b65c"
+    },
+    {
+      "bytes": 261617,
+      "id": "flash-summary-corrected",
+      "review_status": "scoped_load_and_reporting_correction_accepted",
+      "sha256": "6ed2fbabd392865fcf86fd2e1544186ea799e93138b6c9549665ca46e43d3c91"
+    },
+    {
+      "bytes": 3230,
+      "id": "flash-correction-handoff",
+      "review_status": "reporting_correction_accepted",
+      "sha256": "a403e82815800df18b8fa24ab03b131330cbe2ef8c51643e2fca26781133b4fc"
+    },
+    {
+      "bytes": 2160,
+      "id": "tp-v8-handoff",
+      "review_status": "independent_scoped_storage_telemetry_and_accounting_acceptance",
+      "sha256": "5a8806901f8f71876ab25b7e442c610a96d746ab4d9665dfa754970a4f2111ff"
+    },
+    {
+      "bytes": 4762,
+      "id": "tp-v8-results",
+      "review_status": "independent_scoped_storage_telemetry_and_accounting_acceptance",
+      "sha256": "26c8af8425d64edeca72cbf0a0126b9252ca3cde029a686b97a2ef2b6b0f4392"
+    },
+    {
+      "bytes": 2393,
+      "id": "trex-v6-storage-handoff",
+      "review_status": "independent_scoped_storage_telemetry_and_accounting_acceptance",
+      "sha256": "bc6230828da2054ba000281e1d33b307622243daf2cab339b163a62e07b8be7c"
+    },
+    {
+      "bytes": 3235,
+      "id": "trex-v6-qualification-handoff",
+      "review_status": "independent_scoped_storage_telemetry_and_accounting_acceptance",
+      "sha256": "d03067958b43b6015c9cbaf640ac597220f2c7162bc33ea9834b91b64c420694"
+    },
+    {
+      "bytes": 5998,
+      "id": "trex-v6-qualification-results",
+      "review_status": "independent_scoped_storage_telemetry_and_accounting_acceptance",
+      "sha256": "adfc30c20846f0eec421293acbadf72f5a3a596621f6a2f6d2e8a2413ca10f5c"
+    },
+    {
+      "bytes": 8199,
+      "id": "tb-review",
+      "review_status": "independent_scoped_review",
+      "sha256": "a4056fb765e36699655c668ead3ae255e7f7b31c97c5ca688ead6dac44db145a"
+    },
+    {
+      "bytes": 2328,
+      "id": "flash-correction-review",
+      "review_status": "independent_scoped_review",
+      "sha256": "d367539684449c94423a3aa9a8068fe5eed01a0dc37bc07956d9ae00408f66bc"
+    },
+    {
+      "id": "tp-v8-trex-v6-independent-review",
+      "bytes": 3116,
+      "sha256": "26171ef68c7cac6b19dd3303bc4263331a6fdb1a7e8d24767a1335ba788970e3",
+      "review_status": "independent_scoped_storage_telemetry_and_accounting_acceptance"
+    },
+    {
+      "id": "trex-cap-diagnosis-v7-handoff",
+      "bytes": 3364,
+      "sha256": "eb0d63756a59a1b52bc93b5135650af8d25a89688bb0ae664416dd4f7fdf51af",
+      "review_status": "pending_independent_review"
+    },
+    {
+      "id": "tp-v9-multisource-handoff",
+      "sha256": "502bf06802c29fdc8c54ea1d207180f14123ea8e5164e7c03602d177d7829513",
+      "bytes": 2796,
+      "review_status": "pending_independent_review"
+    }
+  ]
+}

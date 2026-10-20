@@ -1,0 +1,26 @@
+{
+  "ultra_sparse": {
+    "capped": {
+      "transfer_walking_limit": 10,
+      "accessible_only": false,
+      "limits": {
+        "max_runs": 10000,
+        "max_connection_visits": 100000,
+        "max_walk_settled": 100000,
+        "max_walk_edges": 100000,
+        "max_shortcuts": 10000,
+        "max_output_legs": 100000
+      }
+    },
+    "transfer_buffer": 0,
+    "max_proof_checks": 100000
+  },
+  "ultra_query": {
+    "max_runs": 10000,
+    "max_connection_visits": 100000,
+    "max_walk_settled": 100000,
+    "max_walk_edges": 100000,
+    "max_shortcuts": 10000,
+    "max_output_legs": 100000
+  }
+}

@@ -52,6 +52,9 @@ type record struct {
 	Final            []model.Validated           `json:"final"`
 	Display          map[int]presentation.Result `json:"display_options"`
 	Completed        bool                        `json:"completed"`
+	Attempted        bool                        `json:"attempted"`
+	ValidEmpty       bool                        `json:"valid_empty"`
+	Transit          bool                        `json:"transit"`
 	Status           string                      `json:"status"`
 	Error            string                      `json:"error,omitempty"`
 	Certificates     contracts                   `json:"certificates"`
@@ -93,6 +96,10 @@ func status(e error) string {
 	if e == nil {
 		return "complete"
 	}
+	var classified *outcomeError
+	if errors.As(e, &classified) {
+		return classified.outcome
+	}
 	s := e.Error()
 	switch {
 	case strings.Contains(s, "capability:"):
@@ -113,9 +120,11 @@ func status(e error) string {
 }
 func run() error {
 	dp := flag.String("dataset", "", "normalized data")
+	fixture := flag.String("fixture", "", "pinned original-synthetic manifest; alternative to dataset and queries")
+	scopedPath := flag.String("scoped-config", "", "explicit configuration JSON required for scoped adapters")
 	qp := flag.String("queries", "", "frozen queries")
 	out := flag.String("out-dir", "", "new output")
-	alg := flag.String("algorithm", "", "one isolated router")
+	alg := flag.String("algorithm", "", "one isolated router: "+strings.Join(append(append([]string{}, names...), scopedNames...), ", "))
 	k := flag.Int("candidate-k", 10, "internal exact arrival k / per cap k")
 	size := flag.Int("batch-size", 8, "common submission size")
 	reps := flag.Int("repetitions", 3, "measured repetitions")
@@ -147,7 +156,7 @@ func run() error {
 		}
 		choiceConfig = &cfg
 	}
-	if *dp == "" || *qp == "" || *out == "" || *alg == "" || *k < 1 || *size < 1 || *reps < 1 || *warm < 0 || *deadline <= 0 || *prepTimeout <= 0 || *rssStop <= 0 || *witnesses <= 0 {
+	if (*fixture == "" && (*dp == "" || *qp == "")) || (*fixture != "" && (*dp != "" || *qp != "")) || *out == "" || *alg == "" || *k < 1 || *size < 1 || *reps < 1 || *warm < 0 || *deadline <= 0 || *prepTimeout <= 0 || *rssStop <= 0 || *witnesses <= 0 {
 		return fmt.Errorf("invalid flags")
 	}
 	if e := os.Mkdir(*out, 0700); e != nil {
@@ -184,13 +193,41 @@ func run() error {
 	var d model.Dataset
 	var w workload
 	t := time.Now()
-	dh, e := read(*dp, &d)
-	if e != nil {
-		return e
-	}
-	qh, e := read(*qp, &w)
-	if e != nil {
-		return e
+	var dh, qh, fixtureSHA string
+	if *fixture != "" {
+		bundle, manifest, err := fixtures.Load(*fixture)
+		if err != nil {
+			return err
+		}
+		d = bundle.Dataset
+		data, err := json.Marshal(d)
+		if err != nil {
+			return err
+		}
+		dh = fixtures.Sum(data)
+		w = workload{Seed: uint64(manifest.Seed), Method: manifest.Generator, DatasetSHA256: dh}
+		for _, q := range bundle.Queries {
+			w.Items = append(w.Items, item{Stratum: "original_synthetic", Query: q})
+		}
+		queries, err := json.Marshal(w)
+		if err != nil {
+			return err
+		}
+		qh = fixtures.Sum(queries)
+		manifestBytes, err := os.ReadFile(*fixture)
+		if err != nil {
+			return err
+		}
+		fixtureSHA = fixtures.Sum(manifestBytes)
+	} else {
+		dh, e = read(*dp, &d)
+		if e != nil {
+			return e
+		}
+		qh, e = read(*qp, &w)
+		if e != nil {
+			return e
+		}
 	}
 	loadNS := time.Since(t).Nanoseconds()
 	if dh != w.DatasetSHA256 || len(w.Items) == 0 {
@@ -209,12 +246,31 @@ func run() error {
 			return e
 		}
 	}
+	var scoped scopedConfig
+	scopedSHA := ""
+	if isScoped(*alg) {
+		if *scopedPath == "" {
+			return fmt.Errorf("scoped adapter requires -scoped-config")
+		}
+		scopedSHA, e = read(*scopedPath, &scoped)
+		if e != nil {
+			return e
+		}
+	} else if *scopedPath != "" {
+		return fmt.Errorf("scoped configuration supplied for a legacy adapter")
+	}
 	runtime.GC()
 	var before, after runtime.MemStats
 	runtime.ReadMemStats(&before)
 	t = time.Now()
 	ctx, cancel := context.WithTimeout(context.Background(), *prepTimeout)
-	r, prepErr := prepare(ctx, d, *alg, *k, *labels, *transfers, *workLimit, *witnesses)
+	var r *router
+	var prepErr error
+	if isScoped(*alg) {
+		r, prepErr = prepareScoped(ctx, d, *alg, scoped)
+	} else {
+		r, prepErr = prepare(ctx, d, *alg, *k, *labels, *transfers, *workLimit, *witnesses)
+	}
 	prepNS := time.Since(t).Nanoseconds()
 	if prepErr == nil && (ctx.Err() != nil || prepNS > prepTimeout.Nanoseconds()) {
 		prepErr = fmt.Errorf("preparation deadline exceeded")
@@ -358,18 +414,28 @@ func run() error {
 			}
 		}
 		z.Completed = complete
+		z.Attempted = prepErr == nil
+		z.ValidEmpty = complete && len(z.Final) == 0
+		if complete {
+			for _, j := range z.Final {
+				if j.Metrics.Boardings > 0 {
+					z.Transit = true
+					break
+				}
+			}
+		}
 		z.Status = status(err)
 		if err != nil {
 			z.Error = err.Error()
 		}
 		if prepErr != nil {
-			z.Status = "preparation_unavailable"
+			z.Status = "not_run_preparation_unavailable"
 			z.Error = prepErr.Error()
 		}
 		if !complete && err == nil {
 			z.Status = "uncertified"
 		}
-		if z.Status == "routing_error" {
+		if z.Status == "routing_error" || z.Status == "correctness_mismatch" {
 			fatal = true
 		}
 		return z
@@ -446,8 +512,19 @@ func run() error {
 		counts := map[string]int{}
 		responses := []float64{}
 		cores := []float64{}
-		complete := 0
+		complete, attempted, validEmpty, transit := 0, 0, 0, 0
+		allResponses := []float64{}
 		for _, v := range p.Records {
+			if v.Attempted {
+				attempted++
+				allResponses = append(allResponses, float64(v.ResponseNS))
+			}
+			if v.ValidEmpty {
+				validEmpty++
+			}
+			if v.Transit {
+				transit++
+			}
 			counts[v.Status]++
 			if v.Completed {
 				complete++
@@ -460,7 +537,7 @@ func run() error {
 				fatal = true
 			}
 		}
-		summary := map[string]any{"repetition": rep, "warmup": p.Warmup, "forced": forced, "file": file, "sha256": io.SHA256, "requested": len(items), "complete": complete, "statuses": counts, "makespan_ns": makespan, "completed_queries_per_second": float64(complete) * 1e9 / float64(makespan), "completed_response_ns": evaluation.Summarize(responses), "completed_individual_core_ns": evaluation.Summarize(cores)}
+		summary := map[string]any{"repetition": rep, "warmup": p.Warmup, "forced": forced, "file": file, "sha256": io.SHA256, "requested": len(items), "complete": complete, "attempted": attempted, "not_run": len(items) - attempted, "valid_empty": validEmpty, "transit": transit, "attempted_response_ns": evaluation.Summarize(allResponses), "statuses": counts, "makespan_ns": makespan, "completed_queries_per_second": float64(complete) * 1e9 / float64(makespan), "completed_response_ns": evaluation.Summarize(responses), "completed_individual_core_ns": evaluation.Summarize(cores)}
 		summaries = append(summaries, summary)
 		if !forced && rep >= *warm {
 			qps = append(qps, float64(complete)*1e9/float64(makespan))
@@ -488,7 +565,7 @@ func run() error {
 	if r.cost != nil {
 		finalCost = r.cost()
 	}
-	_, e = experiment.WriteArtifact(filepath.Join(*out, "summary.json"), map[string]any{"success": !fatal, "success_scope": "No malformed route/adapter/unknown routing failure; budget/unsupported/deadline rows retained. Cross-process quality audited separately.", "algorithm": *alg, "kind": r.kind, "configuration": r.config, "quality_preparation": qualityPrep, "quality_enabled": *quality, "preference_config": choiceConfig, "preference_config_sha256": preferenceSHA, "candidate_k": *k, "display_k": []int{1, 3, 5, 10}, "penalty": 300, "batch_size": *size, "repetitions": *reps, "warmups": *warm, "batch_deadline_ns": deadline.Nanoseconds(), "preparation_deadline_ns": prepTimeout.Nanoseconds(), "rss_sampled_safety_stop_bytes": *rssStop, "rss_sampling_interval_ns": int64(100000000), "hard_memory_cap": false, "hard_cpu_confinement": false, "gomaxprocs": runtime.GOMAXPROCS(0), "go_version": runtime.Version(), "goos": runtime.GOOS, "goarch": runtime.GOARCH, "hardware": os.Getenv("TRANSIT_BENCH_HARDWARE"), "provenance": prov, "dataset_sha256": dh, "queries_sha256": qh, "seed": w.Seed, "method": w.Method, "input_load_ns": loadNS, "preparation": prep, "checker_preparation": checkPrep, "passes": summaries, "throughput_interval": ci, "index_cost_final": finalCost, "resources_final": experiment.SnapshotResources(), "scope": "Native development with recorded resources;8GB/four cores is a cost reference, not an acceptance gate. One router/process. Common batch submission deadline includes queue/search/validation/ranking. No divided shared-core latency; process RSS separate from cumulative allocations; no worker subprocesses."})
+	_, e = experiment.WriteArtifact(filepath.Join(*out, "summary.json"), map[string]any{"success": !fatal, "success_scope": "No malformed route/adapter/unknown routing failure; budget/unsupported/deadline rows retained. Cross-process quality audited separately.", "algorithm": *alg, "kind": r.kind, "configuration": r.config, "quality_preparation": qualityPrep, "quality_enabled": *quality, "preference_config": choiceConfig, "preference_config_sha256": preferenceSHA, "candidate_k": *k, "display_k": []int{1, 3, 5, 10}, "penalty": 300, "batch_size": *size, "repetitions": *reps, "warmups": *warm, "batch_deadline_ns": deadline.Nanoseconds(), "preparation_deadline_ns": prepTimeout.Nanoseconds(), "rss_sampled_safety_stop_bytes": *rssStop, "rss_sampling_interval_ns": int64(100000000), "hard_memory_cap": false, "hard_cpu_confinement": false, "gomaxprocs": runtime.GOMAXPROCS(0), "go_version": runtime.Version(), "goos": runtime.GOOS, "goarch": runtime.GOARCH, "hardware": os.Getenv("TRANSIT_BENCH_HARDWARE"), "provenance": prov, "dataset_sha256": dh, "queries_sha256": qh, "fixture_manifest_sha256": fixtureSHA, "scoped_configuration_sha256": scopedSHA, "seed": w.Seed, "method": w.Method, "input_load_ns": loadNS, "preparation": prep, "checker_preparation": checkPrep, "passes": summaries, "throughput_interval": ci, "index_cost_final": finalCost, "resources_final": experiment.SnapshotResources(), "scope": "Native development with recorded resources;8GB/four cores is a cost reference, not an acceptance gate. One router/process. Common batch submission deadline includes queue/search/validation/ranking. No divided shared-core latency; process RSS separate from cumulative allocations; no worker subprocesses."})
 	if e != nil {
 		return e
 	}

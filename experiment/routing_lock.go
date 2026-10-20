@@ -33,7 +33,7 @@ func VerifyRoutingLock(root string) (RoutingLock, error) {
 	if e = strictjson.Decode(b, &lock); e != nil {
 		return lock, e
 	}
-	if lock.Module != "github.com/ertyoii/transit-routing-go" || lock.Version != "v0.1.0-pre.2" || lock.Commit == "" || len(lock.Files) == 0 {
+	if lock.Module != "github.com/ertyoii/transit-routing-go" || lock.Version != "v0.1.0-pre.3" || lock.Commit == "" || len(lock.Files) == 0 {
 		return lock, fmt.Errorf("invalid routing pin")
 	}
 	dir := filepath.Join(root, "vendor", filepath.FromSlash(lock.Module))
