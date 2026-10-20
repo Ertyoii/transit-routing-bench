@@ -36,6 +36,7 @@ func TestPreparationProcessOutcomes(t *testing.T) {
 		wantSuccess                            bool
 	}{
 		{"unknown-adapter", "deliberately_unknown", "", "routing_error", "unknown algorithm", false},
+		{"misleading-adapter-name", "capability: incomplete: budget exhausted", "", "routing_error", "unknown algorithm", false},
 		{"mismatched-config", "trip_based_capped", "flash", "routing_error", "trip_based configuration required", false},
 		{"invalid-budget-config", "trip_based_capped", "invalid", "routing_error", "invalid preparation/budget configuration", false},
 		{"partial-tp", "tp_destination_fixed_caps_experimental", "tp-partial", "incomplete_budget", "source guard", true},

@@ -130,16 +130,21 @@ func preparationOutcome(err error) (string, bool) {
 	if errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded) {
 		return "deadline", false
 	}
-	s := strings.ToLower(err.Error())
-	if strings.Contains(s, "capability:") {
-		return "unsupported_semantics", false
-	}
-	if strings.Contains(s, "invalid") || strings.Contains(s, "requires") || strings.Contains(s, "required") {
-		return "routing_error", true
-	}
-	if strings.Contains(s, "budget") && strings.Contains(s, "exhausted") ||
-		strings.Contains(s, "incomplete:") && (strings.Contains(s, "budget") || strings.Contains(s, "guard") || strings.Contains(s, "limit")) {
-		return "incomplete_budget", false
+	// Match authoritative library prefixes, not arbitrary words echoed from an
+	// adapter name or input ID. Unwrap profile-context errors to reach the owner.
+	owners := []string{"paper", "trip-based", "flash-tb", "transfer patterns", "scalable tp", "fixed-cap tp", "t-rex", "t-rex candidate", "ultra", "ultra capped", "ultra sparse", "core-ch", "mcraptor"}
+	for cause := err; cause != nil; cause = errors.Unwrap(cause) {
+		s := strings.ToLower(cause.Error())
+		for _, owner := range owners {
+			if strings.HasPrefix(s, owner+" capability:") {
+				return "unsupported_semantics", false
+			}
+			resource := strings.HasPrefix(s, owner+" incomplete:") || strings.HasPrefix(s, owner+" preprocessing incomplete:")
+			malformed := strings.Contains(s, "invalid") || strings.Contains(s, "requires") || strings.Contains(s, "required")
+			if resource && !malformed && (strings.Contains(s, "budget") || strings.Contains(s, "guard") || strings.Contains(s, "limit")) {
+				return "incomplete_budget", false
+			}
+		}
 	}
 	return "routing_error", true
 }
