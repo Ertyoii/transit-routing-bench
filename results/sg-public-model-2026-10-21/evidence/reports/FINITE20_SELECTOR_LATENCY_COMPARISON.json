@@ -1,0 +1,81 @@
+{
+  "rows": [
+    {
+      "window": "morning",
+      "offered": 180,
+      "native_output_mismatches": 0,
+      "control_total_quality_phase": {
+        "p50_ms": 0.056332,
+        "p95_ms": 1.60484,
+        "p99_ms": 3.014603,
+        "max_ms": 4.225692
+      },
+      "finite_total_quality_phase": {
+        "p50_ms": 0.076913,
+        "p95_ms": 1.652419,
+        "p99_ms": 3.201206,
+        "max_ms": 5.702382
+      },
+      "median_paired_full_response_delta_ms": 1.2948095,
+      "median_paired_quality_phase_delta_ms": 0.013795
+    },
+    {
+      "window": "midday",
+      "offered": 180,
+      "native_output_mismatches": 0,
+      "control_total_quality_phase": {
+        "p50_ms": 0.042463,
+        "p95_ms": 1.855918,
+        "p99_ms": 2.620352,
+        "max_ms": 3.180235
+      },
+      "finite_total_quality_phase": {
+        "p50_ms": 0.067219,
+        "p95_ms": 1.992609,
+        "p99_ms": 3.349264,
+        "max_ms": 8.075161
+      },
+      "median_paired_full_response_delta_ms": -0.4756935,
+      "median_paired_quality_phase_delta_ms": 0.0154525
+    },
+    {
+      "window": "evening",
+      "offered": 180,
+      "native_output_mismatches": 0,
+      "control_total_quality_phase": {
+        "p50_ms": 0.044415,
+        "p95_ms": 1.599541,
+        "p99_ms": 2.407459,
+        "max_ms": 2.645998
+      },
+      "finite_total_quality_phase": {
+        "p50_ms": 0.07523,
+        "p95_ms": 1.703374,
+        "p99_ms": 2.804934,
+        "max_ms": 2.899081
+      },
+      "median_paired_full_response_delta_ms": 0.44004,
+      "median_paired_quality_phase_delta_ms": 0.013835
+    },
+    {
+      "window": "overnight",
+      "offered": 180,
+      "native_output_mismatches": 0,
+      "control_total_quality_phase": {
+        "p50_ms": 0.01326,
+        "p95_ms": 0.389323,
+        "p99_ms": 0.956716,
+        "max_ms": 1.028642
+      },
+      "finite_total_quality_phase": {
+        "p50_ms": 0.022102,
+        "p95_ms": 0.44874,
+        "p99_ms": 1.082292,
+        "max_ms": 1.174726
+      },
+      "median_paired_full_response_delta_ms": 0.0203295,
+      "median_paired_quality_phase_delta_ms": 0.0090895
+    }
+  ],
+  "scope": "Fresh serial tune processes, not a repeated selector-isolated latency experiment. quality_ns includes validation/feature extraction, default anchors and finite k3+k5 controls/minimax, not just top3 selector. Full response is authoritative; phase differences conditional on these runs."
+}

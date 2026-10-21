@@ -1,0 +1,196 @@
+{
+  "schema": "sg-public-normalized-inputs-v1",
+  "new_baseline_not_historical_frozenSG": true,
+  "walking_layer": "70 GTFS minimum-time proxies only, no street connectors",
+  "inputs": [
+    {
+      "id": "weekday-morning-20261020",
+      "dataset_path": "${SG_ROOT}/data/weekday-morning-20261020/dataset.json",
+      "dataset_bytes": 91052984,
+      "dataset_sha256": "4a5746add60548ada8ea820edbe04f4291058d4fe04e340fee937add1bcdfb89",
+      "audit_path": "${SG_ROOT}/data/weekday-morning-20261020/import-audit.json",
+      "audit_sha256": "7e60c97629606e598056043f9c288ba2914f882d92a6ea8ff91febd24484c9a1",
+      "source_raw_sha256": "d92173127e9a5cbf8ecb5b4d50ab03f68deb7f8ddff73648b8ffb33c70ab4801",
+      "counts": {
+        "stops": 5450,
+        "trips": 17085,
+        "connections": 409310,
+        "footpaths": 70,
+        "transfers": 70
+      },
+      "source_options": {
+        "service_date": "2026-10-20",
+        "start": 25200,
+        "end": 36000,
+        "frequency_policy": "deterministic_model",
+        "transfer_edges": "minimum_time_proxy",
+        "data_kind": "modeled_snapshot",
+        "max_connections": 1000000
+      },
+      "query_departures_start": 25200,
+      "query_departures_end_exclusive": 32400,
+      "query_arrival_horizon_seconds": 3600,
+      "exit_code": 0,
+      "late_event_seconds_max": 36000,
+      "source_service_dates": {
+        "2026-10-19": 15,
+        "2026-10-20": 17070
+      },
+      "model_coverage": "explicit deterministic frequency realization with transfer proxies only",
+      "transit_source_coverage": "typical_weekday_frequency_model",
+      "eligible_for_primary_transit_reachability_score": true,
+      "coverage_exclusion_reason": null,
+      "physical_reachability_claim": false
+    },
+    {
+      "id": "weekday-midday-20261020",
+      "dataset_path": "${SG_ROOT}/data/weekday-midday-20261020/dataset.json",
+      "dataset_bytes": 91565802,
+      "dataset_sha256": "d01069c78a746fcbe7c7d7dfcf646dfe67aff7d0d8f19e9614cdb4f266c7e4d5",
+      "audit_path": "${SG_ROOT}/data/weekday-midday-20261020/import-audit.json",
+      "audit_sha256": "60249a4c04139340f0a8c401b79bd1595d5134104874945eaafa73e988894245",
+      "source_raw_sha256": "d92173127e9a5cbf8ecb5b4d50ab03f68deb7f8ddff73648b8ffb33c70ab4801",
+      "counts": {
+        "stops": 5450,
+        "trips": 17289,
+        "connections": 411554,
+        "footpaths": 70,
+        "transfers": 70
+      },
+      "source_options": {
+        "service_date": "2026-10-20",
+        "start": 43200,
+        "end": 54000,
+        "frequency_policy": "deterministic_model",
+        "transfer_edges": "minimum_time_proxy",
+        "data_kind": "modeled_snapshot",
+        "max_connections": 1000000
+      },
+      "query_departures_start": 43200,
+      "query_departures_end_exclusive": 50400,
+      "query_arrival_horizon_seconds": 3600,
+      "exit_code": 0,
+      "late_event_seconds_max": 54000,
+      "source_service_dates": {
+        "2026-10-20": 17289
+      },
+      "model_coverage": "explicit deterministic frequency realization with transfer proxies only",
+      "transit_source_coverage": "typical_weekday_frequency_model",
+      "eligible_for_primary_transit_reachability_score": true,
+      "coverage_exclusion_reason": null,
+      "physical_reachability_claim": false
+    },
+    {
+      "id": "weekday-evening-20261020",
+      "dataset_path": "${SG_ROOT}/data/weekday-evening-20261020/dataset.json",
+      "dataset_bytes": 91649841,
+      "dataset_sha256": "82271a27182ade5986f7b5b18b699f24ada82e1b177ef9ee151d28e4b532090a",
+      "audit_path": "${SG_ROOT}/data/weekday-evening-20261020/import-audit.json",
+      "audit_sha256": "f60726e03ef96b2a9547624f50e91ee341294ce32a01222d539405af672dc6ee",
+      "source_raw_sha256": "d92173127e9a5cbf8ecb5b4d50ab03f68deb7f8ddff73648b8ffb33c70ab4801",
+      "counts": {
+        "stops": 5450,
+        "trips": 17298,
+        "connections": 411933,
+        "footpaths": 70,
+        "transfers": 70
+      },
+      "source_options": {
+        "service_date": "2026-10-20",
+        "start": 61200,
+        "end": 72000,
+        "frequency_policy": "deterministic_model",
+        "transfer_edges": "minimum_time_proxy",
+        "data_kind": "modeled_snapshot",
+        "max_connections": 1000000
+      },
+      "query_departures_start": 61200,
+      "query_departures_end_exclusive": 68400,
+      "query_arrival_horizon_seconds": 3600,
+      "exit_code": 0,
+      "late_event_seconds_max": 72000,
+      "source_service_dates": {
+        "2026-10-20": 17298
+      },
+      "model_coverage": "explicit deterministic frequency realization with transfer proxies only",
+      "transit_source_coverage": "typical_weekday_frequency_model",
+      "eligible_for_primary_transit_reachability_score": true,
+      "coverage_exclusion_reason": null,
+      "physical_reachability_claim": false
+    },
+    {
+      "id": "weekday-overnight-20261020",
+      "dataset_path": "${SG_ROOT}/data/weekday-overnight-20261020/dataset.json",
+      "dataset_bytes": 34841780,
+      "dataset_sha256": "d7f898c914b894b2f0a4b0ac3133b433fc3700b46297acf98ea20288fdeea125",
+      "audit_path": "${SG_ROOT}/data/weekday-overnight-20261020/import-audit.json",
+      "audit_sha256": "5d5bae1b87fda4aa8d8ff37ff32ea92364c6d6f717b34192a30d9ed0cba0d961",
+      "source_raw_sha256": "d92173127e9a5cbf8ecb5b4d50ab03f68deb7f8ddff73648b8ffb33c70ab4801",
+      "counts": {
+        "stops": 5450,
+        "trips": 6467,
+        "connections": 155881,
+        "footpaths": 70,
+        "transfers": 70
+      },
+      "source_options": {
+        "service_date": "2026-10-20",
+        "start": 82800,
+        "end": 93600,
+        "frequency_policy": "deterministic_model",
+        "transfer_edges": "minimum_time_proxy",
+        "data_kind": "modeled_snapshot",
+        "max_connections": 1000000
+      },
+      "query_departures_start": 82800,
+      "query_departures_end_exclusive": 90000,
+      "query_arrival_horizon_seconds": 3600,
+      "exit_code": 0,
+      "late_event_seconds_max": 93598,
+      "source_service_dates": {
+        "2026-10-20": 6467
+      },
+      "model_coverage": "explicit deterministic frequency realization with transfer proxies only",
+      "transit_source_coverage": "typical_weekday_frequency_model",
+      "eligible_for_primary_transit_reachability_score": true,
+      "coverage_exclusion_reason": null,
+      "physical_reachability_claim": false
+    },
+    {
+      "id": "weekend-midday-20261024",
+      "dataset_path": "${SG_ROOT}/data/weekend-midday-20261024/dataset.json",
+      "dataset_bytes": 227589,
+      "dataset_sha256": "1575c7d36a0580dd4517c3bb623cda548c699dcb06cefe8d498a0985b663f47d",
+      "audit_path": "${SG_ROOT}/data/weekend-midday-20261024/import-audit.json",
+      "audit_sha256": "c4689970eddbd8fb2ee8b41c7b3e23758fb636569d322aa03c51f5500ebedfa9",
+      "source_raw_sha256": "d92173127e9a5cbf8ecb5b4d50ab03f68deb7f8ddff73648b8ffb33c70ab4801",
+      "counts": {
+        "stops": 5450,
+        "trips": 0,
+        "connections": 0,
+        "footpaths": 70,
+        "transfers": 70
+      },
+      "source_options": {
+        "service_date": "2026-10-24",
+        "start": 43200,
+        "end": 54000,
+        "frequency_policy": "deterministic_model",
+        "transfer_edges": "minimum_time_proxy",
+        "data_kind": "modeled_snapshot",
+        "max_connections": 1000000
+      },
+      "query_departures_start": 43200,
+      "query_departures_end_exclusive": 50400,
+      "query_arrival_horizon_seconds": 3600,
+      "exit_code": 0,
+      "late_event_seconds_max": null,
+      "source_service_dates": {},
+      "model_coverage": "no transit because source WD calendar excludes weekend",
+      "transit_source_coverage": "unavailable_source_calendar",
+      "eligible_for_primary_transit_reachability_score": false,
+      "coverage_exclusion_reason": "Public release calendar WD operates Monday-Friday only. Saturday transit absent from source; do not score as physical unreachability or algorithm no-route success.",
+      "physical_reachability_claim": false
+    }
+  ]
+}

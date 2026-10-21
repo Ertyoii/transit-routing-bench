@@ -1,0 +1,92 @@
+{
+  "schema": "latest-official-lta-source-eligibility-policy-v1",
+  "recorded_utc": "2026-10-20T17:25:16.747215+00:00",
+  "source_manifests": [
+    {
+      "path": "${SG_ROOT}/data/NORMALIZED_INPUTS.json",
+      "sha256": "8bd995848290446d2a3e4b641c23efe7594f66bd8cd7c1a06a3c20bead30a78f",
+      "status": "retained community-frequency model or derivative; not latest official LTA"
+    },
+    {
+      "path": "${SG_ROOT}/data-enriched/NORMALIZED_INPUTS.json",
+      "sha256": "6f24245099bef9b1eedc6945f9c987b8d157273988c555fd37ab4d8be7b83a26",
+      "status": "retained community-frequency model or derivative; not latest official LTA"
+    }
+  ],
+  "denied_normalized_inputs": [
+    {
+      "sha256": "4a5746add60548ada8ea820edbe04f4291058d4fe04e340fee937add1bcdfb89",
+      "path": "${SG_ROOT}/data/weekday-morning-20261020/dataset.json",
+      "reason": "Known provisional community-model normalized bytes; ineligible for latest official LTA formal baseline"
+    },
+    {
+      "sha256": "d01069c78a746fcbe7c7d7dfcf646dfe67aff7d0d8f19e9614cdb4f266c7e4d5",
+      "path": "${SG_ROOT}/data/weekday-midday-20261020/dataset.json",
+      "reason": "Known provisional community-model normalized bytes; ineligible for latest official LTA formal baseline"
+    },
+    {
+      "sha256": "82271a27182ade5986f7b5b18b699f24ada82e1b177ef9ee151d28e4b532090a",
+      "path": "${SG_ROOT}/data/weekday-evening-20261020/dataset.json",
+      "reason": "Known provisional community-model normalized bytes; ineligible for latest official LTA formal baseline"
+    },
+    {
+      "sha256": "d7f898c914b894b2f0a4b0ac3133b433fc3700b46297acf98ea20288fdeea125",
+      "path": "${SG_ROOT}/data/weekday-overnight-20261020/dataset.json",
+      "reason": "Known provisional community-model normalized bytes; ineligible for latest official LTA formal baseline"
+    },
+    {
+      "sha256": "1575c7d36a0580dd4517c3bb623cda548c699dcb06cefe8d498a0985b663f47d",
+      "path": "${SG_ROOT}/data/weekend-midday-20261024/dataset.json",
+      "reason": "Known provisional community-model normalized bytes; ineligible for latest official LTA formal baseline"
+    },
+    {
+      "sha256": "27cbd667e10558da4871bdce9169e2261c661994359f9580612954ec2aef35ff",
+      "path": "${SG_ROOT}/data-enriched/conservative600/weekday-morning-20261020/dataset.json",
+      "reason": "Known provisional community-model normalized bytes; ineligible for latest official LTA formal baseline"
+    },
+    {
+      "sha256": "000ec198ecdbe6d81f33c3986a5451e01a9fbb97a0aec85547e64c51c4540178",
+      "path": "${SG_ROOT}/data-enriched/rail-sensitivity600/weekday-morning-20261020/dataset.json",
+      "reason": "Known provisional community-model normalized bytes; ineligible for latest official LTA formal baseline"
+    },
+    {
+      "sha256": "d777bffc6e66c8268d485734b07c71f43dd5f2d9124c3fca92d56f906f985eb1",
+      "path": "${SG_ROOT}/data-enriched/conservative600/weekday-midday-20261020/dataset.json",
+      "reason": "Known provisional community-model normalized bytes; ineligible for latest official LTA formal baseline"
+    },
+    {
+      "sha256": "b03836a2d2300b11f88258e4abe57df8667e62820881a6120347cea52860ce88",
+      "path": "${SG_ROOT}/data-enriched/rail-sensitivity600/weekday-midday-20261020/dataset.json",
+      "reason": "Known provisional community-model normalized bytes; ineligible for latest official LTA formal baseline"
+    },
+    {
+      "sha256": "f35d77f1ec86123a7a9bea963658cbcba6638f9c22a0ee201f724fc50c3c0587",
+      "path": "${SG_ROOT}/data-enriched/conservative600/weekday-evening-20261020/dataset.json",
+      "reason": "Known provisional community-model normalized bytes; ineligible for latest official LTA formal baseline"
+    },
+    {
+      "sha256": "c547dba90d551d2025411560b91fd4473f2ecfc847c5c4f922121a4aa366a733",
+      "path": "${SG_ROOT}/data-enriched/rail-sensitivity600/weekday-evening-20261020/dataset.json",
+      "reason": "Known provisional community-model normalized bytes; ineligible for latest official LTA formal baseline"
+    },
+    {
+      "sha256": "7c700f4340228d246eaa34f4c3d2d484e0278cec3b37c81c071b50257f533b50",
+      "path": "${SG_ROOT}/data-enriched/conservative600/weekday-overnight-20261020/dataset.json",
+      "reason": "Known provisional community-model normalized bytes; ineligible for latest official LTA formal baseline"
+    },
+    {
+      "sha256": "1dcfa5e1a69d0d3161178c7737b39b70d950bb4173bcad5c1320171b34faba6a",
+      "path": "${SG_ROOT}/data-enriched/rail-sensitivity600/weekday-overnight-20261020/dataset.json",
+      "reason": "Known provisional community-model normalized bytes; ineligible for latest official LTA formal baseline"
+    },
+    {
+      "sha256": "1575c7d36a0580dd4517c3bb623cda548c699dcb06cefe8d498a0985b663f47d",
+      "path": "${SG_ROOT}/data/weekend-midday-20261024/dataset.json",
+      "reason": "Known provisional/unsupported community-model normalized bytes"
+    }
+  ],
+  "known_community_raw_sha256": [
+    "d92173127e9a5cbf8ecb5b4d50ab03f68deb7f8ddff73648b8ffb33c70ab4801"
+  ],
+  "scope": "Only formal final-evaluation source eligibility. Diagnostic artifact inspection is not official source qualification or execution permission."
+}

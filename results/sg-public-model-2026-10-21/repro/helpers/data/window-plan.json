@@ -1,0 +1,61 @@
+{
+  "schema": "sg-public-window-plan-v1",
+  "selected_before_algorithm_results": true,
+  "timezone": "Asia/Singapore",
+  "frequency_policy": "deterministic_model",
+  "data_kind": "modeled_snapshot",
+  "walking_edges": "minimum_time_proxy",
+  "max_connections": 1000000,
+  "overflow_policy": "fail-not-truncate",
+  "departure_interval": "first two hours of each declared three-hour model window; each query latest_arrival = departure+3600 seconds, final hour protects late departures",
+  "windows": [
+    {
+      "id": "weekday-morning-20261020",
+      "service_date": "2026-10-20",
+      "start": 25200,
+      "end": 36000,
+      "departures_start": 25200,
+      "departures_end_exclusive": 32400
+    },
+    {
+      "id": "weekday-midday-20261020",
+      "service_date": "2026-10-20",
+      "start": 43200,
+      "end": 54000,
+      "departures_start": 43200,
+      "departures_end_exclusive": 50400
+    },
+    {
+      "id": "weekday-evening-20261020",
+      "service_date": "2026-10-20",
+      "start": 61200,
+      "end": 72000,
+      "departures_start": 61200,
+      "departures_end_exclusive": 68400
+    },
+    {
+      "id": "weekday-overnight-20261020",
+      "service_date": "2026-10-20",
+      "start": 82800,
+      "end": 93600,
+      "departures_start": 82800,
+      "departures_end_exclusive": 90000
+    },
+    {
+      "id": "weekend-midday-20261024",
+      "service_date": "2026-10-24",
+      "start": 43200,
+      "end": 54000,
+      "departures_start": 43200,
+      "departures_end_exclusive": 50400
+    }
+  ],
+  "limitations": [
+    "Not a complete all-day timetable benchmark.",
+    "Three-hour windows preserve trips within importer support; no pre-window onboard-origin journeys.",
+    "Frequency profile is fixed across day; periods do not imply genuine peak/offpeak headway models.",
+    "Weekend calendar lacks WD service; retain its outcome as coverage limitation.",
+    "70 directed transfer proxies do not provide street pedestrian access or general bus-to-rail transfers."
+  ],
+  "query_arrival_horizon_seconds": 3600
+}

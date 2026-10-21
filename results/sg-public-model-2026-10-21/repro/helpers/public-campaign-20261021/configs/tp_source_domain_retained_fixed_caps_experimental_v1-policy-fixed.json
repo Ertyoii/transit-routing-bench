@@ -1,0 +1,54 @@
+{
+  "source_domain_patterns": {
+    "retained": {
+      "scope": {
+        "patterns": {
+          "profile": {
+            "cells": 1,
+            "max_boardings": 4,
+            "semantics": "static_stop_pair_v1",
+            "limits": {
+              "max_stops": 10000,
+              "max_trips": 100000,
+              "max_closure_paths": 1000000,
+              "max_walk_settled": 2000000,
+              "max_transfers": 5000000,
+              "max_runs": 200000,
+              "max_work": 2000000000,
+              "max_flag_bytes": 100000000,
+              "max_suffix_bytes": 1500000000,
+              "max_witnesses": 2000000,
+              "max_query_segments": 1000000,
+              "max_snapshot_transfers": 5000000
+            }
+          },
+          "max_patterns": 2000000,
+          "max_nodes": 4000000,
+          "max_edges": 6000000,
+          "max_direct_entries": 5000000,
+          "max_build_work": 2000000000,
+          "max_query_work": 2000000,
+          "max_query_labels": 1000000
+        },
+        "destination": "33019",
+        "walking_limits": {
+          "access_seconds": 600,
+          "egress_seconds": 600,
+          "transfer_seconds": 600,
+          "direct_seconds": 600
+        },
+        "profile_max_legs": 1024,
+        "profile_max_walking_seconds": 3000,
+        "max_profile_records": 1000000,
+        "max_profile_sources": 10000,
+        "max_profile_queries": 2000000,
+        "max_profile_queued_segments": 1000000
+      },
+      "max_pending_segments": 1000000,
+      "max_source_seed_events": 2000000
+    },
+    "sources": [
+      "96179"
+    ]
+  }
+}

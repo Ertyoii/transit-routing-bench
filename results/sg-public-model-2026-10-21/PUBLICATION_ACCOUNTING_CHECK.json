@@ -1,0 +1,137 @@
+{
+  "schema": "sg_public_projection_accounting_check_v1",
+  "generated_utc": "2026-10-21T05:09:16.848363+00:00",
+  "decision": "pass",
+  "campaigns": 51,
+  "planned_process_slots": 479,
+  "projected_rows": 179516,
+  "measurement_roles": {
+    "measured": 88554,
+    "preparation-unavailable": 48,
+    "forced-deadline": 88314,
+    "diagnostic-target-partition": 576,
+    "forced-preparation": 8,
+    "offered-unresolved": 2016
+  },
+  "denominator_role_counts": [
+    {
+      "unit": "one-source-many-target-row-and-ordered-cells",
+      "role": "diagnostic-target-partition",
+      "rows": 576
+    },
+    {
+      "unit": "one-source-many-target-row-and-ordered-cells",
+      "role": "forced-deadline",
+      "rows": 1128
+    },
+    {
+      "unit": "one-source-many-target-row-and-ordered-cells",
+      "role": "forced-preparation",
+      "rows": 8
+    },
+    {
+      "unit": "one-source-many-target-row-and-ordered-cells",
+      "role": "measured",
+      "rows": 1128
+    },
+    {
+      "unit": "point-query",
+      "role": "forced-deadline",
+      "rows": 87186
+    },
+    {
+      "unit": "point-query",
+      "role": "measured",
+      "rows": 87330
+    },
+    {
+      "unit": "point-query",
+      "role": "offered-unresolved",
+      "rows": 2016
+    },
+    {
+      "unit": "point-query",
+      "role": "preparation-unavailable",
+      "rows": 48
+    },
+    {
+      "unit": "whole-inclusive-ready-window-query",
+      "role": "measured",
+      "rows": 96
+    }
+  ],
+  "status_role_counts": [
+    {
+      "role": "diagnostic-target-partition",
+      "status": null,
+      "rows": 576
+    },
+    {
+      "role": "forced-deadline",
+      "status": "deadline",
+      "rows": 86886
+    },
+    {
+      "role": "forced-deadline",
+      "status": "not_run_preparation_unavailable",
+      "rows": 300
+    },
+    {
+      "role": "forced-deadline",
+      "status": null,
+      "rows": 1128
+    },
+    {
+      "role": "forced-preparation",
+      "status": null,
+      "rows": 8
+    },
+    {
+      "role": "measured",
+      "status": "complete",
+      "rows": 86144
+    },
+    {
+      "role": "measured",
+      "status": "deadline",
+      "rows": 24
+    },
+    {
+      "role": "measured",
+      "status": "internal_label_limit",
+      "rows": 718
+    },
+    {
+      "role": "measured",
+      "status": "not_run_preparation_unavailable",
+      "rows": 300
+    },
+    {
+      "role": "measured",
+      "status": null,
+      "rows": 1368
+    },
+    {
+      "role": "offered-unresolved",
+      "status": "process_unresolved",
+      "rows": 2016
+    },
+    {
+      "role": "preparation-unavailable",
+      "status": null,
+      "rows": 48
+    }
+  ],
+  "final_test_roles": {
+    "measured": 24120,
+    "forced-deadline": 24120
+  },
+  "prelaunch_unresolved_null_attempt_slots": 2004,
+  "provenance_members_verified": 1475,
+  "uncompressed_outcome_stream_sha256": "0fd237d6f8d64a559d0467be4338d17a19497a9294baaeea2683e3bedf1789ea",
+  "original_compact_publication_manifest_sha256": "5180d0cbeef3b7f74c9658336a55acd32290a1c08a0e17f36af85d535c2eeea9",
+  "all_output_file_hashes_verified": true,
+  "all_per_run_role_counts_reconcile": true,
+  "duplicate_source_row_identities": 0,
+  "scope": "Configuration/repetition/control/prelaunch slots across distinct point/profile/graph-row units, not unique passenger demand; this checks portable projection accounting and hashes, not a new routing or quality experiment. Privacy/source-data restrictions are enforced separately by the projection."
+}

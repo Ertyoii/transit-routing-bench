@@ -1,0 +1,188 @@
+{
+  "artifacts": [
+    {
+      "counts": {
+        "connections": 409310,
+        "footpaths": 70,
+        "stops": 5450,
+        "transfers": 70,
+        "trips": 17085
+      },
+      "dataset_bytes": 91052984,
+      "dataset_relative_path": "data/weekday-morning-20261020/dataset.json",
+      "dataset_sha256": "4a5746add60548ada8ea820edbe04f4291058d4fe04e340fee937add1bcdfb89",
+      "id": "weekday-morning-20261020",
+      "variant": "knownedges"
+    },
+    {
+      "counts": {
+        "connections": 411554,
+        "footpaths": 70,
+        "stops": 5450,
+        "transfers": 70,
+        "trips": 17289
+      },
+      "dataset_bytes": 91565802,
+      "dataset_relative_path": "data/weekday-midday-20261020/dataset.json",
+      "dataset_sha256": "d01069c78a746fcbe7c7d7dfcf646dfe67aff7d0d8f19e9614cdb4f266c7e4d5",
+      "id": "weekday-midday-20261020",
+      "variant": "knownedges"
+    },
+    {
+      "counts": {
+        "connections": 411933,
+        "footpaths": 70,
+        "stops": 5450,
+        "transfers": 70,
+        "trips": 17298
+      },
+      "dataset_bytes": 91649841,
+      "dataset_relative_path": "data/weekday-evening-20261020/dataset.json",
+      "dataset_sha256": "82271a27182ade5986f7b5b18b699f24ada82e1b177ef9ee151d28e4b532090a",
+      "id": "weekday-evening-20261020",
+      "variant": "knownedges"
+    },
+    {
+      "counts": {
+        "connections": 155881,
+        "footpaths": 70,
+        "stops": 5450,
+        "transfers": 70,
+        "trips": 6467
+      },
+      "dataset_bytes": 34841780,
+      "dataset_relative_path": "data/weekday-overnight-20261020/dataset.json",
+      "dataset_sha256": "d7f898c914b894b2f0a4b0ac3133b433fc3700b46297acf98ea20288fdeea125",
+      "id": "weekday-overnight-20261020",
+      "variant": "knownedges"
+    },
+    {
+      "counts": {
+        "connections": 0,
+        "footpaths": 70,
+        "stops": 5450,
+        "transfers": 70,
+        "trips": 0
+      },
+      "dataset_bytes": 227589,
+      "dataset_relative_path": "data/weekend-midday-20261024/dataset.json",
+      "dataset_sha256": "1575c7d36a0580dd4517c3bb623cda548c699dcb06cefe8d498a0985b663f47d",
+      "id": "weekend-midday-20261024",
+      "variant": "knownedges"
+    },
+    {
+      "counts": {
+        "connections": 409310,
+        "footpaths": 40230,
+        "stops": 5450,
+        "transfers": 70,
+        "trips": 17085
+      },
+      "dataset_bytes": 105750876,
+      "dataset_relative_path": "data-enriched/conservative600/weekday-morning-20261020/dataset.json",
+      "dataset_sha256": "27cbd667e10558da4871bdce9169e2261c661994359f9580612954ec2aef35ff",
+      "id": "weekday-morning-20261020",
+      "variant": "conservative600"
+    },
+    {
+      "counts": {
+        "connections": 409310,
+        "footpaths": 41454,
+        "stops": 5450,
+        "transfers": 70,
+        "trips": 17085
+      },
+      "dataset_bytes": 106234698,
+      "dataset_relative_path": "data-enriched/rail-sensitivity600/weekday-morning-20261020/dataset.json",
+      "dataset_sha256": "000ec198ecdbe6d81f33c3986a5451e01a9fbb97a0aec85547e64c51c4540178",
+      "id": "weekday-morning-20261020",
+      "variant": "rail-sensitivity600"
+    },
+    {
+      "counts": {
+        "connections": 411554,
+        "footpaths": 40230,
+        "stops": 5450,
+        "transfers": 70,
+        "trips": 17289
+      },
+      "dataset_bytes": 106263694,
+      "dataset_relative_path": "data-enriched/conservative600/weekday-midday-20261020/dataset.json",
+      "dataset_sha256": "d777bffc6e66c8268d485734b07c71f43dd5f2d9124c3fca92d56f906f985eb1",
+      "id": "weekday-midday-20261020",
+      "variant": "conservative600"
+    },
+    {
+      "counts": {
+        "connections": 411554,
+        "footpaths": 41454,
+        "stops": 5450,
+        "transfers": 70,
+        "trips": 17289
+      },
+      "dataset_bytes": 106747516,
+      "dataset_relative_path": "data-enriched/rail-sensitivity600/weekday-midday-20261020/dataset.json",
+      "dataset_sha256": "b03836a2d2300b11f88258e4abe57df8667e62820881a6120347cea52860ce88",
+      "id": "weekday-midday-20261020",
+      "variant": "rail-sensitivity600"
+    },
+    {
+      "counts": {
+        "connections": 411933,
+        "footpaths": 40230,
+        "stops": 5450,
+        "transfers": 70,
+        "trips": 17298
+      },
+      "dataset_bytes": 106347733,
+      "dataset_relative_path": "data-enriched/conservative600/weekday-evening-20261020/dataset.json",
+      "dataset_sha256": "f35d77f1ec86123a7a9bea963658cbcba6638f9c22a0ee201f724fc50c3c0587",
+      "id": "weekday-evening-20261020",
+      "variant": "conservative600"
+    },
+    {
+      "counts": {
+        "connections": 411933,
+        "footpaths": 41454,
+        "stops": 5450,
+        "transfers": 70,
+        "trips": 17298
+      },
+      "dataset_bytes": 106831555,
+      "dataset_relative_path": "data-enriched/rail-sensitivity600/weekday-evening-20261020/dataset.json",
+      "dataset_sha256": "c547dba90d551d2025411560b91fd4473f2ecfc847c5c4f922121a4aa366a733",
+      "id": "weekday-evening-20261020",
+      "variant": "rail-sensitivity600"
+    },
+    {
+      "counts": {
+        "connections": 155881,
+        "footpaths": 40230,
+        "stops": 5450,
+        "transfers": 70,
+        "trips": 6467
+      },
+      "dataset_bytes": 49539672,
+      "dataset_relative_path": "data-enriched/conservative600/weekday-overnight-20261020/dataset.json",
+      "dataset_sha256": "7c700f4340228d246eaa34f4c3d2d484e0278cec3b37c81c071b50257f533b50",
+      "id": "weekday-overnight-20261020",
+      "variant": "conservative600"
+    },
+    {
+      "counts": {
+        "connections": 155881,
+        "footpaths": 41454,
+        "stops": 5450,
+        "transfers": 70,
+        "trips": 6467
+      },
+      "dataset_bytes": 50023494,
+      "dataset_relative_path": "data-enriched/rail-sensitivity600/weekday-overnight-20261020/dataset.json",
+      "dataset_sha256": "1dcfa5e1a69d0d3161178c7737b39b70d950bb4173bcad5c1320171b34faba6a",
+      "id": "weekday-overnight-20261020",
+      "variant": "rail-sensitivity600"
+    }
+  ],
+  "note": "No dataset bytes. Hashes identify local historical outputs, not redistribution rights. Metadata containing paths, timestamps or helper digests must be rebound after regeneration.",
+  "schema": "sg-input-artifact-hashes-v1"
+}

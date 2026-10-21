@@ -1,0 +1,477 @@
+{
+  "pairs": [
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_arrival_single/test-morning-native90-csa_arrival_single",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_arrival_shared/test-morning-native90-csa_arrival_shared",
+      "offered_pairs": 90,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 90,
+      "median_paired_response_delta_ms": 6.8123405,
+      "median_paired_response_ratio": 1.0278645142020526,
+      "baseline_metrics": {
+        "offered": 90,
+        "complete": 90,
+        "statuses": {
+          "complete": 90
+        },
+        "response_p50_ms": 220.00231,
+        "response_max_ms": 814.04355,
+        "batch_allocation_bytes": 2558372504,
+        "load_s": 2.120486605,
+        "router_prep_s": 1.414561809,
+        "router_prep_alloc_bytes": 1053243104,
+        "sampled_peak_group_rss_bytes": 1192169472
+      },
+      "candidate_metrics": {
+        "offered": 90,
+        "complete": 90,
+        "statuses": {
+          "complete": 90
+        },
+        "response_p50_ms": 228.998069,
+        "response_max_ms": 775.803064,
+        "batch_allocation_bytes": 2558426520,
+        "load_s": 2.129889384,
+        "router_prep_s": 1.5888251,
+        "router_prep_alloc_bytes": 1053243200,
+        "sampled_peak_group_rss_bytes": 1266900992
+      },
+      "scope": "Same90nativecontract outputs, singleversusshared atbatch1; anydeadline/completeness differences retained, not semanticparity failure for unavailablepairs.",
+      "raw_field_difference_count": 0,
+      "joint_complete_native_witness_difference_count": 0,
+      "joint_complete_native_witness_differences": [],
+      "unavailable_or_status_difference_count": 0,
+      "unavailable_or_status_differences": [],
+      "classification_scope": "Rawfielddifferences on deadlines/unavailable pairs are unknownnativeoutput, not demonstrated source correctness failures; originalfailuredenominators remain."
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_score_single/test-morning-native90-csa_score_single",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_score_shared/test-morning-native90-csa_score_shared",
+      "offered_pairs": 90,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 90,
+      "median_paired_response_delta_ms": 1.8410069999999998,
+      "median_paired_response_ratio": 1.0024961065236866,
+      "baseline_metrics": {
+        "offered": 90,
+        "complete": 90,
+        "statuses": {
+          "complete": 90
+        },
+        "response_p50_ms": 614.450159,
+        "response_max_ms": 1248.148157,
+        "batch_allocation_bytes": 4734095752,
+        "load_s": 2.077863772,
+        "router_prep_s": 1.601230168,
+        "router_prep_alloc_bytes": 1053243072,
+        "sampled_peak_group_rss_bytes": 1257381888
+      },
+      "candidate_metrics": {
+        "offered": 90,
+        "complete": 90,
+        "statuses": {
+          "complete": 90
+        },
+        "response_p50_ms": 609.095192,
+        "response_max_ms": 1294.108697,
+        "batch_allocation_bytes": 4809124744,
+        "load_s": 2.18239754,
+        "router_prep_s": 1.594101932,
+        "router_prep_alloc_bytes": 1053243168,
+        "sampled_peak_group_rss_bytes": 1160744960
+      },
+      "scope": "Same90nativecontract outputs, singleversusshared atbatch1; anydeadline/completeness differences retained, not semanticparity failure for unavailablepairs.",
+      "raw_field_difference_count": 0,
+      "joint_complete_native_witness_difference_count": 0,
+      "joint_complete_native_witness_differences": [],
+      "unavailable_or_status_difference_count": 0,
+      "unavailable_or_status_differences": [],
+      "classification_scope": "Rawfielddifferences on deadlines/unavailable pairs are unknownnativeoutput, not demonstrated source correctness failures; originalfailuredenominators remain."
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_arrival_single/test-midday-native90-csa_arrival_single",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_arrival_shared/test-midday-native90-csa_arrival_shared",
+      "offered_pairs": 90,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 90,
+      "median_paired_response_delta_ms": 4.71183,
+      "median_paired_response_ratio": 1.0208891668787103,
+      "baseline_metrics": {
+        "offered": 90,
+        "complete": 90,
+        "statuses": {
+          "complete": 90
+        },
+        "response_p50_ms": 224.598919,
+        "response_max_ms": 990.112748,
+        "batch_allocation_bytes": 2511812272,
+        "load_s": 2.033247339,
+        "router_prep_s": 1.365807096,
+        "router_prep_alloc_bytes": 1055180368,
+        "sampled_peak_group_rss_bytes": 1200046080
+      },
+      "candidate_metrics": {
+        "offered": 90,
+        "complete": 90,
+        "statuses": {
+          "complete": 90
+        },
+        "response_p50_ms": 233.21224,
+        "response_max_ms": 1048.890838,
+        "batch_allocation_bytes": 2511774352,
+        "load_s": 2.138425977,
+        "router_prep_s": 1.277129603,
+        "router_prep_alloc_bytes": 1055180416,
+        "sampled_peak_group_rss_bytes": 1297162240
+      },
+      "scope": "Same90nativecontract outputs, singleversusshared atbatch1; anydeadline/completeness differences retained, not semanticparity failure for unavailablepairs.",
+      "raw_field_difference_count": 0,
+      "joint_complete_native_witness_difference_count": 0,
+      "joint_complete_native_witness_differences": [],
+      "unavailable_or_status_difference_count": 0,
+      "unavailable_or_status_differences": [],
+      "classification_scope": "Rawfielddifferences on deadlines/unavailable pairs are unknownnativeoutput, not demonstrated source correctness failures; originalfailuredenominators remain."
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_score_single/test-midday-native90-csa_score_single",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_score_shared/test-midday-native90-csa_score_shared",
+      "offered_pairs": 90,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 90,
+      "median_paired_response_delta_ms": -26.964351999999998,
+      "median_paired_response_ratio": 0.9623682249524377,
+      "baseline_metrics": {
+        "offered": 90,
+        "complete": 90,
+        "statuses": {
+          "complete": 90
+        },
+        "response_p50_ms": 629.211457,
+        "response_max_ms": 1522.173058,
+        "batch_allocation_bytes": 4610417480,
+        "load_s": 2.655683785,
+        "router_prep_s": 1.678326569,
+        "router_prep_alloc_bytes": 1055353184,
+        "sampled_peak_group_rss_bytes": 1130422272
+      },
+      "candidate_metrics": {
+        "offered": 90,
+        "complete": 90,
+        "statuses": {
+          "complete": 90
+        },
+        "response_p50_ms": 603.292272,
+        "response_max_ms": 1511.548197,
+        "batch_allocation_bytes": 4685279048,
+        "load_s": 2.109464824,
+        "router_prep_s": 1.512008025,
+        "router_prep_alloc_bytes": 1055185880,
+        "sampled_peak_group_rss_bytes": 1313443840
+      },
+      "scope": "Same90nativecontract outputs, singleversusshared atbatch1; anydeadline/completeness differences retained, not semanticparity failure for unavailablepairs.",
+      "raw_field_difference_count": 0,
+      "joint_complete_native_witness_difference_count": 0,
+      "joint_complete_native_witness_differences": [],
+      "unavailable_or_status_difference_count": 0,
+      "unavailable_or_status_differences": [],
+      "classification_scope": "Rawfielddifferences on deadlines/unavailable pairs are unknownnativeoutput, not demonstrated source correctness failures; originalfailuredenominators remain."
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_arrival_single/test-evening-native90-csa_arrival_single",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_arrival_shared/test-evening-native90-csa_arrival_shared",
+      "offered_pairs": 90,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 90,
+      "median_paired_response_delta_ms": 7.954505999999999,
+      "median_paired_response_ratio": 1.037624356577001,
+      "baseline_metrics": {
+        "offered": 90,
+        "complete": 90,
+        "statuses": {
+          "complete": 90
+        },
+        "response_p50_ms": 214.991367,
+        "response_max_ms": 817.903048,
+        "batch_allocation_bytes": 2381718560,
+        "load_s": 1.979226154,
+        "router_prep_s": 1.830461831,
+        "router_prep_alloc_bytes": 1055402624,
+        "sampled_peak_group_rss_bytes": 1188171776
+      },
+      "candidate_metrics": {
+        "offered": 90,
+        "complete": 90,
+        "statuses": {
+          "complete": 90
+        },
+        "response_p50_ms": 226.841076,
+        "response_max_ms": 879.080337,
+        "batch_allocation_bytes": 2381801840,
+        "load_s": 2.285483881,
+        "router_prep_s": 1.23673357,
+        "router_prep_alloc_bytes": 1055339184,
+        "sampled_peak_group_rss_bytes": 1286254592
+      },
+      "scope": "Same90nativecontract outputs, singleversusshared atbatch1; anydeadline/completeness differences retained, not semanticparity failure for unavailablepairs.",
+      "raw_field_difference_count": 0,
+      "joint_complete_native_witness_difference_count": 0,
+      "joint_complete_native_witness_differences": [],
+      "unavailable_or_status_difference_count": 0,
+      "unavailable_or_status_differences": [],
+      "classification_scope": "Rawfielddifferences on deadlines/unavailable pairs are unknownnativeoutput, not demonstrated source correctness failures; originalfailuredenominators remain."
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_score_single/test-evening-native90-csa_score_single",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_score_shared/test-evening-native90-csa_score_shared",
+      "offered_pairs": 90,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 90,
+      "median_paired_response_delta_ms": -24.0872785,
+      "median_paired_response_ratio": 0.9647725914880604,
+      "baseline_metrics": {
+        "offered": 90,
+        "complete": 90,
+        "statuses": {
+          "complete": 90
+        },
+        "response_p50_ms": 624.599673,
+        "response_max_ms": 1357.679707,
+        "batch_allocation_bytes": 4565716640,
+        "load_s": 2.165656639,
+        "router_prep_s": 1.443717644,
+        "router_prep_alloc_bytes": 1055403184,
+        "sampled_peak_group_rss_bytes": 1264107520
+      },
+      "candidate_metrics": {
+        "offered": 90,
+        "complete": 90,
+        "statuses": {
+          "complete": 90
+        },
+        "response_p50_ms": 609.853986,
+        "response_max_ms": 1443.672763,
+        "batch_allocation_bytes": 4639594632,
+        "load_s": 2.208325801,
+        "router_prep_s": 1.624351682,
+        "router_prep_alloc_bytes": 1055339152,
+        "sampled_peak_group_rss_bytes": 1293778944
+      },
+      "scope": "Same90nativecontract outputs, singleversusshared atbatch1; anydeadline/completeness differences retained, not semanticparity failure for unavailablepairs.",
+      "raw_field_difference_count": 0,
+      "joint_complete_native_witness_difference_count": 0,
+      "joint_complete_native_witness_differences": [],
+      "unavailable_or_status_difference_count": 0,
+      "unavailable_or_status_differences": [],
+      "classification_scope": "Rawfielddifferences on deadlines/unavailable pairs are unknownnativeoutput, not demonstrated source correctness failures; originalfailuredenominators remain."
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_arrival_single/test-overnight-native90-csa_arrival_single",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_arrival_shared/test-overnight-native90-csa_arrival_shared",
+      "offered_pairs": 90,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 90,
+      "median_paired_response_delta_ms": 1.6055055,
+      "median_paired_response_ratio": 1.0286606082987086,
+      "baseline_metrics": {
+        "offered": 90,
+        "complete": 90,
+        "statuses": {
+          "complete": 90
+        },
+        "response_p50_ms": 61.384781,
+        "response_max_ms": 442.886352,
+        "batch_allocation_bytes": 738276752,
+        "load_s": 0.83750854,
+        "router_prep_s": 0.573192312,
+        "router_prep_alloc_bytes": 453009536,
+        "sampled_peak_group_rss_bytes": 560701440
+      },
+      "candidate_metrics": {
+        "offered": 90,
+        "complete": 90,
+        "statuses": {
+          "complete": 90
+        },
+        "response_p50_ms": 61.470917,
+        "response_max_ms": 467.676099,
+        "batch_allocation_bytes": 739888544,
+        "load_s": 0.887873471,
+        "router_prep_s": 0.731409155,
+        "router_prep_alloc_bytes": 453009680,
+        "sampled_peak_group_rss_bytes": 540557312
+      },
+      "scope": "Same90nativecontract outputs, singleversusshared atbatch1; anydeadline/completeness differences retained, not semanticparity failure for unavailablepairs.",
+      "raw_field_difference_count": 0,
+      "joint_complete_native_witness_difference_count": 0,
+      "joint_complete_native_witness_differences": [],
+      "unavailable_or_status_difference_count": 0,
+      "unavailable_or_status_differences": [],
+      "classification_scope": "Rawfielddifferences on deadlines/unavailable pairs are unknownnativeoutput, not demonstrated source correctness failures; originalfailuredenominators remain."
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_score_single/test-overnight-native90-csa_score_single",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_score_shared/test-overnight-native90-csa_score_shared",
+      "offered_pairs": 90,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 90,
+      "median_paired_response_delta_ms": -18.23458,
+      "median_paired_response_ratio": 0.8913009359037227,
+      "baseline_metrics": {
+        "offered": 90,
+        "complete": 90,
+        "statuses": {
+          "complete": 90
+        },
+        "response_p50_ms": 202.976307,
+        "response_max_ms": 673.825408,
+        "batch_allocation_bytes": 1638089992,
+        "load_s": 0.829252808,
+        "router_prep_s": 0.576788206,
+        "router_prep_alloc_bytes": 453009632,
+        "sampled_peak_group_rss_bytes": 580521984
+      },
+      "candidate_metrics": {
+        "offered": 90,
+        "complete": 90,
+        "statuses": {
+          "complete": 90
+        },
+        "response_p50_ms": 180.899659,
+        "response_max_ms": 710.03003,
+        "batch_allocation_bytes": 1690067920,
+        "load_s": 0.831688352,
+        "router_prep_s": 0.636433535,
+        "router_prep_alloc_bytes": 453009648,
+        "sampled_peak_group_rss_bytes": 610963456
+      },
+      "scope": "Same90nativecontract outputs, singleversusshared atbatch1; anydeadline/completeness differences retained, not semanticparity failure for unavailablepairs.",
+      "raw_field_difference_count": 0,
+      "joint_complete_native_witness_difference_count": 0,
+      "joint_complete_native_witness_differences": [],
+      "unavailable_or_status_difference_count": 0,
+      "unavailable_or_status_differences": [],
+      "classification_scope": "Rawfielddifferences on deadlines/unavailable pairs are unknownnativeoutput, not demonstrated source correctness failures; originalfailuredenominators remain."
+    }
+  ],
+  "warning": "Status/certificate differences caused by genuine deadline failure remain unknownnativeoutput pairs; do not count as completewitnessmismatch or silentlydiscard."
+}

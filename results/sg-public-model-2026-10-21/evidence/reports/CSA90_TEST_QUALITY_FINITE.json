@@ -1,0 +1,625 @@
+{
+  "schema": "public-modeled-quality-fourwindow-summary-v1",
+  "source_dirs": [
+    "${SG_ROOT}/public-campaign-20261021/resumed-0130/evalkit-test-csa90-finite-morning",
+    "${SG_ROOT}/public-campaign-20261021/resumed-0130/evalkit-test-csa90-finite-midday",
+    "${SG_ROOT}/public-campaign-20261021/resumed-0130/evalkit-test-csa90-finite-evening",
+    "${SG_ROOT}/public-campaign-20261021/resumed-0130/evalkit-test-csa90-finite-overnight"
+  ],
+  "all_window_rows": [
+    {
+      "window": "morning",
+      "algorithm": "mc_raptor_early",
+      "offered": 90,
+      "complete_valid": 90,
+      "statuses": {
+        "complete": 90
+      },
+      "cohorts": {
+        "completed_transit": 35,
+        "completed_valid_empty": 55
+      },
+      "pool_sha256": "3f220a116625542af48f73fe45250ca71409325ffef52a075a138a7c2cc22fa6",
+      "stages": {
+        "raw": {
+          "eligible_query_profile_slots": 700,
+          "covered_query_profile_slots": 700,
+          "missing_query_profile_slots": 0,
+          "pool_profile_coverage_including_failures": 1.0,
+          "pool_relative_regret_seconds_observed_only": {
+            "count": 700,
+            "mean": 0.0,
+            "p50": 0,
+            "p90": 0,
+            "p95": 0,
+            "p99": 0,
+            "max": 0,
+            "quantiles": "empirical nearest rank; not population tail or SLA"
+          },
+          "walking_averse_t300_w4": {
+            "profile_id": "t300_w4",
+            "eligible": 35,
+            "covered": 35,
+            "missing": 0,
+            "pool_relative_regret_seconds_observed_only": {
+              "count": 35,
+              "mean": 0.0,
+              "p50": 0,
+              "p90": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "quantiles": "empirical nearest rank; not population tail or SLA"
+            }
+          }
+        },
+        "candidates": {
+          "eligible_query_profile_slots": 700,
+          "covered_query_profile_slots": 700,
+          "missing_query_profile_slots": 0,
+          "pool_profile_coverage_including_failures": 1.0,
+          "pool_relative_regret_seconds_observed_only": {
+            "count": 700,
+            "mean": 0.0,
+            "p50": 0,
+            "p90": 0,
+            "p95": 0,
+            "p99": 0,
+            "max": 0,
+            "quantiles": "empirical nearest rank; not population tail or SLA"
+          },
+          "walking_averse_t300_w4": {
+            "profile_id": "t300_w4",
+            "eligible": 35,
+            "covered": 35,
+            "missing": 0,
+            "pool_relative_regret_seconds_observed_only": {
+              "count": 35,
+              "mean": 0.0,
+              "p50": 0,
+              "p90": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "quantiles": "empirical nearest rank; not population tail or SLA"
+            }
+          }
+        },
+        "displayed": {
+          "eligible_query_profile_slots": 700,
+          "covered_query_profile_slots": 684,
+          "missing_query_profile_slots": 0,
+          "pool_profile_coverage_including_failures": 0.9771428571428571,
+          "pool_relative_regret_seconds_observed_only": {
+            "count": 700,
+            "mean": 1.04,
+            "p50": 0,
+            "p90": 0,
+            "p95": 0,
+            "p99": 23,
+            "max": 138,
+            "quantiles": "empirical nearest rank; not population tail or SLA"
+          },
+          "walking_averse_t300_w4": {
+            "profile_id": "t300_w4",
+            "eligible": 35,
+            "covered": 33,
+            "missing": 0,
+            "pool_relative_regret_seconds_observed_only": {
+              "count": 35,
+              "mean": 0.7142857142857143,
+              "p50": 0,
+              "p90": 0,
+              "p95": 8,
+              "p99": 17,
+              "max": 17,
+              "quantiles": "empirical nearest rank; not population tail or SLA"
+            }
+          }
+        },
+        "displayed_secondary": {
+          "eligible_query_profile_slots": 700,
+          "covered_query_profile_slots": 700,
+          "missing_query_profile_slots": 0,
+          "pool_profile_coverage_including_failures": 1.0,
+          "pool_relative_regret_seconds_observed_only": {
+            "count": 700,
+            "mean": 0.0,
+            "p50": 0,
+            "p90": 0,
+            "p95": 0,
+            "p99": 0,
+            "max": 0,
+            "quantiles": "empirical nearest rank; not population tail or SLA"
+          },
+          "walking_averse_t300_w4": {
+            "profile_id": "t300_w4",
+            "eligible": 35,
+            "covered": 35,
+            "missing": 0,
+            "pool_relative_regret_seconds_observed_only": {
+              "count": 35,
+              "mean": 0.0,
+              "p50": 0,
+              "p90": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "quantiles": "empirical nearest rank; not population tail or SLA"
+            }
+          }
+        }
+      }
+    },
+    {
+      "window": "midday",
+      "algorithm": "mc_raptor_early",
+      "offered": 90,
+      "complete_valid": 90,
+      "statuses": {
+        "complete": 90
+      },
+      "cohorts": {
+        "completed_transit": 37,
+        "completed_valid_empty": 53
+      },
+      "pool_sha256": "0ae5ef51b0d6649ac83c274562518426fcf81f0307f5c6190947fe0dc7482fdb",
+      "stages": {
+        "raw": {
+          "eligible_query_profile_slots": 740,
+          "covered_query_profile_slots": 740,
+          "missing_query_profile_slots": 0,
+          "pool_profile_coverage_including_failures": 1.0,
+          "pool_relative_regret_seconds_observed_only": {
+            "count": 740,
+            "mean": 0.0,
+            "p50": 0,
+            "p90": 0,
+            "p95": 0,
+            "p99": 0,
+            "max": 0,
+            "quantiles": "empirical nearest rank; not population tail or SLA"
+          },
+          "walking_averse_t300_w4": {
+            "profile_id": "t300_w4",
+            "eligible": 37,
+            "covered": 37,
+            "missing": 0,
+            "pool_relative_regret_seconds_observed_only": {
+              "count": 37,
+              "mean": 0.0,
+              "p50": 0,
+              "p90": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "quantiles": "empirical nearest rank; not population tail or SLA"
+            }
+          }
+        },
+        "candidates": {
+          "eligible_query_profile_slots": 740,
+          "covered_query_profile_slots": 740,
+          "missing_query_profile_slots": 0,
+          "pool_profile_coverage_including_failures": 1.0,
+          "pool_relative_regret_seconds_observed_only": {
+            "count": 740,
+            "mean": 0.0,
+            "p50": 0,
+            "p90": 0,
+            "p95": 0,
+            "p99": 0,
+            "max": 0,
+            "quantiles": "empirical nearest rank; not population tail or SLA"
+          },
+          "walking_averse_t300_w4": {
+            "profile_id": "t300_w4",
+            "eligible": 37,
+            "covered": 37,
+            "missing": 0,
+            "pool_relative_regret_seconds_observed_only": {
+              "count": 37,
+              "mean": 0.0,
+              "p50": 0,
+              "p90": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "quantiles": "empirical nearest rank; not population tail or SLA"
+            }
+          }
+        },
+        "displayed": {
+          "eligible_query_profile_slots": 740,
+          "covered_query_profile_slots": 708,
+          "missing_query_profile_slots": 0,
+          "pool_profile_coverage_including_failures": 0.9567567567567568,
+          "pool_relative_regret_seconds_observed_only": {
+            "count": 740,
+            "mean": 3.675675675675676,
+            "p50": 0,
+            "p90": 0,
+            "p95": 0,
+            "p99": 131,
+            "max": 187,
+            "quantiles": "empirical nearest rank; not population tail or SLA"
+          },
+          "walking_averse_t300_w4": {
+            "profile_id": "t300_w4",
+            "eligible": 37,
+            "covered": 36,
+            "missing": 0,
+            "pool_relative_regret_seconds_observed_only": {
+              "count": 37,
+              "mean": 2.918918918918919,
+              "p50": 0,
+              "p90": 0,
+              "p95": 0,
+              "p99": 108,
+              "max": 108,
+              "quantiles": "empirical nearest rank; not population tail or SLA"
+            }
+          }
+        },
+        "displayed_secondary": {
+          "eligible_query_profile_slots": 740,
+          "covered_query_profile_slots": 735,
+          "missing_query_profile_slots": 0,
+          "pool_profile_coverage_including_failures": 0.9932432432432432,
+          "pool_relative_regret_seconds_observed_only": {
+            "count": 740,
+            "mean": 0.2527027027027027,
+            "p50": 0,
+            "p90": 0,
+            "p95": 0,
+            "p99": 0,
+            "max": 71,
+            "quantiles": "empirical nearest rank; not population tail or SLA"
+          },
+          "walking_averse_t300_w4": {
+            "profile_id": "t300_w4",
+            "eligible": 37,
+            "covered": 37,
+            "missing": 0,
+            "pool_relative_regret_seconds_observed_only": {
+              "count": 37,
+              "mean": 0.0,
+              "p50": 0,
+              "p90": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "quantiles": "empirical nearest rank; not population tail or SLA"
+            }
+          }
+        }
+      }
+    },
+    {
+      "window": "evening",
+      "algorithm": "mc_raptor_early",
+      "offered": 90,
+      "complete_valid": 90,
+      "statuses": {
+        "complete": 90
+      },
+      "cohorts": {
+        "completed_transit": 33,
+        "completed_valid_empty": 57
+      },
+      "pool_sha256": "3f1fe8d2e36e00de2399e686f9dad673fc05938dd8a9ac9a7c3138fb20484518",
+      "stages": {
+        "raw": {
+          "eligible_query_profile_slots": 660,
+          "covered_query_profile_slots": 660,
+          "missing_query_profile_slots": 0,
+          "pool_profile_coverage_including_failures": 1.0,
+          "pool_relative_regret_seconds_observed_only": {
+            "count": 660,
+            "mean": 0.0,
+            "p50": 0,
+            "p90": 0,
+            "p95": 0,
+            "p99": 0,
+            "max": 0,
+            "quantiles": "empirical nearest rank; not population tail or SLA"
+          },
+          "walking_averse_t300_w4": {
+            "profile_id": "t300_w4",
+            "eligible": 33,
+            "covered": 33,
+            "missing": 0,
+            "pool_relative_regret_seconds_observed_only": {
+              "count": 33,
+              "mean": 0.0,
+              "p50": 0,
+              "p90": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "quantiles": "empirical nearest rank; not population tail or SLA"
+            }
+          }
+        },
+        "candidates": {
+          "eligible_query_profile_slots": 660,
+          "covered_query_profile_slots": 660,
+          "missing_query_profile_slots": 0,
+          "pool_profile_coverage_including_failures": 1.0,
+          "pool_relative_regret_seconds_observed_only": {
+            "count": 660,
+            "mean": 0.0,
+            "p50": 0,
+            "p90": 0,
+            "p95": 0,
+            "p99": 0,
+            "max": 0,
+            "quantiles": "empirical nearest rank; not population tail or SLA"
+          },
+          "walking_averse_t300_w4": {
+            "profile_id": "t300_w4",
+            "eligible": 33,
+            "covered": 33,
+            "missing": 0,
+            "pool_relative_regret_seconds_observed_only": {
+              "count": 33,
+              "mean": 0.0,
+              "p50": 0,
+              "p90": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "quantiles": "empirical nearest rank; not population tail or SLA"
+            }
+          }
+        },
+        "displayed": {
+          "eligible_query_profile_slots": 660,
+          "covered_query_profile_slots": 637,
+          "missing_query_profile_slots": 0,
+          "pool_profile_coverage_including_failures": 0.9651515151515152,
+          "pool_relative_regret_seconds_observed_only": {
+            "count": 660,
+            "mean": 2.05,
+            "p50": 0,
+            "p90": 0,
+            "p95": 0,
+            "p99": 80,
+            "max": 138,
+            "quantiles": "empirical nearest rank; not population tail or SLA"
+          },
+          "walking_averse_t300_w4": {
+            "profile_id": "t300_w4",
+            "eligible": 33,
+            "covered": 32,
+            "missing": 0,
+            "pool_relative_regret_seconds_observed_only": {
+              "count": 33,
+              "mean": 0.18181818181818182,
+              "p50": 0,
+              "p90": 0,
+              "p95": 0,
+              "p99": 6,
+              "max": 6,
+              "quantiles": "empirical nearest rank; not population tail or SLA"
+            }
+          }
+        },
+        "displayed_secondary": {
+          "eligible_query_profile_slots": 660,
+          "covered_query_profile_slots": 660,
+          "missing_query_profile_slots": 0,
+          "pool_profile_coverage_including_failures": 1.0,
+          "pool_relative_regret_seconds_observed_only": {
+            "count": 660,
+            "mean": 0.0,
+            "p50": 0,
+            "p90": 0,
+            "p95": 0,
+            "p99": 0,
+            "max": 0,
+            "quantiles": "empirical nearest rank; not population tail or SLA"
+          },
+          "walking_averse_t300_w4": {
+            "profile_id": "t300_w4",
+            "eligible": 33,
+            "covered": 33,
+            "missing": 0,
+            "pool_relative_regret_seconds_observed_only": {
+              "count": 33,
+              "mean": 0.0,
+              "p50": 0,
+              "p90": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "quantiles": "empirical nearest rank; not population tail or SLA"
+            }
+          }
+        }
+      }
+    },
+    {
+      "window": "overnight",
+      "algorithm": "mc_raptor_early",
+      "offered": 90,
+      "complete_valid": 90,
+      "statuses": {
+        "complete": 90
+      },
+      "cohorts": {
+        "completed_transit": 16,
+        "completed_valid_empty": 74
+      },
+      "pool_sha256": "dc0d93d44acdcefef3f3e11131d2d778047845246f3cfaff4d70c189e98db62e",
+      "stages": {
+        "raw": {
+          "eligible_query_profile_slots": 320,
+          "covered_query_profile_slots": 320,
+          "missing_query_profile_slots": 0,
+          "pool_profile_coverage_including_failures": 1.0,
+          "pool_relative_regret_seconds_observed_only": {
+            "count": 320,
+            "mean": 0.0,
+            "p50": 0,
+            "p90": 0,
+            "p95": 0,
+            "p99": 0,
+            "max": 0,
+            "quantiles": "empirical nearest rank; not population tail or SLA"
+          },
+          "walking_averse_t300_w4": {
+            "profile_id": "t300_w4",
+            "eligible": 16,
+            "covered": 16,
+            "missing": 0,
+            "pool_relative_regret_seconds_observed_only": {
+              "count": 16,
+              "mean": 0.0,
+              "p50": 0,
+              "p90": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "quantiles": "empirical nearest rank; not population tail or SLA"
+            }
+          }
+        },
+        "candidates": {
+          "eligible_query_profile_slots": 320,
+          "covered_query_profile_slots": 320,
+          "missing_query_profile_slots": 0,
+          "pool_profile_coverage_including_failures": 1.0,
+          "pool_relative_regret_seconds_observed_only": {
+            "count": 320,
+            "mean": 0.0,
+            "p50": 0,
+            "p90": 0,
+            "p95": 0,
+            "p99": 0,
+            "max": 0,
+            "quantiles": "empirical nearest rank; not population tail or SLA"
+          },
+          "walking_averse_t300_w4": {
+            "profile_id": "t300_w4",
+            "eligible": 16,
+            "covered": 16,
+            "missing": 0,
+            "pool_relative_regret_seconds_observed_only": {
+              "count": 16,
+              "mean": 0.0,
+              "p50": 0,
+              "p90": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "quantiles": "empirical nearest rank; not population tail or SLA"
+            }
+          }
+        },
+        "displayed": {
+          "eligible_query_profile_slots": 320,
+          "covered_query_profile_slots": 309,
+          "missing_query_profile_slots": 0,
+          "pool_profile_coverage_including_failures": 0.965625,
+          "pool_relative_regret_seconds_observed_only": {
+            "count": 320,
+            "mean": 3.7,
+            "p50": 0,
+            "p90": 0,
+            "p95": 0,
+            "p99": 175,
+            "max": 325,
+            "quantiles": "empirical nearest rank; not population tail or SLA"
+          },
+          "walking_averse_t300_w4": {
+            "profile_id": "t300_w4",
+            "eligible": 16,
+            "covered": 16,
+            "missing": 0,
+            "pool_relative_regret_seconds_observed_only": {
+              "count": 16,
+              "mean": 0.0,
+              "p50": 0,
+              "p90": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "quantiles": "empirical nearest rank; not population tail or SLA"
+            }
+          }
+        },
+        "displayed_secondary": {
+          "eligible_query_profile_slots": 320,
+          "covered_query_profile_slots": 320,
+          "missing_query_profile_slots": 0,
+          "pool_profile_coverage_including_failures": 1.0,
+          "pool_relative_regret_seconds_observed_only": {
+            "count": 320,
+            "mean": 0.0,
+            "p50": 0,
+            "p90": 0,
+            "p95": 0,
+            "p99": 0,
+            "max": 0,
+            "quantiles": "empirical nearest rank; not population tail or SLA"
+          },
+          "walking_averse_t300_w4": {
+            "profile_id": "t300_w4",
+            "eligible": 16,
+            "covered": 16,
+            "missing": 0,
+            "pool_relative_regret_seconds_observed_only": {
+              "count": 16,
+              "mean": 0.0,
+              "p50": 0,
+              "p90": 0,
+              "p95": 0,
+              "p99": 0,
+              "max": 0,
+              "quantiles": "empirical nearest rank; not population tail or SLA"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "aggregate_descriptive_only": [
+    {
+      "algorithm": "mc_raptor_early",
+      "offered": 360,
+      "complete_valid": 360,
+      "stages": {
+        "raw": {
+          "eligible": 2420,
+          "covered": 2420,
+          "missing": 0,
+          "maximum_pool_relative_regret_score_seconds": 0,
+          "grid_coverage": 1.0
+        },
+        "candidates": {
+          "eligible": 2420,
+          "covered": 2420,
+          "missing": 0,
+          "maximum_pool_relative_regret_score_seconds": 0,
+          "grid_coverage": 1.0
+        },
+        "displayed": {
+          "eligible": 2420,
+          "covered": 2338,
+          "missing": 0,
+          "maximum_pool_relative_regret_score_seconds": 325,
+          "grid_coverage": 0.9661157024793389
+        },
+        "displayed_secondary": {
+          "eligible": 2420,
+          "covered": 2415,
+          "missing": 0,
+          "maximum_pool_relative_regret_score_seconds": 71,
+          "grid_coverage": 0.9979338842975206
+        }
+      }
+    }
+  ],
+  "scope": "Same20 explicit hypothetical preference grid and incomplete observed witness pool per window; not externally validated passenger preferences, population probabilities, global optimum or travel-time regrets. Eligibility is profile-query slots with a nonempty common pool; model-empty queries retain outcome denominators but have no finite optimum. Cross-window pooled descriptive weights are not observed demand. Score-second regret may include transfer/walking penalties."
+}

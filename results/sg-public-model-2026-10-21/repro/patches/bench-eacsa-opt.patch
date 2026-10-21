@@ -1,0 +1,272 @@
+diff --git a/routing.lock.json b/routing.lock.json
+index 540efe744b2b8ee01fa02a42d387b048b38d3af5..cf2c6b3060d108884bf07f2b2514caaf7b31a69a 100644
+--- a/routing.lock.json
++++ b/routing.lock.json
+@@ -1,7 +1,7 @@
+ {
+   "module": "github.com/ertyoii/transit-routing-go",
+   "version": "v0.1.0-pre.3",
+-  "commit": "b102816018b1db87304c751f2cd601a2abe4057a",
++  "commit": "be43d903004c8cc8b888d0273b65e850468d36f6",
+   "files": {
+     "LICENSE": "3c524d60abb36a8a9d25782594ea2f8665f56b5811b38c53ff62754b96f49da7",
+     "THIRD_PARTY_NOTICES.md": "6016bae242130d6a43b111a0457427b43f047f4bd0aa607cccda2000577bce0b",
+@@ -14,7 +14,7 @@
+     "csa/stratified.go": "b3c14867b7b360f20dfefd983cf4ce56a39ab4dd6de542bb8d16a2145aa095a2",
+     "csa/topk.go": "66920572e1d2c86de18ed4b336007452f2d562702738dee02eac6522a1934a6e",
+     "csa/trace.go": "076300f8a651677e1b75f6074b932267ca08c71dce8db3e6df7e54badbb140e9",
+-    "eacsa/scan.go": "9c82785e51d311e66b36c463dcd2ecb3338f3747165e1f1b4c7def96936a9d06",
++    "eacsa/scan.go": "da853cadd9c62879f4c349d6b20700d49caaa3f08ebcc4fbf22b3670163d5ad6",
+     "gtfs/import.go": "d2fb180f26394f35feae163ad83d53c2ffe8aee504dff4a0260cde2e13fa8584",
+     "internal/capverify/enumerate.go": "a5b79d48444815f6042b592bd8aac0adce8a732bc10a676d923491155736b40c",
+     "internal/capverify/frontier.go": "d381db7923af16899a3454be5e1440c306f5eb8e4c13f93c3e7e0d31cd45202f",
+@@ -108,7 +108,7 @@
+     "walking/transit/catalog.go": "b20f53c78b38bf6426d4180f89bf6545bee3638d7ae46d909847dddc734a0fa8",
+     "walking/transit/graph.go": "07ec2ac36311597ed657b686be7bc222ef3ac7ec022473d1f55729f5754b6fbe"
+   },
+-  "source_sha256": "b795aeec8da53a1e9ab6f37be762bd3956b2a0f68bb2bc6ba94ed589006a2ae3",
+-  "origin": "Local public source candidate for https://github.com/Ertyoii/transit-routing-go; exact local revision, native and final composed/result review pending; v0.1.0-pre.3 remains unreleased and no tag is implied",
++  "source_sha256": "216bf51d9205abd7056a8cb9d47f839ef7fee2189283c4ffa62dd8d4197647dc",
++  "origin": "Local EA-CSA dense-state candidate from b102816, not pushed or released; tune timing and final composed review pending",
+   "baseline_source_sha256": "f7cf70d1a970fb70077fa13299cdb8c991e8712c44fe1fb19ba10a5befccdd2d"
+ }
+diff --git a/vendor/github.com/ertyoii/transit-routing-go/eacsa/scan.go b/vendor/github.com/ertyoii/transit-routing-go/eacsa/scan.go
+index ecaef974faceab62dc5e280ad001709ad500be90..7fecda4f6529e3b3e68c60f31e04c6733d9b6951 100644
+--- a/vendor/github.com/ertyoii/transit-routing-go/eacsa/scan.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/eacsa/scan.go
+@@ -10,8 +10,59 @@ import (
+ )
+ 
+ type Index struct {
+-	p           *paper.Profile
+-	connections []model.Connection
++	p              *paper.Profile
++	connections    []model.Connection
++	connectionIDs  []connectionIDs
++	stopIDs        map[string]int
++	stopNames      []string
++	stopAccessible []bool
++	tripAccessible []bool
++}
++
++// Ordinals are immutable and refer to the profile's owned dataset, never the
++// caller's slices. Keep them aligned with the unchanged departure/ID scan order.
++type connectionIDs struct{ from, to, trip int }
++
++// A zero time means absent; reached labels store time+1. Validated service times
++// are nonnegative and bounded, including the zero-time, nil-parent access label.
++type readyLabel struct {
++	time   int64
++	parent *paper.Node
++}
++type tripState struct {
++	parent   *paper.Node
++	sequence int
++}
++
++type indexedPaths struct {
++	paths []paper.Path
++	tos   []int
++}
++type denseWalks struct {
++	walker *paper.Walker
++	index  *Index
++	cache  []indexedPaths
++}
++
++// Retain Walker.Paths' cancellation boundary on cache hits, but use the already
++// known source ordinal and map each path target only once per query closure.
++func (w *denseWalks) paths(ctx context.Context, from int) (indexedPaths, error) {
++	if p := w.cache[from]; p.paths != nil {
++		if err := ctx.Err(); err != nil {
++			return indexedPaths{}, err
++		}
++		return p, nil
++	}
++	paths, err := w.walker.Paths(ctx, w.index.stopNames[from])
++	if err != nil {
++		return indexedPaths{}, err
++	}
++	p := indexedPaths{paths: paths, tos: make([]int, len(paths))}
++	for i, path := range paths {
++		p.tos[i] = w.index.stopIDs[path.To]
++	}
++	w.cache[from] = p
++	return p, nil
+ }
+ 
+ func New(d model.Dataset) (*Index, error) {
+@@ -26,7 +77,28 @@ func New(d model.Dataset) (*Index, error) {
+ 		}
+ 		return cs[i].Departure < cs[j].Departure
+ 	})
+-	return &Index{p, cs}, nil
++	x := &Index{p: p, connections: cs,
++		stopIDs:        make(map[string]int, len(p.Data.Stops)),
++		stopNames:      make([]string, len(p.Data.Stops)),
++		stopAccessible: make([]bool, len(p.Data.Stops)),
++		connectionIDs:  make([]connectionIDs, len(cs)),
++	}
++	for i, s := range p.Data.Stops {
++		x.stopIDs[s.ID] = i
++		x.stopNames[i] = s.ID
++		x.stopAccessible[i] = s.Accessible == model.Yes
++	}
++	tripIDs := make(map[string]int)
++	for i, c := range cs {
++		trip, ok := tripIDs[c.TripID]
++		if !ok {
++			trip = len(x.tripAccessible)
++			tripIDs[c.TripID] = trip
++			x.tripAccessible = append(x.tripAccessible, p.Trips[c.TripID].Accessible == model.Yes)
++		}
++		x.connectionIDs[i] = connectionIDs{from: x.stopIDs[c.From], to: x.stopIDs[c.To], trip: trip}
++	}
++	return x, nil
+ }
+ func (x *Index) Capabilities() paper.Capability { return x.p.Capability }
+ 
+@@ -55,83 +127,101 @@ func (x *Index) Search(ctx context.Context, q model.Query) (out paper.Result, er
+ 	}
+ 	walker := x.p.Walker(q)
+ 	defer func() { out.Stats.WalkClosures = walker.Count }()
+-	ready := make([]map[string]paper.Label, q.MaxBoardings+1)
+-	onboard := make([]map[string]*paper.Node, q.MaxBoardings+1)
+-	lastSeq := make([]map[string]int, q.MaxBoardings+1)
++	walks := denseWalks{walker: walker, index: x, cache: make([]indexedPaths, len(x.stopNames))}
++	origin, destination := x.stopIDs[q.Origin], x.stopIDs[q.Destination]
++	// Allocate a layer only when it is first reached. This avoids allocating
++	// stop/trip-sized state for boardings that the query never uses.
++	ready := make([][]readyLabel, q.MaxBoardings+1)
++	onboard := make([][]tripState, q.MaxBoardings+1)
+ 	best := make([]paper.Label, q.MaxBoardings+1)
+-	for b := range ready {
+-		ready[b] = map[string]paper.Label{}
+-		onboard[b] = map[string]*paper.Node{}
+-		lastSeq[b] = map[string]int{}
++	for b := range best {
+ 		best[b].Time = paper.Infinity
+ 	}
+-	paths, e := walker.Paths(ctx, q.Origin)
++	paths, e := walks.paths(ctx, origin)
+ 	if e != nil {
+ 		err = e
+ 		return
+ 	}
+-	for _, w := range paths {
++	for i, w := range paths.paths {
++		to := paths.tos[i]
+ 		at := q.Departure + w.Duration
+ 		if at > q.LatestArrival {
+ 			continue
+ 		}
+ 		n := w.Append(nil, q.Departure)
+-		if w.To == q.Destination {
++		if to == destination {
+ 			if w.Duration <= q.Walking.Direct {
+ 				best[0] = paper.Label{Time: at, Parent: n}
+ 			}
+ 			continue
+ 		}
+ 		if w.Duration <= q.Walking.Access {
+-			ready[0][w.To] = paper.Label{Time: at, Parent: n}
++			if ready[0] == nil {
++				ready[0] = make([]readyLabel, len(x.stopNames))
++			}
++			ready[0][to] = readyLabel{time: at + 1, parent: n}
+ 		}
+ 	}
+ 	start := sort.Search(len(x.connections), func(i int) bool { return x.connections[i].Departure >= q.Departure })
+-	for _, c := range x.connections[start:] {
++	for ci := start; ci < len(x.connections); ci++ {
++		c := x.connections[ci]
++		ids := x.connectionIDs[ci]
+ 		if err = ctx.Err(); err != nil {
+ 			return
+ 		}
+ 		if c.Departure > q.LatestArrival {
+ 			break
+ 		}
+-		if c.Arrival > q.LatestArrival || !x.p.TripAllowed(q, c.TripID) {
++		if c.Arrival > q.LatestArrival || (q.AccessibleOnly && !x.tripAccessible[ids.trip]) {
+ 			continue
+ 		}
+ 		for b := 1; b <= q.MaxBoardings; b++ {
+ 			out.Stats.Connections++
+-			parent, aboard := onboard[b][c.TripID]
+-			aboard = aboard && lastSeq[b][c.TripID] == c.Sequence-1
++			var parent *paper.Node
++			aboard := false
++			if states := onboard[b]; states != nil {
++				state := states[ids.trip]
++				parent = state.parent
++				aboard = parent != nil && state.sequence == c.Sequence-1
++			}
+ 			if !aboard {
+-				label, ok := ready[b-1][c.From]
+-				if !ok || label.Time > c.Departure || !c.Pickup || !x.p.Accessible(q, c.From) {
++				labels := ready[b-1]
++				if labels == nil {
++					continue
++				}
++				label := labels[ids.from]
++				if label.time == 0 || label.time-1 > c.Departure || !c.Pickup || (q.AccessibleOnly && !x.stopAccessible[ids.from]) {
+ 					continue
+ 				}
+-				parent = label.Parent
++				parent = label.parent
+ 			}
+ 			n := paper.Ride(parent, c)
+-			onboard[b][c.TripID] = n
+-			lastSeq[b][c.TripID] = c.Sequence
+-			if !c.Dropoff || !x.p.Accessible(q, c.To) {
++			if onboard[b] == nil {
++				onboard[b] = make([]tripState, len(x.tripAccessible))
++			}
++			onboard[b][ids.trip] = tripState{parent: n, sequence: c.Sequence}
++			if !c.Dropoff || (q.AccessibleOnly && !x.stopAccessible[ids.to]) {
+ 				continue
+ 			}
+-			if c.To == q.Destination {
++			if ids.to == destination {
+ 				if c.Arrival < best[b].Time {
+ 					best[b] = paper.Label{Time: c.Arrival, Parent: n}
+ 				}
+-				delete(onboard[b], c.TripID)
++				onboard[b][ids.trip].parent = nil
+ 				continue
+ 			}
+-			paths, e := walker.Paths(ctx, c.To)
++			paths, e := walks.paths(ctx, ids.to)
+ 			if e != nil {
+ 				err = e
+ 				return
+ 			}
+-			for _, w := range paths {
++			for wi, w := range paths.paths {
++				to := paths.tos[wi]
+ 				at := c.Arrival + w.Duration
+ 				if at > q.LatestArrival {
+ 					continue
+ 				}
+-				if w.To == q.Destination {
++				if to == destination {
+ 					if w.Duration <= q.Walking.Egress && at < best[b].Time {
+ 						best[b] = paper.Label{Time: at, Parent: w.Append(n, c.Arrival)}
+ 					}
+@@ -148,9 +238,12 @@ func (x *Index) Search(ctx context.Context, q model.Query) (out paper.Result, er
+ 				if !allowed || at > q.LatestArrival {
+ 					continue
+ 				}
+-				old, ok := ready[b][w.To]
+-				if !ok || at < old.Time {
+-					ready[b][w.To] = paper.Label{Time: at, Parent: w.Append(n, c.Arrival)}
++				if ready[b] == nil {
++					ready[b] = make([]readyLabel, len(x.stopNames))
++				}
++				old := ready[b][to]
++				if old.time == 0 || at+1 < old.time {
++					ready[b][to] = readyLabel{time: at + 1, parent: w.Append(n, c.Arrival)}
+ 				}
+ 			}
+ 		}

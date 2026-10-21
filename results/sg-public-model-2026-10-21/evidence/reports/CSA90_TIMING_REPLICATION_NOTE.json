@@ -1,0 +1,9 @@
+{
+  "schema": "sg_timing_noise_replication_note_v1",
+  "declared_utc": "2026-10-21T03:20:05.369968+00:00",
+  "cause": "A6.6s CPUunaffined read-only fullvalidation resource-summary refresh occurred during nativeCSA morning score-single. No otherrouter orbuild executed, but potentialanalysisCPU interference is explicitly retained.",
+  "action": "Repeat ONLYsame90 requests/source/config/deadline/processresources once after queued native90anchors and separate railtune. Original result retained; no success filtering or silentreplacement. Exactnative outputagreement and latencyvariation will bereported.",
+  "original_run": "validation-morning-csa_score_single-suffix-labels1000000-batch1",
+  "change_to_routing_config": "none",
+  "test_exposed": false
+}

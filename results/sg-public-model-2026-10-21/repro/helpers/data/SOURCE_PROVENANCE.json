@@ -1,0 +1,154 @@
+{
+  "schema": "sg-public-input-provenance-v1",
+  "retrieved_utc": "2026-10-20T17:01:14.261644+00:00",
+  "source_repository": "https://github.com/Vorld/singapore-gtfs",
+  "source_tag": "v2026-07-12",
+  "source_commit_short": "5b9ed16",
+  "download_url": "https://github.com/Vorld/singapore-gtfs/releases/download/v2026-07-12/singapore-gtfs.zip",
+  "raw_zip": "singapore-gtfs-v2026-07-12.zip",
+  "raw_zip_bytes": 348712,
+  "raw_zip_sha256": "d92173127e9a5cbf8ecb5b4d50ab03f68deb7f8ddff73648b8ffb33c70ab4801",
+  "publisher_sha256": "d92173127e9a5cbf8ecb5b4d50ab03f68deb7f8ddff73648b8ffb33c70ab4801",
+  "publisher_sha256_url": "https://github.com/Vorld/singapore-gtfs/releases/tag/v2026-07-12",
+  "publisher_hash_matches": true,
+  "content_files": [
+    {
+      "name": "agency.txt",
+      "bytes": 136,
+      "rows": 1,
+      "sha256": "4b4a5ef2413c155098dc1fcbc6f22d31650f8227191f7fe2ed5768e3cccb3045",
+      "fields": [
+        "agency_id",
+        "agency_name",
+        "agency_url",
+        "agency_timezone"
+      ]
+    },
+    {
+      "name": "calendar.txt",
+      "bytes": 125,
+      "rows": 1,
+      "sha256": "f0ec030c102c7b271f59995b1a605ffb3208866800b35e6900c3b5bb4ffe2181",
+      "fields": [
+        "service_id",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+        "sunday",
+        "start_date",
+        "end_date"
+      ]
+    },
+    {
+      "name": "feed_info.txt",
+      "bytes": 159,
+      "rows": 1,
+      "sha256": "45d237f67193a545d67ce552d531117deaf8f452d58fe9070128d78e684f6f6f",
+      "fields": [
+        "feed_publisher_name",
+        "feed_publisher_url",
+        "feed_lang",
+        "feed_version"
+      ]
+    },
+    {
+      "name": "stops.txt",
+      "bytes": 311742,
+      "rows": 5450,
+      "sha256": "bb47514761586ea0676551f7274291c5bf6e91404d99d3c1aafc743ed4841fe2",
+      "fields": [
+        "stop_id",
+        "stop_name",
+        "stop_lat",
+        "stop_lon",
+        "location_type",
+        "parent_station"
+      ]
+    },
+    {
+      "name": "routes.txt",
+      "bytes": 16283,
+      "rows": 615,
+      "sha256": "48adc9ec94142ba12dc73552b07cb1e01dc962081927b78991502645e5a935c1",
+      "fields": [
+        "route_id",
+        "agency_id",
+        "route_short_name",
+        "route_long_name",
+        "route_type"
+      ]
+    },
+    {
+      "name": "trips.txt",
+      "bytes": 17922,
+      "rows": 823,
+      "sha256": "d550045987f68beae30273cab321b157eba0c3f39b7fb50cc4e632a6fa120401",
+      "fields": [
+        "route_id",
+        "service_id",
+        "trip_id",
+        "direction_id"
+      ]
+    },
+    {
+      "name": "stop_times.txt",
+      "bytes": 997855,
+      "rows": 27391,
+      "sha256": "419698b3d9ed3b2db91554fe74a99df653cd160b04f348650716d7496d281708",
+      "fields": [
+        "trip_id",
+        "arrival_time",
+        "departure_time",
+        "stop_id",
+        "stop_sequence"
+      ]
+    },
+    {
+      "name": "frequencies.txt",
+      "bytes": 26402,
+      "rows": 823,
+      "sha256": "6008dc06027bff4058a6f0829b0c321a2f85daa853b02ef6e0077efdc7b6b55d",
+      "fields": [
+        "trip_id",
+        "start_time",
+        "end_time",
+        "headway_secs"
+      ]
+    },
+    {
+      "name": "transfers.txt",
+      "bytes": 1183,
+      "rows": 70,
+      "sha256": "229f278573f4f0e612067ef54210911ed71ecfd7506ddc9e8ae2241e5a1c5db0",
+      "fields": [
+        "from_stop_id",
+        "to_stop_id",
+        "transfer_type",
+        "min_transfer_time"
+      ]
+    }
+  ],
+  "limitations": [
+    "Unofficial typical-weekday frequency model, not a timetable-accurate or live official feed.",
+    "All823 frequencies rows omit exact_times; importer must explicitly use deterministic_model and modeled_snapshot.",
+    "All stop_times omit pickup_type/drop_off_type; no source restriction column can be reconstructed.",
+    "All stops/trips omit wheelchair fields; access stays unknown.",
+    "Only70 measured rail-interchange type2 transfer rows; no street or nearby stop connectors.",
+    "Weekends have no service under WD calendar; empty weekend is model coverage limitation, not actual Singapore service.",
+    "Software MIT licence does not relicense third-party input data; preserve NOTICE; no public dataset redistribution authorized."
+  ],
+  "license_files": [
+    {
+      "path": "Vorld-NOTICE-v2026-07-12.md",
+      "sha256": "66cb7eda469eb1240050c815f660b5a667594e2f6d9d27e03b46dadf52f24834"
+    },
+    {
+      "path": "Vorld-LICENSE-v2026-07-12.txt",
+      "sha256": "80200b42cb14b64e61bfc761612a8e04655f4964bb3a1452e19eb66645e60b91"
+    }
+  ],
+  "intended_processing": "Private owned-cloud research only; no public Git publication."
+}

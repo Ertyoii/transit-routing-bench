@@ -1,0 +1,232 @@
+{
+  "all_helper_original_and_portable_hashes_rechecked": true,
+  "all_profiling_overlay_source_files_rechecked": true,
+  "check_attempts": [
+    {
+      "initial_default_python_result": "not executable: osmium was absent from default interpreter",
+      "resolution": "Existing preparation virtual environment had the declared osmium dependency; all 8 synthetic walking tests passed. No package installation/network used.",
+      "suite": "helpers/walking-build/test_walk.py"
+    }
+  ],
+  "checks": [
+    {
+      "exit_code": 0,
+      "interpreter": "Default Python",
+      "passed": true,
+      "suite": "scripts/test_bundle_tools.py",
+      "test_summary": "Ran 5 tests in 0.005s"
+    },
+    {
+      "exit_code": 0,
+      "interpreter": "Default Python",
+      "passed": true,
+      "suite": "helpers/workload-build/test_generate_workloads.py",
+      "test_summary": "Ran 3 tests in 0.012s"
+    },
+    {
+      "exit_code": 0,
+      "interpreter": "Default Python",
+      "passed": true,
+      "suite": "helpers/evalkit/test_evalkit.py",
+      "test_summary": "Ran 32 tests in 0.139s"
+    },
+    {
+      "exit_code": 0,
+      "interpreter": "Existing walking preparation virtual environment; no installation",
+      "passed": true,
+      "suite": "helpers/walking-build/test_walk.py",
+      "test_summary": "Ran 8 tests in 0.000s"
+    },
+    {
+      "exit_code": 0,
+      "interpreter": "Default Python",
+      "passed": true,
+      "suite": "helpers/passenger-build/test_build_passenger.py",
+      "test_summary": "Ran 6 tests in 0.002s"
+    },
+    {
+      "exit_code": 0,
+      "interpreter": "Default Python",
+      "passed": true,
+      "suite": "helpers/public-campaign-20261021/test_stage_publication.py",
+      "test_summary": "Ran 23 tests in 0.194s"
+    }
+  ],
+  "cpu_affinity": "CPU 8 for packager commands and inherited synthetic test subprocesses",
+  "final_clean_candidate_heads_rechecked": 14,
+  "final_frozen_helper_hashes_rechecked": true,
+  "final_source_freeze_utc": "2026-10-21T05:03:01.882339+00:00",
+  "full_helper_materialization": {
+    "all_passed": true,
+    "file_count": 75,
+    "json_root_placeholders_expanded": true,
+    "root_with_spaces_checked": true
+  },
+  "go_builds_tests_or_routers_executed": false,
+  "heldout_or_performance_claims_from_packager": false,
+  "latest_full_source_checks": "Passed against the final revised compact/full helper snapshot: 16 complete patch replays, original/portable helper hashes, clean candidate HEADs, AST/shell checks, helper materialization and privacy/recognizable-secret scan.",
+  "latest_helper_syntax_checks": [
+    {
+      "executed": false,
+      "python_ast_passed": true,
+      "sha256": "5337d525a6c30466d0e3c0e2a7a5bf9f85fad95e007391cd32316bd7d7ef0a3b",
+      "source": "public-campaign-20261021/summarize_campaigns.py"
+    },
+    {
+      "executed": false,
+      "python_ast_passed": true,
+      "sha256": "4c47de248999620568473ddd7a7acd319c2e5fb57fe760a11ee3d5d0d7b35589",
+      "source": "public-campaign-20261021/analyze_primary_stage.py"
+    },
+    {
+      "executed": false,
+      "python_ast_passed": true,
+      "sha256": "779970beeb828d16f4f5bb851b88e982cb2681b93375acbe43edd83663b2e7fe",
+      "source": "public-campaign-20261021/analyze_native_csa_stage.py"
+    },
+    {
+      "executed": false,
+      "python_ast_passed": true,
+      "sha256": "279ac72538e2fa7c1310b1a20fd5f32fbca9470faa712e79b96b8cd42dba595e",
+      "source": "public-campaign-20261021/prepare_final_test_release.py"
+    },
+    {
+      "executed": false,
+      "python_ast_passed": true,
+      "sha256": "5405ee41ea07b6f095624267dec911f9274fb0c7f74266e6d51da074dd7aab35",
+      "source": "public-campaign-20261021/execute_final_test_release.py"
+    }
+  ],
+  "latest_projection_sync": [
+    {
+      "sha256": "633ec9c0daf180131c4aed8a87e3f55047b414384551f56b803b490d0289afbe",
+      "source": "public-campaign-20261021/stage_publication.py"
+    },
+    {
+      "sha256": "ec52cc8710479179a9386fb12c0426a19a96be26fb9d5ed955f9d8775736e674",
+      "source": "public-campaign-20261021/test_stage_publication.py"
+    },
+    {
+      "sha256": "6b5aa018aab6c5c46964f55e150bc05c67ea677f4d73a301cec4c2f5f96c58de",
+      "source": "public-campaign-20261021/COMPACT_PROJECTION.md"
+    }
+  ],
+  "latest_result_renderer_check": {
+    "executed": false,
+    "final_results_acceptance_claim": false,
+    "private_path_findings": 0,
+    "python_ast_passed": true,
+    "sha256": "7e7547f114c0e907598158bd8275325c45ffb33f331176bf43349415c6a4e597",
+    "source": "public-campaign-20261021/render_final_results.py"
+  },
+  "limits": [
+    "These are synthetic Python/helper checks and source replay only, not end-to-end data regeneration, Go verification or performance evidence."
+  ],
+  "live_source_changed": false,
+  "network_accessed": false,
+  "offline_patch_replays": {
+    "all_passed": true,
+    "auxiliary_working_overlay_matches": true,
+    "candidate_exact_tree_matches": 14,
+    "count": 16,
+    "profiling_dirty_working_overlay_matches": true
+  },
+  "packaging_prose_revision": {
+    "existing_77_test_results_remain_applicable_to_unchanged_sources": true,
+    "new_go_data_or_projection_tests_run": false,
+    "previous_snapshot_payload_manifest_sha256": "8e3adf50dfa98fd20f0350a0add554ef61c104fb4f642f13a3cc68c919f57c77",
+    "revised_utc": "2026-10-21T05:05:56.039679+00:00",
+    "source_helper_patch_license_bytes_unchanged": true,
+    "version": "source-final-v2"
+  },
+  "passed_synthetic_tests": 77,
+  "passed_synthetic_tests_note": "77 synthetic tests passed across recorded suites; the revised compact/full projection suite has 23 tests. This source packager did not execute actual campaign projection.",
+  "portable_payload_scan": {
+    "checks": [
+      "Absolute private research, home and temporary directory prefixes",
+      "Private-key headers and recognizable GitHub/OpenAI/AWS secret token formats",
+      "Symlinks, binary/data asset extensions, Python bytecode"
+    ],
+    "file_types": "Text source, patches, configuration, aggregate provenance/expected hashes and license notices only",
+    "findings": [],
+    "limits": "Heuristic privacy/secret scan, not a complete formal secret-detection proof."
+  },
+  "profiling_overlay": {
+    "actual_profile_binaries_included": false,
+    "exact_changed_blob_comparison_passed": true,
+    "files": 4,
+    "formerly_untracked_source_included": 2,
+    "go_build_test_router_or_profiling_executed": false,
+    "independent_offline_base_replay_passed": true,
+    "live_status_and_source_bytes_unchanged": true,
+    "tracked_modified": 2
+  },
+  "profiling_overlay_historical_binding": {
+    "all_command_build_runtime_go_hashes_match_current_overlay": true,
+    "historical_readme_support_bytes": "unproven by existing Go-only binding; support-only drift unknown",
+    "profile_or_router_execution": false,
+    "runs_checked": 6,
+    "source_binding_evidence_sha256": "13270c4d23603663f22020ed90e21308ea45058be3c9e30a1b00125dca3aa52e"
+  },
+  "public_repository_url_audit": {
+    "correct_bench_repository": "https://github.com/Ertyoii/transit-routing-bench.git",
+    "correct_routing_repository": "https://github.com/Ertyoii/transit-routing-go.git",
+    "incorrect_transit_routing_repository_urls": [],
+    "reconstruction_helper_ast_passed": true,
+    "remote_check": "Release owner verified public GitHub commit metadata separately; source-only packaging performed no network fetch.",
+    "source_module_import_paths_unchanged": true
+  },
+  "publication_status": "Frozen source-only supplement after helper synchronization and packaging checks. Source-only packaging did not run campaign projection or assemble the combined report release.",
+  "schema": "sg-source-bundle-validation-v1",
+  "source_reconstruction_helper_integration": [
+    {
+      "build_or_router_executed": false,
+      "offline_only": true,
+      "root_with_spaces": true,
+      "source_trees": [
+        {
+          "base_commit": "b102816018b1db87304c751f2cd601a2abe4057a",
+          "candidate_commit_recreated": false,
+          "directory": "routing-csa-opt",
+          "source_sha256": "1512ce6a16c9bfaa1ae6c6d64be8b68dc2d5ef8b345c40e9e2cc849b611f82c4",
+          "tree": "c1aaabe94ccab59af28279f05f274303a863605b"
+        },
+        {
+          "base_commit": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+          "candidate_commit_recreated": false,
+          "directory": "bench-csa-opt",
+          "source_sha256": "0dc425c044303fb87245c93cc68db4255f6b0f0b376dd13fb3b97c0bbffc2744",
+          "tree": "40c3d911e06ecf1abe1838ff39eac502194746a1"
+        }
+      ],
+      "variant": "csa-opt"
+    },
+    {
+      "build_or_router_executed": false,
+      "offline_only": true,
+      "root_with_spaces": true,
+      "source_trees": [
+        {
+          "base_commit": "b102816018b1db87304c751f2cd601a2abe4057a",
+          "candidate_commit_recreated": false,
+          "directory": "routing-profiling-driver-overlay",
+          "source_sha256": "3036b6dc1d0ec90c694015113225c077b8432c8484b2f84e32a1870693e35df5",
+          "tree": "c6f00e816557b6dda7bd59818ed64d081ed9c807"
+        },
+        {
+          "base_commit": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+          "candidate_commit_recreated": false,
+          "directory": "bench-profiling-driver-overlay",
+          "source_sha256": "057f9f9b26482c6b80aecfa7526615cff9f91d2510bac1fc338d311207b6ee3f",
+          "tree": "1b2a2eff5a05dbeed2a18634f8c88def62ebfcb3"
+        }
+      ],
+      "variant": "profiling-driver-overlay"
+    }
+  ],
+  "syntax_validation": {
+    "python_ast_files_passed": 40,
+    "shell_bash_n_files_passed": 6
+  },
+  "timing_campaigns_executed": false
+}

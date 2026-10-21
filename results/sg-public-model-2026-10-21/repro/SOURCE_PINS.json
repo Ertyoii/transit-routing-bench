@@ -1,0 +1,1510 @@
+{
+  "auxiliary": {
+    "base_commit": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+    "changed_file_count": 8,
+    "changed_files": [
+      "cmd/corechgraphbench/audit.go",
+      "cmd/corechgraphbench/audit_test.go",
+      "cmd/corechgraphbench/main.go",
+      "cmd/profilebench/main.go",
+      "cmd/profilebench/point_input.go",
+      "cmd/profilebench/point_input_test.go",
+      "cmd/tadbench/main.go",
+      "scripts/build.sh"
+    ],
+    "clean_commit_claim": false,
+    "complete_patch": "patches/bench-auxiliary-source-v2.patch",
+    "each_changed_blob_matches_working_source": true,
+    "offline_replay_passed": true,
+    "patch_bytes": 46734,
+    "patch_sha256": "3e2e645ad2583a1bc60659592174cb30354ba1ab4df47110e76886caf84ddd05",
+    "portability_changes": [],
+    "result_tree": "2f297a52a2d5b094acfb68ac1c5eb932f27f7f10",
+    "source_sha256": "ae087ee05d0dcd85eb7925fa912f749184e6db81b83df67205e4aa89427e1c63",
+    "status": "Complete eight-file working-source overlay, not a clean committed candidate."
+  },
+  "bases": {
+    "bench": {
+      "commit": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+      "public_reachability_evidence": {
+        "commit": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+        "method": "Release owner verified public GitHub commit metadata",
+        "private": false,
+        "public_access_not_private_authenticated_fetch": true,
+        "reported_utc": "2026-10-21T03:58:34Z",
+        "repository_license_spdx": "MIT",
+        "scope": "Public base only; not a claim that local candidate commit objects were published.",
+        "status": "public_commit_and_tree_verified",
+        "tree": "23f6411121c5d121db53dbbcc4febc09be2e2337",
+        "visibility": "public"
+      },
+      "repository_url": "https://github.com/Ertyoii/transit-routing-bench.git",
+      "tree": "23f6411121c5d121db53dbbcc4febc09be2e2337"
+    },
+    "routing": {
+      "commit": "b102816018b1db87304c751f2cd601a2abe4057a",
+      "public_reachability_evidence": {
+        "commit": "b102816018b1db87304c751f2cd601a2abe4057a",
+        "default_branch": "main",
+        "method": "Release owner verified public GitHub commit metadata",
+        "private": false,
+        "public_access_not_private_authenticated_fetch": true,
+        "reported_utc": "2026-10-21T03:58:34Z",
+        "repository_license_spdx": "MIT",
+        "scope": "Public base only; not a claim that local candidate commit objects were published.",
+        "status": "public_commit_and_tree_verified",
+        "tree": "c6f00e816557b6dda7bd59818ed64d081ed9c807",
+        "visibility": "public"
+      },
+      "repository_url": "https://github.com/Ertyoii/transit-routing-go.git",
+      "tree": "c6f00e816557b6dda7bd59818ed64d081ed9c807"
+    }
+  },
+  "candidates": [
+    {
+      "bench": {
+        "base_commit": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+        "changes": [
+          {
+            "path": "regression/csa/suffix_bound_test.go",
+            "status": "A"
+          },
+          {
+            "path": "routing.lock.json",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/csa/bounds.go",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/csa/scan.go",
+            "status": "M"
+          }
+        ],
+        "clean_worktree_verified": true,
+        "complete_patch": "patches/bench-csa-opt.patch",
+        "frozen_commit": "9a2620ab6748251cbe11496430fe1fa4736d6e9a",
+        "offline_replay_tree_matches": true,
+        "patch_bytes": 16493,
+        "patch_sha256": "e57d773ab737772021b08e9d54e6cdbb47cdac277bd1904026c94425aa792ede",
+        "portability_changes": [],
+        "source_sha256": "0dc425c044303fb87245c93cc68db4255f6b0f0b376dd13fb3b97c0bbffc2744",
+        "tree": "40c3d911e06ecf1abe1838ff39eac502194746a1",
+        "vendored_routing_lock": {
+          "commit": "69be7bea66a9ba2dff953af69d25836578e03f6d",
+          "module": "github.com/ertyoii/transit-routing-go",
+          "source_sha256": "c02068189b06abd75d05b9093fb4eb59635a4d899cafbfb99ed0c28be0eed58e",
+          "version": "v0.1.0-pre.3"
+        },
+        "worktree_label": "bench-csa-opt"
+      },
+      "id": "csa-opt",
+      "routing": {
+        "base_commit": "b102816018b1db87304c751f2cd601a2abe4057a",
+        "changes": [
+          {
+            "path": "csa/bounds.go",
+            "status": "M"
+          },
+          {
+            "path": "csa/bounds_test.go",
+            "status": "A"
+          },
+          {
+            "path": "csa/scan.go",
+            "status": "M"
+          },
+          {
+            "path": "docs/CSA_SUFFIX_PRUNING.md",
+            "status": "A"
+          }
+        ],
+        "clean_worktree_verified": true,
+        "complete_patch": "patches/routing-csa-opt.patch",
+        "frozen_commit": "69be7bea66a9ba2dff953af69d25836578e03f6d",
+        "offline_replay_tree_matches": true,
+        "patch_bytes": 20429,
+        "patch_sha256": "62909f983271394d8267daa172ae012a2788fb7263e7b4e426f2751b1bcacbd9",
+        "portability_changes": [],
+        "source_sha256": "1512ce6a16c9bfaa1ae6c6d64be8b68dc2d5ef8b345c40e9e2cc849b611f82c4",
+        "tree": "c1aaabe94ccab59af28279f05f274303a863605b",
+        "worktree_label": "routing-csa-opt"
+      }
+    },
+    {
+      "bench": {
+        "base_commit": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+        "changes": [
+          {
+            "path": "routing.lock.json",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/eacsa/scan.go",
+            "status": "M"
+          }
+        ],
+        "clean_worktree_verified": true,
+        "complete_patch": "patches/bench-eacsa-opt.patch",
+        "frozen_commit": "bbd535fc8b45012ef8b078f5bfd839433172ef72",
+        "offline_replay_tree_matches": true,
+        "patch_bytes": 10180,
+        "patch_sha256": "08d617ddd2f5fb532477ef9e2ff97e343da396481de7f8c83eff49a74dee0336",
+        "portability_changes": [],
+        "source_sha256": "54a108be19f528a976bcb9dd5a600350b05e4232fe858804e0e0b70207ad97f6",
+        "tree": "9a621a7ed481a0ae52a8ea6e5ed0fd00b905f75c",
+        "vendored_routing_lock": {
+          "commit": "be43d903004c8cc8b888d0273b65e850468d36f6",
+          "module": "github.com/ertyoii/transit-routing-go",
+          "source_sha256": "216bf51d9205abd7056a8cb9d47f839ef7fee2189283c4ffa62dd8d4197647dc",
+          "version": "v0.1.0-pre.3"
+        },
+        "worktree_label": "bench-eacsa-opt"
+      },
+      "id": "eacsa-opt",
+      "routing": {
+        "base_commit": "b102816018b1db87304c751f2cd601a2abe4057a",
+        "changes": [
+          {
+            "path": "eacsa/dense_test.go",
+            "status": "A"
+          },
+          {
+            "path": "eacsa/frozen_reference_test.go",
+            "status": "A"
+          },
+          {
+            "path": "eacsa/scan.go",
+            "status": "M"
+          }
+        ],
+        "clean_worktree_verified": true,
+        "complete_patch": "patches/routing-eacsa-opt.patch",
+        "frozen_commit": "be43d903004c8cc8b888d0273b65e850468d36f6",
+        "offline_replay_tree_matches": true,
+        "patch_bytes": 19233,
+        "patch_sha256": "c1eca161c4237addbcace4ec42ee950611e49fa12177234234e0cdb9fdfde865",
+        "portability_changes": [],
+        "source_sha256": "124cb1a42591b0f8875b649a277b034f80b6de5f7b1048be9da0d0fad5a919bf",
+        "tree": "6f888a9d9b93cde313664cd6d1bd708d1214c990",
+        "worktree_label": "routing-eacsa-opt"
+      }
+    },
+    {
+      "bench": {
+        "base_commit": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+        "changes": [
+          {
+            "path": "routing.lock.json",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/paper/profile.go",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/walking/graph/graph.go",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/walking/graph/reach_session.go",
+            "status": "A"
+          }
+        ],
+        "clean_worktree_verified": true,
+        "complete_patch": "patches/bench-query-walk-opt.patch",
+        "frozen_commit": "b6dd643577d1f547b240297e3de4501dce2873ed",
+        "offline_replay_tree_matches": true,
+        "patch_bytes": 16967,
+        "patch_sha256": "5e9aa41b50483ad3aabb6d54d0d0a6572f666be3f8e27d3159a48e269837e11c",
+        "portability_changes": [],
+        "source_sha256": "4f3ebe57da0b1708e0931309673f09e35a6485186a45d65658d43640ec33847d",
+        "tree": "3fb57f37d39d6cba05e24b2e104ebca3fccd72fa",
+        "vendored_routing_lock": {
+          "commit": "6bd99513f16f6c614ef7971ec379ff732196228c",
+          "module": "github.com/ertyoii/transit-routing-go",
+          "source_sha256": "669ad0c2ea1bb4ebff9ccac4fd3a3b8b7287197d43efec203954c6eaf92d5191",
+          "version": "v0.1.0-pre.3"
+        },
+        "worktree_label": "bench-query-walk-opt"
+      },
+      "id": "query-walk-opt",
+      "routing": {
+        "base_commit": "b102816018b1db87304c751f2cd601a2abe4057a",
+        "changes": [
+          {
+            "path": "paper/profile.go",
+            "status": "M"
+          },
+          {
+            "path": "walking/graph/graph.go",
+            "status": "M"
+          },
+          {
+            "path": "walking/graph/reach_session.go",
+            "status": "A"
+          },
+          {
+            "path": "walking/graph/reach_session_test.go",
+            "status": "A"
+          }
+        ],
+        "clean_worktree_verified": true,
+        "complete_patch": "patches/routing-query-walk-opt.patch",
+        "frozen_commit": "6bd99513f16f6c614ef7971ec379ff732196228c",
+        "offline_replay_tree_matches": true,
+        "patch_bytes": 29775,
+        "patch_sha256": "58ca29d3f676d5d7ce4d27a6860aaf48d61c7dbb63fe99e24be6de5edf900b54",
+        "portability_changes": [],
+        "source_sha256": "6efac5044779235351e04253e23bcac2b290f63e0f6a5a0fe642c47b4deaba32",
+        "tree": "9f16de4a1be8ff699bd6b9129bfec8b51f03cdd3",
+        "worktree_label": "routing-query-walk-opt"
+      }
+    },
+    {
+      "bench": {
+        "base_commit": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+        "changes": [
+          {
+            "path": "routing.lock.json",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/paper/profile.go",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/indexed_walks.go",
+            "status": "A"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/multicriteria.go",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/raptor.go",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/walking/graph/graph.go",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/walking/graph/reach_session.go",
+            "status": "A"
+          }
+        ],
+        "clean_worktree_verified": true,
+        "complete_patch": "patches/bench-raptor-dense-opt.patch",
+        "frozen_commit": "083038abe0791a2835f6390248c7d3a4d1c7c5df",
+        "offline_replay_tree_matches": true,
+        "patch_bytes": 26085,
+        "patch_sha256": "2313a1d34c6e26f1d5ae4236ee8ba5ce1cdfe4f74b4ec37288e4abd187641b35",
+        "portability_changes": [],
+        "source_sha256": "24fe8bb3ac7d40ca8eb11857b3b3ae9094983d8199eafe141c005f8e009571ab",
+        "tree": "611eb763fa2666017585a03d6430201fba69a72b",
+        "vendored_routing_lock": {
+          "commit": "725520af0cff62792f70b941d4d69066eecb1010",
+          "module": "github.com/ertyoii/transit-routing-go",
+          "source_sha256": "49950d7c89581d4282d9774709294092050458f8ba3d51bb73ed0119fbda8961",
+          "version": "v0.1.0-pre.3"
+        },
+        "worktree_label": "bench-raptor-dense-opt"
+      },
+      "id": "raptor-dense-opt",
+      "routing": {
+        "base_commit": "b102816018b1db87304c751f2cd601a2abe4057a",
+        "changes": [
+          {
+            "path": "paper/profile.go",
+            "status": "M"
+          },
+          {
+            "path": "raptor/indexed_baseline_test.go",
+            "status": "A"
+          },
+          {
+            "path": "raptor/indexed_walks.go",
+            "status": "A"
+          },
+          {
+            "path": "raptor/indexed_walks_test.go",
+            "status": "A"
+          },
+          {
+            "path": "raptor/multicriteria.go",
+            "status": "M"
+          },
+          {
+            "path": "raptor/raptor.go",
+            "status": "M"
+          },
+          {
+            "path": "walking/graph/graph.go",
+            "status": "M"
+          },
+          {
+            "path": "walking/graph/reach_session.go",
+            "status": "A"
+          },
+          {
+            "path": "walking/graph/reach_session_test.go",
+            "status": "A"
+          }
+        ],
+        "clean_worktree_verified": true,
+        "complete_patch": "patches/routing-raptor-dense-opt.patch",
+        "frozen_commit": "725520af0cff62792f70b941d4d69066eecb1010",
+        "offline_replay_tree_matches": true,
+        "patch_bytes": 56993,
+        "patch_sha256": "292f765a3b6af8e4ed79ec45dbfcc680530bbe4843111b23d76a51acb23ec1c5",
+        "portability_changes": [],
+        "source_sha256": "adf983cd6ae31e25f8a87afd8316a2b6fe31d815a60758deedeefa97b75c432a",
+        "tree": "223ce6f7ff9b30d5cc4e2e3b027e3b98545877a5",
+        "worktree_label": "routing-raptor-dense-opt"
+      }
+    },
+    {
+      "bench": {
+        "base_commit": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+        "changes": [
+          {
+            "path": "regression/ultra/capped_dense_oracle_test.go",
+            "status": "A"
+          },
+          {
+            "path": "routing.lock.json",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/ultra/capped.go",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/ultra/capped_search.go",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/ultra/sparse.go",
+            "status": "M"
+          }
+        ],
+        "clean_worktree_verified": true,
+        "complete_patch": "patches/bench-ultra-capped-opt.patch",
+        "frozen_commit": "886eea85bcd030c34f3f561aa8bde1f0125ad9f2",
+        "offline_replay_tree_matches": true,
+        "patch_bytes": 21194,
+        "patch_sha256": "4569560f00fe2ff3a73a2c60279588aaa487a7f6433fcf8ecb87906d4f3a477b",
+        "portability_changes": [],
+        "source_sha256": "51e0a6878eb45c46224ff6260d20faff0c8dc4bf98f9b2615495ad71880aeeaa",
+        "tree": "ee34fbc2627027dd074ac85df25fc030edf3a148",
+        "vendored_routing_lock": {
+          "commit": "cd88c9c161317e26274d745cac285722156aa453",
+          "module": "github.com/ertyoii/transit-routing-go",
+          "source_sha256": "376e447be4a537bb9d02ee1976909c70dbc893908e6df36c23a0557dcd7832bb",
+          "version": "v0.1.0-pre.3"
+        },
+        "worktree_label": "bench-ultra-capped-opt"
+      },
+      "id": "ultra-capped-opt",
+      "routing": {
+        "base_commit": "b102816018b1db87304c751f2cd601a2abe4057a",
+        "changes": [
+          {
+            "path": "ultra/capped.go",
+            "status": "M"
+          },
+          {
+            "path": "ultra/capped_dense_test.go",
+            "status": "A"
+          },
+          {
+            "path": "ultra/capped_frozen_baseline_test.go",
+            "status": "A"
+          },
+          {
+            "path": "ultra/capped_frozen_search_test.go",
+            "status": "A"
+          },
+          {
+            "path": "ultra/capped_frozen_sparse_test.go",
+            "status": "A"
+          },
+          {
+            "path": "ultra/capped_search.go",
+            "status": "M"
+          },
+          {
+            "path": "ultra/sparse.go",
+            "status": "M"
+          }
+        ],
+        "clean_worktree_verified": true,
+        "complete_patch": "patches/routing-ultra-capped-opt.patch",
+        "frozen_commit": "cd88c9c161317e26274d745cac285722156aa453",
+        "offline_replay_tree_matches": true,
+        "patch_bytes": 52798,
+        "patch_sha256": "3067c7df40641e3ec1a78a23866ffb39b4945e583266a6eaff0a6e4e623988d5",
+        "portability_changes": [],
+        "source_sha256": "ac101dd12c8675decb6c91180d110228084ddd67549c3e2adc0206634f59ff23",
+        "tree": "2195b6ee3b7a3d3502941b96234d53cec498edb4",
+        "worktree_label": "routing-ultra-capped-opt"
+      }
+    },
+    {
+      "bench": {
+        "base_commit": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+        "changes": [
+          {
+            "path": "routing.lock.json",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/eacsa/scan.go",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/paper/profile.go",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/walking/graph/graph.go",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/walking/graph/reach_session.go",
+            "status": "A"
+          }
+        ],
+        "clean_worktree_verified": true,
+        "complete_patch": "patches/bench-walk-eacsa-opt.patch",
+        "frozen_commit": "3eb19cf71a854a255b73c700ad6c819b37b1a847",
+        "offline_replay_tree_matches": true,
+        "patch_bytes": 25698,
+        "patch_sha256": "59f16a617d23e3c15fc41633fe3fc84df3d42a9d367cddc49b80dcac99388593",
+        "portability_changes": [],
+        "source_sha256": "17a3c3d048bb012692d4e7e064051f7725a6925f25466220f3d3aea7ffb08c8e",
+        "tree": "45d08f508fced4fdf402175b1b085a9c5a401b02",
+        "vendored_routing_lock": {
+          "commit": "71b93206c7fcd5f035f34afba8c4b38fd9dba183",
+          "module": "github.com/ertyoii/transit-routing-go",
+          "source_sha256": "759ee87c31f691e29cacf71b45b095cae41389fcfac381b11bf21d7ad2a93873",
+          "version": "v0.1.0-pre.3"
+        },
+        "worktree_label": "bench-walk-eacsa-opt"
+      },
+      "id": "walk-eacsa-opt",
+      "routing": {
+        "base_commit": "b102816018b1db87304c751f2cd601a2abe4057a",
+        "changes": [
+          {
+            "path": "eacsa/dense_test.go",
+            "status": "A"
+          },
+          {
+            "path": "eacsa/frozen_reference_test.go",
+            "status": "A"
+          },
+          {
+            "path": "eacsa/scan.go",
+            "status": "M"
+          },
+          {
+            "path": "paper/profile.go",
+            "status": "M"
+          },
+          {
+            "path": "walking/graph/graph.go",
+            "status": "M"
+          },
+          {
+            "path": "walking/graph/reach_session.go",
+            "status": "A"
+          },
+          {
+            "path": "walking/graph/reach_session_test.go",
+            "status": "A"
+          }
+        ],
+        "clean_worktree_verified": true,
+        "complete_patch": "patches/routing-walk-eacsa-opt.patch",
+        "frozen_commit": "71b93206c7fcd5f035f34afba8c4b38fd9dba183",
+        "offline_replay_tree_matches": true,
+        "patch_bytes": 49008,
+        "patch_sha256": "7ec0795a1b4829e487b43922fc9e0a30a4a23f5668c2e2339b2d8d6b6214a90e",
+        "portability_changes": [],
+        "source_sha256": "eb4bc121d7096d7ad671afbad97b2d9640b15ea9c177951fdeb4bda206a11c97",
+        "tree": "2719ce3c0e029a023244a8d1d54788cab8da266e",
+        "worktree_label": "routing-walk-eacsa-opt"
+      }
+    },
+    {
+      "bench": {
+        "base_commit": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+        "changes": [
+          {
+            "path": "routing.lock.json",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/bounded_walking.go",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_patterns.go",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/cost_summary.go",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash.go",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_graph.go",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex.go",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_diagnostic.go",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_query.go",
+            "status": "M"
+          },
+          {
+            "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_walking_scope.go",
+            "status": "A"
+          }
+        ],
+        "clean_worktree_verified": true,
+        "complete_patch": "patches/bench-walk-opt.patch",
+        "frozen_commit": "f87156af8da3253b72424146abde2a2476cbf666",
+        "offline_replay_tree_matches": true,
+        "patch_bytes": 29283,
+        "patch_sha256": "10feec6f9831993987b84033aaa81eb973d55df05224617b367f990dbbba7234",
+        "portability_changes": [],
+        "source_sha256": "824d799936c2e96f249b0843f6b2399b72da0ba1aba1f42142f4f4ca7e34365c",
+        "tree": "a55f139ae2009852d6058e16d0e7ca246b3abec8",
+        "vendored_routing_lock": {
+          "commit": "66b9108e4495df6773217753706e3658bfcab612",
+          "module": "github.com/ertyoii/transit-routing-go",
+          "source_sha256": "ea4727c60a8823bbdc8e0da5b857f03c51bf5f091652110862fe917235b50246",
+          "version": "v0.1.0-pre.3"
+        },
+        "worktree_label": "bench-walk-opt"
+      },
+      "id": "walk-opt",
+      "routing": {
+        "base_commit": "b102816018b1db87304c751f2cd601a2abe4057a",
+        "changes": [
+          {
+            "path": "docs/CAPPED_WALKING_CLOSURE.md",
+            "status": "A"
+          },
+          {
+            "path": "tripbased/bounded_walking.go",
+            "status": "M"
+          },
+          {
+            "path": "tripbased/capped_patterns.go",
+            "status": "M"
+          },
+          {
+            "path": "tripbased/cost_summary.go",
+            "status": "M"
+          },
+          {
+            "path": "tripbased/flash.go",
+            "status": "M"
+          },
+          {
+            "path": "tripbased/flash_graph.go",
+            "status": "M"
+          },
+          {
+            "path": "tripbased/trex.go",
+            "status": "M"
+          },
+          {
+            "path": "tripbased/trex_diagnostic.go",
+            "status": "M"
+          },
+          {
+            "path": "tripbased/trex_query.go",
+            "status": "M"
+          },
+          {
+            "path": "tripbased/trex_walking_scope.go",
+            "status": "A"
+          },
+          {
+            "path": "tripbased/walking_scope_internal_test.go",
+            "status": "A"
+          },
+          {
+            "path": "tripbased/walking_scope_oracle_test.go",
+            "status": "A"
+          }
+        ],
+        "clean_worktree_verified": true,
+        "complete_patch": "patches/routing-walk-opt.patch",
+        "frozen_commit": "66b9108e4495df6773217753706e3658bfcab612",
+        "offline_replay_tree_matches": true,
+        "patch_bytes": 46944,
+        "patch_sha256": "3dac4cacaeead7cc557d6599f76bb35beaea9dc39973708d256c4955ce1876f8",
+        "portability_changes": [],
+        "source_sha256": "08eb2a0cb30382eba0458e7b955e67beb235d7e9611f45c37f6968d63b1566f8",
+        "tree": "f41ab8f0af90f141f1c4d6401eda0d7cf189510d",
+        "worktree_label": "routing-walk-opt"
+      }
+    }
+  ],
+  "complete_patch_count": 16,
+  "created_utc": "2026-10-21T03:12:00Z",
+  "diagnostic_overlay_sync_utc": "2026-10-21T04:12:00Z",
+  "diagnostic_overlays": [
+    {
+      "base_commit": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+      "changed_file_count": 4,
+      "changes": [
+        {
+          "bytes": 5767,
+          "path": "README.md",
+          "sha256": "0e0e51d503d6792a042f91675b416553e36980a3de3671e7af2bb67b388acc66",
+          "status": "tracked modification"
+        },
+        {
+          "bytes": 23740,
+          "path": "cmd/familybench/main.go",
+          "sha256": "75bf4de4da159c6ee1880aa875b94e51b9801dfad62c53f413786427f4097565",
+          "status": "tracked modification"
+        },
+        {
+          "bytes": 4141,
+          "path": "cmd/familybench/profiling.go",
+          "sha256": "5c9066d17aac43f34bb66b4e5ad000d76a27dc1cf3e2149341839b6b1fbe5cfd",
+          "status": "untracked included as added source"
+        },
+        {
+          "bytes": 7244,
+          "path": "cmd/familybench/profiling_test.go",
+          "sha256": "0f7df5b0342892dc13e407b870ad390fd5dd3e6776d843af8f2fd443fb0495b6",
+          "status": "untracked included as added source"
+        }
+      ],
+      "clean_commit_claim": false,
+      "complete_patch": "patches/bench-profiling-driver-overlay.patch",
+      "each_changed_blob_matches_working_source": true,
+      "head_commit_when_captured": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+      "historical_go_source_binding": {
+        "all_sources_before_build_runtime_go_hashes_match": true,
+        "evidence_file": "PROFILING_OVERLAY_HISTORICAL_BINDING.json",
+        "evidence_sha256": "13270c4d23603663f22020ed90e21308ea45058be3c9e30a1b00125dca3aa52e",
+        "historical_readme_support_byte_identity": "unproven: not covered by recorded Go-only hash; no support-only drift asserted",
+        "original_profile_runs_checked": 6
+      },
+      "id": "profiling-driver-overlay",
+      "offline_replay_passed": true,
+      "patch_bytes": 15594,
+      "patch_sha256": "6120f016c470ad0a0f55c98dd549ba42358f87b648f2a8d03223b2b479f2b23f",
+      "portability_changes": [],
+      "qualification": "Four-file dirty working-source diagnostic profiling overlay; whole-process profile-tune-six diagnostics, not headline latency or a new routing optimization. Actual profile binaries are excluded.",
+      "repository": "bench",
+      "result_tree": "1b2a2eff5a05dbeed2a18634f8c88def62ebfcb3",
+      "source_sha256": "057f9f9b26482c6b80aecfa7526615cff9f91d2510bac1fc338d311207b6ee3f",
+      "temporary_index_only_live_source_unmodified": true,
+      "worktree_label": "bench-profile"
+    }
+  ],
+  "evidence_separation": {
+    "go_module_identity": "Go module import paths and vendored source are preserved as actual source bytes. A module name need not be substituted with a repository URL.",
+    "local_candidate_reconstruction": "Offline base-plus-complete-patch index replay verifies exact candidate Git trees. This does not require or imply public candidate-commit reachability.",
+    "public_base_reachability": "The release owner verified public GitHub commit metadata for the two public base commits and trees. Source-only packaging performed no network fetch."
+  },
+  "excluded_environment_lock": {
+    "original_sha256": "4cd3b19b72e4e65bffb2d123587369a811ad21cbb9329f4ad8ffac8b85d20ca5",
+    "published_subset": "helpers/walking-build/requirements-reproduction.txt",
+    "reason": "Environment-wide freeze includes unrelated packages and an internal local-file dependency; publish relevant numerical/parser pins only.",
+    "source_relative_path": "walking-build/requirements-lock.txt"
+  },
+  "helper_last_sync_utc": "2026-10-21T04:58:57.855657+00:00",
+  "helper_sources": [
+    {
+      "original_bytes": 4676,
+      "original_sha256": "b3c6efbf909d7627478a694561f797c1da7c6e49f7934c296cedbfc12c1c091e",
+      "payload_path": "helpers/data/SOURCE_PROVENANCE.json",
+      "portable_bytes": 4676,
+      "portable_sha256": "b3c6efbf909d7627478a694561f797c1da7c6e49f7934c296cedbfc12c1c091e",
+      "source_relative_path": "data/SOURCE_PROVENANCE.json",
+      "transformations": []
+    },
+    {
+      "original_bytes": 1789,
+      "original_sha256": "b03eb7d3dd5c4ebde448ad69d18f5a72ca5232c9886baab81f215f44001ea832",
+      "payload_path": "helpers/data/import-public-windows.sh",
+      "portable_bytes": 1829,
+      "portable_sha256": "994c434e4610befa98471925937e7f866444f976b2b96d4d62438bc13dfd0f5c",
+      "source_relative_path": "data/import-public-windows.sh",
+      "transformations": [
+        "Replace the fixed absolute research root with SG_ROOT. JSON uses a literal ${SG_ROOT} placeholder expanded during helper installation; shell/Python sources read the environment variable. No routing or budget logic changed."
+      ]
+    },
+    {
+      "original_bytes": 2044,
+      "original_sha256": "3575e950ca161d0a575b8b3b88dc95ffd3afb1ded372d938e734ec034f835dca",
+      "payload_path": "helpers/data/window-plan.json",
+      "portable_bytes": 2044,
+      "portable_sha256": "3575e950ca161d0a575b8b3b88dc95ffd3afb1ded372d938e734ec034f835dca",
+      "source_relative_path": "data/window-plan.json",
+      "transformations": []
+    },
+    {
+      "original_bytes": 75473,
+      "original_sha256": "d26f32d8cabfcc873387749cd1d9d818bbaecd8ad3b597753f029b0f7a5aeedb",
+      "payload_path": "helpers/evalkit/evalkit.py",
+      "portable_bytes": 75473,
+      "portable_sha256": "d26f32d8cabfcc873387749cd1d9d818bbaecd8ad3b597753f029b0f7a5aeedb",
+      "source_relative_path": "evalkit/evalkit.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 2267,
+      "original_sha256": "b68e6839bc74961ef02ac220e675a8f98cd8f03af9d43b8f46e6056cc236a5f1",
+      "payload_path": "helpers/evalkit/profiles.default.json",
+      "portable_bytes": 2267,
+      "portable_sha256": "b68e6839bc74961ef02ac220e675a8f98cd8f03af9d43b8f46e6056cc236a5f1",
+      "source_relative_path": "evalkit/profiles.default.json",
+      "transformations": []
+    },
+    {
+      "original_bytes": 26031,
+      "original_sha256": "eb4dfed1f311c07442a9df5f1f40e5e89cade743f8da4036f371618956c0c37e",
+      "payload_path": "helpers/evalkit/test_evalkit.py",
+      "portable_bytes": 26031,
+      "portable_sha256": "eb4dfed1f311c07442a9df5f1f40e5e89cade743f8da4036f371618956c0c37e",
+      "source_relative_path": "evalkit/test_evalkit.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 4218,
+      "original_sha256": "d13249722632baa0a9696d8a0324c05513af6156543e586a27c61d2e386b342f",
+      "payload_path": "helpers/passenger-build/audit_pilot.py",
+      "portable_bytes": 4218,
+      "portable_sha256": "d13249722632baa0a9696d8a0324c05513af6156543e586a27c61d2e386b342f",
+      "source_relative_path": "passenger-build/audit_pilot.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 26275,
+      "original_sha256": "8a541ed5e9258baf9a55b75fc165e67a58d9f2ac26bbfbc272efbeaf698061ea",
+      "payload_path": "helpers/passenger-build/build_passenger.py",
+      "portable_bytes": 26275,
+      "portable_sha256": "8a541ed5e9258baf9a55b75fc165e67a58d9f2ac26bbfbc272efbeaf698061ea",
+      "source_relative_path": "passenger-build/build_passenger.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 15725,
+      "original_sha256": "83d8d64ddbef1b7f7063e9dce37a64503a8d3310d1e934395fba7240d6161793",
+      "payload_path": "helpers/passenger-build/nativecheck_test.go",
+      "portable_bytes": 15725,
+      "portable_sha256": "83d8d64ddbef1b7f7063e9dce37a64503a8d3310d1e934395fba7240d6161793",
+      "source_relative_path": "passenger-build/nativecheck_test.go",
+      "transformations": []
+    },
+    {
+      "original_bytes": 6645,
+      "original_sha256": "06519981e8d8d17d80d48564e7626f116c01980e679d26f6247e59e6219d8274",
+      "payload_path": "helpers/passenger-build/test_build_passenger.py",
+      "portable_bytes": 6645,
+      "portable_sha256": "06519981e8d8d17d80d48564e7626f116c01980e679d26f6247e59e6219d8274",
+      "source_relative_path": "passenger-build/test_build_passenger.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 6906,
+      "original_sha256": "4c47de248999620568473ddd7a7acd319c2e5fb57fe760a11ee3d5d0d7b35589",
+      "payload_path": "helpers/public-campaign-20261021/analyze_primary_stage.py",
+      "portable_bytes": 6906,
+      "portable_sha256": "4c47de248999620568473ddd7a7acd319c2e5fb57fe760a11ee3d5d0d7b35589",
+      "source_relative_path": "public-campaign-20261021/analyze_primary_stage.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 7963,
+      "original_sha256": "7bba03dd94932b07e41eb6bb967838c41cc80c3b5d5b66effaca852a111c35c2",
+      "payload_path": "helpers/public-campaign-20261021/analyze_repeated_blocks.py",
+      "portable_bytes": 7963,
+      "portable_sha256": "7bba03dd94932b07e41eb6bb967838c41cc80c3b5d5b66effaca852a111c35c2",
+      "source_relative_path": "public-campaign-20261021/analyze_repeated_blocks.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 2110,
+      "original_sha256": "5cabc483bc4aceb99d49991ee26a72989d7ea086748e81a60d5673f07a080f3c",
+      "payload_path": "helpers/public-campaign-20261021/auxiliary-native/build-and-test.sh",
+      "portable_bytes": 2150,
+      "portable_sha256": "59e74c0b770ef24039ecbe518a1c21549b2ba7856a8b05be68df080e3454e804",
+      "source_relative_path": "public-campaign-20261021/auxiliary-native/build-and-test.sh",
+      "transformations": [
+        "Replace the fixed absolute research root with SG_ROOT. JSON uses a literal ${SG_ROOT} placeholder expanded during helper installation; shell/Python sources read the environment variable. No routing or budget logic changed."
+      ]
+    },
+    {
+      "original_bytes": 2639,
+      "original_sha256": "821405dfec1193beceac394a71df7b63e265c88adaac154bb62c98241ab0d4ae",
+      "payload_path": "helpers/public-campaign-20261021/compare_optimization.py",
+      "portable_bytes": 2639,
+      "portable_sha256": "821405dfec1193beceac394a71df7b63e265c88adaac154bb62c98241ab0d4ae",
+      "source_relative_path": "public-campaign-20261021/compare_optimization.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 817,
+      "original_sha256": "e2850b25154f45e4fb68bc6ba1a8f600a03e9362291d11874dfb34ced8e26e0b",
+      "payload_path": "helpers/public-campaign-20261021/evaluate_remaining_windows.py",
+      "portable_bytes": 816,
+      "portable_sha256": "3a83771cfcc3fd2e607c558db7a47e914126dbeeb3ecf0682fdc974472be286b",
+      "source_relative_path": "public-campaign-20261021/evaluate_remaining_windows.py",
+      "transformations": [
+        "Replace the fixed absolute research root with SG_ROOT. JSON uses a literal ${SG_ROOT} placeholder expanded during helper installation; shell/Python sources read the environment variable. No routing or budget logic changed."
+      ]
+    },
+    {
+      "original_bytes": 3812,
+      "original_sha256": "8fae7f20af50392664d8ffdae208bebb36bc2679474742a5af0617e8cb461cb3",
+      "payload_path": "helpers/public-campaign-20261021/prepare_broad.py",
+      "portable_bytes": 3811,
+      "portable_sha256": "12bf6e3c7cf47a9c2d29754529c0c7d92855ff024d35a0ea47b4ef197f2c8f55",
+      "source_relative_path": "public-campaign-20261021/prepare_broad.py",
+      "transformations": [
+        "Replace the fixed absolute research root with SG_ROOT. JSON uses a literal ${SG_ROOT} placeholder expanded during helper installation; shell/Python sources read the environment variable. No routing or budget logic changed."
+      ]
+    },
+    {
+      "original_bytes": 3380,
+      "original_sha256": "7119fb30ca6628025a3334bb566d0166f25b052f420c7966e1a013a55d53cca3",
+      "payload_path": "helpers/public-campaign-20261021/prepare_next.py",
+      "portable_bytes": 3379,
+      "portable_sha256": "d3e3c514b9c04e9fbf9f3626dc2a06c5889ae0a8f88ec3cdc2e6a86aff50b933",
+      "source_relative_path": "public-campaign-20261021/prepare_next.py",
+      "transformations": [
+        "Replace the fixed absolute research root with SG_ROOT. JSON uses a literal ${SG_ROOT} placeholder expanded during helper installation; shell/Python sources read the environment variable. No routing or budget logic changed."
+      ]
+    },
+    {
+      "original_bytes": 5879,
+      "original_sha256": "5337d525a6c30466d0e3c0e2a7a5bf9f85fad95e007391cd32316bd7d7ef0a3b",
+      "payload_path": "helpers/public-campaign-20261021/summarize_campaigns.py",
+      "portable_bytes": 5879,
+      "portable_sha256": "5337d525a6c30466d0e3c0e2a7a5bf9f85fad95e007391cd32316bd7d7ef0a3b",
+      "source_relative_path": "public-campaign-20261021/summarize_campaigns.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 2455,
+      "original_sha256": "638c4137e268bfa78a43377fb0bd0747a10940257bf9bf48a6774e395e21e20c",
+      "payload_path": "helpers/public-campaign-20261021/summarize_quality_windows.py",
+      "portable_bytes": 2455,
+      "portable_sha256": "638c4137e268bfa78a43377fb0bd0747a10940257bf9bf48a6774e395e21e20c",
+      "source_relative_path": "public-campaign-20261021/summarize_quality_windows.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 30101,
+      "original_sha256": "d31d95c151108a7711a14816ab6a1b093af6c771875de9f4100159ada5b97814",
+      "payload_path": "helpers/setup/campaign_gate.py",
+      "portable_bytes": 30101,
+      "portable_sha256": "d31d95c151108a7711a14816ab6a1b093af6c771875de9f4100159ada5b97814",
+      "source_relative_path": "setup/campaign_gate.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 533,
+      "original_sha256": "4b1df5dd79029958403ea8d99e2b5dd887c212f51b149830c1a3528d5abf1bdf",
+      "payload_path": "helpers/setup/environment.sh",
+      "portable_bytes": 537,
+      "portable_sha256": "660c1c91ab52bfa46639ececdf9b83411f8b4fa741f6daf213b3b4176a6ad017",
+      "source_relative_path": "setup/environment.sh",
+      "transformations": [
+        "Replace the fixed absolute research root with SG_ROOT. JSON uses a literal ${SG_ROOT} placeholder expanded during helper installation; shell/Python sources read the environment variable. No routing or budget logic changed."
+      ]
+    },
+    {
+      "original_bytes": 1142,
+      "original_sha256": "63162ba02dd534193c2f830e6bd630c320949f1b27c7fd353e57c53ec73f4bc0",
+      "payload_path": "helpers/setup/run-baseline.sh",
+      "portable_bytes": 1128,
+      "portable_sha256": "69c04d99e27cb7430e1142d76e9a55de2eee21a264154e1c99a25751738e1c3c",
+      "source_relative_path": "setup/run-baseline.sh",
+      "transformations": [
+        "Replace the fixed absolute research root with SG_ROOT. JSON uses a literal ${SG_ROOT} placeholder expanded during helper installation; shell/Python sources read the environment variable. No routing or budget logic changed."
+      ]
+    },
+    {
+      "original_bytes": 114,
+      "original_sha256": "5ebcb11e32f19d8a7d5098d8ba675b2a674e9b1502e0d746a64495445941baa3",
+      "payload_path": "helpers/setup/run-fourcpu.sh",
+      "portable_bytes": 154,
+      "portable_sha256": "6e4b4cfba33216d803a0f361fe623f3331cdde9c9614d5f17f610a82a707e114",
+      "source_relative_path": "setup/run-fourcpu.sh",
+      "transformations": [
+        "Replace the fixed absolute research root with SG_ROOT. JSON uses a literal ${SG_ROOT} placeholder expanded during helper installation; shell/Python sources read the environment variable. No routing or budget logic changed."
+      ]
+    },
+    {
+      "original_bytes": 482,
+      "original_sha256": "728e75a934159c1587a41b390f00a922ec0d5dd1b05a3662db2facd83535b2e2",
+      "payload_path": "helpers/setup/run-full-tests.sh",
+      "portable_bytes": 468,
+      "portable_sha256": "fba60ce70bc785ba9ad44f40a6015a45fbfe3af58ed45c1a5268c1cc8a1b4475",
+      "source_relative_path": "setup/run-full-tests.sh",
+      "transformations": [
+        "Replace the fixed absolute research root with SG_ROOT. JSON uses a literal ${SG_ROOT} placeholder expanded during helper installation; shell/Python sources read the environment variable. No routing or budget logic changed."
+      ]
+    },
+    {
+      "original_bytes": 33922,
+      "original_sha256": "4e0c3b35a7612996926d59df93ef0e93443dbdc856cb80f427714cca8b10357d",
+      "payload_path": "helpers/setup/run_campaign.py",
+      "portable_bytes": 33922,
+      "portable_sha256": "4e0c3b35a7612996926d59df93ef0e93443dbdc856cb80f427714cca8b10357d",
+      "source_relative_path": "setup/run_campaign.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 5493,
+      "original_sha256": "4e49e82c1e8db5de72f55f775c0fd8099c9580c587efd0470a485b762a95dc1c",
+      "payload_path": "helpers/setup/source-eligibility-policy.json",
+      "portable_bytes": 5173,
+      "portable_sha256": "52d6b2aef18e3e026d662c53776ee06893d6f65b144d9c608acf27cc581c2d48",
+      "source_relative_path": "setup/source-eligibility-policy.json",
+      "transformations": [
+        "Replace the fixed absolute research root with SG_ROOT. JSON uses a literal ${SG_ROOT} placeholder expanded during helper installation; shell/Python sources read the environment variable. No routing or budget logic changed."
+      ]
+    },
+    {
+      "original_bytes": 23638,
+      "original_sha256": "746e76d52d4be7e4c80acdfd14a3901c38f4622eaa180639f11943c840ccdd3e",
+      "payload_path": "helpers/setup/test_campaign_gate.py",
+      "portable_bytes": 23626,
+      "portable_sha256": "b3cb901ba9a8f92b9796d9ab5a4bbafbef6bbc180f8de6ec119ad1baf985ce77",
+      "source_relative_path": "setup/test_campaign_gate.py",
+      "transformations": [
+        "Replace the hardcoded Unix temporary-directory fixture override with the portable tempfile default. This changes a synthetic test fixture location only, not gate or campaign logic."
+      ]
+    },
+    {
+      "original_bytes": 15299,
+      "original_sha256": "7b8537b80b0dbc8105e6c9df7637abeb64801c98b3c0aec24afe0fa41a609a12",
+      "payload_path": "helpers/setup/test_public_model_gate.py",
+      "portable_bytes": 15299,
+      "portable_sha256": "7b8537b80b0dbc8105e6c9df7637abeb64801c98b3c0aec24afe0fa41a609a12",
+      "source_relative_path": "setup/test_public_model_gate.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 653,
+      "original_sha256": "99f30edd2bb854933f8283d1517ac5dfa273d830020e0f1e5d494d15730684ef",
+      "payload_path": "helpers/walking-build/ODbL-ATTRIBUTION.txt",
+      "portable_bytes": 653,
+      "portable_sha256": "99f30edd2bb854933f8283d1517ac5dfa273d830020e0f1e5d494d15730684ef",
+      "source_relative_path": "walking-build/ODbL-ATTRIBUTION.txt",
+      "transformations": []
+    },
+    {
+      "original_bytes": 1374,
+      "original_sha256": "6d16273d84aa3d2a9aa7def9e8b63a8f6a2945ea557218b4b86f55e5b86c95bb",
+      "payload_path": "helpers/walking-build/SOURCE_PROVENANCE.json",
+      "portable_bytes": 1374,
+      "portable_sha256": "6d16273d84aa3d2a9aa7def9e8b63a8f6a2945ea557218b4b86f55e5b86c95bb",
+      "source_relative_path": "walking-build/SOURCE_PROVENANCE.json",
+      "transformations": []
+    },
+    {
+      "original_bytes": 1028,
+      "original_sha256": "4e121730dc2f2d1fda7b238f4ce53b4f82b4c5e7d0670fe187035c0372aef4c4",
+      "payload_path": "helpers/walking-build/SOURCE_QUALIFICATION.json",
+      "portable_bytes": 1028,
+      "portable_sha256": "4e121730dc2f2d1fda7b238f4ce53b4f82b4c5e7d0670fe187035c0372aef4c4",
+      "source_relative_path": "walking-build/SOURCE_QUALIFICATION.json",
+      "transformations": []
+    },
+    {
+      "original_bytes": 4217,
+      "original_sha256": "ab1ae85b14652c2479f56e9abb64e9ea31dead99530cd009c4963968c8bca59f",
+      "payload_path": "helpers/walking-build/build_rail_sensitivity.py",
+      "portable_bytes": 4217,
+      "portable_sha256": "ab1ae85b14652c2479f56e9abb64e9ea31dead99530cd009c4963968c8bca59f",
+      "source_relative_path": "walking-build/build_rail_sensitivity.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 15185,
+      "original_sha256": "476fcb9149c7f46a5f6c6b70863b839809dff0eef45e58267bb029b73ee93cc8",
+      "payload_path": "helpers/walking-build/build_walk.py",
+      "portable_bytes": 15185,
+      "portable_sha256": "476fcb9149c7f46a5f6c6b70863b839809dff0eef45e58267bb029b73ee93cc8",
+      "source_relative_path": "walking-build/build_walk.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 5355,
+      "original_sha256": "6db727993eb9029f10b34cf93e32372d2feea15d71b9f9ec2eca4de6265e97f4",
+      "payload_path": "helpers/walking-build/generate_footpaths.py",
+      "portable_bytes": 5355,
+      "portable_sha256": "6db727993eb9029f10b34cf93e32372d2feea15d71b9f9ec2eca4de6265e97f4",
+      "source_relative_path": "walking-build/generate_footpaths.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 5702,
+      "original_sha256": "1cae307574df6d6b1ad68833ffcc493be6bfb4b2a332bf6012e48828a13043ee",
+      "payload_path": "helpers/walking-build/generate_rail_sensitivity.py",
+      "portable_bytes": 5702,
+      "portable_sha256": "1cae307574df6d6b1ad68833ffcc493be6bfb4b2a332bf6012e48828a13043ee",
+      "source_relative_path": "walking-build/generate_rail_sensitivity.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 149,
+      "original_sha256": "49d0d75c94b432944e0897655e06ccf317cee0b5bbc96712f431473987ba0477",
+      "payload_path": "helpers/walking-build/go.mod",
+      "portable_bytes": 149,
+      "portable_sha256": "49d0d75c94b432944e0897655e06ccf317cee0b5bbc96712f431473987ba0477",
+      "source_relative_path": "walking-build/go.mod",
+      "transformations": []
+    },
+    {
+      "original_bytes": 6232,
+      "original_sha256": "e0789fb49dd8c421151c61b9d97e78b1149a98d896f6d7d5eb81603ec1a9f352",
+      "payload_path": "helpers/walking-build/merge_datasets.py",
+      "portable_bytes": 6232,
+      "portable_sha256": "e0789fb49dd8c421151c61b9d97e78b1149a98d896f6d7d5eb81603ec1a9f352",
+      "source_relative_path": "walking-build/merge_datasets.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 599,
+      "original_sha256": "d1943bc0f2c2cabacc096edd936e883fe577a6c1922137ca2ff7485c98def612",
+      "payload_path": "helpers/walking-build/parse_relations.py",
+      "portable_bytes": 599,
+      "portable_sha256": "d1943bc0f2c2cabacc096edd936e883fe577a6c1922137ca2ff7485c98def612",
+      "source_relative_path": "walking-build/parse_relations.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 1877,
+      "original_sha256": "dd9f4534755923ba893f7cff6ee4aa0aac4bda4233b97bb25f72e5c84a126f33",
+      "payload_path": "helpers/walking-build/test_walk.py",
+      "portable_bytes": 1877,
+      "portable_sha256": "dd9f4534755923ba893f7cff6ee4aa0aac4bda4233b97bb25f72e5c84a126f33",
+      "source_relative_path": "walking-build/test_walk.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 4010,
+      "original_sha256": "64e8db8a245f8419fe1b305fe0810c1e8143ca77c692efdd70d6a0ce16dbef08",
+      "payload_path": "helpers/walking-build/validate_artifacts.py",
+      "portable_bytes": 4010,
+      "portable_sha256": "64e8db8a245f8419fe1b305fe0810c1e8143ca77c692efdd70d6a0ce16dbef08",
+      "source_relative_path": "walking-build/validate_artifacts.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 673,
+      "original_sha256": "242069f69802ccbcaefdde8d8006952dd400fd9842dc9f211921dbb722d59c1e",
+      "payload_path": "helpers/walking-build/validate_datasets.go",
+      "portable_bytes": 673,
+      "portable_sha256": "242069f69802ccbcaefdde8d8006952dd400fd9842dc9f211921dbb722d59c1e",
+      "source_relative_path": "walking-build/validate_datasets.go",
+      "transformations": []
+    },
+    {
+      "original_bytes": 814,
+      "original_sha256": "afef4d9fd47bba3c734ebb52a1167ae9071b4f3c46f764186dccc7210673feb7",
+      "payload_path": "helpers/walking-build/validate_loader.go",
+      "portable_bytes": 814,
+      "portable_sha256": "afef4d9fd47bba3c734ebb52a1167ae9071b4f3c46f764186dccc7210673feb7",
+      "source_relative_path": "walking-build/validate_loader.go",
+      "transformations": []
+    },
+    {
+      "original_bytes": 663,
+      "original_sha256": "8142b8dafc4dc4656fe4852a0e7cec5b657d522539214830b6e212c608fc7a90",
+      "payload_path": "helpers/workload-build/frozen-plan-v2/HASH_COMMITMENT.json",
+      "portable_bytes": 663,
+      "portable_sha256": "8142b8dafc4dc4656fe4852a0e7cec5b657d522539214830b6e212c608fc7a90",
+      "source_relative_path": "workload-build/frozen-plan-v2/HASH_COMMITMENT.json",
+      "transformations": []
+    },
+    {
+      "original_bytes": 24835,
+      "original_sha256": "3bcc01de589a497c7896e2add6bcce89b2d1c1d203697818f588c0219d071611",
+      "payload_path": "helpers/workload-build/frozen-plan-v2/generate_workloads.snapshot.py",
+      "portable_bytes": 24835,
+      "portable_sha256": "3bcc01de589a497c7896e2add6bcce89b2d1c1d203697818f588c0219d071611",
+      "source_relative_path": "workload-build/frozen-plan-v2/generate_workloads.snapshot.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 24835,
+      "original_sha256": "3bcc01de589a497c7896e2add6bcce89b2d1c1d203697818f588c0219d071611",
+      "payload_path": "helpers/workload-build/generate_workloads.py",
+      "portable_bytes": 24835,
+      "portable_sha256": "3bcc01de589a497c7896e2add6bcce89b2d1c1d203697818f588c0219d071611",
+      "source_relative_path": "workload-build/generate_workloads.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 5460,
+      "original_sha256": "cdf544cbd239486b02f41c63021aa8a2f8c77ed937ce4df08395fe3f2dcd368e",
+      "payload_path": "helpers/workload-build/test_generate_workloads.py",
+      "portable_bytes": 5460,
+      "portable_sha256": "cdf544cbd239486b02f41c63021aa8a2f8c77ed937ce4df08395fe3f2dcd368e",
+      "source_relative_path": "workload-build/test_generate_workloads.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 8246,
+      "original_sha256": "8bd995848290446d2a3e4b641c23efe7594f66bd8cd7c1a06a3c20bead30a78f",
+      "payload_path": "helpers/data/NORMALIZED_INPUTS.json",
+      "portable_bytes": 8046,
+      "portable_sha256": "69491e9414166a4c99b3736a0563c194c8da2549452967396fbb6270c60bafcf",
+      "source_relative_path": "data/NORMALIZED_INPUTS.json",
+      "transformations": [
+        "Replace the absolute research-root path in aggregate input metadata with the ${SG_ROOT} installation placeholder. Dataset byte SHA256 values are unchanged."
+      ]
+    },
+    {
+      "original_bytes": 40733,
+      "original_sha256": "633ec9c0daf180131c4aed8a87e3f55047b414384551f56b803b490d0289afbe",
+      "payload_path": "helpers/public-campaign-20261021/stage_publication.py",
+      "portable_bytes": 40733,
+      "portable_sha256": "633ec9c0daf180131c4aed8a87e3f55047b414384551f56b803b490d0289afbe",
+      "source_relative_path": "public-campaign-20261021/stage_publication.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 24472,
+      "original_sha256": "ec52cc8710479179a9386fb12c0426a19a96be26fb9d5ed955f9d8775736e674",
+      "payload_path": "helpers/public-campaign-20261021/test_stage_publication.py",
+      "portable_bytes": 24472,
+      "portable_sha256": "ec52cc8710479179a9386fb12c0426a19a96be26fb9d5ed955f9d8775736e674",
+      "source_relative_path": "public-campaign-20261021/test_stage_publication.py",
+      "transformations": []
+    },
+    {
+      "kind": "configuration source snapshot, including declared source/target domain constants where applicable; not a workload",
+      "original_bytes": 2312,
+      "original_sha256": "577aa0cb39e44032cba34b75d789553b0c11d42309e1ff4eb99eb65e4cd60845",
+      "payload_path": "helpers/public-campaign-20261021/configs/evalkit-finite20-top3.json",
+      "portable_bytes": 2312,
+      "portable_sha256": "577aa0cb39e44032cba34b75d789553b0c11d42309e1ff4eb99eb65e4cd60845",
+      "source_relative_path": "public-campaign-20261021/configs/evalkit-finite20-top3.json",
+      "transformations": []
+    },
+    {
+      "kind": "configuration source snapshot, including declared source/target domain constants where applicable; not a workload",
+      "original_bytes": 2615,
+      "original_sha256": "20b5b055053eda8ea8b4d8063c5e6b6bae7ba4ef0ef61da67b52df78ece9f934",
+      "payload_path": "helpers/public-campaign-20261021/configs/finite20-choice-200k.json",
+      "portable_bytes": 2615,
+      "portable_sha256": "20b5b055053eda8ea8b4d8063c5e6b6bae7ba4ef0ef61da67b52df78ece9f934",
+      "source_relative_path": "public-campaign-20261021/configs/finite20-choice-200k.json",
+      "transformations": []
+    },
+    {
+      "kind": "configuration source snapshot, including declared source/target domain constants where applicable; not a workload",
+      "original_bytes": 561,
+      "original_sha256": "2340b75018ca512d0fa1900ce0ebabd4b8949d56235917981ea65cd6b4f0b643",
+      "payload_path": "helpers/public-campaign-20261021/configs/flash_tb_static_stop_pair_suffix_flags_role_caps_v1.json",
+      "portable_bytes": 561,
+      "portable_sha256": "2340b75018ca512d0fa1900ce0ebabd4b8949d56235917981ea65cd6b4f0b643",
+      "source_relative_path": "public-campaign-20261021/configs/flash_tb_static_stop_pair_suffix_flags_role_caps_v1.json",
+      "transformations": []
+    },
+    {
+      "kind": "configuration source snapshot, including declared source/target domain constants where applicable; not a workload",
+      "original_bytes": 1264,
+      "original_sha256": "664e6d8bc0bae010eaf79802bb02b50f87c3c8115b7581df2f9cfda5c0df637f",
+      "payload_path": "helpers/public-campaign-20261021/configs/tp_destination_fixed_caps_experimental-policy-fixed.json",
+      "portable_bytes": 1264,
+      "portable_sha256": "664e6d8bc0bae010eaf79802bb02b50f87c3c8115b7581df2f9cfda5c0df637f",
+      "source_relative_path": "public-campaign-20261021/configs/tp_destination_fixed_caps_experimental-policy-fixed.json",
+      "transformations": []
+    },
+    {
+      "kind": "configuration source snapshot, including declared source/target domain constants where applicable; not a workload",
+      "original_bytes": 1268,
+      "original_sha256": "e798ce60737704d4d93005dbe76c474f88a1fc9d526184b2eecd6094aa9c393e",
+      "payload_path": "helpers/public-campaign-20261021/configs/tp_destination_fixed_caps_experimental-transfers100000000.json",
+      "portable_bytes": 1268,
+      "portable_sha256": "e798ce60737704d4d93005dbe76c474f88a1fc9d526184b2eecd6094aa9c393e",
+      "source_relative_path": "public-campaign-20261021/configs/tp_destination_fixed_caps_experimental-transfers100000000.json",
+      "transformations": []
+    },
+    {
+      "kind": "configuration source snapshot, including declared source/target domain constants where applicable; not a workload",
+      "original_bytes": 1266,
+      "original_sha256": "5ded870aa1b3e90433cc5fa6c44fd448a9904172b538c36589fea7169087577e",
+      "payload_path": "helpers/public-campaign-20261021/configs/tp_destination_fixed_caps_experimental-transfers25000000.json",
+      "portable_bytes": 1266,
+      "portable_sha256": "5ded870aa1b3e90433cc5fa6c44fd448a9904172b538c36589fea7169087577e",
+      "source_relative_path": "public-campaign-20261021/configs/tp_destination_fixed_caps_experimental-transfers25000000.json",
+      "transformations": []
+    },
+    {
+      "kind": "configuration source snapshot, including declared source/target domain constants where applicable; not a workload",
+      "original_bytes": 1312,
+      "original_sha256": "9d870277c7551d909f6e86626b21f028b84572e906dd23d46b7e73d065e2cbb9",
+      "payload_path": "helpers/public-campaign-20261021/configs/tp_destination_fixed_caps_experimental.json",
+      "portable_bytes": 1312,
+      "portable_sha256": "9d870277c7551d909f6e86626b21f028b84572e906dd23d46b7e73d065e2cbb9",
+      "source_relative_path": "public-campaign-20261021/configs/tp_destination_fixed_caps_experimental.json",
+      "transformations": []
+    },
+    {
+      "kind": "configuration source snapshot, including declared source/target domain constants where applicable; not a workload",
+      "original_bytes": 1609,
+      "original_sha256": "e03c2b5d463b38213eaf771544fa9fa54b6c4d5b099b770114c0eb6597b0d61b",
+      "payload_path": "helpers/public-campaign-20261021/configs/tp_source_domain_retained_fixed_caps_experimental_v1-policy-fixed.json",
+      "portable_bytes": 1609,
+      "portable_sha256": "e03c2b5d463b38213eaf771544fa9fa54b6c4d5b099b770114c0eb6597b0d61b",
+      "source_relative_path": "public-campaign-20261021/configs/tp_source_domain_retained_fixed_caps_experimental_v1-policy-fixed.json",
+      "transformations": []
+    },
+    {
+      "kind": "configuration source snapshot, including declared source/target domain constants where applicable; not a workload",
+      "original_bytes": 1613,
+      "original_sha256": "9e24821af8351aff8b8a6f38b2d6ecb32350ed4ab5ccada854482aa42cdac072",
+      "payload_path": "helpers/public-campaign-20261021/configs/tp_source_domain_retained_fixed_caps_experimental_v1-transfers100000000.json",
+      "portable_bytes": 1613,
+      "portable_sha256": "9e24821af8351aff8b8a6f38b2d6ecb32350ed4ab5ccada854482aa42cdac072",
+      "source_relative_path": "public-campaign-20261021/configs/tp_source_domain_retained_fixed_caps_experimental_v1-transfers100000000.json",
+      "transformations": []
+    },
+    {
+      "kind": "configuration source snapshot, including declared source/target domain constants where applicable; not a workload",
+      "original_bytes": 1611,
+      "original_sha256": "97b778ed3e86f4922ca4f32ad489d03abe93346312f8e660665d577e138e3577",
+      "payload_path": "helpers/public-campaign-20261021/configs/tp_source_domain_retained_fixed_caps_experimental_v1-transfers25000000.json",
+      "portable_bytes": 1611,
+      "portable_sha256": "97b778ed3e86f4922ca4f32ad489d03abe93346312f8e660665d577e138e3577",
+      "source_relative_path": "public-campaign-20261021/configs/tp_source_domain_retained_fixed_caps_experimental_v1-transfers25000000.json",
+      "transformations": []
+    },
+    {
+      "kind": "configuration source snapshot, including declared source/target domain constants where applicable; not a workload",
+      "original_bytes": 1661,
+      "original_sha256": "e0ff164c3e40d62b1e823709e3e0a937564b0908b9b0c32cc15d7d74a3a574f5",
+      "payload_path": "helpers/public-campaign-20261021/configs/tp_source_domain_retained_fixed_caps_experimental_v1.json",
+      "portable_bytes": 1661,
+      "portable_sha256": "e0ff164c3e40d62b1e823709e3e0a937564b0908b9b0c32cc15d7d74a3a574f5",
+      "source_relative_path": "public-campaign-20261021/configs/tp_source_domain_retained_fixed_caps_experimental_v1.json",
+      "transformations": []
+    },
+    {
+      "kind": "configuration source snapshot, including declared source/target domain constants where applicable; not a workload",
+      "original_bytes": 766,
+      "original_sha256": "5f0b01b713b11974b71fa0c54a0def59fa79229a557f1ed69b295e41c329fca6",
+      "payload_path": "helpers/public-campaign-20261021/configs/trex_fixed_transfer_cap_ranked_defined_probe_verified_experimental_v1-transfers100000000.json",
+      "portable_bytes": 766,
+      "portable_sha256": "5f0b01b713b11974b71fa0c54a0def59fa79229a557f1ed69b295e41c329fca6",
+      "source_relative_path": "public-campaign-20261021/configs/trex_fixed_transfer_cap_ranked_defined_probe_verified_experimental_v1-transfers100000000.json",
+      "transformations": []
+    },
+    {
+      "kind": "configuration source snapshot, including declared source/target domain constants where applicable; not a workload",
+      "original_bytes": 765,
+      "original_sha256": "4e10c31543af3a0cd895fda9a316026f1aa00eb4baec37481e4d61a192acd7c8",
+      "payload_path": "helpers/public-campaign-20261021/configs/trex_fixed_transfer_cap_ranked_defined_probe_verified_experimental_v1-transfers25000000.json",
+      "portable_bytes": 765,
+      "portable_sha256": "4e10c31543af3a0cd895fda9a316026f1aa00eb4baec37481e4d61a192acd7c8",
+      "source_relative_path": "public-campaign-20261021/configs/trex_fixed_transfer_cap_ranked_defined_probe_verified_experimental_v1-transfers25000000.json",
+      "transformations": []
+    },
+    {
+      "kind": "configuration source snapshot, including declared source/target domain constants where applicable; not a workload",
+      "original_bytes": 764,
+      "original_sha256": "033b0f93cf4e03361a594d9e892579bf58a678208d1d2519a98ea33038ad93db",
+      "payload_path": "helpers/public-campaign-20261021/configs/trex_fixed_transfer_cap_ranked_defined_probe_verified_experimental_v1.json",
+      "portable_bytes": 764,
+      "portable_sha256": "033b0f93cf4e03361a594d9e892579bf58a678208d1d2519a98ea33038ad93db",
+      "source_relative_path": "public-campaign-20261021/configs/trex_fixed_transfer_cap_ranked_defined_probe_verified_experimental_v1.json",
+      "transformations": []
+    },
+    {
+      "kind": "configuration source snapshot, including declared source/target domain constants where applicable; not a workload",
+      "original_bytes": 605,
+      "original_sha256": "0869ccceb466594314d2ee8ab41e8d64b2780dffc71ded8d9016adc1fa29b12a",
+      "payload_path": "helpers/public-campaign-20261021/configs/trex_static_caps_mandatory_verified_experimental.json",
+      "portable_bytes": 605,
+      "portable_sha256": "0869ccceb466594314d2ee8ab41e8d64b2780dffc71ded8d9016adc1fa29b12a",
+      "source_relative_path": "public-campaign-20261021/configs/trex_static_caps_mandatory_verified_experimental.json",
+      "transformations": []
+    },
+    {
+      "kind": "configuration source snapshot, including declared source/target domain constants where applicable; not a workload",
+      "original_bytes": 140,
+      "original_sha256": "d8d76645ff4b45d499a1f0e9d3325b372f68e30ae6d5eedd11bc1c093d02480f",
+      "payload_path": "helpers/public-campaign-20261021/configs/trip_based_capped-transfers100000000.json",
+      "portable_bytes": 140,
+      "portable_sha256": "d8d76645ff4b45d499a1f0e9d3325b372f68e30ae6d5eedd11bc1c093d02480f",
+      "source_relative_path": "public-campaign-20261021/configs/trip_based_capped-transfers100000000.json",
+      "transformations": []
+    },
+    {
+      "kind": "configuration source snapshot, including declared source/target domain constants where applicable; not a workload",
+      "original_bytes": 139,
+      "original_sha256": "78988c1216d3a3f59cddfb5d313048e558e862590d1a538ded45703d34d0c0a9",
+      "payload_path": "helpers/public-campaign-20261021/configs/trip_based_capped-transfers25000000.json",
+      "portable_bytes": 139,
+      "portable_sha256": "78988c1216d3a3f59cddfb5d313048e558e862590d1a538ded45703d34d0c0a9",
+      "source_relative_path": "public-campaign-20261021/configs/trip_based_capped-transfers25000000.json",
+      "transformations": []
+    },
+    {
+      "kind": "configuration source snapshot, including declared source/target domain constants where applicable; not a workload",
+      "original_bytes": 138,
+      "original_sha256": "7217d2efd95bb6af17d44ff0f67e448ea85980353fade5bd9013578b9f1dbe39",
+      "payload_path": "helpers/public-campaign-20261021/configs/trip_based_capped.json",
+      "portable_bytes": 138,
+      "portable_sha256": "7217d2efd95bb6af17d44ff0f67e448ea85980353fade5bd9013578b9f1dbe39",
+      "source_relative_path": "public-campaign-20261021/configs/trip_based_capped.json",
+      "transformations": []
+    },
+    {
+      "kind": "configuration source snapshot, including declared source/target domain constants where applicable; not a workload",
+      "original_bytes": 641,
+      "original_sha256": "59fdde6888d6b814ef7a7636b4e7b9f9e2a5bd74080b50a1beac1307e0b35651",
+      "payload_path": "helpers/public-campaign-20261021/configs/ultra_cap_safe_stay_witness_subset_v1.json",
+      "portable_bytes": 641,
+      "portable_sha256": "59fdde6888d6b814ef7a7636b4e7b9f9e2a5bd74080b50a1beac1307e0b35651",
+      "source_relative_path": "public-campaign-20261021/configs/ultra_cap_safe_stay_witness_subset_v1.json",
+      "transformations": []
+    },
+    {
+      "kind": "configuration source snapshot, including declared source/target domain constants where applicable; not a workload",
+      "original_bytes": 530,
+      "original_sha256": "55734763e52b2e7ed3bfc3248a4deaabcb97491ec52d2e34dfc3129c29237279",
+      "payload_path": "helpers/public-campaign-20261021/configs/ultra_transfer_complete_capped.json",
+      "portable_bytes": 530,
+      "portable_sha256": "55734763e52b2e7ed3bfc3248a4deaabcb97491ec52d2e34dfc3129c29237279",
+      "source_relative_path": "public-campaign-20261021/configs/ultra_transfer_complete_capped.json",
+      "transformations": []
+    },
+    {
+      "original_bytes": 5876,
+      "original_sha256": "779970beeb828d16f4f5bb851b88e982cb2681b93375acbe43edd83663b2e7fe",
+      "payload_path": "helpers/public-campaign-20261021/analyze_native_csa_stage.py",
+      "portable_bytes": 5876,
+      "portable_sha256": "779970beeb828d16f4f5bb851b88e982cb2681b93375acbe43edd83663b2e7fe",
+      "source_relative_path": "public-campaign-20261021/analyze_native_csa_stage.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 8734,
+      "original_sha256": "279ac72538e2fa7c1310b1a20fd5f32fbca9470faa712e79b96b8cd42dba595e",
+      "payload_path": "helpers/public-campaign-20261021/prepare_final_test_release.py",
+      "portable_bytes": 8734,
+      "portable_sha256": "279ac72538e2fa7c1310b1a20fd5f32fbca9470faa712e79b96b8cd42dba595e",
+      "source_relative_path": "public-campaign-20261021/prepare_final_test_release.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 4497,
+      "original_sha256": "5405ee41ea07b6f095624267dec911f9274fb0c7f74266e6d51da074dd7aab35",
+      "payload_path": "helpers/public-campaign-20261021/execute_final_test_release.py",
+      "portable_bytes": 4497,
+      "portable_sha256": "5405ee41ea07b6f095624267dec911f9274fb0c7f74266e6d51da074dd7aab35",
+      "source_relative_path": "public-campaign-20261021/execute_final_test_release.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 18581,
+      "original_sha256": "00d3f7201306ec5b56b7c162eff0fe4bed9a85d3b0bc20ce1d169d9ac0f91015",
+      "payload_path": "helpers/public-campaign-20261021/render_final_results.py",
+      "portable_bytes": 18581,
+      "portable_sha256": "00d3f7201306ec5b56b7c162eff0fe4bed9a85d3b0bc20ce1d169d9ac0f91015",
+      "source_relative_path": "public-campaign-20261021/render_final_results.py",
+      "transformations": []
+    },
+    {
+      "original_bytes": 4632,
+      "original_sha256": "6b5aa018aab6c5c46964f55e150bc05c67ea677f4d73a301cec4c2f5f96c58de",
+      "payload_path": "helpers/public-campaign-20261021/COMPACT_PROJECTION.md",
+      "portable_bytes": 4632,
+      "portable_sha256": "6b5aa018aab6c5c46964f55e150bc05c67ea677f4d73a301cec4c2f5f96c58de",
+      "source_relative_path": "public-campaign-20261021/COMPACT_PROJECTION.md",
+      "transformations": []
+    }
+  ],
+  "not_included_unfrozen_drafts": [],
+  "packaging_revision": {
+    "previous_snapshot_payload_manifest_sha256": "8e3adf50dfa98fd20f0350a0add554ef61c104fb4f642f13a3cc68c919f57c77",
+    "revised_utc": "2026-10-21T05:05:56.039679+00:00",
+    "scope": "User-facing packaging prose only; source/helper/patch and license bytes unchanged.",
+    "version": "source-final-v2"
+  },
+  "publication_acceptance": {
+    "original_acceptance_sha256": "baf3456246f2b29ea1f328d747d5b2d82323427321162144296824b9bea80d34",
+    "projection_source_sync": "Final revised full/optional compact projector source synchronized; 23 synthetic projection tests pass. Source-only packaging did not run campaign projection.",
+    "scope": "Publication evidence acceptance is separate from input-data redistribution rights and source/tree replay. The combined release supplies final accepted documents outside repro/.",
+    "state": "Accepted by final independent public-evidence review; acceptance verified by the release owner"
+  },
+  "publication_projection": {
+    "compact_projection_guide_sha256": "6b5aa018aab6c5c46964f55e150bc05c67ea677f4d73a301cec4c2f5f96c58de",
+    "note": "Optional compact mode preserves outcomes/objective vectors/witness hashes/timings/failures while consolidating or hashing verbose quality metadata; full mode remains preserved. Exact sealed-run virtual prefix and exact named semantic-hash containers have narrow normalizations.",
+    "packager_executed_actual_projection": false,
+    "release_projection_preflight": {
+      "command_specs": 479,
+      "plan_status_preflight_failures": 0,
+      "terminal_campaigns": 51
+    },
+    "stage_publication_py_sha256": "633ec9c0daf180131c4aed8a87e3f55047b414384551f56b803b490d0289afbe",
+    "test_stage_publication_py_sha256": "ec52cc8710479179a9386fb12c0426a19a96be26fb9d5ed955f9d8775736e674"
+  },
+  "publication_status": "Frozen source reproducibility supplement. The combined release supplies accepted reports and a separate combined release manifest outside repro/.",
+  "rights": {
+    "excluded_data": "Raw GTFS/OSM, derived graphs/bindings/datasets, stop metadata, selected endpoint plans/workloads, LTA map assets, binaries, machine logs and internal task/chat notes are not included.",
+    "input_data": "No public redistribution rights established by this package; provider terms and ODbL obligations apply independently.",
+    "local_helpers": "Original campaign helper source is distributed within the existing MIT-licensed public project under that repository default, as confirmed by the project owner. Existing third-party license notices and attributions remain applicable. This does not relicense any source or derived transit/map data.",
+    "repository_code": "MIT, subject to preserved third-party notices. See licenses/routing and licenses/bench."
+  },
+  "schema": "sg-public-source-pins-v1",
+  "scope": "Source-only portable reproducibility supplement; no raw or derived transit/map datasets, workloads, binaries or run logs.",
+  "source_freeze_utc": "2026-10-21T05:03:01.882339+00:00",
+  "source_inputs": [
+    {
+      "bytes": 348712,
+      "destination": "data/singapore-gtfs-v2026-07-12.zip",
+      "id": "gtfs",
+      "redistribution_rights_established": false,
+      "sha256": "d92173127e9a5cbf8ecb5b4d50ab03f68deb7f8ddff73648b8ffb33c70ab4801",
+      "url": "https://github.com/Vorld/singapore-gtfs/releases/download/v2026-07-12/singapore-gtfs.zip"
+    },
+    {
+      "bytes": 252137556,
+      "destination": "walking-build/malaysia-singapore-brunei-261019.osm.pbf",
+      "id": "osm",
+      "redistribution_rights_established": false,
+      "sha256": "143cd2983864f6595e817e4e72b5f1acb498629a04613eb2e6da0bc5b064b0f3",
+      "url": "https://download.geofabrik.de/asia/malaysia-singapore-brunei-261019.osm.pbf"
+    }
+  ],
+  "verification_limits": [
+    "All 16 complete patches passed offline isolated-index replay: fourteen exact frozen candidate trees, one eight-file auxiliary working overlay and one four-file diagnostic profiling working overlay. No Go builds/tests or routing/profiling workloads were run.",
+    "Frozen commit names are original local identities, not claims that candidate commits are reachable on a public remote.",
+    "Portable helper edits alter script digests and path-bound manifests. Regenerated artifacts need new hashes and seals.",
+    "Data redistribution rights are not established. Obtain inputs separately under provider terms."
+  ]
+}

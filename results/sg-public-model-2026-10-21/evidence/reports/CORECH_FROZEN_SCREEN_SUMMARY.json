@@ -1,0 +1,1534 @@
+{
+  "schema": "corech-raw-graph-existing-screen-v1",
+  "rows": [
+    {
+      "window": "morning",
+      "algorithm": "identity",
+      "original_point_requests": 180,
+      "rows": 117,
+      "cells": 13689,
+      "positive_reference_rows": 12,
+      "nonself_found_cells": 12,
+      "errors": 0,
+      "all_rows_response": {
+        "count": 117,
+        "p50_ms": 0.024185,
+        "p95_ms": 0.047249,
+        "p99_ms": 0.069813,
+        "max_ms": 0.189789
+      },
+      "positive_reference_rows_response": {
+        "count": 12,
+        "p50_ms": 0.031686,
+        "p95_ms": 0.047249,
+        "p99_ms": 0.047249,
+        "max_ms": 0.047249
+      },
+      "independent_audit_ns": 79798541,
+      "preparation": {
+        "core_ch": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 92447416,
+              "total_alloc_bytes": 1261941960,
+              "num_gc": 13
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 595259392,
+              "user_cpu_seconds": 2.327208,
+              "system_cpu_seconds": 0.268134,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 72970952,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 86130344,
+              "total_alloc_bytes": 1188971008,
+              "num_gc": 12
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 595259392,
+              "user_cpu_seconds": 2.144913,
+              "system_cpu_seconds": 0.260644,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 117,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 159986434,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 15387467,
+            "write_ns": 640592,
+            "bytes": 4492075,
+            "sha256": "4b0c18d22d75442f8868214a57e78e1ec4cf3718e5fc1d28d74bcb9aec818276",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 84698528,
+              "total_alloc_bytes": 1261941960,
+              "num_gc": 14
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 595259392,
+              "user_cpu_seconds": 2.35974,
+              "system_cpu_seconds": 0.268134,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": -1431816,
+          "post_gc_ns": 9806794,
+          "snapshot_copy_ns": 307743,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 3241,
+            "shortcuts": 3034,
+            "witness_searches": 6038,
+            "limited_witness_searches": 104,
+            "witness_settled": 164581,
+            "witness_edge_visits": 2106292,
+            "witness_omissions": 24088,
+            "core_vertices": 2209,
+            "core_edges": 30932,
+            "stop_reason": "average_core_out_degree"
+          }
+        },
+        "identity": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 105376352,
+              "total_alloc_bytes": 1155263344,
+              "num_gc": 10
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 595259392,
+              "user_cpu_seconds": 2.0636039999999998,
+              "system_cpu_seconds": 0.254266,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 28791696,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 76584656,
+              "total_alloc_bytes": 1126471648,
+              "num_gc": 10
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 595259392,
+              "user_cpu_seconds": 2.04535,
+              "system_cpu_seconds": 0.251843,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 5450,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 18293959,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 13744022,
+            "write_ns": 625870,
+            "bytes": 4335977,
+            "sha256": "252f369877e943c9e1bc0f056dab38b4843f41df69d19edc5139f1273606c0d2",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 80701592,
+              "total_alloc_bytes": 1155263360,
+              "num_gc": 11
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 595259392,
+              "user_cpu_seconds": 2.094103,
+              "system_cpu_seconds": 0.259274,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": 4116936,
+          "post_gc_ns": 11706616,
+          "snapshot_copy_ns": 222217,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 0,
+            "shortcuts": 0,
+            "witness_searches": 0,
+            "limited_witness_searches": 0,
+            "witness_settled": 0,
+            "witness_edge_visits": 0,
+            "witness_omissions": 0,
+            "core_vertices": 5450,
+            "core_edges": 40230,
+            "stop_reason": "target_core_size"
+          }
+        }
+      }
+    },
+    {
+      "window": "morning",
+      "algorithm": "core_ch",
+      "original_point_requests": 180,
+      "rows": 117,
+      "cells": 13689,
+      "positive_reference_rows": 12,
+      "nonself_found_cells": 12,
+      "errors": 0,
+      "all_rows_response": {
+        "count": 117,
+        "p50_ms": 0.023044,
+        "p95_ms": 0.043364,
+        "p99_ms": 0.04749,
+        "max_ms": 0.066096
+      },
+      "positive_reference_rows_response": {
+        "count": 12,
+        "p50_ms": 0.032198,
+        "p95_ms": 0.044065,
+        "p99_ms": 0.044065,
+        "max_ms": 0.044065
+      },
+      "independent_audit_ns": 79798541,
+      "preparation": {
+        "core_ch": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 92447416,
+              "total_alloc_bytes": 1261941960,
+              "num_gc": 13
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 595259392,
+              "user_cpu_seconds": 2.327208,
+              "system_cpu_seconds": 0.268134,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 72970952,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 86130344,
+              "total_alloc_bytes": 1188971008,
+              "num_gc": 12
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 595259392,
+              "user_cpu_seconds": 2.144913,
+              "system_cpu_seconds": 0.260644,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 117,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 159986434,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 15387467,
+            "write_ns": 640592,
+            "bytes": 4492075,
+            "sha256": "4b0c18d22d75442f8868214a57e78e1ec4cf3718e5fc1d28d74bcb9aec818276",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 84698528,
+              "total_alloc_bytes": 1261941960,
+              "num_gc": 14
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 595259392,
+              "user_cpu_seconds": 2.35974,
+              "system_cpu_seconds": 0.268134,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": -1431816,
+          "post_gc_ns": 9806794,
+          "snapshot_copy_ns": 307743,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 3241,
+            "shortcuts": 3034,
+            "witness_searches": 6038,
+            "limited_witness_searches": 104,
+            "witness_settled": 164581,
+            "witness_edge_visits": 2106292,
+            "witness_omissions": 24088,
+            "core_vertices": 2209,
+            "core_edges": 30932,
+            "stop_reason": "average_core_out_degree"
+          }
+        },
+        "identity": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 105376352,
+              "total_alloc_bytes": 1155263344,
+              "num_gc": 10
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 595259392,
+              "user_cpu_seconds": 2.0636039999999998,
+              "system_cpu_seconds": 0.254266,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 28791696,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 76584656,
+              "total_alloc_bytes": 1126471648,
+              "num_gc": 10
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 595259392,
+              "user_cpu_seconds": 2.04535,
+              "system_cpu_seconds": 0.251843,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 5450,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 18293959,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 13744022,
+            "write_ns": 625870,
+            "bytes": 4335977,
+            "sha256": "252f369877e943c9e1bc0f056dab38b4843f41df69d19edc5139f1273606c0d2",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 80701592,
+              "total_alloc_bytes": 1155263360,
+              "num_gc": 11
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 595259392,
+              "user_cpu_seconds": 2.094103,
+              "system_cpu_seconds": 0.259274,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": 4116936,
+          "post_gc_ns": 11706616,
+          "snapshot_copy_ns": 222217,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 0,
+            "shortcuts": 0,
+            "witness_searches": 0,
+            "limited_witness_searches": 0,
+            "witness_settled": 0,
+            "witness_edge_visits": 0,
+            "witness_omissions": 0,
+            "core_vertices": 5450,
+            "core_edges": 40230,
+            "stop_reason": "target_core_size"
+          }
+        }
+      }
+    },
+    {
+      "window": "midday",
+      "algorithm": "identity",
+      "original_point_requests": 180,
+      "rows": 117,
+      "cells": 13689,
+      "positive_reference_rows": 12,
+      "nonself_found_cells": 12,
+      "errors": 0,
+      "all_rows_response": {
+        "count": 117,
+        "p50_ms": 0.024055,
+        "p95_ms": 0.057224,
+        "p99_ms": 0.094339,
+        "max_ms": 0.120137
+      },
+      "positive_reference_rows_response": {
+        "count": 12,
+        "p50_ms": 0.032998,
+        "p95_ms": 0.057224,
+        "p99_ms": 0.057224,
+        "max_ms": 0.057224
+      },
+      "independent_audit_ns": 80731839,
+      "preparation": {
+        "core_ch": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 100086888,
+              "total_alloc_bytes": 1265126808,
+              "num_gc": 13
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 601550848,
+              "user_cpu_seconds": 2.353152,
+              "system_cpu_seconds": 0.440526,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 72962904,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 86263880,
+              "total_alloc_bytes": 1192163904,
+              "num_gc": 12
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 601550848,
+              "user_cpu_seconds": 2.167663,
+              "system_cpu_seconds": 0.432343,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 117,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 158993406,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 15210447,
+            "write_ns": 1718556,
+            "bytes": 4492075,
+            "sha256": "4b0c18d22d75442f8868214a57e78e1ec4cf3718e5fc1d28d74bcb9aec818276",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 84831952,
+              "total_alloc_bytes": 1265126808,
+              "num_gc": 14
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 601550848,
+              "user_cpu_seconds": 2.383391,
+              "system_cpu_seconds": 0.440817,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": -1431928,
+          "post_gc_ns": 14954660,
+          "snapshot_copy_ns": 275985,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 3241,
+            "shortcuts": 3034,
+            "witness_searches": 6038,
+            "limited_witness_searches": 104,
+            "witness_settled": 164581,
+            "witness_edge_visits": 2106292,
+            "witness_omissions": 24088,
+            "core_vertices": 2209,
+            "core_edges": 30932,
+            "stop_reason": "average_core_out_degree"
+          }
+        },
+        "identity": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 105515384,
+              "total_alloc_bytes": 1158461736,
+              "num_gc": 10
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 601550848,
+              "user_cpu_seconds": 2.097158,
+              "system_cpu_seconds": 0.421877,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 28791696,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 76723688,
+              "total_alloc_bytes": 1129670040,
+              "num_gc": 10
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 601550848,
+              "user_cpu_seconds": 2.080627,
+              "system_cpu_seconds": 0.421772,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 5450,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 15373898,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 13579019,
+            "write_ns": 782981,
+            "bytes": 4335977,
+            "sha256": "252f369877e943c9e1bc0f056dab38b4843f41df69d19edc5139f1273606c0d2",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 80840608,
+              "total_alloc_bytes": 1158461736,
+              "num_gc": 11
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 601550848,
+              "user_cpu_seconds": 2.129033,
+              "system_cpu_seconds": 0.422324,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": 4116920,
+          "post_gc_ns": 14051223,
+          "snapshot_copy_ns": 246012,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 0,
+            "shortcuts": 0,
+            "witness_searches": 0,
+            "limited_witness_searches": 0,
+            "witness_settled": 0,
+            "witness_edge_visits": 0,
+            "witness_omissions": 0,
+            "core_vertices": 5450,
+            "core_edges": 40230,
+            "stop_reason": "target_core_size"
+          }
+        }
+      }
+    },
+    {
+      "window": "midday",
+      "algorithm": "core_ch",
+      "original_point_requests": 180,
+      "rows": 117,
+      "cells": 13689,
+      "positive_reference_rows": 12,
+      "nonself_found_cells": 12,
+      "errors": 0,
+      "all_rows_response": {
+        "count": 117,
+        "p50_ms": 0.021853,
+        "p95_ms": 0.040359,
+        "p99_ms": 0.111194,
+        "max_ms": 0.113687
+      },
+      "positive_reference_rows_response": {
+        "count": 12,
+        "p50_ms": 0.03352,
+        "p95_ms": 0.073939,
+        "p99_ms": 0.073939,
+        "max_ms": 0.073939
+      },
+      "independent_audit_ns": 80731839,
+      "preparation": {
+        "core_ch": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 100086888,
+              "total_alloc_bytes": 1265126808,
+              "num_gc": 13
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 601550848,
+              "user_cpu_seconds": 2.353152,
+              "system_cpu_seconds": 0.440526,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 72962904,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 86263880,
+              "total_alloc_bytes": 1192163904,
+              "num_gc": 12
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 601550848,
+              "user_cpu_seconds": 2.167663,
+              "system_cpu_seconds": 0.432343,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 117,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 158993406,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 15210447,
+            "write_ns": 1718556,
+            "bytes": 4492075,
+            "sha256": "4b0c18d22d75442f8868214a57e78e1ec4cf3718e5fc1d28d74bcb9aec818276",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 84831952,
+              "total_alloc_bytes": 1265126808,
+              "num_gc": 14
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 601550848,
+              "user_cpu_seconds": 2.383391,
+              "system_cpu_seconds": 0.440817,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": -1431928,
+          "post_gc_ns": 14954660,
+          "snapshot_copy_ns": 275985,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 3241,
+            "shortcuts": 3034,
+            "witness_searches": 6038,
+            "limited_witness_searches": 104,
+            "witness_settled": 164581,
+            "witness_edge_visits": 2106292,
+            "witness_omissions": 24088,
+            "core_vertices": 2209,
+            "core_edges": 30932,
+            "stop_reason": "average_core_out_degree"
+          }
+        },
+        "identity": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 105515384,
+              "total_alloc_bytes": 1158461736,
+              "num_gc": 10
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 601550848,
+              "user_cpu_seconds": 2.097158,
+              "system_cpu_seconds": 0.421877,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 28791696,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 76723688,
+              "total_alloc_bytes": 1129670040,
+              "num_gc": 10
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 601550848,
+              "user_cpu_seconds": 2.080627,
+              "system_cpu_seconds": 0.421772,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 5450,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 15373898,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 13579019,
+            "write_ns": 782981,
+            "bytes": 4335977,
+            "sha256": "252f369877e943c9e1bc0f056dab38b4843f41df69d19edc5139f1273606c0d2",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 80840608,
+              "total_alloc_bytes": 1158461736,
+              "num_gc": 11
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 601550848,
+              "user_cpu_seconds": 2.129033,
+              "system_cpu_seconds": 0.422324,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": 4116920,
+          "post_gc_ns": 14051223,
+          "snapshot_copy_ns": 246012,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 0,
+            "shortcuts": 0,
+            "witness_searches": 0,
+            "limited_witness_searches": 0,
+            "witness_settled": 0,
+            "witness_edge_visits": 0,
+            "witness_omissions": 0,
+            "core_vertices": 5450,
+            "core_edges": 40230,
+            "stop_reason": "target_core_size"
+          }
+        }
+      }
+    },
+    {
+      "window": "evening",
+      "algorithm": "identity",
+      "original_point_requests": 180,
+      "rows": 117,
+      "cells": 13689,
+      "positive_reference_rows": 12,
+      "nonself_found_cells": 12,
+      "errors": 0,
+      "all_rows_response": {
+        "count": 117,
+        "p50_ms": 0.023244,
+        "p95_ms": 0.04752,
+        "p99_ms": 0.06782,
+        "max_ms": 0.071835
+      },
+      "positive_reference_rows_response": {
+        "count": 12,
+        "p50_ms": 0.033911,
+        "p95_ms": 0.044997,
+        "p99_ms": 0.044997,
+        "max_ms": 0.044997
+      },
+      "independent_audit_ns": 81024634,
+      "preparation": {
+        "core_ch": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 100219704,
+              "total_alloc_bytes": 1265654600,
+              "num_gc": 13
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 596307968,
+              "user_cpu_seconds": 2.33362,
+              "system_cpu_seconds": 0.32378,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 72966568,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 86277856,
+              "total_alloc_bytes": 1192688032,
+              "num_gc": 12
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 596307968,
+              "user_cpu_seconds": 2.151834,
+              "system_cpu_seconds": 0.32378,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 117,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 152938881,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 13838530,
+            "write_ns": 2879773,
+            "bytes": 4492075,
+            "sha256": "4b0c18d22d75442f8868214a57e78e1ec4cf3718e5fc1d28d74bcb9aec818276",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 84845944,
+              "total_alloc_bytes": 1265654600,
+              "num_gc": 14
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 596307968,
+              "user_cpu_seconds": 2.36441,
+              "system_cpu_seconds": 0.32378,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": -1431912,
+          "post_gc_ns": 9284026,
+          "snapshot_copy_ns": 287592,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 3241,
+            "shortcuts": 3034,
+            "witness_searches": 6038,
+            "limited_witness_searches": 104,
+            "witness_settled": 164581,
+            "witness_edge_visits": 2106292,
+            "witness_omissions": 24088,
+            "core_vertices": 2209,
+            "core_edges": 30932,
+            "stop_reason": "average_core_out_degree"
+          }
+        },
+        "identity": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 105528880,
+              "total_alloc_bytes": 1158985384,
+              "num_gc": 10
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 596307968,
+              "user_cpu_seconds": 2.081871,
+              "system_cpu_seconds": 0.319584,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 28791680,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 76737200,
+              "total_alloc_bytes": 1130193704,
+              "num_gc": 10
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 596307968,
+              "user_cpu_seconds": 2.065872,
+              "system_cpu_seconds": 0.319584,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 5450,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 14813664,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 14139913,
+            "write_ns": 654582,
+            "bytes": 4335977,
+            "sha256": "252f369877e943c9e1bc0f056dab38b4843f41df69d19edc5139f1273606c0d2",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 80854104,
+              "total_alloc_bytes": 1158985384,
+              "num_gc": 11
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 596307968,
+              "user_cpu_seconds": 2.11057,
+              "system_cpu_seconds": 0.320103,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": 4116904,
+          "post_gc_ns": 8591133,
+          "snapshot_copy_ns": 284819,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 0,
+            "shortcuts": 0,
+            "witness_searches": 0,
+            "limited_witness_searches": 0,
+            "witness_settled": 0,
+            "witness_edge_visits": 0,
+            "witness_omissions": 0,
+            "core_vertices": 5450,
+            "core_edges": 40230,
+            "stop_reason": "target_core_size"
+          }
+        }
+      }
+    },
+    {
+      "window": "evening",
+      "algorithm": "core_ch",
+      "original_point_requests": 180,
+      "rows": 117,
+      "cells": 13689,
+      "positive_reference_rows": 12,
+      "nonself_found_cells": 12,
+      "errors": 0,
+      "all_rows_response": {
+        "count": 117,
+        "p50_ms": 0.022623,
+        "p95_ms": 0.04112,
+        "p99_ms": 0.059407,
+        "max_ms": 0.072166
+      },
+      "positive_reference_rows_response": {
+        "count": 12,
+        "p50_ms": 0.033249,
+        "p95_ms": 0.054319,
+        "p99_ms": 0.054319,
+        "max_ms": 0.054319
+      },
+      "independent_audit_ns": 81024634,
+      "preparation": {
+        "core_ch": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 100219704,
+              "total_alloc_bytes": 1265654600,
+              "num_gc": 13
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 596307968,
+              "user_cpu_seconds": 2.33362,
+              "system_cpu_seconds": 0.32378,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 72966568,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 86277856,
+              "total_alloc_bytes": 1192688032,
+              "num_gc": 12
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 596307968,
+              "user_cpu_seconds": 2.151834,
+              "system_cpu_seconds": 0.32378,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 117,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 152938881,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 13838530,
+            "write_ns": 2879773,
+            "bytes": 4492075,
+            "sha256": "4b0c18d22d75442f8868214a57e78e1ec4cf3718e5fc1d28d74bcb9aec818276",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 84845944,
+              "total_alloc_bytes": 1265654600,
+              "num_gc": 14
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 596307968,
+              "user_cpu_seconds": 2.36441,
+              "system_cpu_seconds": 0.32378,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": -1431912,
+          "post_gc_ns": 9284026,
+          "snapshot_copy_ns": 287592,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 3241,
+            "shortcuts": 3034,
+            "witness_searches": 6038,
+            "limited_witness_searches": 104,
+            "witness_settled": 164581,
+            "witness_edge_visits": 2106292,
+            "witness_omissions": 24088,
+            "core_vertices": 2209,
+            "core_edges": 30932,
+            "stop_reason": "average_core_out_degree"
+          }
+        },
+        "identity": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 105528880,
+              "total_alloc_bytes": 1158985384,
+              "num_gc": 10
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 596307968,
+              "user_cpu_seconds": 2.081871,
+              "system_cpu_seconds": 0.319584,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 28791680,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 76737200,
+              "total_alloc_bytes": 1130193704,
+              "num_gc": 10
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 596307968,
+              "user_cpu_seconds": 2.065872,
+              "system_cpu_seconds": 0.319584,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 5450,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 14813664,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 14139913,
+            "write_ns": 654582,
+            "bytes": 4335977,
+            "sha256": "252f369877e943c9e1bc0f056dab38b4843f41df69d19edc5139f1273606c0d2",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 80854104,
+              "total_alloc_bytes": 1158985384,
+              "num_gc": 11
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 596307968,
+              "user_cpu_seconds": 2.11057,
+              "system_cpu_seconds": 0.320103,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": 4116904,
+          "post_gc_ns": 8591133,
+          "snapshot_copy_ns": 284819,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 0,
+            "shortcuts": 0,
+            "witness_searches": 0,
+            "limited_witness_searches": 0,
+            "witness_settled": 0,
+            "witness_edge_visits": 0,
+            "witness_omissions": 0,
+            "core_vertices": 5450,
+            "core_edges": 40230,
+            "stop_reason": "target_core_size"
+          }
+        }
+      }
+    },
+    {
+      "window": "overnight",
+      "algorithm": "identity",
+      "original_point_requests": 180,
+      "rows": 117,
+      "cells": 13689,
+      "positive_reference_rows": 12,
+      "nonself_found_cells": 12,
+      "errors": 0,
+      "all_rows_response": {
+        "count": 117,
+        "p50_ms": 0.024545,
+        "p95_ms": 0.049042,
+        "p99_ms": 0.151693,
+        "max_ms": 1.189437
+      },
+      "positive_reference_rows_response": {
+        "count": 12,
+        "p50_ms": 0.036034,
+        "p95_ms": 0.045498,
+        "p99_ms": 0.045498,
+        "max_ms": 0.045498
+      },
+      "independent_audit_ns": 81652106,
+      "preparation": {
+        "core_ch": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 76999048,
+              "total_alloc_bytes": 650771640,
+              "num_gc": 13
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 232321024,
+              "user_cpu_seconds": 1.165118,
+              "system_cpu_seconds": 0.149678,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 72963528,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 47927848,
+              "total_alloc_bytes": 577808112,
+              "num_gc": 12
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 232321024,
+              "user_cpu_seconds": 0.983555,
+              "system_cpu_seconds": 0.149491,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 117,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 158305237,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 14583686,
+            "write_ns": 2837080,
+            "bytes": 4492075,
+            "sha256": "4b0c18d22d75442f8868214a57e78e1ec4cf3718e5fc1d28d74bcb9aec818276",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 46495920,
+              "total_alloc_bytes": 650771640,
+              "num_gc": 14
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 232321024,
+              "user_cpu_seconds": 1.1854230000000001,
+              "system_cpu_seconds": 0.149678,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": -1431928,
+          "post_gc_ns": 6467601,
+          "snapshot_copy_ns": 307612,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 3241,
+            "shortcuts": 3034,
+            "witness_searches": 6038,
+            "limited_witness_searches": 104,
+            "witness_settled": 164581,
+            "witness_edge_visits": 2106292,
+            "witness_omissions": 24088,
+            "core_vertices": 2209,
+            "core_edges": 30932,
+            "stop_reason": "average_core_out_degree"
+          }
+        },
+        "identity": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 67179504,
+              "total_alloc_bytes": 544100288,
+              "num_gc": 9
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 232058880,
+              "user_cpu_seconds": 0.936994,
+              "system_cpu_seconds": 0.134437,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 28791664,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 38387840,
+              "total_alloc_bytes": 515308624,
+              "num_gc": 9
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 231141376,
+              "user_cpu_seconds": 0.912936,
+              "system_cpu_seconds": 0.133338,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 5450,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 16596769,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 13733236,
+            "write_ns": 4822237,
+            "bytes": 4335977,
+            "sha256": "252f369877e943c9e1bc0f056dab38b4843f41df69d19edc5139f1273606c0d2",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 42498680,
+              "total_alloc_bytes": 544100304,
+              "num_gc": 11
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 232321024,
+              "user_cpu_seconds": 0.960283,
+              "system_cpu_seconds": 0.134437,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": 4110840,
+          "post_gc_ns": 7233848,
+          "snapshot_copy_ns": 229547,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 0,
+            "shortcuts": 0,
+            "witness_searches": 0,
+            "limited_witness_searches": 0,
+            "witness_settled": 0,
+            "witness_edge_visits": 0,
+            "witness_omissions": 0,
+            "core_vertices": 5450,
+            "core_edges": 40230,
+            "stop_reason": "target_core_size"
+          }
+        }
+      }
+    },
+    {
+      "window": "overnight",
+      "algorithm": "core_ch",
+      "original_point_requests": 180,
+      "rows": 117,
+      "cells": 13689,
+      "positive_reference_rows": 12,
+      "nonself_found_cells": 12,
+      "errors": 0,
+      "all_rows_response": {
+        "count": 117,
+        "p50_ms": 0.028712,
+        "p95_ms": 0.105605,
+        "p99_ms": 0.127007,
+        "max_ms": 2.237269
+      },
+      "positive_reference_rows_response": {
+        "count": 12,
+        "p50_ms": 0.034912,
+        "p95_ms": 0.127007,
+        "p99_ms": 0.127007,
+        "max_ms": 0.127007
+      },
+      "independent_audit_ns": 81652106,
+      "preparation": {
+        "core_ch": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 76999048,
+              "total_alloc_bytes": 650771640,
+              "num_gc": 13
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 232321024,
+              "user_cpu_seconds": 1.165118,
+              "system_cpu_seconds": 0.149678,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 72963528,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 47927848,
+              "total_alloc_bytes": 577808112,
+              "num_gc": 12
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 232321024,
+              "user_cpu_seconds": 0.983555,
+              "system_cpu_seconds": 0.149491,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 117,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 158305237,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 14583686,
+            "write_ns": 2837080,
+            "bytes": 4492075,
+            "sha256": "4b0c18d22d75442f8868214a57e78e1ec4cf3718e5fc1d28d74bcb9aec818276",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 46495920,
+              "total_alloc_bytes": 650771640,
+              "num_gc": 14
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 232321024,
+              "user_cpu_seconds": 1.1854230000000001,
+              "system_cpu_seconds": 0.149678,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": -1431928,
+          "post_gc_ns": 6467601,
+          "snapshot_copy_ns": 307612,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 3241,
+            "shortcuts": 3034,
+            "witness_searches": 6038,
+            "limited_witness_searches": 104,
+            "witness_settled": 164581,
+            "witness_edge_visits": 2106292,
+            "witness_omissions": 24088,
+            "core_vertices": 2209,
+            "core_edges": 30932,
+            "stop_reason": "average_core_out_degree"
+          }
+        },
+        "identity": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 67179504,
+              "total_alloc_bytes": 544100288,
+              "num_gc": 9
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 232058880,
+              "user_cpu_seconds": 0.936994,
+              "system_cpu_seconds": 0.134437,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 28791664,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 38387840,
+              "total_alloc_bytes": 515308624,
+              "num_gc": 9
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 231141376,
+              "user_cpu_seconds": 0.912936,
+              "system_cpu_seconds": 0.133338,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 5450,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 16596769,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 13733236,
+            "write_ns": 4822237,
+            "bytes": 4335977,
+            "sha256": "252f369877e943c9e1bc0f056dab38b4843f41df69d19edc5139f1273606c0d2",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 42498680,
+              "total_alloc_bytes": 544100304,
+              "num_gc": 11
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 232321024,
+              "user_cpu_seconds": 0.960283,
+              "system_cpu_seconds": 0.134437,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": 4110840,
+          "post_gc_ns": 7233848,
+          "snapshot_copy_ns": 229547,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 0,
+            "shortcuts": 0,
+            "witness_searches": 0,
+            "limited_witness_searches": 0,
+            "witness_settled": 0,
+            "witness_edge_visits": 0,
+            "witness_omissions": 0,
+            "core_vertices": 5450,
+            "core_edges": 40230,
+            "stop_reason": "target_core_size"
+          }
+        }
+      }
+    }
+  ],
+  "scope": "Reference-defined structural positive-row stratum, no removal of any requested row/cell. Transfer-only117target row, not transit/boarding/role-budget/accessibility routing. Dense point-workload anchors are query-endpoint-dependent preprocessing. Single process/pass, empirical tune observations, no population tail, batch-division or global/physical claim."
+}

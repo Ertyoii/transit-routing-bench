@@ -1,0 +1,489 @@
+diff --git a/csa/bounds.go b/csa/bounds.go
+index 6b9992926068806346db4f89ae0f36967ec9f75f..a8ea650607a3587c66557834eb4267e1d9fb455f 100644
+--- a/csa/bounds.go
++++ b/csa/bounds.go
+@@ -81,3 +81,124 @@ func (l *lane) lastBoardingDeadEnd(p *label) bool {
+ 	}
+ 	return false
+ }
++
++// prepareSuffixBound computes a destination-directed timetable feasibility
++// relaxation for every remaining-boarding count. latest[b][s] is the latest
++// ready-to-board time at s from which the destination can be reached by the
++// horizon with at most b boardings. Walking is directed. Pickup, dropoff and
++// consecutive same-trip continuation are retained, including zero-time events.
++// Accessibility, transfer rules/buffers, walking resources and leg limits are
++// relaxed, never strengthened. Thus a missing suffix is a proof of infeasibility,
++// not a dominance claim between different journey identities.
++//
++// The optional layered certificate is limited to modest boarding counts to avoid
++// replacing bounded enumeration with unbounded preprocessing/memory on unusually
++// large valid queries. Other queries retain the existing last-boarding bound.
++func (l *lane) prepareSuffixBound() {
++	if l.err != nil {
++		return
++	}
++	const maximumBoundLayers = 16
++	if l.query.MaxBoardings > maximumBoundLayers {
++		return
++	}
++	n := len(l.index.data.Stops)
++	l.latestSuffix = make([][]int64, l.query.MaxBoardings+1)
++	latest := make([]int64, n)
++	for s, walk := range l.walkToDestination {
++		latest[s] = -1
++		if walk <= l.query.LatestArrival {
++			latest[s] = l.query.LatestArrival - walk
++		}
++	}
++	l.latestSuffix[0] = latest
++	if l.query.MaxBoardings == 0 {
++		return
++	}
++	l.vehicleSuffixBoardings = make([]uint8, len(l.index.data.Connections))
++	for ci := range l.vehicleSuffixBoardings {
++		l.vehicleSuffixBoardings[ci] = uint8(l.query.MaxBoardings + 1)
++	}
++	for b := 1; b <= l.query.MaxBoardings; b++ {
++		if err := l.ctx.Err(); err != nil {
++			l.err = err
++			return
++		}
++		next := append([]int64(nil), latest...)
++		queue := &latestBoundQueue{}
++		for _, chain := range l.index.chains {
++			canFinish := false
++			for i := len(chain) - 1; i >= 0; i-- {
++				if i&1023 == 0 {
++					if err := l.ctx.Err(); err != nil {
++						l.err = err
++						return
++					}
++				}
++				ci := chain[i]
++				c := l.index.data.Connections[ci]
++				// Staying aboard is independent of this event's pickup/dropoff.
++				canFinish = canFinish || c.Dropoff && c.Arrival <= latest[l.index.stops[c.To]]
++				if !canFinish {
++					continue
++				}
++				l.vehicleSuffixBoardings[ci] = min(l.vehicleSuffixBoardings[ci], uint8(b-1))
++				from := l.index.stops[c.From]
++				if c.Pickup && c.Departure > next[from] {
++					next[from] = c.Departure
++				}
++			}
++		}
++		for stop, at := range next {
++			if at > latest[stop] {
++				heap.Push(queue, boundEntry{stop, at})
++			}
++		}
++		// Multi-source latest-departure propagation is reverse Dijkstra: a
++		// directed u->v walk of d permits readiness at latest[v]-d at u.
++		for queue.Len() > 0 {
++			if err := l.ctx.Err(); err != nil {
++				l.err = err
++				return
++			}
++			u := heap.Pop(queue).(boundEntry)
++			if u.time != next[u.stop] {
++				continue
++			}
++			for _, w := range l.index.incomingWalks[u.stop] {
++				from := l.index.stops[w.From]
++				t := u.time - w.Duration
++				if t > next[from] {
++					next[from] = t
++					heap.Push(queue, boundEntry{from, t})
++				}
++			}
++		}
++		l.latestSuffix[b] = next
++		latest = next
++	}
++}
++
++type latestBoundQueue []boundEntry
++
++func (q latestBoundQueue) Len() int           { return len(q) }
++func (q latestBoundQueue) Less(i, j int) bool { return q[i].time > q[j].time }
++func (q latestBoundQueue) Swap(i, j int)      { q[i], q[j] = q[j], q[i] }
++func (q *latestBoundQueue) Push(x any)        { *q = append(*q, x.(boundEntry)) }
++func (q *latestBoundQueue) Pop() any {
++	old := *q
++	x := old[len(old)-1]
++	*q = old[:len(old)-1]
++	return x
++}
++
++func (l *lane) suffixDeadEnd(stop int, at int64, boards, connection int) bool {
++	if l.latestSuffix == nil {
++		return false
++	}
++	remaining := l.query.MaxBoardings - boards
++	if connection >= 0 {
++		return int(l.vehicleSuffixBoardings[connection]) > remaining
++	}
++	return at > l.latestSuffix[remaining][stop]
++}
+diff --git a/csa/bounds_test.go b/csa/bounds_test.go
+new file mode 100644
+index 0000000000000000000000000000000000000000..b6a61261520272d180b1fb0451244e4d7e2e01ae
+--- /dev/null
++++ b/csa/bounds_test.go
+@@ -0,0 +1,155 @@
++package csa
++
++import (
++	"context"
++	"fmt"
++	"reflect"
++	"testing"
++
++	"github.com/ertyoii/transit-routing-go/model"
++)
++
++func boundFixture() (model.Dataset, model.Query) {
++	d := model.Dataset{SchemaVersion: model.SchemaVersion, ID: "suffix-bounds", TimeZone: "Asia/Singapore", ServiceDate: "2026-10-20"}
++	for _, id := range []string{"A", "B", "C", "D", "X"} {
++		d.Stops = append(d.Stops, model.Stop{ID: id, Accessible: model.Yes})
++	}
++	d.Trips = []model.Trip{{ID: "through", Accessible: model.Yes}, {ID: "other", Accessible: model.Yes}}
++	d.Connections = []model.Connection{
++		{ID: "z0", TripID: "through", From: "A", To: "X", Departure: 5, Arrival: 5, Pickup: true},
++		{ID: "a1", TripID: "through", Sequence: 1, From: "X", To: "B", Departure: 5, Arrival: 5},
++		{ID: "m2", TripID: "through", Sequence: 2, From: "B", To: "C", Departure: 6, Arrival: 8, Dropoff: true},
++		{ID: "other", TripID: "other", From: "B", To: "D", Departure: 9, Arrival: 10, Pickup: true, Dropoff: true},
++	}
++	d.Footpaths = []model.Footpath{{ID: "egress", From: "C", To: "D", Duration: 2, Accessible: model.Yes}, {ID: "reverse", From: "D", To: "X", Duration: 1, Accessible: model.Yes}}
++	q := model.Query{ID: "q", Origin: "A", Destination: "D", LatestArrival: 10, MaxWalkSeconds: 10, MaxBoardings: 1, MaxLegs: 6}
++	return d, q
++}
++
++func TestSuffixBoundPreservesStayAboardAndDirectedWalking(t *testing.T) {
++	d, q := boundFixture()
++	idx, err := New(d)
++	if err != nil {
++		t.Fatal(err)
++	}
++	cfg := Config{MaxLabels: 100, MaxJourneys: 10, ExactTopK: 10}
++	l, err := idx.newLane(context.Background(), q, cfg)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if got := l.latestSuffix[1][idx.stops["A"]]; got != 5 {
++		t.Fatalf("latest access time=%d, want 5", got)
++	}
++	if got := l.latestSuffix[0][idx.stops["X"]]; got != -1 {
++		t.Fatalf("walking direction reversed: latest X=%d", got)
++	}
++	if got := l.latestSuffix[1][idx.stops["X"]]; got != -1 {
++		t.Fatalf("pickup-prohibited X treated as boardable: %d", got)
++	}
++	r, err := idx.Single(context.Background(), q, cfg)
++	if err != nil || !r.TopKComplete || len(r.Journeys) != 1 || len(r.Journeys[0].Legs) != 4 {
++		t.Fatalf("through journey lost: %+v %v", r, err)
++	}
++	q.LatestArrival = 9
++	r, err = idx.Single(context.Background(), q, cfg)
++	if err != nil || !r.TopKComplete || len(r.Journeys) != 0 || r.Stats.Labels != 1 {
++		t.Fatalf("horizon dead end not certified at origin: %+v %v", r, err)
++	}
++}
++
++func TestSuffixBoundRemovesDeadEndsBeforeLabelBudget(t *testing.T) {
++	d, q := boundFixture()
++	d.Connections = nil
++	d.Trips = nil
++	d.Footpaths = nil
++	for i := 0; i < 30; i++ {
++		id := fmt.Sprintf("branch-%02d", i)
++		d.Trips = append(d.Trips, model.Trip{ID: id, Accessible: model.Yes})
++		d.Connections = append(d.Connections, model.Connection{ID: id, TripID: id, From: "A", To: "B", Departure: 1, Arrival: 2, Pickup: true, Dropoff: true})
++	}
++	idx, err := New(d)
++	if err != nil {
++		t.Fatal(err)
++	}
++	q.MaxBoardings = 2
++	cfg := Config{MaxLabels: 3, MaxJourneys: 10, ExactTopK: 10}
++	r, err := idx.Single(context.Background(), q, cfg)
++	if err != nil || !r.TopKComplete || r.Stats.Labels != 1 || r.Stats.DeadEndPruned != 1 {
++		t.Fatalf("dead branch allocation: %+v %v", r, err)
++	}
++	// Enumeration mode is unchanged and must still report its actual budget.
++	cfg.ExactTopK = 0
++	r, err = idx.Single(context.Background(), q, cfg)
++	if err == nil || r.Complete || r.Stats.Labels != cfg.MaxLabels {
++		t.Fatalf("enumeration budget contract changed: %+v %v", r, err)
++	}
++}
++
++func TestSuffixBoundSharedOrderAndCapCertificates(t *testing.T) {
++	d, q := boundFixture()
++	idx, err := New(d)
++	if err != nil {
++		t.Fatal(err)
++	}
++	qs := []model.Query{q, q, q}
++	qs[1].ID, qs[1].Origin = "no-pickup", "X"
++	qs[2].ID, qs[2].LatestArrival = "too-late", 9
++	cfg := Config{MaxLabels: 100, MaxJourneys: 10, ExactTopK: 10}
++	for _, caps := range []bool{false, true} {
++		want := map[string]Result{}
++		for _, q := range qs {
++			var r Result
++			if caps {
++				r, err = idx.StratifiedSingle(context.Background(), q, cfg)
++			} else {
++				r, err = idx.Single(context.Background(), q, cfg)
++			}
++			if err != nil {
++				t.Fatal(err)
++			}
++			want[q.ID] = r
++		}
++		for _, order := range [][]int{{0, 1, 2}, {2, 1, 0}, {1, 0, 2}} {
++			ordered := []model.Query{qs[order[0]], qs[order[1]], qs[order[2]]}
++			var b Batch
++			if caps {
++				b, err = idx.StratifiedShared(context.Background(), ordered, cfg)
++			} else {
++				b, err = idx.Shared(context.Background(), ordered, cfg)
++			}
++			if err != nil {
++				t.Fatal(err)
++			}
++			for _, r := range b.Results {
++				w := want[r.QueryID]
++				if !reflect.DeepEqual(r.Journeys, w.Journeys) || r.Stats != w.Stats || r.TopKComplete != w.TopKComplete || r.CapComplete != w.CapComplete {
++					t.Fatalf("lane order changed certificate or identity: got=%+v want=%+v", r, w)
++				}
++			}
++		}
++	}
++}
++
++func TestSuffixBoundLargeBoardingFallbackAndCancellation(t *testing.T) {
++	d, q := boundFixture()
++	idx, err := New(d)
++	if err != nil {
++		t.Fatal(err)
++	}
++	q.MaxBoardings, q.MaxLegs = 17, 18
++	cfg := Config{MaxLabels: 100, MaxJourneys: 10, ExactTopK: 10}
++	l, err := idx.newLane(context.Background(), q, cfg)
++	if err != nil || l.latestSuffix != nil {
++		t.Fatalf("large valid query should retain preexisting bounds: %v", err)
++	}
++	r, err := idx.Single(context.Background(), q, cfg)
++	if err != nil || !r.TopKComplete || len(r.Journeys) != 1 {
++		t.Fatalf("fallback changed supported query: %+v %v", r, err)
++	}
++	ctx, cancel := context.WithCancel(context.Background())
++	cancel()
++	r, err = idx.Single(ctx, q, cfg)
++	if err != context.Canceled || r.TopKComplete {
++		t.Fatalf("cancelled query certified: %+v %v", r, err)
++	}
++}
+diff --git a/csa/scan.go b/csa/scan.go
+index 34fd9937544c7e2a6d8f63edb215d75639c9a8e5..4e9f6d414039395b8769627e5de57c8c59ee76f3 100644
+--- a/csa/scan.go
++++ b/csa/scan.go
+@@ -131,17 +131,19 @@ type label struct {
+ 	identity                 string
+ }
+ type lane struct {
+-	index              *Index
+-	query              model.Query
+-	config             Config
+-	pools              [][]*label
+-	result             Result
+-	err                error
+-	ctx                context.Context
+-	states             map[stateKey][]*label
+-	terminal           []*label
+-	walkToDestination  []int64
+-	lastVehicleArrival []int64
++	index                  *Index
++	query                  model.Query
++	config                 Config
++	pools                  [][]*label
++	result                 Result
++	err                    error
++	ctx                    context.Context
++	states                 map[stateKey][]*label
++	terminal               []*label
++	walkToDestination      []int64
++	lastVehicleArrival     []int64
++	latestSuffix           [][]int64
++	vehicleSuffixBoardings []uint8
+ }
+ 
+ func (idx *Index) newLane(ctx context.Context, q model.Query, cfg Config) (*lane, error) {
+@@ -160,6 +162,7 @@ func (idx *Index) newLane(ctx context.Context, q model.Query, cfg Config) (*lane
+ 		l.states = map[stateKey][]*label{}
+ 		l.result.TopK = cfg.ExactTopK
+ 		l.prepareLastBoardingBound()
++		l.prepareSuffixBound()
+ 	}
+ 	if l.stopOK(idx.stops[q.Origin]) && l.stopOK(idx.stops[q.Destination]) {
+ 		l.add(&label{stop: idx.stops[q.Origin], time: q.Departure, lastRide: -1, lastConnection: -1})
+@@ -224,7 +227,7 @@ func (l *lane) add(p *label) {
+ 		l.trace(p, "leg_bound")
+ 		return
+ 	}
+-	if l.config.ExactTopK > 0 && l.lastBoardingDeadEnd(p) {
++	if l.config.ExactTopK > 0 && (l.suffixDeadEnd(p.stop, p.time, p.boards, p.lastConnection) || l.lastBoardingDeadEnd(p)) {
+ 		l.result.Stats.DeadEndPruned++
+ 		return
+ 	}
+@@ -260,6 +263,10 @@ func (l *lane) add(p *label) {
+ 				continue
+ 			}
+ 		}
++		if l.config.ExactTopK > 0 && l.suffixDeadEnd(to, p.time+w.Duration, p.boards, -1) {
++			l.result.Stats.DeadEndPruned++
++			continue
++		}
+ 		child := &label{stop: to, time: p.time + w.Duration, walk: p.walk + w.Duration, block: p.block + w.Duration, boards: p.boards, depth: p.depth + 1, lastRide: p.lastRide, lastConnection: -1, parent: p, leg: model.Leg{Kind: "walk", Ref: w.ID, Departure: p.time, Arrival: p.time + w.Duration}}
+ 		l.add(child)
+ 		if l.err != nil {
+@@ -318,7 +325,7 @@ func (l *lane) ride(p *label, ci int) {
+ 	}
+ 	// Reject a provably hopeless transition before materializing a search label.
+ 	// ConnectionAttempts still records its work; MaxLabels counts generated labels.
+-	if l.config.ExactTopK > 0 && boards == q.MaxBoardings && l.lastVehicleArrival[ci] > q.LatestArrival {
++	if l.config.ExactTopK > 0 && (l.suffixDeadEnd(l.index.stops[c.To], c.Arrival, boards, ci) || boards == q.MaxBoardings && l.lastVehicleArrival[ci] > q.LatestArrival) {
+ 		l.result.Stats.DeadEndPruned++
+ 		return
+ 	}
+diff --git a/docs/CSA_SUFFIX_PRUNING.md b/docs/CSA_SUFFIX_PRUNING.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..9d124e6d25a57c2757daf6150fe1f5013308484f
+--- /dev/null
++++ b/docs/CSA_SUFFIX_PRUNING.md
+@@ -0,0 +1,121 @@
++# Public CSA destination suffix feasibility certificate
++
++Status: generic correctness candidate, not a measured Singapore optimization result.
++The official, current, complete LTA bus + rail data gate remains open. No SG
++performance campaign was run for this candidate, and no speed/convergence claim
++is made. The earlier community-feed/70-known-footpath pilot is provisional only.
++
++## What changes
++
++Only public `csa` exact-top-k searches gain an optional destination-directed,
++boarding-layered temporal suffix infeasibility test. It is used by Single,
++Shared, StratifiedSingle and StratifiedShared. Full enumeration and heuristic
++per-stop modes do not use it. K, label/journey budgets, horizon, walking limits,
++accessibility, transfer semantics and output identity ordering are unchanged.
++The existing last-boarding walking/vehicle bound remains in place.
++
++A label is pruned only when no destination suffix exists even in a relaxation
++of the requested problem. A ride/walk transition proved hopeless is rejected
++before allocating a label. This is consistent with the existing definition of
++MaxLabels as generated labels and the existing final-boarding preallocation
++prune. ConnectionAttempts/FootpathAttempts continue to count attempted work;
++DeadEndPruned includes the new proof as well as the existing final-boarding proof.
++
++## Recurrence and proof
++
++Let T be LatestArrival, D the destination, and L_b(s) the latest nonnegative
++ready-to-board time at stop s from which a relaxed suffix can reach D by T with
++at most b additional vehicle boardings. Missing values are -1. The relaxation
++retains directed footpaths, fixed event times, pickup/dropoff, trip-sequence
++continuation and the boarding count. It ignores accessibility, transfer
++rules/buffers, total/phase walking resources and leg count. Ignoring these
++restrictions only adds possible suffixes.
++
++L_0(s) is T minus the directed shortest walking distance s -> D, or -1 when
++that value is negative/unreachable. Reverse Dijkstra uses incoming directed
++footpaths; it never reverses a walk's feasible direction.
++
++For a connection c_i in a valid contiguous trip chain and r additional
++boardings after that already-boarded connection, define R_r(c_i) by reverse
++sequence traversal:
++
++    R_r(c_i) = (Dropoff(c_i) and Arrival(c_i) <= L_r(To(c_i)))
++               or R_r(c_(i+1)).
++
++The final connection has no next term. Dataset validation guarantees spatial
++and temporal trip continuity. Therefore the next term is a valid stay-aboard
++possibility, independent of intermediate pickup/dropoff flags. This also
++handles equal-time / zero-duration events regardless of connection ID order.
++
++For b >= 1, ready-to-board seeds are:
++
++    P_b(s) = max(L_(b-1)(s),
++                 Departure(c) for c with From(c)=s, Pickup(c), R_(b-1)(c)).
++
++Then L_b(s) is the maximum of P_b(u) minus the duration of each directed walking
++path s -> u, including the empty path. A max-priority reverse Dijkstra computes
++this closure. Positive footpath durations ensure cycles cannot increase a
++latest-ready value. Boarding consumes a layer, so equal-time inter-trip
++transfers cannot introduce an unresolved dependency within a layer.
++
++Induction: any actual suffix with no boardings is a directed walk covered by
++L_0. For an actual suffix with b>0 boardings, its access/transfer walk reaches a
++pickup-permitted event. Following the boarded vehicle until the first actual
++alighting uses consecutive connections, so the reverse chain recurrence covers
++it. Its remaining suffix has at most b-1 boardings and is covered inductively.
++The reverse walking closure therefore gives a latest-ready value at least as
++late as the actual prefix time. This proves necessity, not sufficiency.
++
++For an off-vehicle label with m boardings, reject only if its time is greater
++than L_(B-m)(stop). For an on-vehicle label, reject only if R_(B-m)(lastConnection)
++is false. The implementation stores the minimum r for which each connection's
++R_r is true. Bounds are inclusive at LatestArrival. The original resource,
++pickup/dropoff, transfer and accessibility checks still decide actual edges.
++
++Consequently no feasible full journey identity is removed. This is not a new
++prefix-dominance rule and does not replace paths by merely equal objective
++values. Existing K-prefix dominance, terminal tie ordering and top-k/cap
++certification conditions are unchanged. If context or label/journey limits
++fail, completeness is still false. Separate score-cap lanes still certify each
++at-most-boarding top-k set and union their identities as before.
++
++## Preparation cost and unmeasured tradeoff
++
++This is query-time preparation, included in existing core timing, not free
++index preprocessing. With S stops, C connections, W directed footpaths and
++B<=16 boardings, it adds B complete trip-chain passes and B reverse walking
++closures, plus copying/retaining B+1 stop-time rows. A conservative time bound
++is O(B*(C+S+(S+W)*log(S+W))); normal heap work depends on improvements. Seeds
++are queued once per improved stop rather than once per connection.
++
++Persistent extra lane storage is 8*(B+1)*S bytes for int64 latest-ready rows,
++plus C bytes for uint8 minimum additional boarding counts, slice overhead and
++transient reverse-Dijkstra heap storage. This is in addition to the preexisting
++walking/last-vehicle bound arrays. B=0 avoids the per-connection byte array.
++Stratified wrappers currently prepare independent cap lanes, so preparation and
++storage are repeated across those lanes. Shared search retains independent lane
++bounds. This may outweigh search savings on easy or dense-walking queries;
++only official-data end-to-end preparation/core/RSS measurements can decide.
++
++For B>16 the optional certificate is not built: all previously supported
++queries still use the existing exact-top-k algorithm and last-boarding bound.
++This is a preprocessing guard, not a new query cap, larger budget, unsupported
++status or reduced correctness contract. No global mutable cache is introduced.
++
++## Generic verification
++
++The candidate has direct tests for directed walking, intermediate no-pickup /
++no-dropoff stay-aboard, zero-time events, inclusive horizon, unchanged enumeration
++budgets, independent shared-lane order, stratified certificates, cancellation and
++large-boarding fallback.
++
++An isolated benchmark checkout adds independent exhaustive-oracle checks for
++all walking phases/resources, prohibited/minimum/specific transfer exceptions,
++accessibility, walking cycles, no-pickup/no-dropoff, zero-time events, input and
++lane permutations, and 128 deterministic tiny randomized seeds. Arrival tests
++compare complete identities for k=1,3,5,10; cap tests compare k=3 separately for
++every boarding cap and compare shared versus single results/counters.
++
++Source and bench full-suite outcomes and exact vendoring instructions are
++recorded in the accompanying local candidate deliverable. No remote push or
++publication is part of this work.

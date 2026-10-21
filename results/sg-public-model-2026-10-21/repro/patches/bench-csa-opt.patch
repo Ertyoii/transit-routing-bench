@@ -1,0 +1,398 @@
+diff --git a/regression/csa/suffix_bound_test.go b/regression/csa/suffix_bound_test.go
+new file mode 100644
+index 0000000000000000000000000000000000000000..c18ef0459df446230692e53ca22490cba4c55f51
+--- /dev/null
++++ b/regression/csa/suffix_bound_test.go
+@@ -0,0 +1,157 @@
++package csa_test
++
++import (
++	"context"
++	"fmt"
++	"math/rand/v2"
++	"reflect"
++	"slices"
++	"testing"
++
++	"github.com/ertyoii/transit-routing-bench/oracle"
++	"github.com/ertyoii/transit-routing-go/csa"
++	"github.com/ertyoii/transit-routing-go/model"
++)
++
++func checkSuffixCaps(t testing.TB, d model.Dataset, qs []model.Query) {
++	t.Helper()
++	idx, err := csa.New(d)
++	if err != nil {
++		t.Fatal(err)
++	}
++	cfg := csa.Config{MaxLabels: 300000, MaxJourneys: 100000, ExactTopK: 3}
++	for _, q := range qs {
++		r, err := idx.StratifiedSingle(context.Background(), q, cfg)
++		if err != nil || !r.CapComplete {
++			t.Fatalf("cap certificate: %+v %v", r, err)
++		}
++		for b, child := range r.CapResults {
++			cq := q
++			cq.MaxBoardings = b
++			o, err := oracle.Enumerate(context.Background(), d, cq, oracle.Limits{MaxStates: 300000, MaxJourneys: 100000})
++			if err != nil || !o.Complete {
++				t.Fatalf("inconclusive oracle: %v", err)
++			}
++			want := canonical(t, d, cq, o.Journeys)
++			want = want[:min(cfg.ExactTopK, len(want))]
++			if !child.Result.TopKComplete || !reflect.DeepEqual(canonical(t, d, cq, child.Result.Journeys), want) {
++				t.Fatalf("cap %d lost candidate identities", b)
++			}
++		}
++	}
++	for _, reverse := range []bool{false, true} {
++		ordered := slices.Clone(qs)
++		if reverse {
++			slices.Reverse(ordered)
++		}
++		batch, err := idx.StratifiedShared(context.Background(), ordered, cfg)
++		if err != nil {
++			t.Fatal(err)
++		}
++		for i, q := range ordered {
++			single, err := idx.StratifiedSingle(context.Background(), q, cfg)
++			if err != nil || !batch.Results[i].CapComplete || !reflect.DeepEqual(batch.Results[i].Journeys, single.Journeys) || batch.Results[i].Stats != single.Stats {
++				t.Fatalf("shared cap lane ordering changed results: %v", err)
++			}
++		}
++	}
++}
++
++func TestSuffixBoundsWithWalkingPhasesTransferRulesAndHorizon(t *testing.T) {
++	d, q := walkFixture()
++	qs := []model.Query{q}
++	for i, phase := range []string{"access", "egress", "transfer", "horizon", "total", "boards", "legs"} {
++		cq := q
++		cq.ID = phase
++		w := *q.Walking
++		cq.Walking = &w
++		switch i {
++		case 0:
++			w.Access = 599
++		case 1:
++			w.Egress = 599
++		case 2:
++			w.Transfer = 600
++		case 3:
++			cq.LatestArrival = 2199
++		case 4:
++			cq.MaxWalkSeconds = 1800
++		case 5:
++			cq.MaxBoardings = 1
++		case 6:
++			cq.MaxLegs = 4
++		}
++		qs = append(qs, cq)
++	}
++	for _, rules := range [][]model.TransferRule{nil,
++		{{ID: "forbid", FromStop: "C", ToStop: "D", Type: 3}},
++		{{ID: "minimum", FromStop: "C", ToStop: "D", Type: 2, MinSeconds: 701}},
++		{{ID: "forbid", FromStop: "C", ToStop: "D", Type: 3}, {ID: "exception", FromStop: "C", ToStop: "D", FromTrip: "one", ToTrip: "two", Type: 2, MinSeconds: 700}},
++	} {
++		d.Transfers = rules
++		topKDifferential(t, d, qs)
++		checkSuffixCaps(t, d, qs)
++	}
++}
++
++func TestSuffixBoundsStayAboardNoPickupDropoffAndZeroEvents(t *testing.T) {
++	d := model.Dataset{SchemaVersion: model.SchemaVersion, ID: "suffix-oracle", TimeZone: "Asia/Singapore", ServiceDate: "2026-10-20"}
++	for _, s := range []string{"A", "B", "C", "D", "X"} {
++		d.Stops = append(d.Stops, model.Stop{ID: s, Accessible: model.Yes})
++	}
++	d.Stops[4].Accessible = model.Unknown // May stay aboard, may not alight.
++	d.Trips = []model.Trip{{ID: "through", Accessible: model.Yes}, {ID: "parallel", Accessible: model.Yes}, {ID: "bad-pickup", Accessible: model.Yes}}
++	d.Connections = []model.Connection{
++		{ID: "z0", TripID: "through", From: "A", To: "X", Departure: 5, Arrival: 5, Pickup: true},
++		{ID: "a1", TripID: "through", Sequence: 1, From: "X", To: "B", Departure: 5, Arrival: 5},
++		{ID: "m2", TripID: "through", Sequence: 2, From: "B", To: "C", Departure: 5, Arrival: 8, Dropoff: true},
++		{ID: "parallel", TripID: "parallel", From: "A", To: "C", Departure: 5, Arrival: 8, Pickup: true, Dropoff: true},
++		{ID: "bad-pickup", TripID: "bad-pickup", From: "B", To: "D", Departure: 8, Arrival: 9, Dropoff: true},
++	}
++	d.Footpaths = []model.Footpath{{ID: "egress", From: "C", To: "D", Duration: 2, Accessible: model.Yes}, {ID: "reverse-only", From: "D", To: "A", Duration: 1, Accessible: model.Yes}, {ID: "cycle1", From: "B", To: "X", Duration: 1, Accessible: model.Yes}, {ID: "cycle2", From: "X", To: "B", Duration: 1, Accessible: model.Yes}}
++	q := model.Query{ID: "base", Origin: "A", Destination: "D", LatestArrival: 10, MaxWalkSeconds: 6, MaxBoardings: 3, MaxLegs: 6, AccessibleOnly: true}
++	qs := []model.Query{q}
++	for i := 0; i < 3; i++ {
++		cq := q
++		cq.ID = fmt.Sprint(i)
++		switch i {
++		case 0:
++			cq.Origin = "B"
++		case 1:
++			cq.LatestArrival = 9
++		case 2:
++			cq.AccessibleOnly = false
++		}
++		qs = append(qs, cq)
++	}
++	topKDifferential(t, d, qs)
++	checkSuffixCaps(t, d, qs)
++	slices.Reverse(d.Connections)
++	slices.Reverse(d.Footpaths)
++	slices.Reverse(qs)
++	topKDifferential(t, d, qs)
++	checkSuffixCaps(t, d, qs)
++}
++
++func TestSuffixBoundDeterministicTinyOracleSeeds(t *testing.T) {
++	for seed := uint64(0); seed < 128; seed++ {
++		rng := rand.New(rand.NewPCG(seed, seed+19))
++		d := model.Dataset{SchemaVersion: model.SchemaVersion, ID: "suffix-random", TimeZone: "Asia/Singapore", ServiceDate: "2026-10-20"}
++		stops := []string{"A", "B", "C"}
++		for _, s := range stops {
++			d.Stops = append(d.Stops, model.Stop{ID: s, Accessible: model.Yes})
++		}
++		for i := 0; i < 6; i++ {
++			id := fmt.Sprintf("r%d", i)
++			dep := int64(rng.IntN(8))
++			d.Trips = append(d.Trips, model.Trip{ID: id, Accessible: model.Yes})
++			d.Connections = append(d.Connections, model.Connection{ID: id, TripID: id, From: stops[rng.IntN(3)], To: stops[rng.IntN(3)], Departure: dep, Arrival: dep + int64(rng.IntN(3)), Pickup: rng.IntN(4) != 0, Dropoff: rng.IntN(4) != 0})
++		}
++		for i := 0; i < 2; i++ {
++			d.Footpaths = append(d.Footpaths, model.Footpath{ID: fmt.Sprintf("w%d", i), From: stops[rng.IntN(3)], To: stops[rng.IntN(3)], Duration: 1, Accessible: model.Yes})
++		}
++		q := model.Query{ID: fmt.Sprint(seed), Origin: "A", Destination: "C", LatestArrival: 12, MaxBoardings: 3, MaxLegs: 5, MaxWalkSeconds: 3, TransferBuffer: int64(rng.IntN(3))}
++		topKDifferential(t, d, []model.Query{q})
++		checkSuffixCaps(t, d, []model.Query{q})
++	}
++}
+diff --git a/routing.lock.json b/routing.lock.json
+index 540efe744b2b8ee01fa02a42d387b048b38d3af5..25ad466c25b7f11d7370c77c91e79adba63d65f5 100644
+--- a/routing.lock.json
++++ b/routing.lock.json
+@@ -1,7 +1,7 @@
+ {
+   "module": "github.com/ertyoii/transit-routing-go",
+   "version": "v0.1.0-pre.3",
+-  "commit": "b102816018b1db87304c751f2cd601a2abe4057a",
++  "commit": "69be7bea66a9ba2dff953af69d25836578e03f6d",
+   "files": {
+     "LICENSE": "3c524d60abb36a8a9d25782594ea2f8665f56b5811b38c53ff62754b96f49da7",
+     "THIRD_PARTY_NOTICES.md": "6016bae242130d6a43b111a0457427b43f047f4bd0aa607cccda2000577bce0b",
+@@ -9,8 +9,8 @@
+     "comparison/ranked.go": "8449c35c043726c0227e96a6b95a00e73d55aa7a93888b0d923fb9c036fc54a6",
+     "corech/core.go": "ba0e68aba190cdea80b708895687b5bf4461accc35187159af399023e3576681",
+     "corech/query.go": "55b98ea5d0fa4bca7702d30b017d85a266e50023af6b587a65cddcb3177e672f",
+-    "csa/bounds.go": "ff1126448a2113d83eaf58a2d92c362d2babecfbe89c3c01084937b480e02b29",
+-    "csa/scan.go": "6954115220c25ca7adef3b308b872faa0b7cd1830dc369e6d9cb1b7ccd26f0cd",
++    "csa/bounds.go": "637a23eb885471149b9b65c69ee377fcba248ad4c7b6233ae6397290d3acf633",
++    "csa/scan.go": "e5dca9e8ecc823c749715c7d3b264f82abd88a6eed8c466e610103da6d420d44",
+     "csa/stratified.go": "b3c14867b7b360f20dfefd983cf4ce56a39ab4dd6de542bb8d16a2145aa095a2",
+     "csa/topk.go": "66920572e1d2c86de18ed4b336007452f2d562702738dee02eac6522a1934a6e",
+     "csa/trace.go": "076300f8a651677e1b75f6074b932267ca08c71dce8db3e6df7e54badbb140e9",
+@@ -108,7 +108,7 @@
+     "walking/transit/catalog.go": "b20f53c78b38bf6426d4180f89bf6545bee3638d7ae46d909847dddc734a0fa8",
+     "walking/transit/graph.go": "07ec2ac36311597ed657b686be7bc222ef3ac7ec022473d1f55729f5754b6fbe"
+   },
+-  "source_sha256": "b795aeec8da53a1e9ab6f37be762bd3956b2a0f68bb2bc6ba94ed589006a2ae3",
+-  "origin": "Local public source candidate for https://github.com/Ertyoii/transit-routing-go; exact local revision, native and final composed/result review pending; v0.1.0-pre.3 remains unreleased and no tag is implied",
++  "source_sha256": "c02068189b06abd75d05b9093fb4eb59635a4d899cafbfb99ed0c28be0eed58e",
++  "origin": "Local unpushed public CSA temporal suffix correctness candidate; official Singapore bus+rail baseline and performance validation pending; v0.1.0-pre.3 remains unreleased and no tag is implied",
+   "baseline_source_sha256": "f7cf70d1a970fb70077fa13299cdb8c991e8712c44fe1fb19ba10a5befccdd2d"
+ }
+diff --git a/vendor/github.com/ertyoii/transit-routing-go/csa/bounds.go b/vendor/github.com/ertyoii/transit-routing-go/csa/bounds.go
+index 6b9992926068806346db4f89ae0f36967ec9f75f..a8ea650607a3587c66557834eb4267e1d9fb455f 100644
+--- a/vendor/github.com/ertyoii/transit-routing-go/csa/bounds.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/csa/bounds.go
+@@ -81,3 +81,124 @@ func (l *lane) lastBoardingDeadEnd(p *label) bool {
+ 	}
+ 	return false
+ }
++
++// prepareSuffixBound computes a destination-directed timetable feasibility
++// relaxation for every remaining-boarding count. latest[b][s] is the latest
++// ready-to-board time at s from which the destination can be reached by the
++// horizon with at most b boardings. Walking is directed. Pickup, dropoff and
++// consecutive same-trip continuation are retained, including zero-time events.
++// Accessibility, transfer rules/buffers, walking resources and leg limits are
++// relaxed, never strengthened. Thus a missing suffix is a proof of infeasibility,
++// not a dominance claim between different journey identities.
++//
++// The optional layered certificate is limited to modest boarding counts to avoid
++// replacing bounded enumeration with unbounded preprocessing/memory on unusually
++// large valid queries. Other queries retain the existing last-boarding bound.
++func (l *lane) prepareSuffixBound() {
++	if l.err != nil {
++		return
++	}
++	const maximumBoundLayers = 16
++	if l.query.MaxBoardings > maximumBoundLayers {
++		return
++	}
++	n := len(l.index.data.Stops)
++	l.latestSuffix = make([][]int64, l.query.MaxBoardings+1)
++	latest := make([]int64, n)
++	for s, walk := range l.walkToDestination {
++		latest[s] = -1
++		if walk <= l.query.LatestArrival {
++			latest[s] = l.query.LatestArrival - walk
++		}
++	}
++	l.latestSuffix[0] = latest
++	if l.query.MaxBoardings == 0 {
++		return
++	}
++	l.vehicleSuffixBoardings = make([]uint8, len(l.index.data.Connections))
++	for ci := range l.vehicleSuffixBoardings {
++		l.vehicleSuffixBoardings[ci] = uint8(l.query.MaxBoardings + 1)
++	}
++	for b := 1; b <= l.query.MaxBoardings; b++ {
++		if err := l.ctx.Err(); err != nil {
++			l.err = err
++			return
++		}
++		next := append([]int64(nil), latest...)
++		queue := &latestBoundQueue{}
++		for _, chain := range l.index.chains {
++			canFinish := false
++			for i := len(chain) - 1; i >= 0; i-- {
++				if i&1023 == 0 {
++					if err := l.ctx.Err(); err != nil {
++						l.err = err
++						return
++					}
++				}
++				ci := chain[i]
++				c := l.index.data.Connections[ci]
++				// Staying aboard is independent of this event's pickup/dropoff.
++				canFinish = canFinish || c.Dropoff && c.Arrival <= latest[l.index.stops[c.To]]
++				if !canFinish {
++					continue
++				}
++				l.vehicleSuffixBoardings[ci] = min(l.vehicleSuffixBoardings[ci], uint8(b-1))
++				from := l.index.stops[c.From]
++				if c.Pickup && c.Departure > next[from] {
++					next[from] = c.Departure
++				}
++			}
++		}
++		for stop, at := range next {
++			if at > latest[stop] {
++				heap.Push(queue, boundEntry{stop, at})
++			}
++		}
++		// Multi-source latest-departure propagation is reverse Dijkstra: a
++		// directed u->v walk of d permits readiness at latest[v]-d at u.
++		for queue.Len() > 0 {
++			if err := l.ctx.Err(); err != nil {
++				l.err = err
++				return
++			}
++			u := heap.Pop(queue).(boundEntry)
++			if u.time != next[u.stop] {
++				continue
++			}
++			for _, w := range l.index.incomingWalks[u.stop] {
++				from := l.index.stops[w.From]
++				t := u.time - w.Duration
++				if t > next[from] {
++					next[from] = t
++					heap.Push(queue, boundEntry{from, t})
++				}
++			}
++		}
++		l.latestSuffix[b] = next
++		latest = next
++	}
++}
++
++type latestBoundQueue []boundEntry
++
++func (q latestBoundQueue) Len() int           { return len(q) }
++func (q latestBoundQueue) Less(i, j int) bool { return q[i].time > q[j].time }
++func (q latestBoundQueue) Swap(i, j int)      { q[i], q[j] = q[j], q[i] }
++func (q *latestBoundQueue) Push(x any)        { *q = append(*q, x.(boundEntry)) }
++func (q *latestBoundQueue) Pop() any {
++	old := *q
++	x := old[len(old)-1]
++	*q = old[:len(old)-1]
++	return x
++}
++
++func (l *lane) suffixDeadEnd(stop int, at int64, boards, connection int) bool {
++	if l.latestSuffix == nil {
++		return false
++	}
++	remaining := l.query.MaxBoardings - boards
++	if connection >= 0 {
++		return int(l.vehicleSuffixBoardings[connection]) > remaining
++	}
++	return at > l.latestSuffix[remaining][stop]
++}
+diff --git a/vendor/github.com/ertyoii/transit-routing-go/csa/scan.go b/vendor/github.com/ertyoii/transit-routing-go/csa/scan.go
+index 34fd9937544c7e2a6d8f63edb215d75639c9a8e5..4e9f6d414039395b8769627e5de57c8c59ee76f3 100644
+--- a/vendor/github.com/ertyoii/transit-routing-go/csa/scan.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/csa/scan.go
+@@ -131,17 +131,19 @@ type label struct {
+ 	identity                 string
+ }
+ type lane struct {
+-	index              *Index
+-	query              model.Query
+-	config             Config
+-	pools              [][]*label
+-	result             Result
+-	err                error
+-	ctx                context.Context
+-	states             map[stateKey][]*label
+-	terminal           []*label
+-	walkToDestination  []int64
+-	lastVehicleArrival []int64
++	index                  *Index
++	query                  model.Query
++	config                 Config
++	pools                  [][]*label
++	result                 Result
++	err                    error
++	ctx                    context.Context
++	states                 map[stateKey][]*label
++	terminal               []*label
++	walkToDestination      []int64
++	lastVehicleArrival     []int64
++	latestSuffix           [][]int64
++	vehicleSuffixBoardings []uint8
+ }
+ 
+ func (idx *Index) newLane(ctx context.Context, q model.Query, cfg Config) (*lane, error) {
+@@ -160,6 +162,7 @@ func (idx *Index) newLane(ctx context.Context, q model.Query, cfg Config) (*lane
+ 		l.states = map[stateKey][]*label{}
+ 		l.result.TopK = cfg.ExactTopK
+ 		l.prepareLastBoardingBound()
++		l.prepareSuffixBound()
+ 	}
+ 	if l.stopOK(idx.stops[q.Origin]) && l.stopOK(idx.stops[q.Destination]) {
+ 		l.add(&label{stop: idx.stops[q.Origin], time: q.Departure, lastRide: -1, lastConnection: -1})
+@@ -224,7 +227,7 @@ func (l *lane) add(p *label) {
+ 		l.trace(p, "leg_bound")
+ 		return
+ 	}
+-	if l.config.ExactTopK > 0 && l.lastBoardingDeadEnd(p) {
++	if l.config.ExactTopK > 0 && (l.suffixDeadEnd(p.stop, p.time, p.boards, p.lastConnection) || l.lastBoardingDeadEnd(p)) {
+ 		l.result.Stats.DeadEndPruned++
+ 		return
+ 	}
+@@ -260,6 +263,10 @@ func (l *lane) add(p *label) {
+ 				continue
+ 			}
+ 		}
++		if l.config.ExactTopK > 0 && l.suffixDeadEnd(to, p.time+w.Duration, p.boards, -1) {
++			l.result.Stats.DeadEndPruned++
++			continue
++		}
+ 		child := &label{stop: to, time: p.time + w.Duration, walk: p.walk + w.Duration, block: p.block + w.Duration, boards: p.boards, depth: p.depth + 1, lastRide: p.lastRide, lastConnection: -1, parent: p, leg: model.Leg{Kind: "walk", Ref: w.ID, Departure: p.time, Arrival: p.time + w.Duration}}
+ 		l.add(child)
+ 		if l.err != nil {
+@@ -318,7 +325,7 @@ func (l *lane) ride(p *label, ci int) {
+ 	}
+ 	// Reject a provably hopeless transition before materializing a search label.
+ 	// ConnectionAttempts still records its work; MaxLabels counts generated labels.
+-	if l.config.ExactTopK > 0 && boards == q.MaxBoardings && l.lastVehicleArrival[ci] > q.LatestArrival {
++	if l.config.ExactTopK > 0 && (l.suffixDeadEnd(l.index.stops[c.To], c.Arrival, boards, ci) || boards == q.MaxBoardings && l.lastVehicleArrival[ci] > q.LatestArrival) {
+ 		l.result.Stats.DeadEndPruned++
+ 		return
+ 	}

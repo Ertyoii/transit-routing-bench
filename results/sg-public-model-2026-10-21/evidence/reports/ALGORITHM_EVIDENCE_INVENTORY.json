@@ -1,0 +1,315 @@
+{
+  "schema": "sg_implemented_algorithm_evidence_inventory_v1",
+  "updated_utc": "2026-10-21T04:50:41.149872+00:00",
+  "implemented_native_entries": 27,
+  "entries": [
+    {
+      "algorithm": "csa_arrival_single",
+      "native_contract": "One strict arrival identity-top-10 lane with a one-million-label ceiling; independent stop-pair request at batch size1. Shared scheduling is separately named.",
+      "current_qualification": "All 90 frozen validation requests per window, four windows, with matching point-router anchors; independent exact tiny k=1/3/5/10 and strict-top-7 source oracles.",
+      "limits_and_remaining_space": "Distinct from the 450-request primary panel and from a 2D frontier. Shared batch 1 is compatibility, not batching gain. Negative shared batch 4/8 results and both original score deadlines are retained.",
+      "final_test_status": "Completed all 90 registered screen-test requests per window across four windows (360/adapter), unchanged under public-model seals; independent final evidence acceptance passed.",
+      "heldout_evidence": {
+        "requests_per_window": 90,
+        "windows": 4,
+        "offered_per_configuration": 360,
+        "complete_per_configuration": 360,
+        "ordinary_query_failures": 0,
+        "data_tier": "public_model",
+        "different_from_full450": true
+      }
+    },
+    {
+      "algorithm": "csa_arrival_shared",
+      "native_contract": "One strict arrival identity-top-10 lane with a one-million-label ceiling; independent stop-pair request at batch size1. Shared scheduling is separately named.",
+      "current_qualification": "All 90 frozen validation requests per window, four windows, with matching point-router anchors; independent exact tiny k=1/3/5/10 and strict-top-7 source oracles.",
+      "limits_and_remaining_space": "Distinct from the 450-request primary panel and from a 2D frontier. Shared batch 1 is compatibility, not batching gain. Negative shared batch 4/8 results and both original score deadlines are retained.",
+      "final_test_status": "Completed all 90 registered screen-test requests per window across four windows (360/adapter), unchanged under public-model seals; independent final evidence acceptance passed.",
+      "heldout_evidence": {
+        "requests_per_window": 90,
+        "windows": 4,
+        "offered_per_configuration": 360,
+        "complete_per_configuration": 360,
+        "ordinary_query_failures": 0,
+        "data_tier": "public_model",
+        "different_from_full450": true
+      }
+    },
+    {
+      "algorithm": "csa_score_single",
+      "native_contract": "Score adapter uses boarding-cap lanes0 through4, each strictk10 and a one-million-label ceiling, then validates and score-ranks their union (up to five k-sized lists); batch size1.",
+      "current_qualification": "All 90 frozen validation requests per window, four windows, with matching point-router anchors; independent exact tiny k=1/3/5/10 and strict-top-7 source oracles.",
+      "limits_and_remaining_space": "Distinct from the 450-request primary panel and from a 2D frontier. Shared batch 1 is compatibility, not batching gain. Negative shared batch 4/8 results and both original score deadlines are retained.",
+      "final_test_status": "Completed all 90 registered screen-test requests per window across four windows (360/adapter), unchanged under public-model seals; independent final evidence acceptance passed.",
+      "heldout_evidence": {
+        "requests_per_window": 90,
+        "windows": 4,
+        "offered_per_configuration": 360,
+        "complete_per_configuration": 360,
+        "ordinary_query_failures": 0,
+        "data_tier": "public_model",
+        "different_from_full450": true
+      }
+    },
+    {
+      "algorithm": "csa_score_shared",
+      "native_contract": "Score adapter uses boarding-cap lanes0 through4, each strictk10 and a one-million-label ceiling, then validates and score-ranks their union (up to five k-sized lists); batch size1.",
+      "current_qualification": "All 90 frozen validation requests per window, four windows, with matching point-router anchors; independent exact tiny k=1/3/5/10 and strict-top-7 source oracles.",
+      "limits_and_remaining_space": "Distinct from the 450-request primary panel and from a 2D frontier. Shared batch 1 is compatibility, not batching gain. Negative shared batch 4/8 results and both original score deadlines are retained.",
+      "final_test_status": "Completed all 90 registered screen-test requests per window across four windows (360/adapter), unchanged under public-model seals; independent final evidence acceptance passed.",
+      "heldout_evidence": {
+        "requests_per_window": 90,
+        "windows": 4,
+        "offered_per_configuration": 360,
+        "complete_per_configuration": 360,
+        "ordinary_query_failures": 0,
+        "data_tier": "public_model",
+        "different_from_full450": true
+      }
+    },
+    {
+      "algorithm": "ea_csa_layered",
+      "native_contract": "2D arrival-versus-boardings frontier under the primary hard caps.",
+      "current_qualification": "450 validation requests per window, four windows; relevant source/control comparisons also have two repeated 180-query tune blocks, independent witness reconstruction and cap-vector crosschecks.",
+      "limits_and_remaining_space": "No independent full-network oracle or global completeness proof is created by agreement. Walking ties affect soft preference coverage.",
+      "final_test_status": "Completed all 450 registered heldout requests per window across four windows (1800/configuration), unchanged under the public-model seals; independent final evidence acceptance passed.",
+      "heldout_evidence": {
+        "requests_per_window": 450,
+        "windows": 4,
+        "offered_per_configuration": 1800,
+        "complete_per_configuration": 1800,
+        "ordinary_query_failures": 0,
+        "data_tier": "public_model"
+      }
+    },
+    {
+      "algorithm": "raptor_early",
+      "native_contract": "2D arrival-versus-boardings frontier under the primary hard caps.",
+      "current_qualification": "450 validation requests per window, four windows; relevant source/control comparisons also have two repeated 180-query tune blocks, independent witness reconstruction and cap-vector crosschecks.",
+      "limits_and_remaining_space": "No independent full-network oracle or global completeness proof is created by agreement. Walking ties affect soft preference coverage.",
+      "final_test_status": "Completed all 450 registered heldout requests per window across four windows (1800/configuration), unchanged under the public-model seals; independent final evidence acceptance passed.",
+      "heldout_evidence": {
+        "requests_per_window": 450,
+        "windows": 4,
+        "offered_per_configuration": 1800,
+        "complete_per_configuration": 1800,
+        "ordinary_query_failures": 0,
+        "data_tier": "public_model"
+      }
+    },
+    {
+      "algorithm": "ultra_transfer_complete_capped",
+      "native_contract": "2D arrival-versus-boardings frontier under the primary hard caps.",
+      "current_qualification": "450 validation requests per window, four windows; relevant source/control comparisons also have two repeated 180-query tune blocks, independent witness reconstruction and cap-vector crosschecks.",
+      "limits_and_remaining_space": "No independent full-network oracle or global completeness proof is created by agreement. Walking ties affect soft preference coverage.",
+      "final_test_status": "Completed all 450 registered heldout requests per window across four windows (1800/configuration), unchanged under the public-model seals; independent final evidence acceptance passed.",
+      "heldout_evidence": {
+        "requests_per_window": 450,
+        "windows": 4,
+        "offered_per_configuration": 1800,
+        "complete_per_configuration": 1800,
+        "ordinary_query_failures": 0,
+        "data_tier": "public_model"
+      }
+    },
+    {
+      "algorithm": "ultra_cap_safe_stay_witness_subset_v1",
+      "native_contract": "2D arrival-versus-boardings frontier under the primary hard caps.",
+      "current_qualification": "450 validation requests per window, four windows; relevant source/control comparisons also have two repeated 180-query tune blocks, independent witness reconstruction and cap-vector crosschecks.",
+      "limits_and_remaining_space": "No independent full-network oracle or global completeness proof is created by agreement. Walking ties affect soft preference coverage.",
+      "final_test_status": "Completed all 450 registered heldout requests per window across four windows (1800/configuration), unchanged under the public-model seals; independent final evidence acceptance passed.",
+      "heldout_evidence": {
+        "requests_per_window": 450,
+        "windows": 4,
+        "offered_per_configuration": 1800,
+        "complete_per_configuration": 1800,
+        "ordinary_query_failures": 0,
+        "data_tier": "public_model"
+      }
+    },
+    {
+      "algorithm": "raptor",
+      "native_contract": "Ordinary RAPTOR 2D arrival-versus-boardings frontier under the primary hard caps.",
+      "current_qualification": "Two repeated 180-query tune/source blocks plus four-window dense-entrypoint coverage; ordinary entrypoint was not separately in the 450-query validation slate.",
+      "limits_and_remaining_space": "The ordinary entrypoint completed its own 450-query/window heldout source-control comparison. It was not separately in the full-validation slate; do not inherit Early validation denominators.",
+      "final_test_status": "Completed all 450 registered heldout requests per window across four windows (1800/configuration), unchanged under the public-model seals; independent final evidence acceptance passed.",
+      "heldout_evidence": {
+        "requests_per_window": 450,
+        "windows": 4,
+        "offered_per_configuration": 1800,
+        "complete_per_configuration": 1800,
+        "ordinary_query_failures": 0,
+        "data_tier": "public_model"
+      }
+    },
+    {
+      "algorithm": "mc_raptor",
+      "native_contract": "3D arrival/boardings/walking frontier, with default display and separately measured finite20 selection.",
+      "current_qualification": "450 validation requests per window, four windows, at 500k and one-million label ceilings, with exact emitted-output agreement and independent tiny 3D oracles.",
+      "limits_and_remaining_space": "500k is sufficient on this bounded evidence, not half the actual memory or always faster. Finite20 is optimized to the same hypothetical weights, not external passenger truth.",
+      "final_test_status": "Completed all 450 registered heldout requests per window across four windows (1800/configuration), unchanged under the public-model seals; independent final evidence acceptance passed.",
+      "heldout_evidence": {
+        "requests_per_window": 450,
+        "windows": 4,
+        "offered_per_configuration": 1800,
+        "complete_per_configuration": 1800,
+        "ordinary_query_failures": 0,
+        "data_tier": "public_model"
+      }
+    },
+    {
+      "algorithm": "mc_raptor_early",
+      "native_contract": "3D arrival/boardings/walking frontier, with default display and separately measured finite20 selection.",
+      "current_qualification": "450 validation requests per window, four windows, at 500k and one-million label ceilings, with exact emitted-output agreement and independent tiny 3D oracles.",
+      "limits_and_remaining_space": "500k is sufficient on this bounded evidence, not half the actual memory or always faster. Finite20 is optimized to the same hypothetical weights, not external passenger truth.",
+      "final_test_status": "Completed all 450 registered heldout requests per window across four windows (1800/configuration), unchanged under the public-model seals; independent final evidence acceptance passed.",
+      "heldout_evidence": {
+        "requests_per_window": 450,
+        "windows": 4,
+        "offered_per_configuration": 1800,
+        "complete_per_configuration": 1800,
+        "ordinary_query_failures": 0,
+        "data_tier": "public_model"
+      }
+    },
+    {
+      "algorithm": "trip_based_capped",
+      "native_contract": "2D primary 600-second role caps; 100-million actual retained-transfer-link limit.",
+      "current_qualification": "450 validation and 180 tune requests per window, four windows, with independent feasible witnesses and cap-vector agreement.",
+      "limits_and_remaining_space": "Day peak RSS is roughly six GB, router preparation roughly seven seconds plus checker/quality preparation, and queries are slower. Efficient index construction remains unexhausted.",
+      "final_test_status": "Completed all 450 registered heldout requests per window across four windows (1800/configuration), unchanged under the public-model seals; independent final evidence acceptance passed.",
+      "heldout_evidence": {
+        "requests_per_window": 450,
+        "windows": 4,
+        "offered_per_configuration": 1800,
+        "complete_per_configuration": 1800,
+        "ordinary_query_failures": 0,
+        "data_tier": "public_model"
+      }
+    },
+    {
+      "algorithm": "trip_based",
+      "native_contract": "Legacy 2D index with adapter-hardcoded 900-second transfer-walking radius.",
+      "current_qualification": "12 morning requests were not run after the five-million actual-transfer preparation limit.",
+      "limits_and_remaining_space": "Not a GTFS-rule capability rejection. The larger 25m/100m retries belong to cappedTB600, not this bare 900-second native index. Further resource space remains unexhausted.",
+      "final_test_status": "Not in declared heldout slate; retain explicit smaller native-contract or unavailable evidence level."
+    },
+    {
+      "algorithm": "flash_tb",
+      "native_contract": "Legacy adapter-specific FLASH / TP / scalableTP / TREX contract.",
+      "current_qualification": "All 12 morning requests were not run because nonempty GTFS transfer rules are unsupported.",
+      "limits_and_remaining_space": "No rule deletion or fallback was used. No successful query latency is invented. Other supported datasets/contracts may differ.",
+      "final_test_status": "Not in declared heldout slate; retain explicit smaller native-contract or unavailable evidence level."
+    },
+    {
+      "algorithm": "transfer_patterns",
+      "native_contract": "Legacy adapter-specific FLASH / TP / scalableTP / TREX contract.",
+      "current_qualification": "All 12 morning requests were not run because nonempty GTFS transfer rules are unsupported.",
+      "limits_and_remaining_space": "No rule deletion or fallback was used. No successful query latency is invented. Other supported datasets/contracts may differ.",
+      "final_test_status": "Not in declared heldout slate; retain explicit smaller native-contract or unavailable evidence level."
+    },
+    {
+      "algorithm": "scalable_tp",
+      "native_contract": "Legacy adapter-specific FLASH / TP / scalableTP / TREX contract.",
+      "current_qualification": "All 12 morning requests were not run because nonempty GTFS transfer rules are unsupported.",
+      "limits_and_remaining_space": "No rule deletion or fallback was used. No successful query latency is invented. Other supported datasets/contracts may differ.",
+      "final_test_status": "Not in declared heldout slate; retain explicit smaller native-contract or unavailable evidence level."
+    },
+    {
+      "algorithm": "trex",
+      "native_contract": "Legacy adapter-specific FLASH / TP / scalableTP / TREX contract.",
+      "current_qualification": "All 12 morning requests were not run because nonempty GTFS transfer rules are unsupported.",
+      "limits_and_remaining_space": "No rule deletion or fallback was used. No successful query latency is invented. Other supported datasets/contracts may differ.",
+      "final_test_status": "Not in declared heldout slate; retain explicit smaller native-contract or unavailable evidence level."
+    },
+    {
+      "algorithm": "flash_tb_static_stop_pair_suffix_flags_role_caps_v1",
+      "native_contract": "Declared scoped adapter with exact full-walking-metric preparation.",
+      "current_qualification": "All 12 morning requests were not run after the full walking-closure path guard.",
+      "limits_and_remaining_space": "The one-million full-closure guard is not algorithmic impossibility. No workload-inferred bounded 600-second FLASH variant was substituted.",
+      "final_test_status": "Not in declared heldout slate; retain explicit smaller native-contract or unavailable evidence level."
+    },
+    {
+      "algorithm": "trex_static_caps_mandatory_verified_experimental",
+      "native_contract": "Declared scoped adapter with exact full-walking-metric preparation.",
+      "current_qualification": "All 12 morning requests were not run after the full walking-closure path guard.",
+      "limits_and_remaining_space": "The one-million full-closure guard is not algorithmic impossibility. No workload-inferred bounded 600-second FLASH variant was substituted.",
+      "final_test_status": "Not in declared heldout slate; retain explicit smaller native-contract or unavailable evidence level."
+    },
+    {
+      "algorithm": "tp_destination_fixed_caps_experimental",
+      "native_contract": "Fixed-cap static stop-pair query profile, with the explicit destination or source-domain scope.",
+      "current_qualification": "Initial malformed walking-policy attempts are retained; corrected closure and 25m/100m actual-transfer preparation retries also decline.",
+      "limits_and_remaining_space": "No successful query latency is qualified. Memory/index construction and resource frontiers remain unexhausted.",
+      "final_test_status": "Not in declared heldout slate; retain explicit smaller native-contract or unavailable evidence level."
+    },
+    {
+      "algorithm": "tp_source_domain_retained_fixed_caps_experimental_v1",
+      "native_contract": "Fixed-cap static stop-pair query profile, with the explicit destination or source-domain scope.",
+      "current_qualification": "Initial malformed walking-policy attempts are retained; corrected closure and 25m/100m actual-transfer preparation retries also decline.",
+      "limits_and_remaining_space": "No successful query latency is qualified. Memory/index construction and resource frontiers remain unexhausted.",
+      "final_test_status": "Not in declared heldout slate; retain explicit smaller native-contract or unavailable evidence level."
+    },
+    {
+      "algorithm": "trex_fixed_transfer_cap_ranked_defined_probe_verified_experimental_v1",
+      "native_contract": "Verified fixed-transfer-cap ranked-defined-probe TREX.",
+      "current_qualification": "The original RSS stop retains 12 unresolved requests; corrected bounded-closure 25m/100m retries hit actual-transfer preparation limits.",
+      "limits_and_remaining_space": "Failed, not-run and unresolved outcomes are separate. No convergence or successful query latency is claimed.",
+      "final_test_status": "Not in declared heldout slate; retain explicit smaller native-contract or unavailable evidence level."
+    },
+    {
+      "algorithm": "profile_csa",
+      "native_contract": "Whole inclusive 61-readiness window [departure, departure+60], keeping latest arrival fixed.",
+      "current_qualification": "12 registered point-input requests per window, four windows, transformed under the declared profile contract; every integer boarding-cap arrival grid checked.",
+      "limits_and_remaining_space": "Not 450-query point-router tail qualification. Never divide whole-profile time by 61. Multiple native controls share a process/preparation.",
+      "final_test_status": "Not in declared heldout slate; retain explicit smaller native-contract or unavailable evidence level."
+    },
+    {
+      "algorithm": "range_raptor",
+      "native_contract": "Whole inclusive 61-readiness window [departure, departure+60], keeping latest arrival fixed.",
+      "current_qualification": "12 registered point-input requests per window, four windows, transformed under the declared profile contract; every integer boarding-cap arrival grid checked.",
+      "limits_and_remaining_space": "Not 450-query point-router tail qualification. Never divide whole-profile time by 61. Multiple native controls share a process/preparation.",
+      "final_test_status": "Not in declared heldout slate; retain explicit smaller native-contract or unavailable evidence level."
+    },
+    {
+      "algorithm": "tad",
+      "native_contract": "One earliest-arrival witness.",
+      "current_qualification": "12 native-contract smoke requests per window, four windows, plus independent tiny source oracles and projected EA/RAPTOR minimum-arrival agreement.",
+      "limits_and_remaining_space": "Reference frontier routers perform more work. Not equal-work or full-450 frontier qualification.",
+      "final_test_status": "Not in declared heldout slate; retain explicit smaller native-contract or unavailable evidence level."
+    },
+    {
+      "algorithm": "ultra_native",
+      "native_contract": "Canonical native ULTRA.",
+      "current_qualification": "12 requests per window, four windows, explicitly unavailable because the GTFS transfer-rule table is unsupported.",
+      "limits_and_remaining_space": "Distinct from capped ULTRA control/subset adapters. Transfer rules were not removed.",
+      "final_test_status": "Not in declared heldout slate; retain explicit smaller native-contract or unavailable evidence level."
+    },
+    {
+      "algorithm": "core_ch",
+      "native_contract": "Transfer-graph-only one-source-many-target whole rows, 600-second scalar distance.",
+      "current_qualification": "117 anchors, 117 rows and 13,689 cells per method/window; 12 rows with positive nonself cells and 105 self-only rows, independently audited against raw-edge Bellman-Ford.",
+      "limits_and_remaining_space": "Not full transit or passenger point-query latency. Anchor-dependent preparation, same transfer graph across windows, and no demonstrated CH speedup.",
+      "final_test_status": "Not in declared heldout slate; retain explicit smaller native-contract or unavailable evidence level."
+    }
+  ],
+  "absent_external_systems": [
+    {
+      "algorithm": "OpenTripPlanner",
+      "status": "Absent from the supplied Go inventory; not benchmarked or replaced, and no external-system parity is claimed."
+    }
+  ],
+  "all_algorithms_scope": "All 27 implemented native entrypoints were attempted or measured under their separate contracts. Qualification levels, unsupported semantics and preparation guards are explicit. This is not every theoretical algorithm or an exhaustion of every implementation.",
+  "test_outcomes_exposed": true,
+  "convergence_claim": false,
+  "final_test_summary": {
+    "processes": 76,
+    "ordinary_offered": 24120,
+    "ordinary_complete": 24120,
+    "forced_deadline_rows_separate": 24120,
+    "warmups": 0,
+    "retuning_or_retry_after_outcome": false,
+    "independent_acceptance": "accepted_bounded_public_model_evidence_no_blockers",
+    "original_acceptance_sha256": "baf3456246f2b29ea1f328d747d5b2d82323427321162144296824b9bea80d34"
+  }
+}

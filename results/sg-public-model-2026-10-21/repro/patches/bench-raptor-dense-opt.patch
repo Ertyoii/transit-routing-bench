@@ -1,0 +1,659 @@
+diff --git a/routing.lock.json b/routing.lock.json
+index 540efe744b2b8ee01fa02a42d387b048b38d3af5..edac852dac160c63b8f674a7c7dedb6678f72db9 100644
+--- a/routing.lock.json
++++ b/routing.lock.json
+@@ -1,7 +1,6 @@
+ {
+-  "module": "github.com/ertyoii/transit-routing-go",
+-  "version": "v0.1.0-pre.3",
+-  "commit": "b102816018b1db87304c751f2cd601a2abe4057a",
++  "baseline_source_sha256": "f7cf70d1a970fb70077fa13299cdb8c991e8712c44fe1fb19ba10a5befccdd2d",
++  "commit": "725520af0cff62792f70b941d4d69066eecb1010",
+   "files": {
+     "LICENSE": "3c524d60abb36a8a9d25782594ea2f8665f56b5811b38c53ff62754b96f49da7",
+     "THIRD_PARTY_NOTICES.md": "6016bae242130d6a43b111a0457427b43f047f4bd0aa607cccda2000577bce0b",
+@@ -24,7 +23,7 @@
+     "model/binding.go": "0c9cbef951029a396931a7a8af204d1d34e8b5ce4777fee8d1c9d3d3d0379b0a",
+     "model/model.go": "ff1ad33cb87e072171d4a4844d89b0e159773dacf9dd85b6c17979c5809f6a7d",
+     "model/query_validator.go": "a05147dc2d502100e4f9e8b90f9ec29742cffa6fb0f3ba846634c1b089810213",
+-    "paper/profile.go": "ef171ca2a3827d687687c0a8f21000cd1af9d8534b571f78e91e37c70f75376a",
++    "paper/profile.go": "96f9ed6c4ef844dd0e761bcc13f78064fbf5c3c61d440b44c2e952db687913fb",
+     "paper/walking_bound.go": "5b1d0638fcdbbb839313346bd85d9841dcaad490c9340f79f73b74b5da97f419",
+     "presentation/rank.go": "5723df6970f463db4b5445ad685e90d1667f673c940f5201ac055a643835da7e",
+     "profilecsa/scan.go": "84779bd360aa0a5bd4aa37854d3f36cb3f150c81214563438a583478341af349",
+@@ -40,9 +39,10 @@
+     "provenance/notices/ultra-reference-LICENSE.txt": "d5baa7300225514cda71dc7d69c842572112380be743e30d467ec03a37d1837d",
+     "provenance/source-pins.json": "8b451a972b3a1927d22587cc0ff9f47115e216fb99a1ec5b8b04d1fc70bf0490",
+     "raptor/early_pruning.go": "a0ae73b3306cc58a72c1474476e7ecad94ae614c3c47aacbd479201b4e49329d",
+-    "raptor/multicriteria.go": "ef138e2e6520fffa6344089dd29eea0016a221369c997f37e17a9945ce2d6b61",
++    "raptor/indexed_walks.go": "59e0d8149cd8948d5a29e87d770971947f49e971f30899e604d3ed3b7e3ba827",
++    "raptor/multicriteria.go": "31a9d899fdfa9c03a8d2dd05512a1676074d9b639196eb1543a03fce6937989b",
+     "raptor/range.go": "81f63bb9d674bd0e9955b4aa493b1657ed9c8c7992d04c9fc76960ef92805a15",
+-    "raptor/raptor.go": "86a73775704c8c34417f272f3d2298346a4cabc9f55cba25f4800a2d43668fd8",
++    "raptor/raptor.go": "bec19d510d5cd339f5d3314e62c828cfccf380fc8d0e7430301e45e9ef734f07",
+     "raptor/round_queue.go": "3319c9839c727e512d7eef37a5d078c4c4438769dc7254622bac040bdf535a70",
+     "recommend/choices.go": "f92dc795483533d0c7d1bbfeecff3c56a8b9e516d30c85cfc48a92c515a9e8d2",
+     "recommend/quality.go": "0305ce81032f25cb01a721a7567330d8339babbcebdf889ad61404b35e70d627",
+@@ -101,14 +101,16 @@
+     "validate/journey.go": "467b568a761fb7e1bbb45da32d54fa1539f9fceca1e6cbb6a7e04d3d71e298ef",
+     "walking/cache.go": "a6ce8c4ca31beba49587aa1d4a00f10aafc4994c9531e53a98caff5baec73f3d",
+     "walking/contract.go": "03921ca99783454f3f4556782e6421257bb149e2708cb22af4a376216a86445f",
+-    "walking/graph/graph.go": "7e0965bae0f16145f23a1b273099e4b1f629d6d5f7d879b01bd3492fe5c9a80e",
++    "walking/graph/graph.go": "5fcc482edb45eb11d01928e8dffb148f00dd2a32f4649a0bb0f6cf27109cd998",
++    "walking/graph/reach_session.go": "8403f7669c2e6a5058b929d8b424b81110b1297aa6101cb80a857579b6fa9436",
+     "walking/httpapi/handler.go": "cc718267008fc54375517601939c35b5fc4a1f86ce069d4c57f7d6772a36e539",
+     "walking/osm/load.go": "7ef78a3ca7827eb0ca8563a829149e95416559ec8b13e673144d64f82c8d0019",
+     "walking/transit/bindings.go": "01f4535d6a97e6838c71e44176f2555183e70ed8e45d4b91493c86be1b353c71",
+     "walking/transit/catalog.go": "b20f53c78b38bf6426d4180f89bf6545bee3638d7ae46d909847dddc734a0fa8",
+     "walking/transit/graph.go": "07ec2ac36311597ed657b686be7bc222ef3ac7ec022473d1f55729f5754b6fbe"
+   },
+-  "source_sha256": "b795aeec8da53a1e9ab6f37be762bd3956b2a0f68bb2bc6ba94ed589006a2ae3",
+-  "origin": "Local public source candidate for https://github.com/Ertyoii/transit-routing-go; exact local revision, native and final composed/result review pending; v0.1.0-pre.3 remains unreleased and no tag is implied",
+-  "baseline_source_sha256": "f7cf70d1a970fb70077fa13299cdb8c991e8712c44fe1fb19ba10a5befccdd2d"
++  "module": "github.com/ertyoii/transit-routing-go",
++  "origin": "Local isolated RAPTOR indexed readiness plus accepted query-walking candidate; based on b102816; no public push or release implied. Benchmark harness otherwise unchanged at f5fb8eb.",
++  "source_sha256": "49950d7c89581d4282d9774709294092050458f8ba3d51bb73ed0119fbda8961",
++  "version": "v0.1.0-pre.3"
+ }
+diff --git a/vendor/github.com/ertyoii/transit-routing-go/paper/profile.go b/vendor/github.com/ertyoii/transit-routing-go/paper/profile.go
+index 9aa8e96d50004884e7ab2b6b3217792cd0db6958..f633d8a54e145d9aee27bc61b61feb71685d3985 100644
+--- a/vendor/github.com/ertyoii/transit-routing-go/paper/profile.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/paper/profile.go
+@@ -223,16 +223,18 @@ func (p Path) Append(n *Node, start int64) *Node {
+ }
+ 
+ type Walker struct {
+-	p     *Profile
+-	q     model.Query
+-	cache map[string][]Path
+-	Count int
++	p        *Profile
++	q        model.Query
++	cache    map[string][]Path
++	reach    *graph.ReachSession
++	snapshot string
++	Count    int
+ }
+ 
+ func (p *Profile) Walker(q model.Query) *Walker {
+ 	w := *q.Walking
+ 	q.Walking = &w
+-	return &Walker{p: p, q: q, cache: map[string][]Path{}}
++	return &Walker{p: p, q: q, cache: map[string][]Path{}, reach: p.walkingGraph.NewReachSession(), snapshot: p.walkingGraph.Descriptor().SnapshotID}
+ }
+ 
+ type entry struct {
+@@ -267,8 +269,8 @@ func (w *Walker) Paths(ctx context.Context, from string) ([]Path, error) {
+ 	if w.q.Destination != "" {
+ 		targets = append(targets, walking.Endpoint{NodeID: w.q.Destination})
+ 	}
+-	closure, err := w.p.walkingGraph.ReachWithTargets(ctx, walking.ReachRequest{Targets: targets,
+-		SnapshotID: w.p.walkingGraph.Descriptor().SnapshotID, From: walking.Endpoint{NodeID: from},
++	closure, err := w.reach.ReachWithTargets(ctx, walking.ReachRequest{Targets: targets,
++		SnapshotID: w.snapshot, From: walking.Endpoint{NodeID: from},
+ 		Options: walking.Options{Role: walking.Closure, MaxSeconds: limit, AccessibleOnly: w.q.AccessibleOnly, StopAt: w.q.Destination},
+ 	}, w.p.walkingTargets)
+ 	if err != nil {
+diff --git a/vendor/github.com/ertyoii/transit-routing-go/raptor/indexed_walks.go b/vendor/github.com/ertyoii/transit-routing-go/raptor/indexed_walks.go
+new file mode 100644
+index 0000000000000000000000000000000000000000..1c14381259a023786f88c35aeea1791b3b397570
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/raptor/indexed_walks.go
+@@ -0,0 +1,64 @@
++package raptor
++
++import (
++	"context"
++
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/paper"
++)
++
++// pathState is query-local metadata parallel to one immutable walking closure.
++// A transfer's ready delay depends on its stop pair, walking duration and the
++// query's fixed buffer, not on the arrival time or the route that reached it.
++// Resolve lazily at the original call site, preserving rule-error ordering.
++type pathState struct {
++	stop    int
++	delay   int64
++	ready   bool
++	allowed bool
++}
++
++type indexedWalks struct {
++	index  *Index
++	query  model.Query
++	walks  orderedWalks
++	states [][]pathState
++}
++
++func (x *Index) indexedWalks(walker *paper.Walker, q model.Query, early bool) indexedWalks {
++	return indexedWalks{
++		index:  x,
++		query:  q,
++		walks:  orderedWalks{walker: walker, enabled: early, cache: map[string][]paper.Path{}},
++		states: make([][]pathState, len(x.atStop)),
++	}
++}
++
++func (w *indexedWalks) paths(ctx context.Context, from string, source int) ([]paper.Path, []pathState, error) {
++	// Do not bypass the original lookup: its Context.Err poll (also on a cached
++	// closure) is observable in cancellation and partial-result boundaries.
++	paths, err := w.walks.paths(ctx, from)
++	if err != nil {
++		return nil, nil, err
++	}
++	states := w.states[source]
++	if states == nil {
++		states = make([]pathState, len(paths))
++		for i, p := range paths {
++			states[i].stop = w.index.stopIDs[p.To]
++		}
++		w.states[source] = states
++	}
++	return paths, states, nil
++}
++
++func (w *indexedWalks) readyTime(state *pathState, from string, path paper.Path, arrival int64) (int64, bool, error) {
++	if !state.ready {
++		delay, allowed, err := w.index.p.ReadyTime(w.query, from, path.To, 0, path.Duration)
++		if err != nil {
++			return 0, false, err
++		}
++		state.delay, state.allowed, state.ready = delay, allowed, true
++	}
++	return arrival + state.delay, state.allowed, nil
++}
+diff --git a/vendor/github.com/ertyoii/transit-routing-go/raptor/multicriteria.go b/vendor/github.com/ertyoii/transit-routing-go/raptor/multicriteria.go
+index 4cf42a2d9b2f117bb6247ce36bf97fbdd73dbb8c..4cae572dd14dfce910e10ac1bc6a5323138a4d7f 100644
+--- a/vendor/github.com/ertyoii/transit-routing-go/raptor/multicriteria.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/raptor/multicriteria.go
+@@ -156,7 +156,7 @@ func (x *Index) SearchMulti(ctx context.Context, q model.Query, cfg MultiConfig)
+ 		return nil
+ 	}
+ 	walker := x.p.Walker(q)
+-	walks := orderedWalks{walker: walker, enabled: cfg.EarlyPruning, cache: map[string][]paper.Path{}}
++	walks := x.indexedWalks(walker, q, cfg.EarlyPruning)
+ 	dominated := func(at, walk int64, boards int) bool {
+ 		for _, a := range answers {
+ 			out.Stats.EarlyPruning.DominanceChecks++
+@@ -167,7 +167,7 @@ func (x *Index) SearchMulti(ctx context.Context, q model.Query, cfg MultiConfig)
+ 		return false
+ 	}
+ 	defer func() { out.Stats.WalkClosures = walker.Count }()
+-	paths, e := walks.paths(ctx, q.Origin)
++	paths, states, e := walks.paths(ctx, q.Origin, x.stopIDs[q.Origin])
+ 	if e != nil {
+ 		err = e
+ 		return
+@@ -196,7 +196,7 @@ func (x *Index) SearchMulti(ctx context.Context, q model.Query, cfg MultiConfig)
+ 		}
+ 		if w.Duration <= q.Walking.Access {
+ 			var e error
+-			stop := x.stopIDs[w.To]
++			stop := states[i].stop
+ 			wasEmpty := len(previous[stop]) == 0
+ 			previous[stop], _, e = addStop(previous[stop], multiLabel{at, w.Duration, nil}, w, q.Departure)
+ 			if wasEmpty && len(previous[stop]) > 0 {
+@@ -269,7 +269,7 @@ func (x *Index) SearchMulti(ctx context.Context, q model.Query, cfg MultiConfig)
+ 						continue
+ 					}
+ 					continuing = append(continuing, l)
+-					paths, e := walks.paths(ctx, c.To)
++					paths, states, e := walks.paths(ctx, c.To, route.to[i])
+ 					if e != nil {
+ 						err = e
+ 						return
+@@ -297,7 +297,7 @@ func (x *Index) SearchMulti(ctx context.Context, q model.Query, cfg MultiConfig)
+ 						if boards == q.MaxBoardings || w.Duration > q.Walking.Transfer {
+ 							continue
+ 						}
+-						at, allowed, e := x.p.ReadyTime(q, c.To, w.To, c.Arrival, w.Duration)
++						at, allowed, e := walks.readyTime(&states[i], c.To, w, c.Arrival)
+ 						if e != nil {
+ 							err = e
+ 							return
+@@ -305,7 +305,7 @@ func (x *Index) SearchMulti(ctx context.Context, q model.Query, cfg MultiConfig)
+ 						if !allowed || at > q.LatestArrival {
+ 							continue
+ 						}
+-						stop := x.stopIDs[w.To]
++						stop := states[i].stop
+ 						newBag, _, e := addStop(next[stop], multiLabel{at, l.walk + w.Duration, l.parent}, w, c.Arrival)
+ 						if e != nil {
+ 							err = e
+diff --git a/vendor/github.com/ertyoii/transit-routing-go/raptor/raptor.go b/vendor/github.com/ertyoii/transit-routing-go/raptor/raptor.go
+index 95aac22c87a16a0828650da50fe5f8592f1b52a1..bdb195358c700250377257917178182cbea76d84 100644
+--- a/vendor/github.com/ertyoii/transit-routing-go/raptor/raptor.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/raptor/raptor.go
+@@ -17,6 +17,7 @@ type trip struct {
+ type route struct {
+ 	trips []trip
+ 	from  []int
++	to    []int
+ }
+ type occurrence struct{ route, position int }
+ type Index struct {
+@@ -108,8 +109,10 @@ func New(d model.Dataset) (*Index, error) {
+ 	for r := range x.routes {
+ 		route := &x.routes[r]
+ 		route.from = make([]int, len(route.trips[0].cs))
++		route.to = make([]int, len(route.trips[0].cs))
+ 		for i, c := range route.trips[0].cs {
+ 			route.from[i] = x.stopIDs[c.From]
++			route.to[i] = x.stopIDs[c.To]
+ 			x.at[c.From] = append(x.at[c.From], occurrence{r, i})
+ 		}
+ 	}
+@@ -151,13 +154,13 @@ func (x *Index) search(ctx context.Context, q model.Query, early bool) (out pape
+ 		return
+ 	}
+ 	walker := x.p.Walker(q)
+-	walks := orderedWalks{walker: walker, enabled: early, cache: map[string][]paper.Path{}}
++	walks := x.indexedWalks(walker, q, early)
+ 	defer func() { out.Stats.WalkClosures = walker.Count }()
+ 	previous := make([]paper.Label, len(x.atStop))
+ 	previousSet := make([]bool, len(x.atStop))
+ 	previousStops := []int{}
+ 	bestArrival := paper.Infinity
+-	paths, e := walks.paths(ctx, q.Origin)
++	paths, states, e := walks.paths(ctx, q.Origin, x.stopIDs[q.Origin])
+ 	if e != nil {
+ 		err = e
+ 		return
+@@ -183,7 +186,7 @@ func (x *Index) search(ctx context.Context, q model.Query, early bool) (out pape
+ 			continue
+ 		}
+ 		if w.Duration <= q.Walking.Access {
+-			stop := x.stopIDs[w.To]
++			stop := states[i].stop
+ 			if !previousSet[stop] {
+ 				previousStops = append(previousStops, stop)
+ 			}
+@@ -243,7 +246,7 @@ func (x *Index) search(ctx context.Context, q model.Query, early bool) (out pape
+ 					current = -1
+ 					continue
+ 				}
+-				paths, e := walks.paths(ctx, c.To)
++				paths, states, e := walks.paths(ctx, c.To, route.to[i])
+ 				if e != nil {
+ 					err = e
+ 					return
+@@ -269,7 +272,7 @@ func (x *Index) search(ctx context.Context, q model.Query, early bool) (out pape
+ 					if b == q.MaxBoardings || w.Duration > q.Walking.Transfer {
+ 						continue
+ 					}
+-					at, allowed, e := x.p.ReadyTime(q, c.To, w.To, c.Arrival, w.Duration)
++					at, allowed, e := walks.readyTime(&states[i], c.To, w, c.Arrival)
+ 					if e != nil {
+ 						err = e
+ 						return
+@@ -277,7 +280,7 @@ func (x *Index) search(ctx context.Context, q model.Query, early bool) (out pape
+ 					if !allowed || at > q.LatestArrival {
+ 						continue
+ 					}
+-					stop := x.stopIDs[w.To]
++					stop := states[i].stop
+ 					if !nextSet[stop] || at < next[stop].Time {
+ 						if !nextSet[stop] {
+ 							nextStops = append(nextStops, stop)
+diff --git a/vendor/github.com/ertyoii/transit-routing-go/walking/graph/graph.go b/vendor/github.com/ertyoii/transit-routing-go/walking/graph/graph.go
+index 6a2a176e75147226473540418adac75baa2e75ca..c5de1f471f660dd62147035a40f36c239ffb4dc8 100644
+--- a/vendor/github.com/ertyoii/transit-routing-go/walking/graph/graph.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/walking/graph/graph.go
+@@ -38,6 +38,12 @@ type Graph struct {
+ 	edges      map[string]walking.Segment
+ 	out        map[string][]walking.Segment
+ 	limits     Limits
++	// Canonical node ordinals preserve the existing lexical queue tie order.
++	nodeIndex    map[string]int
++	nodeIDs      []string
++	accessible   []bool
++	indexedEdges []walking.Segment
++	indexedOut   [][]indexedEdge
+ }
+ 
+ func New(d Data, limits Limits) (*Graph, error) {
+@@ -101,6 +107,20 @@ func New(d Data, limits Limits) (*Graph, error) {
+ 		return nil, walking.ErrStale
+ 	}
+ 	g.descriptor = d.Descriptor
++	g.nodeIndex = make(map[string]int, len(d.Nodes))
++	g.nodeIDs = make([]string, len(d.Nodes))
++	g.accessible = make([]bool, len(d.Nodes))
++	g.indexedOut = make([][]indexedEdge, len(d.Nodes))
++	for i, n := range d.Nodes {
++		g.nodeIndex[n.ID] = i
++		g.nodeIDs[i] = n.ID
++		g.accessible[i] = n.Accessible == walking.Yes
++	}
++	g.indexedEdges = d.Edges
++	for i, e := range d.Edges {
++		from, to := g.nodeIndex[e.From], g.nodeIndex[e.To]
++		g.indexedOut[from] = append(g.indexedOut[from], indexedEdge{to: to, edge: i})
++	}
+ 	return g, nil
+ }
+ func (g *Graph) Descriptor() walking.Descriptor {
+@@ -165,12 +185,14 @@ func (q *queue) Push(x any)   { *q = append(*q, x.(entry)) }
+ func (q *queue) Pop() any     { a := *q; v := a[len(a)-1]; *q = a[:len(a)-1]; return v }
+ 
+ type search struct {
+-	dist map[string]int64
+-	prev map[string]walking.Segment
++	dist  map[string]int64
++	prev  map[string]walking.Segment
++	dense *reachScratch
++	graph *Graph
+ }
+ 
+ func (g *Graph) search(ctx context.Context, from string, o walking.Options) (search, error) {
+-	s := search{map[string]int64{from: 0}, map[string]walking.Segment{}}
++	s := search{dist: map[string]int64{from: 0}, prev: map[string]walking.Segment{}}
+ 	h := &queue{{from, 0}}
+ 	settled, visits := 0, 0
+ 	for h.Len() > 0 {
+@@ -216,13 +238,29 @@ func (g *Graph) search(ctx context.Context, from string, o walking.Options) (sea
+ 	}
+ 	return s, nil
+ }
++func (s search) distance(to string) (int64, bool) {
++	if s.dense != nil {
++		i := s.graph.nodeIndex[to]
++		return s.dense.dist[i], s.dense.seen[i] == s.dense.generation
++	}
++	v, ok := s.dist[to]
++	return v, ok
++}
++func (s search) previous(to string) walking.Segment {
++	if s.dense != nil {
++		return s.graph.indexedEdges[s.dense.prev[s.graph.nodeIndex[to]]]
++	}
++	return s.prev[to]
++}
+ func (g *Graph) result(ctx context.Context, from, to string, s search, remaining *int) (walking.Result, error) {
+ 	r := walking.Result{SnapshotID: g.descriptor.SnapshotID, From: from, To: to, Status: walking.Unreachable}
+-	seconds, ok := s.dist[to]
++	seconds, ok := s.distance(to)
+ 	if !ok {
+ 		return r, nil
+ 	}
+-	p := walking.Path{SnapshotID: r.SnapshotID, From: from, To: to, Seconds: seconds, Segments: []walking.Segment{}}
++	// Count first so the returned witness needs one exact-sized segment buffer.
++	// The old append-then-CloneResult path copied every segment buffer twice.
++	count := 0
+ 	for at := to; at != from; {
+ 		if e := ctx.Err(); e != nil {
+ 			return walking.Result{}, e
+@@ -231,16 +269,25 @@ func (g *Graph) result(ctx context.Context, from, to string, s search, remaining
+ 			return walking.Result{}, walking.ErrBudget
+ 		}
+ 		*remaining--
+-		edge := s.prev[at]
+-		p.Segments = append(p.Segments, edge)
+-		at = edge.From
++		count++
++		at = s.previous(at).From
+ 	}
+-	for i, j := 0, len(p.Segments)-1; i < j; i, j = i+1, j-1 {
+-		p.Segments[i], p.Segments[j] = p.Segments[j], p.Segments[i]
++	p := walking.Path{SnapshotID: r.SnapshotID, From: from, To: to, Seconds: seconds, Segments: make([]walking.Segment, count)}
++	at := to
++	for i := count - 1; i >= 0; i-- {
++		if e := ctx.Err(); e != nil {
++			return walking.Result{}, e
++		}
++		edge := s.previous(at)
++		// Segment values only contain one mutable child. Copy it exactly once so
++		// callers cannot mutate the immutable graph or another response's witness.
++		edge.Witness.EdgeIDs = append([]string{}, edge.Witness.EdgeIDs...)
++		p.Segments[i] = edge
++		at = edge.From
+ 	}
+ 	r.Status = walking.Reachable
+ 	r.Path = &p
+-	return walking.CloneResult(r), nil
++	return r, nil
+ }
+ func (g *Graph) Route(ctx context.Context, r walking.Request) (walking.Result, error) {
+ 	if e := g.check(ctx, r.SnapshotID, r.From, r.Options); e != nil {
+@@ -310,6 +357,9 @@ func (g *Graph) Reach(ctx context.Context, r walking.ReachRequest) (walking.Reac
+ // targets. A nil set follows ordinary Reach semantics. A nonnil empty set selects
+ // no nodes except explicit request targets; no hidden endpoint is added.
+ func (g *Graph) ReachWithTargets(ctx context.Context, r walking.ReachRequest, selected *TargetSet) (walking.ReachResult, error) {
++	return g.reachWithTargets(ctx, r, selected, nil)
++}
++func (g *Graph) reachWithTargets(ctx context.Context, r walking.ReachRequest, selected *TargetSet, scratch *reachScratch) (walking.ReachResult, error) {
+ 	if e := ctx.Err(); e != nil {
+ 		return walking.ReachResult{}, e
+ 	}
+@@ -334,19 +384,44 @@ func (g *Graph) ReachWithTargets(ctx context.Context, r walking.ReachRequest, se
+ 	if e := g.check(ctx, r.SnapshotID, r.From, r.Options); e != nil {
+ 		return walking.ReachResult{}, e
+ 	}
+-	s, e := g.search(ctx, r.From.NodeID, r.Options)
++	var s search
++	var e error
++	if scratch == nil {
++		s, e = g.search(ctx, r.From.NodeID, r.Options)
++	} else {
++		s, e = g.searchDense(ctx, r.From.NodeID, r.Options, scratch)
++	}
+ 	if e != nil {
+ 		return walking.ReachResult{}, e
+ 	}
+-	keys := make([]string, 0, len(s.dist))
+-	for k := range s.dist {
++	reached := len(s.dist)
++	if scratch != nil {
++		reached = len(scratch.touched)
++	}
++	capacity := reached
++	if selected != nil {
++		capacity = min(capacity, len(selected.ids)+len(targets))
++	} else if len(targets) > 0 {
++		capacity = min(capacity, len(targets))
++	}
++	keys := make([]string, 0, capacity)
++	include := func(k string) {
+ 		if (selected != nil || len(targets) > 0) && !targets[k] && (selected == nil || !selected.ids[k]) {
+-			continue
++			return
+ 		}
+ 		keys = append(keys, k)
+ 	}
++	if scratch != nil {
++		for _, i := range scratch.touched {
++			include(g.nodeIDs[i])
++		}
++	} else {
++		for k := range s.dist {
++			include(k)
++		}
++	}
+ 	sort.Strings(keys)
+-	out := walking.ReachResult{SnapshotID: g.descriptor.SnapshotID, Paths: []walking.Path{}}
++	out := walking.ReachResult{SnapshotID: g.descriptor.SnapshotID, Paths: make([]walking.Path, 0, len(keys))}
+ 	remaining := g.limits.MaxResultSegments
+ 	for _, k := range keys {
+ 		if e := ctx.Err(); e != nil {
+diff --git a/vendor/github.com/ertyoii/transit-routing-go/walking/graph/reach_session.go b/vendor/github.com/ertyoii/transit-routing-go/walking/graph/reach_session.go
+new file mode 100644
+index 0000000000000000000000000000000000000000..ec15f54d50a926772940aeb3be06e5dd51992a92
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/walking/graph/reach_session.go
+@@ -0,0 +1,174 @@
++package graph
++
++import (
++	"context"
++
++	"github.com/ertyoii/transit-routing-go/walking"
++)
++
++type indexedEdge struct {
++	to   int
++	edge int
++}
++
++// ReachSession reuses search storage across closure requests on one immutable
++// graph. It retains no paths, changes no graph state, and returns independently
++// owned witnesses. Concurrent calls are serialized; different sessions never
++// share mutable search storage. Copies of a session share its gate and scratch.
++type ReachSession struct {
++	graph   *Graph
++	gate    chan struct{}
++	scratch *reachScratch
++}
++
++// NewReachSession creates an initially empty closure session. Dense search
++// storage is allocated lazily on its first valid request, not at graph creation.
++func (g *Graph) NewReachSession() *ReachSession {
++	return &ReachSession{graph: g, gate: make(chan struct{}, 1), scratch: &reachScratch{}}
++}
++
++// ReachWithTargets has the same reconstruction, work-budget, accessibility,
++// absorbing-node, and cancellation contract as Graph.ReachWithTargets.
++func (s *ReachSession) ReachWithTargets(ctx context.Context, r walking.ReachRequest, selected *TargetSet) (walking.ReachResult, error) {
++	if e := ctx.Err(); e != nil {
++		return walking.ReachResult{}, e
++	}
++	select {
++	case s.gate <- struct{}{}:
++		defer func() { <-s.gate }()
++	case <-ctx.Done():
++		return walking.ReachResult{}, ctx.Err()
++	}
++	return s.graph.reachWithTargets(ctx, r, selected, s.scratch)
++}
++
++type denseEntry struct {
++	node    int
++	seconds int64
++}
++
++type reachScratch struct {
++	dist       []int64
++	prev       []int
++	seen       []uint32
++	generation uint32
++	touched    []int
++	queue      []denseEntry
++}
++
++func (s *reachScratch) reset(nodes int) {
++	if len(s.dist) != nodes {
++		s.dist = make([]int64, nodes)
++		s.prev = make([]int, nodes)
++		s.seen = make([]uint32, nodes)
++	}
++	s.generation++
++	if s.generation == 0 {
++		// Generation wrap must never make an ancient distance look reachable.
++		clear(s.seen)
++		s.generation = 1
++	}
++	s.touched = s.touched[:0]
++	s.queue = s.queue[:0]
++}
++
++func denseLess(a, b denseEntry) bool {
++	if a.seconds == b.seconds {
++		// Node ordinals are canonical lexical IDs, exactly matching queue.Less.
++		return a.node < b.node
++	}
++	return a.seconds < b.seconds
++}
++func (s *reachScratch) push(v denseEntry) {
++	s.queue = append(s.queue, v)
++	for i := len(s.queue) - 1; i > 0; {
++		parent := (i - 1) / 2
++		if !denseLess(s.queue[i], s.queue[parent]) {
++			break
++		}
++		s.queue[i], s.queue[parent] = s.queue[parent], s.queue[i]
++		i = parent
++	}
++}
++func (s *reachScratch) pop() denseEntry {
++	out := s.queue[0]
++	last := len(s.queue) - 1
++	s.queue[0] = s.queue[last]
++	s.queue = s.queue[:last]
++	for i := 0; ; {
++		left := 2*i + 1
++		if left >= len(s.queue) {
++			break
++		}
++		child := left
++		if right := left + 1; right < len(s.queue) && denseLess(s.queue[right], s.queue[left]) {
++			child = right
++		}
++		if !denseLess(s.queue[child], s.queue[i]) {
++			break
++		}
++		s.queue[i], s.queue[child] = s.queue[child], s.queue[i]
++		i = child
++	}
++	return out
++}
++
++func (g *Graph) searchDense(ctx context.Context, from string, o walking.Options, s *reachScratch) (search, error) {
++	s.reset(len(g.nodeIDs))
++	origin := g.nodeIndex[from]
++	s.dist[origin] = 0
++	s.seen[origin] = s.generation
++	s.touched = append(s.touched, origin)
++	s.push(denseEntry{node: origin})
++	stopAt := -1
++	if o.StopAt != "" {
++		stopAt = g.nodeIndex[o.StopAt]
++	}
++	settled, visits := 0, 0
++	for len(s.queue) > 0 {
++		if e := ctx.Err(); e != nil {
++			return search{}, e
++		}
++		u := s.pop()
++		if u.seconds != s.dist[u.node] {
++			continue
++		}
++		settled++
++		if settled > g.limits.MaxSettled {
++			return search{}, walking.ErrBudget
++		}
++		if u.node == stopAt || o.AccessibleOnly && !g.accessible[u.node] {
++			continue
++		}
++		for _, next := range g.indexedOut[u.node] {
++			if e := ctx.Err(); e != nil {
++				return search{}, e
++			}
++			visits++
++			if visits > g.limits.MaxEdgeVisits {
++				return search{}, walking.ErrBudget
++			}
++			edge := g.indexedEdges[next.edge]
++			if o.AccessibleOnly && (edge.Accessible != walking.Yes || !g.accessible[next.to]) {
++				continue
++			}
++			n := u.seconds + edge.Seconds
++			if n > o.MaxSeconds {
++				continue
++			}
++			if s.seen[next.to] != s.generation || n < s.dist[next.to] {
++				if s.seen[next.to] != s.generation {
++					s.touched = append(s.touched, next.to)
++				}
++				s.dist[next.to] = n
++				s.prev[next.to] = next.edge
++				s.seen[next.to] = s.generation
++				s.push(denseEntry{node: next.to, seconds: n})
++			}
++		}
++	}
++	if e := ctx.Err(); e != nil {
++		return search{}, e
++	}
++	return search{dense: s, graph: g}, nil
++}

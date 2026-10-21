@@ -1,0 +1,3 @@
+package main
+import("crypto/sha256";"encoding/hex";"encoding/json";"fmt";"os";"github.com/ertyoii/transit-routing-go/model")
+func main(){if len(os.Args)<2{panic("dataset paths required")};for _,p:=range os.Args[1:]{func(){raw,e:=os.ReadFile(p);if e!=nil{panic(e)};var d model.Dataset;if e=json.Unmarshal(raw,&d);e!=nil{panic(e)};if e=d.Validate();e!=nil{panic(e)};h:=sha256.Sum256(raw);out,_:=json.Marshal(map[string]any{"path":p,"dataset_id":d.ID,"sha256":hex.EncodeToString(h[:]),"model_validate":"passed","stops":len(d.Stops),"trips":len(d.Trips),"connections":len(d.Connections),"footpaths":len(d.Footpaths),"transfers":len(d.Transfers)});fmt.Println(string(out))}()}}

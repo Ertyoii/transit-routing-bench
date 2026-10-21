@@ -1,0 +1,30 @@
+{
+  "schema": "sg-walking-source-provenance-v1",
+  "retrieved_utc": "2026-10-20T17:03:43Z",
+  "source_url": "https://download.geofabrik.de/asia/malaysia-singapore-brunei-261019.osm.pbf",
+  "publisher_page": "https://download.geofabrik.de/asia/malaysia-singapore-brunei.html",
+  "source_bytes": 252137556,
+  "source_sha256": "143cd2983864f6595e817e4e72b5f1acb498629a04613eb2e6da0bc5b064b0f3",
+  "publisher_md5_url": "https://download.geofabrik.de/asia/malaysia-singapore-brunei-261019.osm.pbf.md5",
+  "publisher_md5": "8752cee3a0704e01fd65f9566293c117",
+  "publisher_md5_matches": true,
+  "pbf_header": {
+    "generator": "osmium/1.16.0",
+    "osmosis_replication_timestamp": "2026-10-19T20:21:11Z",
+    "osmosis_replication_sequence_number": "4944",
+    "osmosis_replication_base_url": "https://download.geofabrik.de/asia/malaysia-singapore-brunei-updates"
+  },
+  "attribution": "\u00a9 OpenStreetMap contributors",
+  "license": "ODbL-1.0",
+  "license_url": "https://opendatacommons.org/licenses/odbl/1-0/",
+  "parser": "osmium4.3.2 from https://pypi.org/simple",
+  "processing_bbox_latlon": [
+    1.13,
+    103.58,
+    1.49,
+    104.1
+  ],
+  "scope": "Conservative mapped pedestrian paths and explicit foot-allowed roads; bus boarding anchors only; no unsupported rail centroid/entrance/interior links",
+  "physical_verification": false,
+  "public_redistribution": false
+}

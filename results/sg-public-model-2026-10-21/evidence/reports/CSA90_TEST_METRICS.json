@@ -1,0 +1,3232 @@
+{
+  "schema": "sg_native_csa90_outcome_metrics_v1",
+  "stage": "test",
+  "generated_utc": "2026-10-21T04:43:16.623867+00:00",
+  "rows": [
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-csa_arrival_single",
+      "run_id": "test-morning-native90-csa_arrival_single",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 33.909431125,
+      "sampled_peak_group_rss_bytes": 1192169472,
+      "prep_status": "complete",
+      "prep_s": 1.414561809,
+      "load_s": 2.120486605,
+      "checker_prep_s": 1.040756906,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 35,
+      "valid_empty": 55,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 220.00231,
+      "successful_response_max_ms": 814.04355,
+      "transit_response_median_ms": 260.197984,
+      "transit_response_max_ms": 814.04355,
+      "attempted_response_max_ms": 814.04355,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_arrival_single/test-morning-native90-csa_arrival_single/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 1164196,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 35.267893,
+      "process_system_cpu_s": 2.444751,
+      "algorithm": "csa_arrival_single",
+      "prep_error": "<nil>",
+      "router_preparation_s": 1.414561809,
+      "router_preparation_allocated_bytes": 1053243104,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 533910640,
+          "total_alloc_bytes": 2315215272,
+          "num_gc": 17
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 860569600,
+          "user_cpu_seconds": 3.550104,
+          "system_cpu_seconds": 0.914125,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 1.040756906,
+      "checker_preparation_allocated_bytes": 1153848720,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 423755872,
+          "total_alloc_bytes": 3469064440,
+          "num_gc": 21
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 897662976,
+          "user_cpu_seconds": 4.798455,
+          "system_cpu_seconds": 1.172207,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 1.78775267,
+      "quality_preparation_allocated_bytes": 1411745136,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 679473856,
+          "total_alloc_bytes": 4880810024,
+          "num_gc": 25
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1184378880,
+          "user_cpu_seconds": 6.663175,
+          "system_cpu_seconds": 2.086488,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 796503056,
+          "total_alloc_bytes": 7897773568,
+          "num_gc": 32
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1192136704,
+          "user_cpu_seconds": 35.267893,
+          "system_cpu_seconds": 2.411655,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 6.36355799,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 213.393873,
+      "first_setup_plus_response_components_s": 6.576951863000001,
+      "successful_response_p95_ms": 467.811578,
+      "successful_response_p99_ms": 814.04355,
+      "transit_response_p95_ms": 659.797563,
+      "transit_response_p99_ms": 814.04355,
+      "attempted_response_p50_ms": 220.00231,
+      "attempted_response_p95_ms": 467.811578,
+      "attempted_response_p99_ms": 814.04355,
+      "measured_batch_allocated_bytes": 2558372504,
+      "attempted_quality_phase_p50_ms": 0.027731,
+      "attempted_quality_phase_p95_ms": 3.853646,
+      "attempted_quality_phase_p99_ms": 4.735582
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-csa_arrival_single",
+      "run_id": "test-midday-native90-csa_arrival_single",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 34.871362428,
+      "sampled_peak_group_rss_bytes": 1200046080,
+      "prep_status": "complete",
+      "prep_s": 1.365807096,
+      "load_s": 2.033247339,
+      "checker_prep_s": 1.541730462,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 37,
+      "valid_empty": 53,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 224.598919,
+      "successful_response_max_ms": 990.112748,
+      "transit_response_median_ms": 271.916791,
+      "transit_response_max_ms": 990.112748,
+      "attempted_response_max_ms": 990.112748,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_arrival_single/test-midday-native90-csa_arrival_single/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 1178104,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 36.267124,
+      "process_system_cpu_s": 2.969478,
+      "algorithm": "csa_arrival_single",
+      "prep_error": "<nil>",
+      "router_preparation_s": 1.365807096,
+      "router_preparation_allocated_bytes": 1055180368,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 535054824,
+          "total_alloc_bytes": 2321045144,
+          "num_gc": 18
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 759078912,
+          "user_cpu_seconds": 3.673282,
+          "system_cpu_seconds": 0.805301,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 1.541730462,
+      "checker_preparation_allocated_bytes": 1156066672,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 558565920,
+          "total_alloc_bytes": 3477112264,
+          "num_gc": 22
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 973971456,
+          "user_cpu_seconds": 5.317546,
+          "system_cpu_seconds": 1.6693259999999999,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 1.772502631,
+      "quality_preparation_allocated_bytes": 1414352216,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 680934984,
+          "total_alloc_bytes": 4891464928,
+          "num_gc": 26
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1117777920,
+          "user_cpu_seconds": 7.236185,
+          "system_cpu_seconds": 2.68934,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 898620592,
+          "total_alloc_bytes": 7865035520,
+          "num_gc": 33
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1206378496,
+          "user_cpu_seconds": 36.267124,
+          "system_cpu_seconds": 2.9313700000000003,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 6.7132875279999995,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 246.436174,
+      "first_setup_plus_response_components_s": 6.959723702,
+      "successful_response_p95_ms": 497.805325,
+      "successful_response_p99_ms": 990.112748,
+      "transit_response_p95_ms": 778.654969,
+      "transit_response_p99_ms": 990.112748,
+      "attempted_response_p50_ms": 224.598919,
+      "attempted_response_p95_ms": 497.805325,
+      "attempted_response_p99_ms": 990.112748,
+      "measured_batch_allocated_bytes": 2511812272,
+      "attempted_quality_phase_p50_ms": 0.016054,
+      "attempted_quality_phase_p95_ms": 3.532053,
+      "attempted_quality_phase_p99_ms": 8.199132
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-csa_arrival_single",
+      "run_id": "test-evening-native90-csa_arrival_single",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 32.692968073,
+      "sampled_peak_group_rss_bytes": 1188171776,
+      "prep_status": "complete",
+      "prep_s": 1.830461831,
+      "load_s": 1.979226154,
+      "checker_prep_s": 1.118922318,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 33,
+      "valid_empty": 57,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 214.991367,
+      "successful_response_max_ms": 817.903048,
+      "transit_response_median_ms": 238.81972,
+      "transit_response_max_ms": 817.903048,
+      "attempted_response_max_ms": 817.903048,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_arrival_single/test-evening-native90-csa_arrival_single/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 1169700,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 34.053973,
+      "process_system_cpu_s": 2.377296,
+      "algorithm": "csa_arrival_single",
+      "prep_error": "<nil>",
+      "router_preparation_s": 1.830461831,
+      "router_preparation_allocated_bytes": 1055402624,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 391898368,
+          "total_alloc_bytes": 2321724080,
+          "num_gc": 18
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 847208448,
+          "user_cpu_seconds": 3.93401,
+          "system_cpu_seconds": 1.4435120000000001,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 1.118922318,
+      "checker_preparation_allocated_bytes": 1156203272,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 702121088,
+          "total_alloc_bytes": 3477927800,
+          "num_gc": 21
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 916946944,
+          "user_cpu_seconds": 5.14653,
+          "system_cpu_seconds": 1.9596559999999998,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 1.131829175,
+      "quality_preparation_allocated_bytes": 1414677848,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 640772880,
+          "total_alloc_bytes": 4892606096,
+          "num_gc": 25
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1111195648,
+          "user_cpu_seconds": 6.682824,
+          "system_cpu_seconds": 2.078021,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 864952792,
+          "total_alloc_bytes": 7717842248,
+          "num_gc": 31
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1197772800,
+          "user_cpu_seconds": 34.053973,
+          "system_cpu_seconds": 2.344849,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 6.060439478,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 223.762569,
+      "first_setup_plus_response_components_s": 6.284202047,
+      "successful_response_p95_ms": 578.1449,
+      "successful_response_p99_ms": 817.903048,
+      "transit_response_p95_ms": 676.800096,
+      "transit_response_p99_ms": 817.903048,
+      "attempted_response_p50_ms": 214.991367,
+      "attempted_response_p95_ms": 578.1449,
+      "attempted_response_p99_ms": 817.903048,
+      "measured_batch_allocated_bytes": 2381718560,
+      "attempted_quality_phase_p50_ms": 0.015442,
+      "attempted_quality_phase_p95_ms": 3.433757,
+      "attempted_quality_phase_p99_ms": 8.017648
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-csa_arrival_single",
+      "run_id": "test-overnight-native90-csa_arrival_single",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 10.073569234,
+      "sampled_peak_group_rss_bytes": 560701440,
+      "prep_status": "complete",
+      "prep_s": 0.573192312,
+      "load_s": 0.83750854,
+      "checker_prep_s": 0.488299024,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 16,
+      "valid_empty": 74,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 61.384781,
+      "successful_response_max_ms": 442.886352,
+      "transit_response_median_ms": 74.114504,
+      "transit_response_max_ms": 442.886352,
+      "attempted_response_max_ms": 442.886352,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_arrival_single/test-overnight-native90-csa_arrival_single/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 547824,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 10.603233,
+      "process_system_cpu_s": 0.8114009999999999,
+      "algorithm": "csa_arrival_single",
+      "prep_error": "<nil>",
+      "router_preparation_s": 0.573192312,
+      "router_preparation_allocated_bytes": 453009536,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 121899536,
+          "total_alloc_bytes": 1016661528,
+          "num_gc": 18
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 355475456,
+          "user_cpu_seconds": 1.57463,
+          "system_cpu_seconds": 0.32554,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 0.488299024,
+      "checker_preparation_allocated_bytes": 503226176,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 265005456,
+          "total_alloc_bytes": 1519888152,
+          "num_gc": 22
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 442830848,
+          "user_cpu_seconds": 2.156614,
+          "system_cpu_seconds": 0.541355,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 0.550955912,
+      "quality_preparation_allocated_bytes": 615040120,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 298213800,
+          "total_alloc_bytes": 2134928720,
+          "num_gc": 26
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 556122112,
+          "user_cpu_seconds": 2.86056,
+          "system_cpu_seconds": 0.746529,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 441174176,
+          "total_alloc_bytes": 3070540848,
+          "num_gc": 30
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 560971776,
+          "user_cpu_seconds": 10.603233,
+          "system_cpu_seconds": 0.793905,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 2.449955788,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 64.369567,
+      "first_setup_plus_response_components_s": 2.514325355,
+      "successful_response_p95_ms": 138.999728,
+      "successful_response_p99_ms": 442.886352,
+      "transit_response_p95_ms": 442.886352,
+      "transit_response_p99_ms": 442.886352,
+      "attempted_response_p50_ms": 61.384781,
+      "attempted_response_p95_ms": 138.999728,
+      "attempted_response_p99_ms": 442.886352,
+      "measured_batch_allocated_bytes": 738276752,
+      "attempted_quality_phase_p50_ms": 0.014602,
+      "attempted_quality_phase_p95_ms": 1.250048,
+      "attempted_quality_phase_p99_ms": 1.940913
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-csa_score_single",
+      "run_id": "test-morning-native90-csa_score_single",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 81.202772902,
+      "sampled_peak_group_rss_bytes": 1257381888,
+      "prep_status": "complete",
+      "prep_s": 1.601230168,
+      "load_s": 2.077863772,
+      "checker_prep_s": 1.258847047,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 35,
+      "valid_empty": 55,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 614.450159,
+      "successful_response_max_ms": 1248.148157,
+      "transit_response_median_ms": 675.196643,
+      "transit_response_max_ms": 1248.148157,
+      "attempted_response_max_ms": 1248.148157,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_score_single/test-morning-native90-csa_score_single/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 1227532,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 84.432386,
+      "process_system_cpu_s": 2.936175,
+      "algorithm": "csa_score_single",
+      "prep_error": "<nil>",
+      "router_preparation_s": 1.601230168,
+      "router_preparation_allocated_bytes": 1053243072,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 533915912,
+          "total_alloc_bytes": 2315219968,
+          "num_gc": 17
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 753127424,
+          "user_cpu_seconds": 3.805105,
+          "system_cpu_seconds": 1.407006,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 1.258847047,
+      "checker_preparation_allocated_bytes": 1153848336,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 700286224,
+          "total_alloc_bytes": 3469068752,
+          "num_gc": 20
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1097199616,
+          "user_cpu_seconds": 5.100305,
+          "system_cpu_seconds": 2.041387,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 1.095018424,
+      "quality_preparation_allocated_bytes": 1412064200,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 759599064,
+          "total_alloc_bytes": 4881133400,
+          "num_gc": 24
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1212932096,
+          "user_cpu_seconds": 6.624712,
+          "system_cpu_seconds": 2.146463,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 524127464,
+          "total_alloc_bytes": 11239713464,
+          "num_gc": 41
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1256992768,
+          "user_cpu_seconds": 84.432386,
+          "system_cpu_seconds": 2.909109,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 6.032959411,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 592.366072,
+      "first_setup_plus_response_components_s": 6.625325483,
+      "successful_response_p95_ms": 899.885682,
+      "successful_response_p99_ms": 1248.148157,
+      "transit_response_p95_ms": 1099.832311,
+      "transit_response_p99_ms": 1248.148157,
+      "attempted_response_p50_ms": 614.450159,
+      "attempted_response_p95_ms": 899.885682,
+      "attempted_response_p99_ms": 1248.148157,
+      "measured_batch_allocated_bytes": 4734095752,
+      "attempted_quality_phase_p50_ms": 0.01351,
+      "attempted_quality_phase_p95_ms": 5.631739,
+      "attempted_quality_phase_p99_ms": 13.53721
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-csa_score_single",
+      "run_id": "test-midday-native90-csa_score_single",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 83.685885241,
+      "sampled_peak_group_rss_bytes": 1130422272,
+      "prep_status": "complete",
+      "prep_s": 1.678326569,
+      "load_s": 2.655683785,
+      "checker_prep_s": 1.243384751,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 37,
+      "valid_empty": 53,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 629.211457,
+      "successful_response_max_ms": 1522.173058,
+      "transit_response_median_ms": 681.589783,
+      "transit_response_max_ms": 1522.173058,
+      "attempted_response_max_ms": 1522.173058,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_score_single/test-midday-native90-csa_score_single/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 1103604,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 85.798101,
+      "process_system_cpu_s": 3.781513,
+      "algorithm": "csa_score_single",
+      "prep_error": "<nil>",
+      "router_preparation_s": 1.678326569,
+      "router_preparation_allocated_bytes": 1055353184,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 613894776,
+          "total_alloc_bytes": 2321226336,
+          "num_gc": 17
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 804184064,
+          "user_cpu_seconds": 3.959621,
+          "system_cpu_seconds": 1.896722,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 1.243384751,
+      "checker_preparation_allocated_bytes": 1155748168,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 780471296,
+          "total_alloc_bytes": 3476974952,
+          "num_gc": 21
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 977309696,
+          "user_cpu_seconds": 5.127091,
+          "system_cpu_seconds": 2.41014,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 1.518946064,
+      "quality_preparation_allocated_bytes": 1414352552,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 761247368,
+          "total_alloc_bytes": 4891327952,
+          "num_gc": 25
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1089400832,
+          "user_cpu_seconds": 6.827454,
+          "system_cpu_seconds": 3.070004,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 575096432,
+          "total_alloc_bytes": 11134899384,
+          "num_gc": 41
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1130090496,
+          "user_cpu_seconds": 85.797287,
+          "system_cpu_seconds": 3.750301,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 7.096341169,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 642.110529,
+      "first_setup_plus_response_components_s": 7.7384516979999995,
+      "successful_response_p95_ms": 936.712705,
+      "successful_response_p99_ms": 1522.173058,
+      "transit_response_p95_ms": 1186.233497,
+      "transit_response_p99_ms": 1522.173058,
+      "attempted_response_p50_ms": 629.211457,
+      "attempted_response_p95_ms": 936.712705,
+      "attempted_response_p99_ms": 1522.173058,
+      "measured_batch_allocated_bytes": 4610417480,
+      "attempted_quality_phase_p50_ms": 0.01324,
+      "attempted_quality_phase_p95_ms": 5.375262,
+      "attempted_quality_phase_p99_ms": 7.711386
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-csa_score_single",
+      "run_id": "test-evening-native90-csa_score_single",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 82.303717753,
+      "sampled_peak_group_rss_bytes": 1264107520,
+      "prep_status": "complete",
+      "prep_s": 1.443717644,
+      "load_s": 2.165656639,
+      "checker_prep_s": 1.013860227,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 33,
+      "valid_empty": 57,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 624.599673,
+      "successful_response_max_ms": 1357.679707,
+      "transit_response_median_ms": 677.780502,
+      "transit_response_max_ms": 1357.679707,
+      "attempted_response_max_ms": 1357.679707,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_score_single/test-evening-native90-csa_score_single/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 1234632,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 85.722873,
+      "process_system_cpu_s": 2.975416,
+      "algorithm": "csa_score_single",
+      "prep_error": "<nil>",
+      "router_preparation_s": 1.443717644,
+      "router_preparation_allocated_bytes": 1055403184,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 391893384,
+          "total_alloc_bytes": 2321791304,
+          "num_gc": 17
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 904204288,
+          "user_cpu_seconds": 3.759797,
+          "system_cpu_seconds": 1.167952,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 1.013860227,
+      "checker_preparation_allocated_bytes": 1155883976,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 603302760,
+          "total_alloc_bytes": 3477675728,
+          "num_gc": 20
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1057308672,
+          "user_cpu_seconds": 4.909633,
+          "system_cpu_seconds": 1.51393,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 1.513292697,
+      "quality_preparation_allocated_bytes": 1414427840,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 693189984,
+          "total_alloc_bytes": 4892104016,
+          "num_gc": 23
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1257836544,
+          "user_cpu_seconds": 6.570224,
+          "system_cpu_seconds": 2.17763,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 616902168,
+          "total_alloc_bytes": 11091972104,
+          "num_gc": 38
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1264263168,
+          "user_cpu_seconds": 85.722873,
+          "system_cpu_seconds": 2.9451650000000003,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 6.136527207,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 630.399854,
+      "first_setup_plus_response_components_s": 6.7669270610000005,
+      "successful_response_p95_ms": 1028.024625,
+      "successful_response_p99_ms": 1357.679707,
+      "transit_response_p95_ms": 1301.286478,
+      "transit_response_p99_ms": 1357.679707,
+      "attempted_response_p50_ms": 624.599673,
+      "attempted_response_p95_ms": 1028.024625,
+      "attempted_response_p99_ms": 1357.679707,
+      "measured_batch_allocated_bytes": 4565716640,
+      "attempted_quality_phase_p50_ms": 0.01375,
+      "attempted_quality_phase_p95_ms": 6.357956,
+      "attempted_quality_phase_p99_ms": 8.166815
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-csa_score_single",
+      "run_id": "test-overnight-native90-csa_score_single",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 27.130705868,
+      "sampled_peak_group_rss_bytes": 580521984,
+      "prep_status": "complete",
+      "prep_s": 0.576788206,
+      "load_s": 0.829252808,
+      "checker_prep_s": 0.483638118,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 16,
+      "valid_empty": 74,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 202.976307,
+      "successful_response_max_ms": 673.825408,
+      "transit_response_median_ms": 242.61421,
+      "transit_response_max_ms": 673.825408,
+      "attempted_response_max_ms": 673.825408,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_score_single/test-overnight-native90-csa_score_single/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 566628,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 28.083901,
+      "process_system_cpu_s": 0.996313,
+      "algorithm": "csa_score_single",
+      "prep_error": "<nil>",
+      "router_preparation_s": 0.576788206,
+      "router_preparation_allocated_bytes": 453009632,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 240546208,
+          "total_alloc_bytes": 1016656416,
+          "num_gc": 16
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 324358144,
+          "user_cpu_seconds": 1.50236,
+          "system_cpu_seconds": 0.348817,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 0.483638118,
+      "checker_preparation_allocated_bytes": 503225280,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 197097104,
+          "total_alloc_bytes": 1519882144,
+          "num_gc": 20
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 429080576,
+          "user_cpu_seconds": 1.994267,
+          "system_cpu_seconds": 0.594916,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 0.541771578,
+      "quality_preparation_allocated_bytes": 615040640,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 436711744,
+          "total_alloc_bytes": 2134923232,
+          "num_gc": 23
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 509235200,
+          "user_cpu_seconds": 2.650429,
+          "system_cpu_seconds": 0.80531,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 255522200,
+          "total_alloc_bytes": 4489584984,
+          "num_gc": 36
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 580227072,
+          "user_cpu_seconds": 28.083901,
+          "system_cpu_seconds": 0.979729,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 2.43145071,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 255.915675,
+      "first_setup_plus_response_components_s": 2.687366385,
+      "successful_response_p95_ms": 303.967245,
+      "successful_response_p99_ms": 673.825408,
+      "transit_response_p95_ms": 673.825408,
+      "transit_response_p99_ms": 673.825408,
+      "attempted_response_p50_ms": 202.976307,
+      "attempted_response_p95_ms": 303.967245,
+      "attempted_response_p99_ms": 673.825408,
+      "measured_batch_allocated_bytes": 1638089992,
+      "attempted_quality_phase_p50_ms": 0.012668,
+      "attempted_quality_phase_p95_ms": 2.08811,
+      "attempted_quality_phase_p99_ms": 2.760187
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-csa_arrival_shared",
+      "run_id": "test-morning-native90-csa_arrival_shared",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 34.45563994,
+      "sampled_peak_group_rss_bytes": 1266900992,
+      "prep_status": "complete",
+      "prep_s": 1.5888251,
+      "load_s": 2.129889384,
+      "checker_prep_s": 1.231258253,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 35,
+      "valid_empty": 55,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 228.998069,
+      "successful_response_max_ms": 775.803064,
+      "transit_response_median_ms": 266.850886,
+      "transit_response_max_ms": 775.803064,
+      "attempted_response_max_ms": 775.803064,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_arrival_shared/test-morning-native90-csa_arrival_shared/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 1243188,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 35.146738,
+      "process_system_cpu_s": 3.058203,
+      "algorithm": "csa_arrival_shared",
+      "prep_error": "<nil>",
+      "router_preparation_s": 1.5888251,
+      "router_preparation_allocated_bytes": 1053243200,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 390819008,
+          "total_alloc_bytes": 2315214488,
+          "num_gc": 18
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 821993472,
+          "user_cpu_seconds": 3.761112,
+          "system_cpu_seconds": 1.3236569999999999,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 1.231258253,
+      "checker_preparation_allocated_bytes": 1153854040,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 557194624,
+          "total_alloc_bytes": 3469068976,
+          "num_gc": 21
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 961724416,
+          "user_cpu_seconds": 4.942403,
+          "system_cpu_seconds": 2.003107,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 1.595542152,
+      "quality_preparation_allocated_bytes": 1411999912,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 685681512,
+          "total_alloc_bytes": 4881069336,
+          "num_gc": 24
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1191428096,
+          "user_cpu_seconds": 6.610657,
+          "system_cpu_seconds": 2.784924,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 894218088,
+          "total_alloc_bytes": 7898213624,
+          "num_gc": 30
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1273024512,
+          "user_cpu_seconds": 35.146738,
+          "system_cpu_seconds": 3.015703,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 6.545514889000001,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 228.844187,
+      "first_setup_plus_response_components_s": 6.7743590760000005,
+      "successful_response_p95_ms": 444.308097,
+      "successful_response_p99_ms": 775.803064,
+      "transit_response_p95_ms": 658.601165,
+      "transit_response_p99_ms": 775.803064,
+      "attempted_response_p50_ms": 228.998069,
+      "attempted_response_p95_ms": 444.308097,
+      "attempted_response_p99_ms": 775.803064,
+      "measured_batch_allocated_bytes": 2558426520,
+      "attempted_quality_phase_p50_ms": 0.01345,
+      "attempted_quality_phase_p95_ms": 3.692419,
+      "attempted_quality_phase_p99_ms": 4.498155
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-csa_arrival_shared",
+      "run_id": "test-midday-native90-csa_arrival_shared",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 34.498098291,
+      "sampled_peak_group_rss_bytes": 1297162240,
+      "prep_status": "complete",
+      "prep_s": 1.277129603,
+      "load_s": 2.138425977,
+      "checker_prep_s": 1.073375326,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 37,
+      "valid_empty": 53,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 233.21224,
+      "successful_response_max_ms": 1048.890838,
+      "transit_response_median_ms": 256.724664,
+      "transit_response_max_ms": 1048.890838,
+      "attempted_response_max_ms": 1048.890838,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_arrival_shared/test-midday-native90-csa_arrival_shared/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 1266592,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 36.015403,
+      "process_system_cpu_s": 1.9009269999999998,
+      "algorithm": "csa_arrival_shared",
+      "prep_error": "<nil>",
+      "router_preparation_s": 1.277129603,
+      "router_preparation_allocated_bytes": 1055180416,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 630404144,
+          "total_alloc_bytes": 2321047704,
+          "num_gc": 17
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 900870144,
+          "user_cpu_seconds": 3.800876,
+          "system_cpu_seconds": 0.700548,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 1.073375326,
+      "checker_preparation_allocated_bytes": 1156002480,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 701880952,
+          "total_alloc_bytes": 3477050632,
+          "num_gc": 21
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 911880192,
+          "user_cpu_seconds": 5.014278,
+          "system_cpu_seconds": 1.092611,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 1.327891835,
+      "quality_preparation_allocated_bytes": 1414357600,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 1079688536,
+          "total_alloc_bytes": 4891408680,
+          "num_gc": 24
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1286483968,
+          "user_cpu_seconds": 6.39264,
+          "system_cpu_seconds": 1.478519,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 859728264,
+          "total_alloc_bytes": 7865050176,
+          "num_gc": 31
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1296990208,
+          "user_cpu_seconds": 36.015403,
+          "system_cpu_seconds": 1.8665509999999998,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 5.816822740999999,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 214.745933,
+      "first_setup_plus_response_components_s": 6.031568673999999,
+      "successful_response_p95_ms": 559.082265,
+      "successful_response_p99_ms": 1048.890838,
+      "transit_response_p95_ms": 813.96822,
+      "transit_response_p99_ms": 1048.890838,
+      "attempted_response_p50_ms": 233.21224,
+      "attempted_response_p95_ms": 559.082265,
+      "attempted_response_p99_ms": 1048.890838,
+      "measured_batch_allocated_bytes": 2511774352,
+      "attempted_quality_phase_p50_ms": 0.01343,
+      "attempted_quality_phase_p95_ms": 3.554665,
+      "attempted_quality_phase_p99_ms": 4.712034
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-csa_arrival_shared",
+      "run_id": "test-evening-native90-csa_arrival_shared",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 34.303049148,
+      "sampled_peak_group_rss_bytes": 1286254592,
+      "prep_status": "complete",
+      "prep_s": 1.23673357,
+      "load_s": 2.285483881,
+      "checker_prep_s": 1.132263706,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 33,
+      "valid_empty": 57,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 226.841076,
+      "successful_response_max_ms": 879.080337,
+      "transit_response_median_ms": 254.095749,
+      "transit_response_max_ms": 879.080337,
+      "attempted_response_max_ms": 879.080337,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_arrival_shared/test-evening-native90-csa_arrival_shared/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 1256312,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 36.22783,
+      "process_system_cpu_s": 2.178932,
+      "algorithm": "csa_arrival_shared",
+      "prep_error": "<nil>",
+      "router_preparation_s": 1.23673357,
+      "router_preparation_allocated_bytes": 1055339184,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 391892328,
+          "total_alloc_bytes": 2321726152,
+          "num_gc": 18
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 689139712,
+          "user_cpu_seconds": 3.802272,
+          "system_cpu_seconds": 0.832806,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 1.132263706,
+      "checker_preparation_allocated_bytes": 1155889232,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 399649192,
+          "total_alloc_bytes": 3477615832,
+          "num_gc": 22
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 929001472,
+          "user_cpu_seconds": 5.065602,
+          "system_cpu_seconds": 1.261935,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 1.305638439,
+      "quality_preparation_allocated_bytes": 1414422736,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 936407456,
+          "total_alloc_bytes": 4892039016,
+          "num_gc": 25
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1268547584,
+          "user_cpu_seconds": 6.504312,
+          "system_cpu_seconds": 1.617788,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 700215096,
+          "total_alloc_bytes": 7717494936,
+          "num_gc": 32
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1286463488,
+          "user_cpu_seconds": 36.22783,
+          "system_cpu_seconds": 2.144012,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 5.960119596,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 230.602325,
+      "first_setup_plus_response_components_s": 6.190721921,
+      "successful_response_p95_ms": 550.919413,
+      "successful_response_p99_ms": 879.080337,
+      "transit_response_p95_ms": 791.36574,
+      "transit_response_p99_ms": 879.080337,
+      "attempted_response_p50_ms": 226.841076,
+      "attempted_response_p95_ms": 550.919413,
+      "attempted_response_p99_ms": 879.080337,
+      "measured_batch_allocated_bytes": 2381801840,
+      "attempted_quality_phase_p50_ms": 0.014371,
+      "attempted_quality_phase_p95_ms": 3.654021,
+      "attempted_quality_phase_p99_ms": 4.618729
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-csa_arrival_shared",
+      "run_id": "test-overnight-native90-csa_arrival_shared",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 10.363518028,
+      "sampled_peak_group_rss_bytes": 540557312,
+      "prep_status": "complete",
+      "prep_s": 0.731409155,
+      "load_s": 0.887873471,
+      "checker_prep_s": 0.289233562,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 16,
+      "valid_empty": 74,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 61.470917,
+      "successful_response_max_ms": 467.676099,
+      "transit_response_median_ms": 77.079715,
+      "transit_response_max_ms": 467.676099,
+      "attempted_response_max_ms": 467.676099,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_arrival_shared/test-overnight-native90-csa_arrival_shared/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 527792,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 10.642702,
+      "process_system_cpu_s": 1.126155,
+      "algorithm": "csa_arrival_shared",
+      "prep_error": "<nil>",
+      "router_preparation_s": 0.731409155,
+      "router_preparation_allocated_bytes": 453009680,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 180830104,
+          "total_alloc_bytes": 1016661744,
+          "num_gc": 17
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 383356928,
+          "user_cpu_seconds": 1.5996380000000001,
+          "system_cpu_seconds": 0.648254,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 0.289233562,
+      "checker_preparation_allocated_bytes": 251666136,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 302890824,
+          "total_alloc_bytes": 1268328328,
+          "num_gc": 18
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 384614400,
+          "user_cpu_seconds": 1.9204780000000001,
+          "system_cpu_seconds": 0.653044,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 0.63752233,
+      "quality_preparation_allocated_bytes": 615040024,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 436716984,
+          "total_alloc_bytes": 1883368800,
+          "num_gc": 21
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 523157504,
+          "user_cpu_seconds": 2.587868,
+          "system_cpu_seconds": 1.057951,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 346863376,
+          "total_alloc_bytes": 2820710888,
+          "num_gc": 26
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 540459008,
+          "user_cpu_seconds": 10.642702,
+          "system_cpu_seconds": 1.111523,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 2.546038518,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 58.774853,
+      "first_setup_plus_response_components_s": 2.604813371,
+      "successful_response_p95_ms": 114.606066,
+      "successful_response_p99_ms": 467.676099,
+      "transit_response_p95_ms": 467.676099,
+      "transit_response_p99_ms": 467.676099,
+      "attempted_response_p50_ms": 61.470917,
+      "attempted_response_p95_ms": 114.606066,
+      "attempted_response_p99_ms": 467.676099,
+      "measured_batch_allocated_bytes": 739888544,
+      "attempted_quality_phase_p50_ms": 0.012398,
+      "attempted_quality_phase_p95_ms": 1.287383,
+      "attempted_quality_phase_p99_ms": 1.605419
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-csa_score_shared",
+      "run_id": "test-morning-native90-csa_score_shared",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 81.287537671,
+      "sampled_peak_group_rss_bytes": 1160744960,
+      "prep_status": "complete",
+      "prep_s": 1.594101932,
+      "load_s": 2.18239754,
+      "checker_prep_s": 1.548900514,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 35,
+      "valid_empty": 55,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 609.095192,
+      "successful_response_max_ms": 1294.108697,
+      "transit_response_median_ms": 665.984186,
+      "transit_response_max_ms": 1294.108697,
+      "attempted_response_max_ms": 1294.108697,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_score_shared/test-morning-native90-csa_score_shared/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 1133180,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 83.901001,
+      "process_system_cpu_s": 3.228584,
+      "algorithm": "csa_score_shared",
+      "prep_error": "<nil>",
+      "router_preparation_s": 1.594101932,
+      "router_preparation_allocated_bytes": 1053243168,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 533910352,
+          "total_alloc_bytes": 2315214408,
+          "num_gc": 18
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 688222208,
+          "user_cpu_seconds": 3.829147,
+          "system_cpu_seconds": 1.425223,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 1.548900514,
+      "checker_preparation_allocated_bytes": 1153912432,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 557189304,
+          "total_alloc_bytes": 3469127288,
+          "num_gc": 22
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1049501696,
+          "user_cpu_seconds": 5.206625,
+          "system_cpu_seconds": 2.475022,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 1.250232644,
+      "quality_preparation_allocated_bytes": 796517648,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 734032408,
+          "total_alloc_bytes": 4265645384,
+          "num_gc": 24
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1117753344,
+          "user_cpu_seconds": 6.509141,
+          "system_cpu_seconds": 2.872334,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 545050432,
+          "total_alloc_bytes": 10699588688,
+          "num_gc": 40
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1160376320,
+          "user_cpu_seconds": 83.900428,
+          "system_cpu_seconds": 3.1942,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 6.57563263,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 624.148551,
+      "first_setup_plus_response_components_s": 7.1997811810000005,
+      "successful_response_p95_ms": 930.719598,
+      "successful_response_p99_ms": 1294.108697,
+      "transit_response_p95_ms": 1172.923073,
+      "transit_response_p99_ms": 1294.108697,
+      "attempted_response_p50_ms": 609.095192,
+      "attempted_response_p95_ms": 930.719598,
+      "attempted_response_p99_ms": 1294.108697,
+      "measured_batch_allocated_bytes": 4809124744,
+      "attempted_quality_phase_p50_ms": 0.010926,
+      "attempted_quality_phase_p95_ms": 5.002439,
+      "attempted_quality_phase_p99_ms": 6.933346
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-csa_score_shared",
+      "run_id": "test-midday-native90-csa_score_shared",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 79.550100327,
+      "sampled_peak_group_rss_bytes": 1313443840,
+      "prep_status": "complete",
+      "prep_s": 1.512008025,
+      "load_s": 2.109464824,
+      "checker_prep_s": 1.070042001,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 37,
+      "valid_empty": 53,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 603.292272,
+      "successful_response_max_ms": 1511.548197,
+      "transit_response_median_ms": 644.494806,
+      "transit_response_max_ms": 1511.548197,
+      "attempted_response_max_ms": 1511.548197,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_score_shared/test-midday-native90-csa_score_shared/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 1289928,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 82.702482,
+      "process_system_cpu_s": 2.571808,
+      "algorithm": "csa_score_shared",
+      "prep_error": "<nil>",
+      "router_preparation_s": 1.512008025,
+      "router_preparation_allocated_bytes": 1055185880,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 535054952,
+          "total_alloc_bytes": 2321045192,
+          "num_gc": 17
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 789913600,
+          "user_cpu_seconds": 3.943797,
+          "system_cpu_seconds": 1.106825,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 1.070042001,
+      "checker_preparation_allocated_bytes": 1155747344,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 701631472,
+          "total_alloc_bytes": 3476792984,
+          "num_gc": 21
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 884023296,
+          "user_cpu_seconds": 5.158609,
+          "system_cpu_seconds": 1.5368140000000001,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 1.189512111,
+      "quality_preparation_allocated_bytes": 1414671560,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 664009800,
+          "total_alloc_bytes": 4891464992,
+          "num_gc": 25
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1090297856,
+          "user_cpu_seconds": 6.728871,
+          "system_cpu_seconds": 1.847497,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 726055328,
+          "total_alloc_bytes": 11210238760,
+          "num_gc": 40
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1320886272,
+          "user_cpu_seconds": 82.702482,
+          "system_cpu_seconds": 2.538318,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 5.881026961,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 598.113493,
+      "first_setup_plus_response_components_s": 6.4791404539999995,
+      "successful_response_p95_ms": 916.225534,
+      "successful_response_p99_ms": 1511.548197,
+      "transit_response_p95_ms": 1132.812616,
+      "transit_response_p99_ms": 1511.548197,
+      "attempted_response_p50_ms": 603.292272,
+      "attempted_response_p95_ms": 916.225534,
+      "attempted_response_p99_ms": 1511.548197,
+      "measured_batch_allocated_bytes": 4685279048,
+      "attempted_quality_phase_p50_ms": 0.010896,
+      "attempted_quality_phase_p95_ms": 5.499398,
+      "attempted_quality_phase_p99_ms": 8.645693
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-csa_score_shared",
+      "run_id": "test-evening-native90-csa_score_shared",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 80.047482057,
+      "sampled_peak_group_rss_bytes": 1293778944,
+      "prep_status": "complete",
+      "prep_s": 1.624351682,
+      "load_s": 2.208325801,
+      "checker_prep_s": 0.750980592,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 33,
+      "valid_empty": 57,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 609.853986,
+      "successful_response_max_ms": 1443.672763,
+      "transit_response_median_ms": 658.790756,
+      "transit_response_max_ms": 1443.672763,
+      "attempted_response_max_ms": 1443.672763,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_score_shared/test-evening-native90-csa_score_shared/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 1262980,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 82.888063,
+      "process_system_cpu_s": 2.7168669999999997,
+      "algorithm": "csa_score_shared",
+      "prep_error": "<nil>",
+      "router_preparation_s": 1.624351682,
+      "router_preparation_allocated_bytes": 1055339152,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 535260224,
+          "total_alloc_bytes": 2321668384,
+          "num_gc": 17
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 895574016,
+          "user_cpu_seconds": 3.9441230000000003,
+          "system_cpu_seconds": 1.3245879999999999,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 0.750980592,
+      "checker_preparation_allocated_bytes": 540912576,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 408632088,
+          "total_alloc_bytes": 2862581408,
+          "num_gc": 19
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 901111808,
+          "user_cpu_seconds": 4.804791,
+          "system_cpu_seconds": 1.366881,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 1.392248622,
+      "quality_preparation_allocated_bytes": 1414678448,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 642083824,
+          "total_alloc_bytes": 4277260304,
+          "num_gc": 23
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1258180608,
+          "user_cpu_seconds": 6.550491,
+          "system_cpu_seconds": 1.8629,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 645712848,
+          "total_alloc_bytes": 10551351512,
+          "num_gc": 38
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1293291520,
+          "user_cpu_seconds": 82.888063,
+          "system_cpu_seconds": 2.684356,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 5.975906697,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 604.29814,
+      "first_setup_plus_response_components_s": 6.580204837,
+      "successful_response_p95_ms": 976.091237,
+      "successful_response_p99_ms": 1443.672763,
+      "transit_response_p95_ms": 1180.128192,
+      "transit_response_p99_ms": 1443.672763,
+      "attempted_response_p50_ms": 609.853986,
+      "attempted_response_p95_ms": 976.091237,
+      "attempted_response_p99_ms": 1443.672763,
+      "measured_batch_allocated_bytes": 4639594632,
+      "attempted_quality_phase_p50_ms": 0.011247,
+      "attempted_quality_phase_p95_ms": 5.590618,
+      "attempted_quality_phase_p99_ms": 7.400109
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-csa_score_shared",
+      "run_id": "test-overnight-native90-csa_score_shared",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 24.453024513,
+      "sampled_peak_group_rss_bytes": 610963456,
+      "prep_status": "complete",
+      "prep_s": 0.636433535,
+      "load_s": 0.831688352,
+      "checker_prep_s": 0.39693474,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 16,
+      "valid_empty": 74,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 180.899659,
+      "successful_response_max_ms": 710.03003,
+      "transit_response_median_ms": 229.57058,
+      "transit_response_max_ms": 710.03003,
+      "attempted_response_max_ms": 710.03003,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-csa_score_shared/test-overnight-native90-csa_score_shared/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 596296,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 25.543423,
+      "process_system_cpu_s": 0.915603,
+      "algorithm": "csa_score_shared",
+      "prep_error": "<nil>",
+      "router_preparation_s": 0.636433535,
+      "router_preparation_allocated_bytes": 453009648,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 240551224,
+          "total_alloc_bytes": 1016661504,
+          "num_gc": 17
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 363921408,
+          "user_cpu_seconds": 1.529353,
+          "system_cpu_seconds": 0.463206,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 0.39693474,
+      "checker_preparation_allocated_bytes": 503225312,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 193537656,
+          "total_alloc_bytes": 1519887264,
+          "num_gc": 21
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 419475456,
+          "user_cpu_seconds": 2.01197,
+          "system_cpu_seconds": 0.589158,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 0.426079118,
+      "quality_preparation_allocated_bytes": 615040976,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 373362416,
+          "total_alloc_bytes": 2134928688,
+          "num_gc": 24
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 517488640,
+          "user_cpu_seconds": 2.541874,
+          "system_cpu_seconds": 0.664013,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 304127784,
+          "total_alloc_bytes": 4541913704,
+          "num_gc": 37
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 610607104,
+          "user_cpu_seconds": 25.543423,
+          "system_cpu_seconds": 0.895856,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 2.291135745,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 188.574555,
+      "first_setup_plus_response_components_s": 2.4797103000000003,
+      "successful_response_p95_ms": 267.615027,
+      "successful_response_p99_ms": 710.03003,
+      "transit_response_p95_ms": 710.03003,
+      "transit_response_p99_ms": 710.03003,
+      "attempted_response_p50_ms": 180.899659,
+      "attempted_response_p95_ms": 267.615027,
+      "attempted_response_p99_ms": 710.03003,
+      "measured_batch_allocated_bytes": 1690067920,
+      "attempted_quality_phase_p50_ms": 0.010645,
+      "attempted_quality_phase_p95_ms": 1.947153,
+      "attempted_quality_phase_p99_ms": 2.653662
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-anchor-raptor-early-dense",
+      "run_id": "test-morning-native90-anchor-raptor-early-dense",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 10.529715663,
+      "sampled_peak_group_rss_bytes": 1336406016,
+      "prep_status": "complete",
+      "prep_s": 2.150901551,
+      "load_s": 2.25515032,
+      "checker_prep_s": 1.615331786,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 35,
+      "valid_empty": 55,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 29.831797,
+      "successful_response_max_ms": 93.570754,
+      "transit_response_median_ms": 28.380183,
+      "transit_response_max_ms": 75.529741,
+      "attempted_response_max_ms": 93.570754,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-anchor-raptor-early-dense/test-morning-native90-anchor-raptor-early-dense/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 1305004,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 11.059896,
+      "process_system_cpu_s": 2.888727,
+      "algorithm": "raptor_early",
+      "prep_error": "<nil>",
+      "router_preparation_s": 2.150901551,
+      "router_preparation_allocated_bytes": 1672052576,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 583662808,
+          "total_alloc_bytes": 2934047440,
+          "num_gc": 20
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 853102592,
+          "user_cpu_seconds": 4.463104,
+          "system_cpu_seconds": 1.810053,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 1.615331786,
+      "checker_preparation_allocated_bytes": 1153848440,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 653277408,
+          "total_alloc_bytes": 4087896328,
+          "num_gc": 24
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1279918080,
+          "user_cpu_seconds": 6.149185,
+          "system_cpu_seconds": 2.727945,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 1.13736127,
+      "quality_preparation_allocated_bytes": 796517648,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 764123816,
+          "total_alloc_bytes": 4884414424,
+          "num_gc": 26
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1319010304,
+          "user_cpu_seconds": 7.537095,
+          "system_cpu_seconds": 2.798041,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 810381400,
+          "total_alloc_bytes": 5974448392,
+          "num_gc": 28
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1336324096,
+          "user_cpu_seconds": 11.059896,
+          "system_cpu_seconds": 2.853231,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 7.158744926999999,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 1.899257,
+      "first_setup_plus_response_components_s": 7.160644183999999,
+      "successful_response_p95_ms": 73.934795,
+      "successful_response_p99_ms": 93.570754,
+      "transit_response_p95_ms": 64.523308,
+      "transit_response_p99_ms": 75.529741,
+      "attempted_response_p50_ms": 29.831797,
+      "attempted_response_p95_ms": 73.934795,
+      "attempted_response_p99_ms": 93.570754,
+      "measured_batch_allocated_bytes": 1063053272,
+      "attempted_quality_phase_p50_ms": 0.029354,
+      "attempted_quality_phase_p95_ms": 0.869358,
+      "attempted_quality_phase_p99_ms": 1.283898
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-anchor-raptor-early-dense",
+      "run_id": "test-midday-native90-anchor-raptor-early-dense",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 10.182900412,
+      "sampled_peak_group_rss_bytes": 1364738048,
+      "prep_status": "complete",
+      "prep_s": 2.10453625,
+      "load_s": 2.352905463,
+      "checker_prep_s": 1.291731359,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 37,
+      "valid_empty": 53,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 31.06558,
+      "successful_response_max_ms": 87.941946,
+      "transit_response_median_ms": 30.573527,
+      "transit_response_max_ms": 77.559783,
+      "attempted_response_max_ms": 87.941946,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-anchor-raptor-early-dense/test-midday-native90-anchor-raptor-early-dense/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 1333476,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 10.849124,
+      "process_system_cpu_s": 2.676028,
+      "algorithm": "raptor_early",
+      "prep_error": "<nil>",
+      "router_preparation_s": 2.10453625,
+      "router_preparation_allocated_bytes": 1676073440,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 385238344,
+          "total_alloc_bytes": 2942028000,
+          "num_gc": 20
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 952324096,
+          "user_cpu_seconds": 4.576888,
+          "system_cpu_seconds": 1.737997,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 1.291731359,
+      "checker_preparation_allocated_bytes": 1155811720,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 654841464,
+          "total_alloc_bytes": 4097840168,
+          "num_gc": 24
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1255002112,
+          "user_cpu_seconds": 5.989617,
+          "system_cpu_seconds": 2.367842,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 1.128161673,
+      "quality_preparation_allocated_bytes": 799380880,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 763690432,
+          "total_alloc_bytes": 4897221496,
+          "num_gc": 26
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1328250880,
+          "user_cpu_seconds": 7.334077,
+          "system_cpu_seconds": 2.532139,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 662017424,
+          "total_alloc_bytes": 5951947904,
+          "num_gc": 28
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1365479424,
+          "user_cpu_seconds": 10.849124,
+          "system_cpu_seconds": 2.638278,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 6.877334745,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 1.806816,
+      "first_setup_plus_response_components_s": 6.879141561,
+      "successful_response_p95_ms": 72.202817,
+      "successful_response_p99_ms": 87.941946,
+      "transit_response_p95_ms": 59.507183,
+      "transit_response_p99_ms": 77.559783,
+      "attempted_response_p50_ms": 31.06558,
+      "attempted_response_p95_ms": 72.202817,
+      "attempted_response_p99_ms": 87.941946,
+      "measured_batch_allocated_bytes": 1027920296,
+      "attempted_quality_phase_p50_ms": 0.030735,
+      "attempted_quality_phase_p95_ms": 0.934204,
+      "attempted_quality_phase_p99_ms": 1.078185
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-anchor-raptor-early-dense",
+      "run_id": "test-evening-native90-anchor-raptor-early-dense",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 10.076412731,
+      "sampled_peak_group_rss_bytes": 1289256960,
+      "prep_status": "complete",
+      "prep_s": 2.051384183,
+      "load_s": 2.217432665,
+      "checker_prep_s": 1.388473716,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 33,
+      "valid_empty": 57,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 28.630178,
+      "successful_response_max_ms": 74.007208,
+      "transit_response_median_ms": 26.642988,
+      "transit_response_max_ms": 65.54713,
+      "attempted_response_max_ms": 74.007208,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-anchor-raptor-early-dense/test-evening-native90-anchor-raptor-early-dense/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 1262616,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 10.815095,
+      "process_system_cpu_s": 2.515752,
+      "algorithm": "raptor_early",
+      "prep_error": "<nil>",
+      "router_preparation_s": 2.051384183,
+      "router_preparation_allocated_bytes": 1573734616,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 506400920,
+          "total_alloc_bytes": 2840080760,
+          "num_gc": 19
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 906231808,
+          "user_cpu_seconds": 4.416451,
+          "system_cpu_seconds": 1.555644,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 1.388473716,
+      "checker_preparation_allocated_bytes": 1155884368,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 532197488,
+          "total_alloc_bytes": 3995965576,
+          "num_gc": 23
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1255677952,
+          "user_cpu_seconds": 5.827098,
+          "system_cpu_seconds": 2.140203,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 1.306572513,
+      "quality_preparation_allocated_bytes": 1414924272,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 798325000,
+          "total_alloc_bytes": 5410890296,
+          "num_gc": 26
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1292918784,
+          "user_cpu_seconds": 7.536299,
+          "system_cpu_seconds": 2.36097,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 875838072,
+          "total_alloc_bytes": 6466278192,
+          "num_gc": 28
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1292918784,
+          "user_cpu_seconds": 10.815095,
+          "system_cpu_seconds": 2.435749,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 6.963863076999999,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 1.913413,
+      "first_setup_plus_response_components_s": 6.965776489999999,
+      "successful_response_p95_ms": 65.54713,
+      "successful_response_p99_ms": 74.007208,
+      "transit_response_p95_ms": 56.161383,
+      "transit_response_p99_ms": 65.54713,
+      "attempted_response_p50_ms": 28.630178,
+      "attempted_response_p95_ms": 65.54713,
+      "attempted_response_p99_ms": 74.007208,
+      "measured_batch_allocated_bytes": 1033333104,
+      "attempted_quality_phase_p50_ms": 0.02737,
+      "attempted_quality_phase_p95_ms": 0.711075,
+      "attempted_quality_phase_p99_ms": 1.102481
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-anchor-raptor-early-dense",
+      "run_id": "test-overnight-native90-anchor-raptor-early-dense",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 3.470593877,
+      "sampled_peak_group_rss_bytes": 614526976,
+      "prep_status": "complete",
+      "prep_s": 0.883387145,
+      "load_s": 0.841833938,
+      "checker_prep_s": 0.403662535,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 16,
+      "valid_empty": 74,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 1.279811,
+      "successful_response_max_ms": 37.266588,
+      "transit_response_median_ms": 14.362441,
+      "transit_response_max_ms": 33.441876,
+      "attempted_response_max_ms": 37.266588,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-anchor-raptor-early-dense/test-overnight-native90-anchor-raptor-early-dense/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 599768,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 3.937411,
+      "process_system_cpu_s": 0.659198,
+      "algorithm": "raptor_early",
+      "prep_error": "<nil>",
+      "router_preparation_s": 0.883387145,
+      "router_preparation_allocated_bytes": 742850176,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 230464856,
+          "total_alloc_bytes": 1306519888,
+          "num_gc": 20
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 381915136,
+          "user_cpu_seconds": 1.929579,
+          "system_cpu_seconds": 0.369234,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 0.403662535,
+      "checker_preparation_allocated_bytes": 503219936,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 381668496,
+          "total_alloc_bytes": 1809740272,
+          "num_gc": 23
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 504717312,
+          "user_cpu_seconds": 2.447152,
+          "system_cpu_seconds": 0.462759,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 0.494531084,
+      "quality_preparation_allocated_bytes": 615040024,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 408952248,
+          "total_alloc_bytes": 2424780744,
+          "num_gc": 26
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 612327424,
+          "user_cpu_seconds": 3.13365,
+          "system_cpu_seconds": 0.592006,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 486183064,
+          "total_alloc_bytes": 2768873000,
+          "num_gc": 27
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 614162432,
+          "user_cpu_seconds": 3.937411,
+          "system_cpu_seconds": 0.639875,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 2.623414702,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 0.140567,
+      "first_setup_plus_response_components_s": 2.6235552689999997,
+      "successful_response_p95_ms": 31.981154,
+      "successful_response_p99_ms": 37.266588,
+      "transit_response_p95_ms": 33.441876,
+      "transit_response_p99_ms": 33.441876,
+      "attempted_response_p50_ms": 1.279811,
+      "attempted_response_p95_ms": 31.981154,
+      "attempted_response_p99_ms": 37.266588,
+      "measured_batch_allocated_bytes": 332052088,
+      "attempted_quality_phase_p50_ms": 0.008903,
+      "attempted_quality_phase_p95_ms": 0.202457,
+      "attempted_quality_phase_p99_ms": 0.403443
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-anchor-ultra-control-dense",
+      "run_id": "test-morning-native90-anchor-ultra-control-dense",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 8.357167704,
+      "sampled_peak_group_rss_bytes": 1335103488,
+      "prep_status": "complete",
+      "prep_s": 2.041008419,
+      "load_s": 2.121109833,
+      "checker_prep_s": 1.194760058,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 35,
+      "valid_empty": 55,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 13.652489,
+      "successful_response_max_ms": 51.31232,
+      "transit_response_median_ms": 13.508298,
+      "transit_response_max_ms": 39.790793,
+      "attempted_response_max_ms": 51.31232,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-anchor-ultra-control-dense/test-morning-native90-anchor-ultra-control-dense/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 1303744,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 9.155766,
+      "process_system_cpu_s": 2.26402,
+      "algorithm": "ultra_transfer_complete_capped",
+      "prep_error": "<nil>",
+      "router_preparation_s": 2.041008419,
+      "router_preparation_allocated_bytes": 1624406000,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 549884288,
+          "total_alloc_bytes": 2886402688,
+          "num_gc": 19
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 912621568,
+          "user_cpu_seconds": 4.349051,
+          "system_cpu_seconds": 1.426557,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 1.194760058,
+      "checker_preparation_allocated_bytes": 1153912912,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 667135376,
+          "total_alloc_bytes": 4040316920,
+          "num_gc": 23
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1206534144,
+          "user_cpu_seconds": 5.795541,
+          "system_cpu_seconds": 1.875804,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 1.29223523,
+      "quality_preparation_allocated_bytes": 1411808680,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 819140888,
+          "total_alloc_bytes": 5452126048,
+          "num_gc": 26
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1329963008,
+          "user_cpu_seconds": 7.476751,
+          "system_cpu_seconds": 2.189457,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 764655280,
+          "total_alloc_bytes": 5974321664,
+          "num_gc": 27
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1335033856,
+          "user_cpu_seconds": 9.155766,
+          "system_cpu_seconds": 2.229223,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 6.64911354,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 1.273532,
+      "first_setup_plus_response_components_s": 6.650387072,
+      "successful_response_p95_ms": 35.4757,
+      "successful_response_p99_ms": 51.31232,
+      "transit_response_p95_ms": 29.057956,
+      "transit_response_p99_ms": 39.790793,
+      "attempted_response_p50_ms": 13.652489,
+      "attempted_response_p95_ms": 35.4757,
+      "attempted_response_p99_ms": 51.31232,
+      "measured_batch_allocated_bytes": 494599184,
+      "attempted_quality_phase_p50_ms": 0.04048,
+      "attempted_quality_phase_p95_ms": 0.774819,
+      "attempted_quality_phase_p99_ms": 1.13563
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-anchor-ultra-control-dense",
+      "run_id": "test-midday-native90-anchor-ultra-control-dense",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 8.186054491,
+      "sampled_peak_group_rss_bytes": 1353641984,
+      "prep_status": "complete",
+      "prep_s": 2.041941056,
+      "load_s": 2.127425242,
+      "checker_prep_s": 0.992755957,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 37,
+      "valid_empty": 53,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 13.834015,
+      "successful_response_max_ms": 42.329611,
+      "transit_response_median_ms": 13.550113,
+      "transit_response_max_ms": 38.00897,
+      "attempted_response_max_ms": 42.329611,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-anchor-ultra-control-dense/test-midday-native90-anchor-ultra-control-dense/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 1329312,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 8.929691,
+      "process_system_cpu_s": 2.200306,
+      "algorithm": "ultra_transfer_complete_capped",
+      "prep_error": "<nil>",
+      "router_preparation_s": 2.041941056,
+      "router_preparation_allocated_bytes": 1731861056,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 556062720,
+          "total_alloc_bytes": 2997745904,
+          "num_gc": 20
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 992714752,
+          "user_cpu_seconds": 4.430073,
+          "system_cpu_seconds": 1.433826,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 0.992755957,
+      "checker_preparation_allocated_bytes": 1155747536,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 890981736,
+          "total_alloc_bytes": 4153494760,
+          "num_gc": 23
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1155432448,
+          "user_cpu_seconds": 5.643037,
+          "system_cpu_seconds": 1.7218179999999998,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 1.356655558,
+      "quality_preparation_allocated_bytes": 1414352552,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 828180704,
+          "total_alloc_bytes": 5567847760,
+          "num_gc": 26
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1355448320,
+          "user_cpu_seconds": 7.3271,
+          "system_cpu_seconds": 2.138675,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 791291904,
+          "total_alloc_bytes": 6074938248,
+          "num_gc": 27
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1361215488,
+          "user_cpu_seconds": 8.929691,
+          "system_cpu_seconds": 2.166164,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 6.518777813,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 1.656495,
+      "first_setup_plus_response_components_s": 6.520434308,
+      "successful_response_p95_ms": 36.110069,
+      "successful_response_p99_ms": 42.329611,
+      "transit_response_p95_ms": 27.038734,
+      "transit_response_p99_ms": 38.00897,
+      "attempted_response_p50_ms": 13.834015,
+      "attempted_response_p95_ms": 36.110069,
+      "attempted_response_p99_ms": 42.329611,
+      "measured_batch_allocated_bytes": 479667120,
+      "attempted_quality_phase_p50_ms": 0.043634,
+      "attempted_quality_phase_p95_ms": 0.713028,
+      "attempted_quality_phase_p99_ms": 1.151463
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-anchor-ultra-control-dense",
+      "run_id": "test-evening-native90-anchor-ultra-control-dense",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 7.92115039,
+      "sampled_peak_group_rss_bytes": 1326440448,
+      "prep_status": "complete",
+      "prep_s": 2.021873123,
+      "load_s": 2.003048993,
+      "checker_prep_s": 0.945625096,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 33,
+      "valid_empty": 57,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 13.566625,
+      "successful_response_max_ms": 37.91552,
+      "transit_response_median_ms": 12.966437,
+      "transit_response_max_ms": 32.659961,
+      "attempted_response_max_ms": 37.91552,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-anchor-ultra-control-dense/test-evening-native90-anchor-ultra-control-dense/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 1296156,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 8.818778,
+      "process_system_cpu_s": 1.698728,
+      "algorithm": "ultra_transfer_complete_capped",
+      "prep_error": "<nil>",
+      "router_preparation_s": 2.021873123,
+      "router_preparation_allocated_bytes": 1629427520,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 541003632,
+          "total_alloc_bytes": 2895780576,
+          "num_gc": 20
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 935170048,
+          "user_cpu_seconds": 4.407324,
+          "system_cpu_seconds": 1.193074,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 0.945625096,
+      "checker_preparation_allocated_bytes": 1156139256,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 559072912,
+          "total_alloc_bytes": 4051921152,
+          "num_gc": 24
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1269211136,
+          "user_cpu_seconds": 5.72969,
+          "system_cpu_seconds": 1.305976,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 1.242778801,
+      "quality_preparation_allocated_bytes": 1414486768,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 894096872,
+          "total_alloc_bytes": 5466408368,
+          "num_gc": 27
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1320407040,
+          "user_cpu_seconds": 7.202842,
+          "system_cpu_seconds": 1.6028609999999999,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 928226648,
+          "total_alloc_bytes": 5976356032,
+          "num_gc": 28
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1327263744,
+          "user_cpu_seconds": 8.818778,
+          "system_cpu_seconds": 1.668129,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 6.2133260130000005,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 1.396633,
+      "first_setup_plus_response_components_s": 6.214722646,
+      "successful_response_p95_ms": 34.567919,
+      "successful_response_p99_ms": 37.91552,
+      "transit_response_p95_ms": 26.892252,
+      "transit_response_p99_ms": 32.659961,
+      "attempted_response_p50_ms": 13.566625,
+      "attempted_response_p95_ms": 34.567919,
+      "attempted_response_p99_ms": 37.91552,
+      "measured_batch_allocated_bytes": 487301216,
+      "attempted_quality_phase_p50_ms": 0.043724,
+      "attempted_quality_phase_p95_ms": 0.70719,
+      "attempted_quality_phase_p99_ms": 1.127749
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-anchor-ultra-control-dense",
+      "run_id": "test-overnight-native90-anchor-ultra-control-dense",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 3.10724804,
+      "sampled_peak_group_rss_bytes": 631668736,
+      "prep_status": "complete",
+      "prep_s": 0.860843176,
+      "load_s": 0.873701361,
+      "checker_prep_s": 0.500507359,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 16,
+      "valid_empty": 74,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 1.10228,
+      "successful_response_max_ms": 18.936491,
+      "transit_response_median_ms": 6.083071,
+      "transit_response_max_ms": 14.991688,
+      "attempted_response_max_ms": 18.936491,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-anchor-ultra-control-dense/test-overnight-native90-anchor-ultra-control-dense/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 616740,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 3.3769,
+      "process_system_cpu_s": 0.7655489999999999,
+      "algorithm": "ultra_transfer_complete_capped",
+      "prep_error": "<nil>",
+      "router_preparation_s": 0.860843176,
+      "router_preparation_allocated_bytes": 901179696,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 210037432,
+          "total_alloc_bytes": 1464856632,
+          "num_gc": 20
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 363110400,
+          "user_cpu_seconds": 1.8895119999999999,
+          "system_cpu_seconds": 0.446771,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 0.500507359,
+      "checker_preparation_allocated_bytes": 503212544,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 395420920,
+          "total_alloc_bytes": 1968070496,
+          "num_gc": 23
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 581472256,
+          "user_cpu_seconds": 2.485888,
+          "system_cpu_seconds": 0.662863,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 0.391552972,
+      "quality_preparation_allocated_bytes": 363535632,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 507466568,
+          "total_alloc_bytes": 2331606576,
+          "num_gc": 24
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 631148544,
+          "user_cpu_seconds": 2.941636,
+          "system_cpu_seconds": 0.727203,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 423413816,
+          "total_alloc_bytes": 2514261432,
+          "num_gc": 25
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 631541760,
+          "user_cpu_seconds": 3.3769,
+          "system_cpu_seconds": 0.749085,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 2.6266048680000003,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 0.147266,
+      "first_setup_plus_response_components_s": 2.626752134,
+      "successful_response_p95_ms": 14.991688,
+      "successful_response_p99_ms": 18.936491,
+      "transit_response_p95_ms": 14.991688,
+      "transit_response_p99_ms": 14.991688,
+      "attempted_response_p50_ms": 1.10228,
+      "attempted_response_p95_ms": 14.991688,
+      "attempted_response_p99_ms": 18.936491,
+      "measured_batch_allocated_bytes": 170088072,
+      "attempted_quality_phase_p50_ms": 0.011167,
+      "attempted_quality_phase_p95_ms": 0.247654,
+      "attempted_quality_phase_p99_ms": 0.432836
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-anchor-mc-early-dense-labels500000-finite20",
+      "run_id": "test-morning-native90-anchor-mc-early-dense-labels500000-finite20",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 10.377659481,
+      "sampled_peak_group_rss_bytes": 1341853696,
+      "prep_status": "complete",
+      "prep_s": 1.937645722,
+      "load_s": 2.117490375,
+      "checker_prep_s": 1.065744041,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 35,
+      "valid_empty": 55,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 38.427247,
+      "successful_response_max_ms": 111.966868,
+      "transit_response_median_ms": 35.29317,
+      "transit_response_max_ms": 111.966868,
+      "attempted_response_max_ms": 111.966868,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-anchor-mc-early-dense-labels500000-finite20/test-morning-native90-anchor-mc-early-dense-labels500000-finite20/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 1310392,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 11.395424,
+      "process_system_cpu_s": 1.938038,
+      "algorithm": "mc_raptor_early",
+      "prep_error": "<nil>",
+      "router_preparation_s": 1.937645722,
+      "router_preparation_allocated_bytes": 1569098960,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 482610568,
+          "total_alloc_bytes": 2831131664,
+          "num_gc": 19
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 908808192,
+          "user_cpu_seconds": 4.154458,
+          "system_cpu_seconds": 1.4735800000000001,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 1.065744041,
+      "checker_preparation_allocated_bytes": 1153848320,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 796432496,
+          "total_alloc_bytes": 3984980432,
+          "num_gc": 22
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1237495808,
+          "user_cpu_seconds": 5.412939,
+          "system_cpu_seconds": 1.78159,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 1.023530059,
+      "quality_preparation_allocated_bytes": 1411743792,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 1252263752,
+          "total_alloc_bytes": 5396724672,
+          "num_gc": 24
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1332776960,
+          "user_cpu_seconds": 6.75846,
+          "system_cpu_seconds": 1.8200150000000002,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 929638336,
+          "total_alloc_bytes": 6658977736,
+          "num_gc": 27
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1341841408,
+          "user_cpu_seconds": 11.395123,
+          "system_cpu_seconds": 1.906758,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 6.144410197,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 2.386788,
+      "first_setup_plus_response_components_s": 6.146796985,
+      "successful_response_p95_ms": 91.323854,
+      "successful_response_p99_ms": 111.966868,
+      "transit_response_p95_ms": 80.443571,
+      "transit_response_p99_ms": 111.966868,
+      "attempted_response_p50_ms": 38.427247,
+      "attempted_response_p95_ms": 91.323854,
+      "attempted_response_p99_ms": 111.966868,
+      "measured_batch_allocated_bytes": 1198628656,
+      "attempted_quality_phase_p50_ms": 0.042492,
+      "attempted_quality_phase_p95_ms": 2.091214,
+      "attempted_quality_phase_p99_ms": 3.448079
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-anchor-mc-early-dense-labels500000-finite20",
+      "run_id": "test-midday-native90-anchor-mc-early-dense-labels500000-finite20",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 10.539825407,
+      "sampled_peak_group_rss_bytes": 1377218560,
+      "prep_status": "complete",
+      "prep_s": 1.766258829,
+      "load_s": 2.118380816,
+      "checker_prep_s": 1.227477371,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 37,
+      "valid_empty": 53,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 39.812427,
+      "successful_response_max_ms": 95.088095,
+      "transit_response_median_ms": 39.229521,
+      "transit_response_max_ms": 93.343523,
+      "attempted_response_max_ms": 95.088095,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-anchor-mc-early-dense-labels500000-finite20/test-midday-native90-anchor-mc-early-dense-labels500000-finite20/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 1344656,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 11.720278,
+      "process_system_cpu_s": 2.053709,
+      "algorithm": "mc_raptor_early",
+      "prep_error": "<nil>",
+      "router_preparation_s": 1.766258829,
+      "router_preparation_allocated_bytes": 1573567176,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 503168648,
+          "total_alloc_bytes": 2839559832,
+          "num_gc": 19
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 910614528,
+          "user_cpu_seconds": 4.237295,
+          "system_cpu_seconds": 1.048674,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 1.227477371,
+      "checker_preparation_allocated_bytes": 1155811720,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 654855160,
+          "total_alloc_bytes": 3995372000,
+          "num_gc": 23
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1248813056,
+          "user_cpu_seconds": 5.645738,
+          "system_cpu_seconds": 1.657008,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 1.271425632,
+      "quality_preparation_allocated_bytes": 1414862760,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 814240000,
+          "total_alloc_bytes": 5410235208,
+          "num_gc": 26
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1372205056,
+          "user_cpu_seconds": 7.238226,
+          "system_cpu_seconds": 1.936954,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 640747448,
+          "total_alloc_bytes": 6633586872,
+          "num_gc": 29
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1376927744,
+          "user_cpu_seconds": 11.720278,
+          "system_cpu_seconds": 2.025476,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 6.383542648000001,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 2.548883,
+      "first_setup_plus_response_components_s": 6.386091531000001,
+      "successful_response_p95_ms": 92.741734,
+      "successful_response_p99_ms": 95.088095,
+      "transit_response_p95_ms": 73.775877,
+      "transit_response_p99_ms": 93.343523,
+      "attempted_response_p50_ms": 39.812427,
+      "attempted_response_p95_ms": 92.741734,
+      "attempted_response_p99_ms": 95.088095,
+      "measured_batch_allocated_bytes": 1161556544,
+      "attempted_quality_phase_p50_ms": 0.043734,
+      "attempted_quality_phase_p95_ms": 1.756923,
+      "attempted_quality_phase_p99_ms": 3.26529
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-anchor-mc-early-dense-labels500000-finite20",
+      "run_id": "test-evening-native90-anchor-mc-early-dense-labels500000-finite20",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 10.901703809,
+      "sampled_peak_group_rss_bytes": 1478389760,
+      "prep_status": "complete",
+      "prep_s": 1.698425451,
+      "load_s": 2.11159527,
+      "checker_prep_s": 1.236623575,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 33,
+      "valid_empty": 57,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 39.301022,
+      "successful_response_max_ms": 129.799337,
+      "transit_response_median_ms": 39.301022,
+      "transit_response_max_ms": 118.130976,
+      "attempted_response_max_ms": 129.799337,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-anchor-mc-early-dense-labels500000-finite20/test-evening-native90-anchor-mc-early-dense-labels500000-finite20/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 1443896,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 11.930966,
+      "process_system_cpu_s": 2.252894,
+      "algorithm": "mc_raptor_early",
+      "prep_error": "<nil>",
+      "router_preparation_s": 1.698425451,
+      "router_preparation_allocated_bytes": 1778723008,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 606252984,
+          "total_alloc_bytes": 3045101656,
+          "num_gc": 21
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 938844160,
+          "user_cpu_seconds": 4.165804,
+          "system_cpu_seconds": 0.946221,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 1.236623575,
+      "checker_preparation_allocated_bytes": 1155884480,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 654999496,
+          "total_alloc_bytes": 4200986584,
+          "num_gc": 25
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1180487680,
+          "user_cpu_seconds": 5.539989,
+          "system_cpu_seconds": 1.535007,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 1.436410474,
+      "quality_preparation_allocated_bytes": 1414422520,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 1255105680,
+          "total_alloc_bytes": 5615409552,
+          "num_gc": 27
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1477894144,
+          "user_cpu_seconds": 7.065199,
+          "system_cpu_seconds": 2.062115,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 862900960,
+          "total_alloc_bytes": 6844511096,
+          "num_gc": 30
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 1478549504,
+          "user_cpu_seconds": 11.930966,
+          "system_cpu_seconds": 2.215197,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 6.483054770000001,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 2.711376,
+      "first_setup_plus_response_components_s": 6.4857661460000005,
+      "successful_response_p95_ms": 98.967741,
+      "successful_response_p99_ms": 129.799337,
+      "transit_response_p95_ms": 86.271782,
+      "transit_response_p99_ms": 118.130976,
+      "attempted_response_p50_ms": 39.301022,
+      "attempted_response_p95_ms": 98.967741,
+      "attempted_response_p99_ms": 129.799337,
+      "measured_batch_allocated_bytes": 1167175248,
+      "attempted_quality_phase_p50_ms": 0.044696,
+      "attempted_quality_phase_p95_ms": 1.888897,
+      "attempted_quality_phase_p99_ms": 2.908195
+    },
+    {
+      "declared_offered_queries": 90,
+      "campaign": "out-native90-anchor-mc-early-dense-labels500000-finite20",
+      "run_id": "test-overnight-native90-anchor-mc-early-dense-labels500000-finite20",
+      "offered_queries_per_pass": 90,
+      "measured_rows": 90,
+      "process_ok": true,
+      "process_wall_s": 3.639484531,
+      "sampled_peak_group_rss_bytes": 584962048,
+      "prep_status": "complete",
+      "prep_s": 0.863302529,
+      "load_s": 0.871654469,
+      "checker_prep_s": 0.445962721,
+      "attempted": 90,
+      "not_run": 0,
+      "complete": 90,
+      "transit": 16,
+      "valid_empty": 74,
+      "statuses": {
+        "complete": 90
+      },
+      "successful_response_median_ms": 1.817281,
+      "successful_response_max_ms": 55.975891,
+      "transit_response_median_ms": 18.535837,
+      "transit_response_max_ms": 51.644324,
+      "attempted_response_max_ms": 55.975891,
+      "forced_rows_excluded": 90,
+      "warmup_rows_excluded": 0,
+      "summary": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-native90-anchor-mc-early-dense-labels500000-finite20/test-overnight-native90-anchor-mc-early-dense-labels500000-finite20/artifact/summary.json",
+      "wait4_ru_maxrss_kib": 570868,
+      "wait4_ru_maxrss_note": "Linux wait4 maximum RSS, not summed process-group memory and not a hard cap.",
+      "process_user_cpu_s": 4.168863,
+      "process_system_cpu_s": 0.605009,
+      "algorithm": "mc_raptor_early",
+      "prep_error": "<nil>",
+      "router_preparation_s": 0.863302529,
+      "router_preparation_allocated_bytes": 948046608,
+      "router_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 141250376,
+          "total_alloc_bytes": 1511753616,
+          "num_gc": 23
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 342736896,
+          "user_cpu_seconds": 2.010186,
+          "system_cpu_seconds": 0.416966,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "checker_preparation_s": 0.445962721,
+      "checker_preparation_allocated_bytes": 503225312,
+      "checker_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 258384920,
+          "total_alloc_bytes": 2014979376,
+          "num_gc": 26
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 529178624,
+          "user_cpu_seconds": 2.542037,
+          "system_cpu_seconds": 0.524704,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "quality_preparation_s": 0.450398967,
+      "quality_preparation_allocated_bytes": 615040944,
+      "quality_preparation_resources_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 386841480,
+          "total_alloc_bytes": 2630020768,
+          "num_gc": 29
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 566247424,
+          "user_cpu_seconds": 3.156534,
+          "system_cpu_seconds": 0.549645,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resources_final_cumulative": {
+        "runtime_memory": {
+          "heap_alloc_bytes": 505740032,
+          "total_alloc_bytes": 3027178640,
+          "num_gc": 30
+        },
+        "process": {
+          "available": true,
+          "max_rss_bytes": 584568832,
+          "user_cpu_seconds": 4.168863,
+          "system_cpu_seconds": 0.587123,
+          "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+        }
+      },
+      "resource_accounting": "Preparation allocation deltas and time phases separate; cumulative heap/RSS snapshots overlap and must not be summed. wait4ru_maxrss leader wholeprocess distinct from sampled summedprocessgroupRSS.",
+      "explicit_startup_phase_sum_s": 2.631318686,
+      "startup_sum_scope": "Sum of separately timed parsing/router/checker/quality-index phases only; excludes process launch, prelaunch hashing, uninstrumented gaps and transport/artifact I/O. Not complete process-cold first-byte latency.",
+      "first_measured_status": "complete",
+      "first_measured_response_ms": 0.184752,
+      "first_setup_plus_response_components_s": 2.631503438,
+      "successful_response_p95_ms": 43.319847,
+      "successful_response_p99_ms": 55.975891,
+      "transit_response_p95_ms": 51.644324,
+      "transit_response_p99_ms": 51.644324,
+      "attempted_response_p50_ms": 1.817281,
+      "attempted_response_p95_ms": 43.319847,
+      "attempted_response_p99_ms": 55.975891,
+      "measured_batch_allocated_bytes": 369868344,
+      "attempted_quality_phase_p50_ms": 0.017766,
+      "attempted_quality_phase_p95_ms": 0.444122,
+      "attempted_quality_phase_p99_ms": 2.18344
+    }
+  ],
+  "offered": 2520,
+  "complete": 2520,
+  "replication_rows_separate_not_new_demand": [],
+  "scope": "ALL90 registered screen requests/window,30unorderedparentODclusters,3departures, fourwindows, nooutcomefilter. Nativeidentitystrictk10 arrival/score versus2D/3Dpointanchors, not equivalentwork orprimary450qualification. Batch1 sharedcompatibility not batchinggain. Failureszero deliveredeligible coverage andnull regret; partialwitnesses diagnostic only.",
+  "topk_qualification": "csa-optimization-deliverable/INDEPENDENT_REVIEW.md plus exacttiny exhaustive k1/3/5/10tests; largeeval doesnotcertify identitytopk completeness."
+}

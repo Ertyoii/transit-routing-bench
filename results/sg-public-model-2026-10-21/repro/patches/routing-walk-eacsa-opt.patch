@@ -1,0 +1,1477 @@
+diff --git a/eacsa/dense_test.go b/eacsa/dense_test.go
+new file mode 100644
+index 0000000000000000000000000000000000000000..8cb9d4770e6850d85b5f93be634dcfc08faf3f24
+--- /dev/null
++++ b/eacsa/dense_test.go
+@@ -0,0 +1,219 @@
++package eacsa
++
++import (
++	"context"
++	"fmt"
++	"math/rand/v2"
++	"reflect"
++	"slices"
++	"sync"
++	"testing"
++
++	"github.com/ertyoii/transit-routing-go/model"
++)
++
++func denseFixture(seed uint64) (model.Dataset, model.Query) {
++	r := rand.New(rand.NewPCG(seed, 4171))
++	d := model.Dataset{SchemaVersion: model.SchemaVersion, ID: "dense-eacsa", TimeZone: "Asia/Singapore", ServiceDate: "2026-10-16"}
++	for _, id := range []string{"Z", "P", "A", "B", "C", "D", "E"} {
++		s := model.Stop{ID: id, Accessible: model.Yes}
++		if id == "P" {
++			s.LocationType = 1
++		}
++		if id == "B" {
++			s.ParentStation = "P"
++		}
++		if id == "C" && seed%3 == 1 {
++			s.Accessible = model.No
++		}
++		d.Stops = append(d.Stops, s)
++	}
++	// Repeated stops, tied departures/arrivals, missed pickups/dropoffs, and a
++	// later connection continuing onboard despite an inaccessible intermediate.
++	routes := [][]string{{"A", "B", "C", "B", "D"}, {"A", "B", "C", "B", "D"}, {"B", "D"}, {"C", "D"}, {"A", "E", "D"}}
++	for ti, stops := range routes {
++		id := fmt.Sprint("t", ti)
++		a := model.Yes
++		if ti == 1 && seed%2 == 1 {
++			a = model.Unknown
++		}
++		d.Trips = append(d.Trips, model.Trip{ID: id, Accessible: a})
++		at := int64(ti*2 + r.IntN(3))
++		for j := 0; j < len(stops)-1; j++ {
++			dep := at
++			at += int64(1 + r.IntN(4))
++			d.Connections = append(d.Connections, model.Connection{ID: fmt.Sprintf("%s-%d", id, j), TripID: id, Sequence: j, From: stops[j], To: stops[j+1], Departure: dep, Arrival: at, Pickup: j == 0 || r.IntN(3) != 0, Dropoff: j == len(stops)-2 || r.IntN(3) != 0})
++		}
++	}
++	// Unused trips must not consume query-local onboard state.
++	d.Trips = append(d.Trips, model.Trip{ID: "unused", Accessible: model.Yes})
++	for i, pair := range [][2]string{{"A", "B"}, {"C", "E"}, {"B", "C"}, {"E", "D"}, {"A", "E"}, {"E", "B"}} {
++		a := model.Yes
++		if i == 4 && seed%2 == 0 {
++			a = model.No
++		}
++		d.Footpaths = append(d.Footpaths, model.Footpath{ID: fmt.Sprint("w", i), From: pair[0], To: pair[1], Duration: int64(1 + r.IntN(4)), Accessible: a})
++	}
++	d.Transfers = []model.TransferRule{{ID: "minimum", FromStop: "P", ToStop: "C", Type: 2, MinSeconds: int64(r.IntN(8))}, {ID: "prohibit", FromStop: "C", ToStop: "B", Type: 3}}
++	r.Shuffle(len(d.Stops), func(i, j int) { d.Stops[i], d.Stops[j] = d.Stops[j], d.Stops[i] })
++	r.Shuffle(len(d.Trips), func(i, j int) { d.Trips[i], d.Trips[j] = d.Trips[j], d.Trips[i] })
++	r.Shuffle(len(d.Connections), func(i, j int) { d.Connections[i], d.Connections[j] = d.Connections[j], d.Connections[i] })
++	q := model.Query{ID: "q", Origin: "A", Destination: "D", Departure: 0, LatestArrival: 40, MaxBoardings: 3, MaxLegs: 128, MaxWalkSeconds: 100, TransferBuffer: int64(r.IntN(3)), Walking: &model.WalkingLimits{Access: 5, Transfer: 5, Egress: 5, Direct: 5}}
++	return d, q
++}
++
++// Compare cancellation at a fixed number of public Context.Err polls instead of
++// a wall clock, to preserve exact partial-result and statistics boundaries.
++type denseCancel struct {
++	context.Context
++	left int
++}
++
++func (c *denseCancel) Err() error {
++	c.left--
++	if c.left <= 0 {
++		return context.Canceled
++	}
++	return nil
++}
++func denseContext(polls int) context.Context {
++	if polls < 0 {
++		return context.Background()
++	}
++	return &denseCancel{context.Background(), polls}
++}
++func denseEqual(t testing.TB, x *Index, q model.Query, polls int) {
++	t.Helper()
++	a, ae := x.frozenSearchV1(denseContext(polls), q)
++	b, be := x.Search(denseContext(polls), q)
++	if !reflect.DeepEqual(a, b) || fmt.Sprint(ae) != fmt.Sprint(be) {
++		t.Fatalf("mismatch q=%+v polls=%d\nold=%+v %v\nnew=%+v %v", q, polls, a, ae, b, be)
++	}
++}
++
++func TestDenseStateFullAndPartialResults(t *testing.T) {
++	for seed := uint64(0); seed < 48; seed++ {
++		d, q := denseFixture(seed)
++		x, err := New(d)
++		if err != nil {
++			t.Fatal(err)
++		}
++		for b := 0; b <= 4; b++ {
++			for _, accessible := range []bool{false, true} {
++				v := q
++				v.MaxBoardings, v.AccessibleOnly = b, accessible
++				for _, caps := range []model.WalkingLimits{{}, {Access: 5, Egress: 5, Transfer: 5, Direct: 5}, {Access: 2, Egress: 7, Transfer: 3, Direct: 1}, {Access: 7, Egress: 0, Transfer: 0, Direct: 7}} {
++					v.Walking = &caps
++					denseEqual(t, x, v, -1)
++				}
++			}
++		}
++		for _, polls := range []int{1, 2, 3, 4, 8, 20, 70, 150, 300, 600, 1200} {
++			denseEqual(t, x, q, polls)
++		}
++		for _, pair := range [][2]string{{"Z", "D"}, {"A", "Z"}, {"B", "C"}, {"A", "A"}, {"missing", "D"}} {
++			v := q
++			v.Origin, v.Destination = pair[0], pair[1]
++			denseEqual(t, x, v, -1)
++		}
++		v := q
++		v.Walking = nil
++		denseEqual(t, x, v, -1)
++		v = q
++		v.MaxLegs = 1
++		denseEqual(t, x, v, -1)
++		v = q
++		v.MaxLegs = 4
++		denseEqual(t, x, v, -1)
++		v = q
++		v.MaxWalkSeconds = 0
++		denseEqual(t, x, v, -1)
++		v = q
++		v.Departure = 5
++		v.LatestArrival = 9
++		denseEqual(t, x, v, -1)
++	}
++}
++
++func TestDenseStateOwnedIndexAndConcurrentQueries(t *testing.T) {
++	d, q := denseFixture(82)
++	x, err := New(d)
++	if err != nil {
++		t.Fatal(err)
++	}
++	old, err := x.Search(context.Background(), q)
++	if err != nil || !old.Complete || len(old.Journeys) == 0 {
++		t.Fatalf("fixture needs output: %v %+v", err, old)
++	}
++	if len(x.tripAccessible) != 5 {
++		t.Fatal("unused trip has an onboard ordinal")
++	}
++	d.Stops[0].ID = "caller-mutated"
++	d.Trips[0].ID = "caller-mutated"
++	d.Connections[0].From = "caller-mutated"
++	d.Footpaths[0].To = "caller-mutated"
++	var wg sync.WaitGroup
++	for i := 0; i < 16; i++ {
++		wg.Add(1)
++		go func(i int) {
++			defer wg.Done()
++			v := q
++			v.AccessibleOnly = i%2 == 1
++			if i%3 == 1 {
++				v.Origin, v.Destination = "B", "C"
++			}
++			denseEqual(t, x, v, -1)
++		}(i)
++	}
++	wg.Wait()
++	again, err := x.Search(context.Background(), q)
++	if err != nil || !reflect.DeepEqual(old, again) {
++		t.Fatal("owned index changed", err)
++	}
++	d2, q2 := denseFixture(82)
++	slices.Reverse(d2.Stops)
++	slices.Reverse(d2.Trips)
++	slices.Reverse(d2.Connections)
++	y, err := New(d2)
++	if err != nil {
++		t.Fatal(err)
++	}
++	permuted, err := y.Search(context.Background(), q2)
++	if err != nil || !reflect.DeepEqual(old, permuted) {
++		t.Fatal("input order changed output", err)
++	}
++}
++
++func FuzzDenseStateSearch(f *testing.F) {
++	for _, seed := range []uint64{0, 1, 13, 82, 193} {
++		f.Add(seed)
++	}
++	f.Fuzz(func(t *testing.T, seed uint64) {
++		d, q := denseFixture(seed)
++		x, err := New(d)
++		if err != nil {
++			t.Fatal(err)
++		}
++		q.AccessibleOnly = seed%2 == 0
++		q.MaxBoardings = int(seed % 5)
++		denseEqual(t, x, q, -1)
++	})
++}
++
++func TestDenseStateWalkOnlyAndEmptyTimetable(t *testing.T) {
++	d, q := denseFixture(82)
++	d.Connections = nil
++	d.Trips = nil
++	d.Transfers = nil
++	x, err := New(d)
++	if err != nil {
++		t.Fatal(err)
++	}
++	for _, pair := range [][2]string{{"A", "D"}, {"Z", "D"}, {"P", "D"}, {"A", "A"}} {
++		v := q
++		v.Origin, v.Destination = pair[0], pair[1]
++		for _, polls := range []int{-1, 1, 4, 8, 20, 70} {
++			denseEqual(t, x, v, polls)
++		}
++	}
++}
+diff --git a/eacsa/frozen_reference_test.go b/eacsa/frozen_reference_test.go
+new file mode 100644
+index 0000000000000000000000000000000000000000..3b3d02a4f2314174b7a7f8acef1d0b191b1d3121
+--- /dev/null
++++ b/eacsa/frozen_reference_test.go
+@@ -0,0 +1,145 @@
++// Test-only frozen b102816 search: differential evidence, not an independent oracle.
++package eacsa
++
++import (
++	"context"
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/paper"
++	"sort"
++)
++
++// Search returns one representative for every strict arrival improvement as
++// boarding cap increases. EA is the minimum arrival; these are NOT top-k paths.
++func (x *Index) frozenSearchV1(ctx context.Context, q model.Query) (out paper.Result, err error) {
++	out.Journeys = []model.Journey{}
++	defer func() {
++		out.Complete = err == nil
++		if err != nil {
++			out.Error = err.Error()
++		}
++	}()
++	if err = x.p.CheckContext(ctx, q); err != nil {
++		return
++	}
++	if err = ctx.Err(); err != nil {
++		return
++	}
++	if !x.p.Accessible(q, q.Origin) || !x.p.Accessible(q, q.Destination) {
++		return
++	}
++	if q.Origin == q.Destination {
++		out.Journeys = append(out.Journeys, paper.Journey(nil))
++		return
++	}
++	walker := x.p.Walker(q)
++	defer func() { out.Stats.WalkClosures = walker.Count }()
++	ready := make([]map[string]paper.Label, q.MaxBoardings+1)
++	onboard := make([]map[string]*paper.Node, q.MaxBoardings+1)
++	lastSeq := make([]map[string]int, q.MaxBoardings+1)
++	best := make([]paper.Label, q.MaxBoardings+1)
++	for b := range ready {
++		ready[b] = map[string]paper.Label{}
++		onboard[b] = map[string]*paper.Node{}
++		lastSeq[b] = map[string]int{}
++		best[b].Time = paper.Infinity
++	}
++	paths, e := walker.Paths(ctx, q.Origin)
++	if e != nil {
++		err = e
++		return
++	}
++	for _, w := range paths {
++		at := q.Departure + w.Duration
++		if at > q.LatestArrival {
++			continue
++		}
++		n := w.Append(nil, q.Departure)
++		if w.To == q.Destination {
++			if w.Duration <= q.Walking.Direct {
++				best[0] = paper.Label{Time: at, Parent: n}
++			}
++			continue
++		}
++		if w.Duration <= q.Walking.Access {
++			ready[0][w.To] = paper.Label{Time: at, Parent: n}
++		}
++	}
++	start := sort.Search(len(x.connections), func(i int) bool { return x.connections[i].Departure >= q.Departure })
++	for _, c := range x.connections[start:] {
++		if err = ctx.Err(); err != nil {
++			return
++		}
++		if c.Departure > q.LatestArrival {
++			break
++		}
++		if c.Arrival > q.LatestArrival || !x.p.TripAllowed(q, c.TripID) {
++			continue
++		}
++		for b := 1; b <= q.MaxBoardings; b++ {
++			out.Stats.Connections++
++			parent, aboard := onboard[b][c.TripID]
++			aboard = aboard && lastSeq[b][c.TripID] == c.Sequence-1
++			if !aboard {
++				label, ok := ready[b-1][c.From]
++				if !ok || label.Time > c.Departure || !c.Pickup || !x.p.Accessible(q, c.From) {
++					continue
++				}
++				parent = label.Parent
++			}
++			n := paper.Ride(parent, c)
++			onboard[b][c.TripID] = n
++			lastSeq[b][c.TripID] = c.Sequence
++			if !c.Dropoff || !x.p.Accessible(q, c.To) {
++				continue
++			}
++			if c.To == q.Destination {
++				if c.Arrival < best[b].Time {
++					best[b] = paper.Label{Time: c.Arrival, Parent: n}
++				}
++				delete(onboard[b], c.TripID)
++				continue
++			}
++			paths, e := walker.Paths(ctx, c.To)
++			if e != nil {
++				err = e
++				return
++			}
++			for _, w := range paths {
++				at := c.Arrival + w.Duration
++				if at > q.LatestArrival {
++					continue
++				}
++				if w.To == q.Destination {
++					if w.Duration <= q.Walking.Egress && at < best[b].Time {
++						best[b] = paper.Label{Time: at, Parent: w.Append(n, c.Arrival)}
++					}
++					continue
++				}
++				if b == q.MaxBoardings || w.Duration > q.Walking.Transfer {
++					continue
++				}
++				at, allowed, e := x.p.ReadyTime(q, c.To, w.To, c.Arrival, w.Duration)
++				if e != nil {
++					err = e
++					return
++				}
++				if !allowed || at > q.LatestArrival {
++					continue
++				}
++				old, ok := ready[b][w.To]
++				if !ok || at < old.Time {
++					ready[b][w.To] = paper.Label{Time: at, Parent: w.Append(n, c.Arrival)}
++				}
++			}
++		}
++	}
++	arrival := paper.Infinity
++	for _, b := range best {
++		if b.Time < arrival {
++			out.Journeys = append(out.Journeys, paper.Journey(b.Parent))
++			arrival = b.Time
++		}
++	}
++	out.Stats.Rounds = q.MaxBoardings
++	return
++}
+diff --git a/eacsa/scan.go b/eacsa/scan.go
+index ecaef974faceab62dc5e280ad001709ad500be90..7fecda4f6529e3b3e68c60f31e04c6733d9b6951 100644
+--- a/eacsa/scan.go
++++ b/eacsa/scan.go
+@@ -10,8 +10,59 @@ import (
+ )
+ 
+ type Index struct {
+-	p           *paper.Profile
+-	connections []model.Connection
++	p              *paper.Profile
++	connections    []model.Connection
++	connectionIDs  []connectionIDs
++	stopIDs        map[string]int
++	stopNames      []string
++	stopAccessible []bool
++	tripAccessible []bool
++}
++
++// Ordinals are immutable and refer to the profile's owned dataset, never the
++// caller's slices. Keep them aligned with the unchanged departure/ID scan order.
++type connectionIDs struct{ from, to, trip int }
++
++// A zero time means absent; reached labels store time+1. Validated service times
++// are nonnegative and bounded, including the zero-time, nil-parent access label.
++type readyLabel struct {
++	time   int64
++	parent *paper.Node
++}
++type tripState struct {
++	parent   *paper.Node
++	sequence int
++}
++
++type indexedPaths struct {
++	paths []paper.Path
++	tos   []int
++}
++type denseWalks struct {
++	walker *paper.Walker
++	index  *Index
++	cache  []indexedPaths
++}
++
++// Retain Walker.Paths' cancellation boundary on cache hits, but use the already
++// known source ordinal and map each path target only once per query closure.
++func (w *denseWalks) paths(ctx context.Context, from int) (indexedPaths, error) {
++	if p := w.cache[from]; p.paths != nil {
++		if err := ctx.Err(); err != nil {
++			return indexedPaths{}, err
++		}
++		return p, nil
++	}
++	paths, err := w.walker.Paths(ctx, w.index.stopNames[from])
++	if err != nil {
++		return indexedPaths{}, err
++	}
++	p := indexedPaths{paths: paths, tos: make([]int, len(paths))}
++	for i, path := range paths {
++		p.tos[i] = w.index.stopIDs[path.To]
++	}
++	w.cache[from] = p
++	return p, nil
+ }
+ 
+ func New(d model.Dataset) (*Index, error) {
+@@ -26,7 +77,28 @@ func New(d model.Dataset) (*Index, error) {
+ 		}
+ 		return cs[i].Departure < cs[j].Departure
+ 	})
+-	return &Index{p, cs}, nil
++	x := &Index{p: p, connections: cs,
++		stopIDs:        make(map[string]int, len(p.Data.Stops)),
++		stopNames:      make([]string, len(p.Data.Stops)),
++		stopAccessible: make([]bool, len(p.Data.Stops)),
++		connectionIDs:  make([]connectionIDs, len(cs)),
++	}
++	for i, s := range p.Data.Stops {
++		x.stopIDs[s.ID] = i
++		x.stopNames[i] = s.ID
++		x.stopAccessible[i] = s.Accessible == model.Yes
++	}
++	tripIDs := make(map[string]int)
++	for i, c := range cs {
++		trip, ok := tripIDs[c.TripID]
++		if !ok {
++			trip = len(x.tripAccessible)
++			tripIDs[c.TripID] = trip
++			x.tripAccessible = append(x.tripAccessible, p.Trips[c.TripID].Accessible == model.Yes)
++		}
++		x.connectionIDs[i] = connectionIDs{from: x.stopIDs[c.From], to: x.stopIDs[c.To], trip: trip}
++	}
++	return x, nil
+ }
+ func (x *Index) Capabilities() paper.Capability { return x.p.Capability }
+ 
+@@ -55,83 +127,101 @@ func (x *Index) Search(ctx context.Context, q model.Query) (out paper.Result, er
+ 	}
+ 	walker := x.p.Walker(q)
+ 	defer func() { out.Stats.WalkClosures = walker.Count }()
+-	ready := make([]map[string]paper.Label, q.MaxBoardings+1)
+-	onboard := make([]map[string]*paper.Node, q.MaxBoardings+1)
+-	lastSeq := make([]map[string]int, q.MaxBoardings+1)
++	walks := denseWalks{walker: walker, index: x, cache: make([]indexedPaths, len(x.stopNames))}
++	origin, destination := x.stopIDs[q.Origin], x.stopIDs[q.Destination]
++	// Allocate a layer only when it is first reached. This avoids allocating
++	// stop/trip-sized state for boardings that the query never uses.
++	ready := make([][]readyLabel, q.MaxBoardings+1)
++	onboard := make([][]tripState, q.MaxBoardings+1)
+ 	best := make([]paper.Label, q.MaxBoardings+1)
+-	for b := range ready {
+-		ready[b] = map[string]paper.Label{}
+-		onboard[b] = map[string]*paper.Node{}
+-		lastSeq[b] = map[string]int{}
++	for b := range best {
+ 		best[b].Time = paper.Infinity
+ 	}
+-	paths, e := walker.Paths(ctx, q.Origin)
++	paths, e := walks.paths(ctx, origin)
+ 	if e != nil {
+ 		err = e
+ 		return
+ 	}
+-	for _, w := range paths {
++	for i, w := range paths.paths {
++		to := paths.tos[i]
+ 		at := q.Departure + w.Duration
+ 		if at > q.LatestArrival {
+ 			continue
+ 		}
+ 		n := w.Append(nil, q.Departure)
+-		if w.To == q.Destination {
++		if to == destination {
+ 			if w.Duration <= q.Walking.Direct {
+ 				best[0] = paper.Label{Time: at, Parent: n}
+ 			}
+ 			continue
+ 		}
+ 		if w.Duration <= q.Walking.Access {
+-			ready[0][w.To] = paper.Label{Time: at, Parent: n}
++			if ready[0] == nil {
++				ready[0] = make([]readyLabel, len(x.stopNames))
++			}
++			ready[0][to] = readyLabel{time: at + 1, parent: n}
+ 		}
+ 	}
+ 	start := sort.Search(len(x.connections), func(i int) bool { return x.connections[i].Departure >= q.Departure })
+-	for _, c := range x.connections[start:] {
++	for ci := start; ci < len(x.connections); ci++ {
++		c := x.connections[ci]
++		ids := x.connectionIDs[ci]
+ 		if err = ctx.Err(); err != nil {
+ 			return
+ 		}
+ 		if c.Departure > q.LatestArrival {
+ 			break
+ 		}
+-		if c.Arrival > q.LatestArrival || !x.p.TripAllowed(q, c.TripID) {
++		if c.Arrival > q.LatestArrival || (q.AccessibleOnly && !x.tripAccessible[ids.trip]) {
+ 			continue
+ 		}
+ 		for b := 1; b <= q.MaxBoardings; b++ {
+ 			out.Stats.Connections++
+-			parent, aboard := onboard[b][c.TripID]
+-			aboard = aboard && lastSeq[b][c.TripID] == c.Sequence-1
++			var parent *paper.Node
++			aboard := false
++			if states := onboard[b]; states != nil {
++				state := states[ids.trip]
++				parent = state.parent
++				aboard = parent != nil && state.sequence == c.Sequence-1
++			}
+ 			if !aboard {
+-				label, ok := ready[b-1][c.From]
+-				if !ok || label.Time > c.Departure || !c.Pickup || !x.p.Accessible(q, c.From) {
++				labels := ready[b-1]
++				if labels == nil {
++					continue
++				}
++				label := labels[ids.from]
++				if label.time == 0 || label.time-1 > c.Departure || !c.Pickup || (q.AccessibleOnly && !x.stopAccessible[ids.from]) {
+ 					continue
+ 				}
+-				parent = label.Parent
++				parent = label.parent
+ 			}
+ 			n := paper.Ride(parent, c)
+-			onboard[b][c.TripID] = n
+-			lastSeq[b][c.TripID] = c.Sequence
+-			if !c.Dropoff || !x.p.Accessible(q, c.To) {
++			if onboard[b] == nil {
++				onboard[b] = make([]tripState, len(x.tripAccessible))
++			}
++			onboard[b][ids.trip] = tripState{parent: n, sequence: c.Sequence}
++			if !c.Dropoff || (q.AccessibleOnly && !x.stopAccessible[ids.to]) {
+ 				continue
+ 			}
+-			if c.To == q.Destination {
++			if ids.to == destination {
+ 				if c.Arrival < best[b].Time {
+ 					best[b] = paper.Label{Time: c.Arrival, Parent: n}
+ 				}
+-				delete(onboard[b], c.TripID)
++				onboard[b][ids.trip].parent = nil
+ 				continue
+ 			}
+-			paths, e := walker.Paths(ctx, c.To)
++			paths, e := walks.paths(ctx, ids.to)
+ 			if e != nil {
+ 				err = e
+ 				return
+ 			}
+-			for _, w := range paths {
++			for wi, w := range paths.paths {
++				to := paths.tos[wi]
+ 				at := c.Arrival + w.Duration
+ 				if at > q.LatestArrival {
+ 					continue
+ 				}
+-				if w.To == q.Destination {
++				if to == destination {
+ 					if w.Duration <= q.Walking.Egress && at < best[b].Time {
+ 						best[b] = paper.Label{Time: at, Parent: w.Append(n, c.Arrival)}
+ 					}
+@@ -148,9 +238,12 @@ func (x *Index) Search(ctx context.Context, q model.Query) (out paper.Result, er
+ 				if !allowed || at > q.LatestArrival {
+ 					continue
+ 				}
+-				old, ok := ready[b][w.To]
+-				if !ok || at < old.Time {
+-					ready[b][w.To] = paper.Label{Time: at, Parent: w.Append(n, c.Arrival)}
++				if ready[b] == nil {
++					ready[b] = make([]readyLabel, len(x.stopNames))
++				}
++				old := ready[b][to]
++				if old.time == 0 || at+1 < old.time {
++					ready[b][to] = readyLabel{time: at + 1, parent: w.Append(n, c.Arrival)}
+ 				}
+ 			}
+ 		}
+diff --git a/paper/profile.go b/paper/profile.go
+index 9aa8e96d50004884e7ab2b6b3217792cd0db6958..f633d8a54e145d9aee27bc61b61feb71685d3985 100644
+--- a/paper/profile.go
++++ b/paper/profile.go
+@@ -223,16 +223,18 @@ func (p Path) Append(n *Node, start int64) *Node {
+ }
+ 
+ type Walker struct {
+-	p     *Profile
+-	q     model.Query
+-	cache map[string][]Path
+-	Count int
++	p        *Profile
++	q        model.Query
++	cache    map[string][]Path
++	reach    *graph.ReachSession
++	snapshot string
++	Count    int
+ }
+ 
+ func (p *Profile) Walker(q model.Query) *Walker {
+ 	w := *q.Walking
+ 	q.Walking = &w
+-	return &Walker{p: p, q: q, cache: map[string][]Path{}}
++	return &Walker{p: p, q: q, cache: map[string][]Path{}, reach: p.walkingGraph.NewReachSession(), snapshot: p.walkingGraph.Descriptor().SnapshotID}
+ }
+ 
+ type entry struct {
+@@ -267,8 +269,8 @@ func (w *Walker) Paths(ctx context.Context, from string) ([]Path, error) {
+ 	if w.q.Destination != "" {
+ 		targets = append(targets, walking.Endpoint{NodeID: w.q.Destination})
+ 	}
+-	closure, err := w.p.walkingGraph.ReachWithTargets(ctx, walking.ReachRequest{Targets: targets,
+-		SnapshotID: w.p.walkingGraph.Descriptor().SnapshotID, From: walking.Endpoint{NodeID: from},
++	closure, err := w.reach.ReachWithTargets(ctx, walking.ReachRequest{Targets: targets,
++		SnapshotID: w.snapshot, From: walking.Endpoint{NodeID: from},
+ 		Options: walking.Options{Role: walking.Closure, MaxSeconds: limit, AccessibleOnly: w.q.AccessibleOnly, StopAt: w.q.Destination},
+ 	}, w.p.walkingTargets)
+ 	if err != nil {
+diff --git a/walking/graph/graph.go b/walking/graph/graph.go
+index 6a2a176e75147226473540418adac75baa2e75ca..c5de1f471f660dd62147035a40f36c239ffb4dc8 100644
+--- a/walking/graph/graph.go
++++ b/walking/graph/graph.go
+@@ -38,6 +38,12 @@ type Graph struct {
+ 	edges      map[string]walking.Segment
+ 	out        map[string][]walking.Segment
+ 	limits     Limits
++	// Canonical node ordinals preserve the existing lexical queue tie order.
++	nodeIndex    map[string]int
++	nodeIDs      []string
++	accessible   []bool
++	indexedEdges []walking.Segment
++	indexedOut   [][]indexedEdge
+ }
+ 
+ func New(d Data, limits Limits) (*Graph, error) {
+@@ -101,6 +107,20 @@ func New(d Data, limits Limits) (*Graph, error) {
+ 		return nil, walking.ErrStale
+ 	}
+ 	g.descriptor = d.Descriptor
++	g.nodeIndex = make(map[string]int, len(d.Nodes))
++	g.nodeIDs = make([]string, len(d.Nodes))
++	g.accessible = make([]bool, len(d.Nodes))
++	g.indexedOut = make([][]indexedEdge, len(d.Nodes))
++	for i, n := range d.Nodes {
++		g.nodeIndex[n.ID] = i
++		g.nodeIDs[i] = n.ID
++		g.accessible[i] = n.Accessible == walking.Yes
++	}
++	g.indexedEdges = d.Edges
++	for i, e := range d.Edges {
++		from, to := g.nodeIndex[e.From], g.nodeIndex[e.To]
++		g.indexedOut[from] = append(g.indexedOut[from], indexedEdge{to: to, edge: i})
++	}
+ 	return g, nil
+ }
+ func (g *Graph) Descriptor() walking.Descriptor {
+@@ -165,12 +185,14 @@ func (q *queue) Push(x any)   { *q = append(*q, x.(entry)) }
+ func (q *queue) Pop() any     { a := *q; v := a[len(a)-1]; *q = a[:len(a)-1]; return v }
+ 
+ type search struct {
+-	dist map[string]int64
+-	prev map[string]walking.Segment
++	dist  map[string]int64
++	prev  map[string]walking.Segment
++	dense *reachScratch
++	graph *Graph
+ }
+ 
+ func (g *Graph) search(ctx context.Context, from string, o walking.Options) (search, error) {
+-	s := search{map[string]int64{from: 0}, map[string]walking.Segment{}}
++	s := search{dist: map[string]int64{from: 0}, prev: map[string]walking.Segment{}}
+ 	h := &queue{{from, 0}}
+ 	settled, visits := 0, 0
+ 	for h.Len() > 0 {
+@@ -216,13 +238,29 @@ func (g *Graph) search(ctx context.Context, from string, o walking.Options) (sea
+ 	}
+ 	return s, nil
+ }
++func (s search) distance(to string) (int64, bool) {
++	if s.dense != nil {
++		i := s.graph.nodeIndex[to]
++		return s.dense.dist[i], s.dense.seen[i] == s.dense.generation
++	}
++	v, ok := s.dist[to]
++	return v, ok
++}
++func (s search) previous(to string) walking.Segment {
++	if s.dense != nil {
++		return s.graph.indexedEdges[s.dense.prev[s.graph.nodeIndex[to]]]
++	}
++	return s.prev[to]
++}
+ func (g *Graph) result(ctx context.Context, from, to string, s search, remaining *int) (walking.Result, error) {
+ 	r := walking.Result{SnapshotID: g.descriptor.SnapshotID, From: from, To: to, Status: walking.Unreachable}
+-	seconds, ok := s.dist[to]
++	seconds, ok := s.distance(to)
+ 	if !ok {
+ 		return r, nil
+ 	}
+-	p := walking.Path{SnapshotID: r.SnapshotID, From: from, To: to, Seconds: seconds, Segments: []walking.Segment{}}
++	// Count first so the returned witness needs one exact-sized segment buffer.
++	// The old append-then-CloneResult path copied every segment buffer twice.
++	count := 0
+ 	for at := to; at != from; {
+ 		if e := ctx.Err(); e != nil {
+ 			return walking.Result{}, e
+@@ -231,16 +269,25 @@ func (g *Graph) result(ctx context.Context, from, to string, s search, remaining
+ 			return walking.Result{}, walking.ErrBudget
+ 		}
+ 		*remaining--
+-		edge := s.prev[at]
+-		p.Segments = append(p.Segments, edge)
+-		at = edge.From
++		count++
++		at = s.previous(at).From
+ 	}
+-	for i, j := 0, len(p.Segments)-1; i < j; i, j = i+1, j-1 {
+-		p.Segments[i], p.Segments[j] = p.Segments[j], p.Segments[i]
++	p := walking.Path{SnapshotID: r.SnapshotID, From: from, To: to, Seconds: seconds, Segments: make([]walking.Segment, count)}
++	at := to
++	for i := count - 1; i >= 0; i-- {
++		if e := ctx.Err(); e != nil {
++			return walking.Result{}, e
++		}
++		edge := s.previous(at)
++		// Segment values only contain one mutable child. Copy it exactly once so
++		// callers cannot mutate the immutable graph or another response's witness.
++		edge.Witness.EdgeIDs = append([]string{}, edge.Witness.EdgeIDs...)
++		p.Segments[i] = edge
++		at = edge.From
+ 	}
+ 	r.Status = walking.Reachable
+ 	r.Path = &p
+-	return walking.CloneResult(r), nil
++	return r, nil
+ }
+ func (g *Graph) Route(ctx context.Context, r walking.Request) (walking.Result, error) {
+ 	if e := g.check(ctx, r.SnapshotID, r.From, r.Options); e != nil {
+@@ -310,6 +357,9 @@ func (g *Graph) Reach(ctx context.Context, r walking.ReachRequest) (walking.Reac
+ // targets. A nil set follows ordinary Reach semantics. A nonnil empty set selects
+ // no nodes except explicit request targets; no hidden endpoint is added.
+ func (g *Graph) ReachWithTargets(ctx context.Context, r walking.ReachRequest, selected *TargetSet) (walking.ReachResult, error) {
++	return g.reachWithTargets(ctx, r, selected, nil)
++}
++func (g *Graph) reachWithTargets(ctx context.Context, r walking.ReachRequest, selected *TargetSet, scratch *reachScratch) (walking.ReachResult, error) {
+ 	if e := ctx.Err(); e != nil {
+ 		return walking.ReachResult{}, e
+ 	}
+@@ -334,19 +384,44 @@ func (g *Graph) ReachWithTargets(ctx context.Context, r walking.ReachRequest, se
+ 	if e := g.check(ctx, r.SnapshotID, r.From, r.Options); e != nil {
+ 		return walking.ReachResult{}, e
+ 	}
+-	s, e := g.search(ctx, r.From.NodeID, r.Options)
++	var s search
++	var e error
++	if scratch == nil {
++		s, e = g.search(ctx, r.From.NodeID, r.Options)
++	} else {
++		s, e = g.searchDense(ctx, r.From.NodeID, r.Options, scratch)
++	}
+ 	if e != nil {
+ 		return walking.ReachResult{}, e
+ 	}
+-	keys := make([]string, 0, len(s.dist))
+-	for k := range s.dist {
++	reached := len(s.dist)
++	if scratch != nil {
++		reached = len(scratch.touched)
++	}
++	capacity := reached
++	if selected != nil {
++		capacity = min(capacity, len(selected.ids)+len(targets))
++	} else if len(targets) > 0 {
++		capacity = min(capacity, len(targets))
++	}
++	keys := make([]string, 0, capacity)
++	include := func(k string) {
+ 		if (selected != nil || len(targets) > 0) && !targets[k] && (selected == nil || !selected.ids[k]) {
+-			continue
++			return
+ 		}
+ 		keys = append(keys, k)
+ 	}
++	if scratch != nil {
++		for _, i := range scratch.touched {
++			include(g.nodeIDs[i])
++		}
++	} else {
++		for k := range s.dist {
++			include(k)
++		}
++	}
+ 	sort.Strings(keys)
+-	out := walking.ReachResult{SnapshotID: g.descriptor.SnapshotID, Paths: []walking.Path{}}
++	out := walking.ReachResult{SnapshotID: g.descriptor.SnapshotID, Paths: make([]walking.Path, 0, len(keys))}
+ 	remaining := g.limits.MaxResultSegments
+ 	for _, k := range keys {
+ 		if e := ctx.Err(); e != nil {
+diff --git a/walking/graph/reach_session.go b/walking/graph/reach_session.go
+new file mode 100644
+index 0000000000000000000000000000000000000000..ec15f54d50a926772940aeb3be06e5dd51992a92
+--- /dev/null
++++ b/walking/graph/reach_session.go
+@@ -0,0 +1,174 @@
++package graph
++
++import (
++	"context"
++
++	"github.com/ertyoii/transit-routing-go/walking"
++)
++
++type indexedEdge struct {
++	to   int
++	edge int
++}
++
++// ReachSession reuses search storage across closure requests on one immutable
++// graph. It retains no paths, changes no graph state, and returns independently
++// owned witnesses. Concurrent calls are serialized; different sessions never
++// share mutable search storage. Copies of a session share its gate and scratch.
++type ReachSession struct {
++	graph   *Graph
++	gate    chan struct{}
++	scratch *reachScratch
++}
++
++// NewReachSession creates an initially empty closure session. Dense search
++// storage is allocated lazily on its first valid request, not at graph creation.
++func (g *Graph) NewReachSession() *ReachSession {
++	return &ReachSession{graph: g, gate: make(chan struct{}, 1), scratch: &reachScratch{}}
++}
++
++// ReachWithTargets has the same reconstruction, work-budget, accessibility,
++// absorbing-node, and cancellation contract as Graph.ReachWithTargets.
++func (s *ReachSession) ReachWithTargets(ctx context.Context, r walking.ReachRequest, selected *TargetSet) (walking.ReachResult, error) {
++	if e := ctx.Err(); e != nil {
++		return walking.ReachResult{}, e
++	}
++	select {
++	case s.gate <- struct{}{}:
++		defer func() { <-s.gate }()
++	case <-ctx.Done():
++		return walking.ReachResult{}, ctx.Err()
++	}
++	return s.graph.reachWithTargets(ctx, r, selected, s.scratch)
++}
++
++type denseEntry struct {
++	node    int
++	seconds int64
++}
++
++type reachScratch struct {
++	dist       []int64
++	prev       []int
++	seen       []uint32
++	generation uint32
++	touched    []int
++	queue      []denseEntry
++}
++
++func (s *reachScratch) reset(nodes int) {
++	if len(s.dist) != nodes {
++		s.dist = make([]int64, nodes)
++		s.prev = make([]int, nodes)
++		s.seen = make([]uint32, nodes)
++	}
++	s.generation++
++	if s.generation == 0 {
++		// Generation wrap must never make an ancient distance look reachable.
++		clear(s.seen)
++		s.generation = 1
++	}
++	s.touched = s.touched[:0]
++	s.queue = s.queue[:0]
++}
++
++func denseLess(a, b denseEntry) bool {
++	if a.seconds == b.seconds {
++		// Node ordinals are canonical lexical IDs, exactly matching queue.Less.
++		return a.node < b.node
++	}
++	return a.seconds < b.seconds
++}
++func (s *reachScratch) push(v denseEntry) {
++	s.queue = append(s.queue, v)
++	for i := len(s.queue) - 1; i > 0; {
++		parent := (i - 1) / 2
++		if !denseLess(s.queue[i], s.queue[parent]) {
++			break
++		}
++		s.queue[i], s.queue[parent] = s.queue[parent], s.queue[i]
++		i = parent
++	}
++}
++func (s *reachScratch) pop() denseEntry {
++	out := s.queue[0]
++	last := len(s.queue) - 1
++	s.queue[0] = s.queue[last]
++	s.queue = s.queue[:last]
++	for i := 0; ; {
++		left := 2*i + 1
++		if left >= len(s.queue) {
++			break
++		}
++		child := left
++		if right := left + 1; right < len(s.queue) && denseLess(s.queue[right], s.queue[left]) {
++			child = right
++		}
++		if !denseLess(s.queue[child], s.queue[i]) {
++			break
++		}
++		s.queue[i], s.queue[child] = s.queue[child], s.queue[i]
++		i = child
++	}
++	return out
++}
++
++func (g *Graph) searchDense(ctx context.Context, from string, o walking.Options, s *reachScratch) (search, error) {
++	s.reset(len(g.nodeIDs))
++	origin := g.nodeIndex[from]
++	s.dist[origin] = 0
++	s.seen[origin] = s.generation
++	s.touched = append(s.touched, origin)
++	s.push(denseEntry{node: origin})
++	stopAt := -1
++	if o.StopAt != "" {
++		stopAt = g.nodeIndex[o.StopAt]
++	}
++	settled, visits := 0, 0
++	for len(s.queue) > 0 {
++		if e := ctx.Err(); e != nil {
++			return search{}, e
++		}
++		u := s.pop()
++		if u.seconds != s.dist[u.node] {
++			continue
++		}
++		settled++
++		if settled > g.limits.MaxSettled {
++			return search{}, walking.ErrBudget
++		}
++		if u.node == stopAt || o.AccessibleOnly && !g.accessible[u.node] {
++			continue
++		}
++		for _, next := range g.indexedOut[u.node] {
++			if e := ctx.Err(); e != nil {
++				return search{}, e
++			}
++			visits++
++			if visits > g.limits.MaxEdgeVisits {
++				return search{}, walking.ErrBudget
++			}
++			edge := g.indexedEdges[next.edge]
++			if o.AccessibleOnly && (edge.Accessible != walking.Yes || !g.accessible[next.to]) {
++				continue
++			}
++			n := u.seconds + edge.Seconds
++			if n > o.MaxSeconds {
++				continue
++			}
++			if s.seen[next.to] != s.generation || n < s.dist[next.to] {
++				if s.seen[next.to] != s.generation {
++					s.touched = append(s.touched, next.to)
++				}
++				s.dist[next.to] = n
++				s.prev[next.to] = next.edge
++				s.seen[next.to] = s.generation
++				s.push(denseEntry{node: next.to, seconds: n})
++			}
++		}
++	}
++	if e := ctx.Err(); e != nil {
++		return search{}, e
++	}
++	return search{dense: s, graph: g}, nil
++}
+diff --git a/walking/graph/reach_session_test.go b/walking/graph/reach_session_test.go
+new file mode 100644
+index 0000000000000000000000000000000000000000..ae40185b3ec40650c715571c6114684d92204c58
+--- /dev/null
++++ b/walking/graph/reach_session_test.go
+@@ -0,0 +1,456 @@
++package graph
++
++import (
++	"context"
++	"errors"
++	"fmt"
++	"math/rand"
++	"reflect"
++	"sync"
++	"testing"
++	"time"
++
++	"github.com/ertyoii/transit-routing-go/walking"
++)
++
++func sessionFixture(seed int64) Data {
++	rng := rand.New(rand.NewSource(seed))
++	d := Data{Descriptor: walking.Descriptor{ProviderID: "session-test", GraphID: fmt.Sprint(seed), Version: "1", CostModel: "seconds", RoleIndependent: true}}
++	for i := 0; i < 15; i++ {
++		access := walking.Yes
++		if i%5 == 0 {
++			access = walking.Unknown
++		}
++		d.Nodes = append(d.Nodes, Node{ID: fmt.Sprintf("n%02d", i), Accessible: access})
++	}
++	for i := 0; i < 85; i++ {
++		from, to := rng.Intn(len(d.Nodes)), rng.Intn(len(d.Nodes))
++		access := walking.Yes
++		if i%7 == 0 {
++			access = walking.No
++		}
++		id := fmt.Sprintf("e%03d", i)
++		d.Edges = append(d.Edges, walking.Segment{ID: id, From: d.Nodes[from].ID, To: d.Nodes[to].ID, Seconds: int64(1 + rng.Intn(4)), Accessible: access, Witness: walking.Witness{Source: "fixture", Revision: "1", EdgeIDs: []string{id, "original"}}})
++	}
++	// Deliberately scramble caller order. Both queues must still break ties by
++	// lexical node ID and outgoing edge ID after canonical graph preparation.
++	rng.Shuffle(len(d.Nodes), func(i, j int) { d.Nodes[i], d.Nodes[j] = d.Nodes[j], d.Nodes[i] })
++	rng.Shuffle(len(d.Edges), func(i, j int) { d.Edges[i], d.Edges[j] = d.Edges[j], d.Edges[i] })
++	return d
++}
++
++func compareSession(t *testing.T, g *Graph, s *ReachSession, req walking.ReachRequest, selected *TargetSet) {
++	t.Helper()
++	want, wantErr := g.ReachWithTargets(context.Background(), req, selected)
++	got, gotErr := s.ReachWithTargets(context.Background(), req, selected)
++	if !reflect.DeepEqual(want, got) || (wantErr == nil) != (gotErr == nil) || wantErr != nil && wantErr.Error() != gotErr.Error() {
++		t.Fatalf("session differs: req=%+v selected=%+v\nwant=%+v %v\ngot=%+v %v", req, selected, want, wantErr, got, gotErr)
++	}
++	for _, p := range got.Paths {
++		r := walking.Request{SnapshotID: req.SnapshotID, From: req.From, To: walking.Endpoint{NodeID: p.To}, Options: req.Options}
++		if err := g.ValidatePath(r, walking.Result{SnapshotID: req.SnapshotID, From: p.From, To: p.To, Status: walking.Reachable, Path: &p}); err != nil {
++			t.Fatal("invalid returned witness", err)
++		}
++	}
++}
++
++func TestReachSessionMatchesMapSearchExactly(t *testing.T) {
++	for seed := int64(1); seed <= 8; seed++ {
++		g, err := New(sessionFixture(seed), DefaultLimits())
++		if err != nil {
++			t.Fatal(err)
++		}
++		s := g.NewReachSession()
++		empty, err := g.PrepareTargets(context.Background(), nil)
++		if err != nil {
++			t.Fatal(err)
++		}
++		selected, err := g.PrepareTargets(context.Background(), []walking.Endpoint{{NodeID: "n04"}, {NodeID: "n10"}, {NodeID: "n04"}})
++		if err != nil {
++			t.Fatal(err)
++		}
++		for origin := 0; origin < 15; origin++ {
++			for _, cap := range []int64{0, 1, 3, 8, walking.MaxSeconds} {
++				for _, accessible := range []bool{false, true} {
++					for _, stopAt := range []string{"", "n04", fmt.Sprintf("n%02d", origin)} {
++						for i, selection := range []*TargetSet{nil, empty, selected} {
++							req := walking.ReachRequest{SnapshotID: g.descriptor.SnapshotID, From: walking.Endpoint{NodeID: fmt.Sprintf("n%02d", origin)}, Options: walking.Options{Role: walking.Closure, MaxSeconds: cap, AccessibleOnly: accessible, StopAt: stopAt}}
++							if i%2 == 0 {
++								req.Targets = []walking.Endpoint{{NodeID: "n12"}, {NodeID: "n01"}, {NodeID: "n12"}}
++							}
++							compareSession(t, g, s, req, selection)
++						}
++					}
++				}
++			}
++		}
++	}
++}
++
++func TestReachSessionBudgetsAndInvalidRequests(t *testing.T) {
++	for _, modify := range []func(*Limits){
++		func(l *Limits) { l.MaxSettled = 1 },
++		func(l *Limits) { l.MaxSettled = 4 },
++		func(l *Limits) { l.MaxEdgeVisits = 1 },
++		func(l *Limits) { l.MaxEdgeVisits = 13 },
++		func(l *Limits) { l.MaxResultSegments = 1 },
++		func(l *Limits) { l.MaxResultSegments = 7 },
++	} {
++		limits := DefaultLimits()
++		modify(&limits)
++		g, err := New(sessionFixture(27), limits)
++		if err != nil {
++			t.Fatal(err)
++		}
++		s := g.NewReachSession()
++		for _, origin := range []string{"n00", "n03", "n14"} {
++			req := walking.ReachRequest{SnapshotID: g.descriptor.SnapshotID, From: walking.Endpoint{NodeID: origin}, Options: walking.Options{Role: walking.Closure, MaxSeconds: 100}}
++			compareSession(t, g, s, req, nil)
++			req.Options.MaxSeconds = 0
++			compareSession(t, g, s, req, nil)
++		}
++	}
++	g, err := New(sessionFixture(5), DefaultLimits())
++	if err != nil {
++		t.Fatal(err)
++	}
++	s := g.NewReachSession()
++	base := walking.ReachRequest{SnapshotID: g.descriptor.SnapshotID, From: walking.Endpoint{NodeID: "n03"}, Options: walking.Options{Role: walking.Closure, MaxSeconds: 8}}
++	for _, change := range []func(*walking.ReachRequest){
++		func(r *walking.ReachRequest) { r.SnapshotID = "stale" },
++		func(r *walking.ReachRequest) { r.From.NodeID = "missing" },
++		func(r *walking.ReachRequest) { r.Options.Role = "invalid" },
++		func(r *walking.ReachRequest) { r.Options.MaxSeconds = -1 },
++		func(r *walking.ReachRequest) { r.Options.StopAt = "missing" },
++		func(r *walking.ReachRequest) { r.Targets = []walking.Endpoint{{NodeID: "missing"}} },
++	} {
++		req := base
++		change(&req)
++		compareSession(t, g, s, req, nil)
++		compareSession(t, g, s, base, nil)
++	}
++	stale := &TargetSet{snapshot: "stale"}
++	compareSession(t, g, s, base, stale)
++}
++
++type cancelAfterChecks struct {
++	context.Context
++	remaining int
++}
++
++func (c *cancelAfterChecks) Err() error {
++	c.remaining--
++	if c.remaining <= 0 {
++		return context.Canceled
++	}
++	return nil
++}
++
++func TestReachSessionCancellationOwnershipConcurrencyAndWrap(t *testing.T) {
++	g, err := New(sessionFixture(9), DefaultLimits())
++	if err != nil {
++		t.Fatal(err)
++	}
++	s := g.NewReachSession()
++	req := walking.ReachRequest{SnapshotID: g.descriptor.SnapshotID, From: walking.Endpoint{NodeID: "n03"}, Options: walking.Options{Role: walking.Closure, MaxSeconds: 100}}
++	want, err := g.ReachWithTargets(context.Background(), req, nil)
++	if err != nil {
++		t.Fatal(err)
++	}
++	for _, checks := range []int{1, 3, 11, 30, 75, 140} {
++		got, err := s.ReachWithTargets(&cancelAfterChecks{Context: context.Background(), remaining: checks}, req, nil)
++		if !errors.Is(err, context.Canceled) || got.Paths != nil {
++			t.Fatalf("partial cancellation response after %d checks: %+v %v", checks, got, err)
++		}
++		compareSession(t, g, s, req, nil)
++	}
++	// Scratch reuse and generation rollover must not leak previously seen nodes.
++	s.scratch.generation = ^uint32(0)
++	for i := range s.scratch.seen {
++		s.scratch.seen[i] = 1
++	}
++	short := req
++	short.Options.MaxSeconds = 0
++	compareSession(t, g, s, short, nil)
++	got, err := s.ReachWithTargets(context.Background(), req, nil)
++	if err != nil {
++		t.Fatal(err)
++	}
++	for i := range got.Paths {
++		for j := range got.Paths[i].Segments {
++			got.Paths[i].Segments[j].ID = "changed"
++			got.Paths[i].Segments[j].Witness.EdgeIDs[0] = "changed"
++		}
++	}
++	compareSession(t, g, s, req, nil)
++	var wg sync.WaitGroup
++	for i := 0; i < 12; i++ {
++		wg.Add(1)
++		go func() {
++			defer wg.Done()
++			got, err := s.ReachWithTargets(context.Background(), req, nil)
++			if err != nil || !reflect.DeepEqual(got, want) {
++				t.Errorf("shared session differs: %v", err)
++			}
++			other := g.NewReachSession()
++			got, err = other.ReachWithTargets(context.Background(), req, nil)
++			if err != nil || !reflect.DeepEqual(got, want) {
++				t.Errorf("independent session differs: %v", err)
++			}
++		}()
++	}
++	wg.Wait()
++}
++
++func TestReachSessionLexicalNodeAndParallelEdgeTies(t *testing.T) {
++	d := Data{Descriptor: walking.Descriptor{ProviderID: "tie-test", GraphID: "ties", Version: "1", CostModel: "seconds", RoleIndependent: true}}
++	for _, id := range []string{"source", "n2", "target", "n10"} {
++		d.Nodes = append(d.Nodes, Node{ID: id, Accessible: walking.Yes})
++	}
++	for _, e := range []struct{ id, from, to string }{
++		{"a-source-n2", "source", "n2"},
++		{"c-source-n10", "source", "n10"},
++		{"b-source-n10", "source", "n10"},
++		{"d-n2-target", "n2", "target"},
++		{"e-n10-target", "n10", "target"},
++	} {
++		d.Edges = append(d.Edges, walking.Segment{ID: e.id, From: e.from, To: e.to, Seconds: 1, Accessible: walking.Yes, Witness: walking.Witness{Source: "fixture", Revision: "1", EdgeIDs: []string{e.id}}})
++	}
++	g, err := New(d, DefaultLimits())
++	if err != nil {
++		t.Fatal(err)
++	}
++	req := walking.ReachRequest{SnapshotID: g.descriptor.SnapshotID, From: walking.Endpoint{NodeID: "source"}, Targets: []walking.Endpoint{{NodeID: "target"}}, Options: walking.Options{Role: walking.Closure, MaxSeconds: 2}}
++	for _, role := range []walking.Role{walking.Access, walking.Egress, walking.Transfer, walking.Direct, walking.Closure} {
++		req.Options.Role = role
++		got, err := g.NewReachSession().ReachWithTargets(context.Background(), req, nil)
++		if err != nil || len(got.Paths) != 1 || len(got.Paths[0].Segments) != 2 || got.Paths[0].Segments[0].ID != "b-source-n10" || got.Paths[0].Segments[1].ID != "e-n10-target" {
++			t.Fatalf("tie witness changed for %s: %+v %v", role, got, err)
++		}
++	}
++}
++
++func BenchmarkReachStorage(b *testing.B) {
++	g, err := New(sessionFixture(17), DefaultLimits())
++	if err != nil {
++		b.Fatal(err)
++	}
++	req := walking.ReachRequest{SnapshotID: g.descriptor.SnapshotID, From: walking.Endpoint{NodeID: "n03"}, Options: walking.Options{Role: walking.Closure, MaxSeconds: 8}}
++	b.Run("map-per-closure", func(b *testing.B) {
++		b.ReportAllocs()
++		for i := 0; i < b.N; i++ {
++			if _, err := g.ReachWithTargets(context.Background(), req, nil); err != nil {
++				b.Fatal(err)
++			}
++		}
++	})
++	b.Run("dense-query-session", func(b *testing.B) {
++		s := g.NewReachSession()
++		// As in a real Walker, one session is reused across its source closures.
++		if _, err := s.ReachWithTargets(context.Background(), req, nil); err != nil {
++			b.Fatal(err)
++		}
++		b.ReportAllocs()
++		b.ResetTimer()
++		for i := 0; i < b.N; i++ {
++			if _, err := s.ReachWithTargets(context.Background(), req, nil); err != nil {
++				b.Fatal(err)
++			}
++		}
++	})
++}
++
++type observedContext struct {
++	context.Context
++	checked chan struct{}
++	once    sync.Once
++}
++
++func (c *observedContext) Err() error {
++	err := c.Context.Err()
++	c.once.Do(func() { close(c.checked) })
++	return err
++}
++
++func TestReachSessionCanceledWaiterReturnsWithoutAcquiringGate(t *testing.T) {
++	g, err := New(sessionFixture(21), DefaultLimits())
++	if err != nil {
++		t.Fatal(err)
++	}
++	s := g.NewReachSession()
++	s.gate <- struct{}{}
++	inner, cancel := context.WithCancel(context.Background())
++	ctx := &observedContext{Context: inner, checked: make(chan struct{})}
++	done := make(chan error, 1)
++	go func() {
++		got, err := s.ReachWithTargets(ctx, walking.ReachRequest{}, nil)
++		if got.Paths != nil {
++			done <- fmt.Errorf("partial canceled response")
++			return
++		}
++		done <- err
++	}()
++	<-ctx.checked
++	cancel()
++	select {
++	case err := <-done:
++		if !errors.Is(err, context.Canceled) {
++			t.Fatal(err)
++		}
++	case <-time.After(time.Second):
++		<-s.gate
++		t.Fatal("canceled request waited for active session")
++	}
++	<-s.gate
++}
++
++// Frozen b102816 append-then-CloneResult reconstruction, retained only as exact
++// output evidence for the new exact-sized owned-witness implementation.
++func frozenResultV1(ctx context.Context, g *Graph, from, to string, s search, remaining *int) (walking.Result, error) {
++	r := walking.Result{SnapshotID: g.descriptor.SnapshotID, From: from, To: to, Status: walking.Unreachable}
++	seconds, ok := s.dist[to]
++	if !ok {
++		return r, nil
++	}
++	p := walking.Path{SnapshotID: r.SnapshotID, From: from, To: to, Seconds: seconds, Segments: []walking.Segment{}}
++	for at := to; at != from; {
++		if e := ctx.Err(); e != nil {
++			return walking.Result{}, e
++		}
++		if *remaining <= 0 {
++			return walking.Result{}, walking.ErrBudget
++		}
++		*remaining--
++		edge := s.prev[at]
++		p.Segments = append(p.Segments, edge)
++		at = edge.From
++	}
++	for i, j := 0, len(p.Segments)-1; i < j; i, j = i+1, j-1 {
++		p.Segments[i], p.Segments[j] = p.Segments[j], p.Segments[i]
++	}
++	r.Status = walking.Reachable
++	r.Path = &p
++	return walking.CloneResult(r), nil
++}
++
++func TestOwnedReconstructionMatchesFrozenResult(t *testing.T) {
++	ctx := context.Background()
++	for seed := int64(1); seed <= 4; seed++ {
++		g, err := New(sessionFixture(seed), DefaultLimits())
++		if err != nil {
++			t.Fatal(err)
++		}
++		for _, from := range g.nodeIDs {
++			s, err := g.search(ctx, from, walking.Options{Role: walking.Closure, MaxSeconds: 8})
++			if err != nil {
++				t.Fatal(err)
++			}
++			for _, to := range g.nodeIDs {
++				for _, budget := range []int{0, 1, 2, 3, 1000} {
++					a, b := budget, budget
++					want, wantErr := frozenResultV1(ctx, g, from, to, s, &a)
++					got, gotErr := g.result(ctx, from, to, s, &b)
++					if !reflect.DeepEqual(want, got) || a != b || fmt.Sprint(wantErr) != fmt.Sprint(gotErr) {
++						t.Fatalf("owned reconstruction differs: %s->%s budget %d: %+v %v / %+v %v, remaining %d/%d", from, to, budget, want, wantErr, got, gotErr, a, b)
++					}
++				}
++			}
++		}
++	}
++}
++
++func TestOwnedResponsesRemainIndependentAcrossReuseAndCells(t *testing.T) {
++	ctx := context.Background()
++	g, err := New(sessionFixture(33), DefaultLimits())
++	if err != nil {
++		t.Fatal(err)
++	}
++	s := g.NewReachSession()
++	req := walking.ReachRequest{SnapshotID: g.descriptor.SnapshotID, From: walking.Endpoint{NodeID: "n03"}, Options: walking.Options{Role: walking.Closure, MaxSeconds: 8}}
++	first, err := s.ReachWithTargets(ctx, req, nil)
++	if err != nil {
++		t.Fatal(err)
++	}
++	want, err := g.ReachWithTargets(ctx, req, nil)
++	if err != nil {
++		t.Fatal(err)
++	}
++	next := req
++	next.From.NodeID = "n10"
++	next.Options.MaxSeconds = 1
++	if _, err := s.ReachWithTargets(ctx, next, nil); err != nil {
++		t.Fatal(err)
++	}
++	if !reflect.DeepEqual(first, want) {
++		t.Fatal("scratch reuse changed an existing response")
++	}
++	// Locate a repeated edge across paths, and mutate just one occurrence.
++	type position struct{ path, segment int }
++	seen := map[string]position{}
++	checked := false
++	for i := range first.Paths {
++		for j, edge := range first.Paths[i].Segments {
++			if old, ok := seen[edge.ID]; ok {
++				first.Paths[old.path].Segments[old.segment].Witness.EdgeIDs[0] = "changed"
++				if first.Paths[i].Segments[j].Witness.EdgeIDs[0] != edge.ID {
++					t.Fatal("paths share witness ownership")
++				}
++				checked = true
++				break
++			}
++			seen[edge.ID] = position{i, j}
++		}
++		if checked {
++			break
++		}
++	}
++	if !checked {
++		t.Fatal("fixture needs a repeated edge")
++	}
++	var target string
++	for _, p := range want.Paths {
++		if len(p.Segments) > 0 {
++			target = p.To
++			break
++		}
++	}
++	r := walking.Request{SnapshotID: req.SnapshotID, From: req.From, To: walking.Endpoint{NodeID: target}, Options: req.Options}
++	batch, err := g.Batch(ctx, []walking.Request{r, r})
++	if err != nil {
++		t.Fatal(err)
++	}
++	batch[0].Path.Segments[0].Witness.EdgeIDs[0] = "batch-change"
++	if batch[1].Path.Segments[0].Witness.EdgeIDs[0] == "batch-change" {
++		t.Fatal("duplicate batch results alias")
++	}
++	matrix, err := g.Matrix(ctx, walking.MatrixRequest{SnapshotID: req.SnapshotID, Sources: []walking.Endpoint{req.From, req.From}, Targets: []walking.Endpoint{r.To, r.To}, Options: req.Options})
++	if err != nil {
++		t.Fatal(err)
++	}
++	matrix.Rows[0][0].Path.Segments[0].Witness.EdgeIDs[0] = "matrix-change"
++	for _, cell := range []walking.Result{matrix.Rows[0][1], matrix.Rows[1][0], matrix.Rows[1][1]} {
++		if cell.Path.Segments[0].Witness.EdgeIDs[0] == "matrix-change" {
++			t.Fatal("duplicate matrix cells alias")
++		}
++	}
++	compareSession(t, g, s, req, nil)
++}
++
++func TestReachSessionValueCopySharesGenerationAndGate(t *testing.T) {
++	g, err := New(sessionFixture(72), DefaultLimits())
++	if err != nil {
++		t.Fatal(err)
++	}
++	s := g.NewReachSession()
++	req := walking.ReachRequest{SnapshotID: g.descriptor.SnapshotID, From: walking.Endpoint{NodeID: "n03"}, Options: walking.Options{Role: walking.Closure, MaxSeconds: 8}}
++	compareSession(t, g, s, req, nil)
++	copy := *s
++	for _, origin := range []string{"n10", "n03", "n14", "n01"} {
++		req.From.NodeID = origin
++		for _, cap := range []int64{0, 8} {
++			req.Options.MaxSeconds = cap
++			compareSession(t, g, &copy, req, nil)
++			compareSession(t, g, s, req, nil)
++		}
++	}
++}

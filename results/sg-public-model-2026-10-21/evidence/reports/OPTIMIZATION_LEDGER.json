@@ -1,0 +1,178 @@
+{
+  "updated_utc": "2026-10-21T04:51:42.741772+00:00",
+  "tier": "public modeled stop-stop static frequency model, not latest official or physical truth",
+  "convergence_status": "not_established; bounded best-measured snapshot, remaining space explicit",
+  "criteria_source": "EVAL_PROTOCOL_DRAFT.md section11; OPTIMIZATION_PLAN.md section7",
+  "requirements": [
+    "Same contract, caps, offered cohorts, verification and full-response boundary",
+    "Registered structural/knob space covered or evidence-based exclusions",
+    "Two equal-budget search rounds with no new >=3% validation p95 Pareto improvement",
+    "Two clean repeated blocks reproduce frontier ordering within uncertainty",
+    "Fresh sealed holdout after source/configuration finalists and validation; no test-conditioned tuning"
+  ],
+  "heldout_outcomes_exposed": true,
+  "hypotheses": [
+    {
+      "family": "RAPTOR",
+      "variant": "reusable dense query walking plus route readiness/alight indexing",
+      "status": "Ordinary/Early source controls completed full450/window test; all source-paired witnesses agree. Early full450 validation completed; ordinary full450 validation was not separately run.",
+      "evidence": [
+        "resumed-0130/CORE_TWO_BLOCK_ANALYSIS.json",
+        "resumed-0130/DENSE_ENTRYPOINT_PARITY.json",
+        "resumed-0130/DENSE_ENTRYPOINT_METRICS.json",
+        "resumed-0130/FULL_TEST_METRICS.json",
+        "resumed-0130/FULL_TEST_SOURCE_PARITY.json",
+        "resumed-0130/FULL_TEST_QUALITY_DEFAULT.json",
+        "resumed-0130/FULL_TEST_QUALITY_FINITE500000.json"
+      ],
+      "limitations": "Memory allocation lower, RSS not uniformly lower; not source convergence",
+      "prior_status": "two clean repeated tune blocks and both ordinary/early native entrypoint exact parity; full validation active"
+    },
+    {
+      "family": "EA-CSA",
+      "variant": "dense immutable ordinals/lazy layers combined with query walking storage",
+      "status": "Combined dense+walking source candidate completed full450/window validation and test with exact source-paired native witness agreement.",
+      "evidence": [
+        "resumed-0130/CORE_TWO_BLOCK_ANALYSIS.json",
+        "resumed-0130/FULL_TEST_METRICS.json",
+        "resumed-0130/FULL_TEST_SOURCE_PARITY.json",
+        "resumed-0130/FULL_TEST_QUALITY_DEFAULT.json",
+        "resumed-0130/FULL_TEST_QUALITY_FINITE500000.json"
+      ],
+      "limitations": "Extra metadata retained; measured load/prep/query allocation+RSS reported separately",
+      "prior_status": "two repeated tune blocks exact native witness preservation; full validation active"
+    },
+    {
+      "family": "ULTRA capped control/subset",
+      "variant": "dense capped labels/readiness",
+      "status": "Full450/window validation and test completed; capped control exact source parity and subset/control cap-vector checks passed. Query allocation increase remains explicit.",
+      "evidence": [
+        "resumed-0130/ULTRA_TWO_BLOCK_ANALYSIS.json",
+        "resumed-0130/FULL_TEST_METRICS.json",
+        "resumed-0130/FULL_TEST_SOURCE_PARITY.json",
+        "resumed-0130/FULL_TEST_QUALITY_DEFAULT.json",
+        "resumed-0130/FULL_TEST_QUALITY_FINITE500000.json"
+      ],
+      "limitations": "~12–14% query allocation increase, no universal memory improvement; subset/control no stable universal winner",
+      "prior_status": "two clean repeated fourwindow tune blocks,5760/5760 complete, zero source/repeatmismatches; full validation active"
+    },
+    {
+      "family": "McRAPTOR ordinary/early",
+      "variant": "dense state, 100k/250k/500k/1m label resource tiers, walking3D and finite20selection",
+      "status": "500k and1m validation witnesses agree; frozen500k finite20 candidates completed full450/window test. Same-grid finite20 top3 coverage97.118%, maximum observed score regret406; not external preference truth.",
+      "evidence": [
+        "resumed-0130/DENSE_ENTRYPOINT_PARITY.json",
+        "resumed-0130/FINITE20_SELECTED_QUALITY.json",
+        "resumed-0130/FINITE20_SAME_RUN_DEFAULT_QUALITY.json",
+        "resumed-0130/FULL_TEST_METRICS.json",
+        "resumed-0130/FULL_TEST_SOURCE_PARITY.json",
+        "resumed-0130/FULL_TEST_QUALITY_DEFAULT.json",
+        "resumed-0130/FULL_TEST_QUALITY_FINITE500000.json"
+      ],
+      "limitations": "3D native contract is richer than2D. Selector optimized to same20hypothetical weights, not external rider preference truth",
+      "prior_status": "500k and1m complete720/720 tune each with same native witnesses; full450validation checking guards before final choice"
+    },
+    {
+      "family": "Strict CSA four adapters",
+      "variant": "safe temporal suffix infeasibility pruning; guard/deadline/batch resource matrix",
+      "status": "All frozen90/window validation and test requests retained. Original validation1438/1440 complete plus separate replication; test1440/1440.720 single-request/shared paired test outputs agree. Native contract is identity topk/score cap-union, not450-query frontier qualification.",
+      "evidence": [
+        "resumed-0130/CSA_BATCH_MATRIX_METRICS.json",
+        "resumed-0130/CSA90_TEST_METRICS.json",
+        "resumed-0130/CSA90_TEST_PAIR_COMPARISONS.json",
+        "resumed-0130/CSA90_TEST_QUALITY.json"
+      ],
+      "limitations": "Higher-label resource point, not pure speedup; shared batch4/8 slower and score deadline failures retained. Native identitytopk qualified by independent tiny oracles, not2D F[b]",
+      "prior_status": "1m original3s batch1 completes12smoke/window; separate90validation/window predeclared, not equal qualification to450 primary"
+    },
+    {
+      "family": "Capped Trip-Based",
+      "variant": "bounded role walking closure and25m/100m actual-transfer resource points",
+      "status": "Capped600 at100m actual-transfer guard completed full450/window validation and test. Morning test startup component sum15.951s, RSS5.696GB; source compression/efficient preparation remain unexhausted.",
+      "evidence": [
+        "resumed-0130/TRIP_BASED_CAPPED_SCREEN_METRICS.json",
+        "resumed-0130/CAPPEDTB_COMMON_POOL_AUDIT_SUMMARY.json",
+        "resumed-0130/FULL_TEST_METRICS.json",
+        "resumed-0130/FULL_TEST_SOURCE_PARITY.json",
+        "resumed-0130/FULL_TEST_QUALITY_DEFAULT.json",
+        "resumed-0130/FULL_TEST_QUALITY_FINITE500000.json"
+      ],
+      "limitations": "~5.4–6.1GB day peakRSS and7.6s preparation, slower point queries retained. Native2D tie witnesses yield different softwalking quality",
+      "prior_status": "100m index completes720/720 tune, full450validation active"
+    },
+    {
+      "family": "Fixed-cap TP/TREX",
+      "variant": "bounded closure plus larger actual-transfer preprocessing budgets",
+      "status": "25m and100m native transfer guard exhaustion; notrun offered preserved",
+      "evidence": [
+        "resumed-0130/closure-larger-prep-tiers/status.json"
+      ],
+      "limitations": "Actual materialized transfer-link count (not merely searchwork) is capped.100m is not an impossibility/global algorithm verdict; more efficient index construction remains unexhausted"
+    },
+    {
+      "family": "Generic FLASH/static TREX",
+      "variant": "full exact walking metric guard",
+      "status": "1m walking guard decline retained; no workload-inferred600scope introduced",
+      "evidence": [
+        "resumed-0130/closure-capability-smoke/status.json"
+      ],
+      "limitations": "New fixedscope FLASH600 variant not implemented; wholemetric cost not bypassed"
+    },
+    {
+      "family": "Legacy FLASH/TP/scalableTP/TREX",
+      "variant": "native supported semantics",
+      "status": "GTFS transfer-rule contract unsupported; explicit unavailable results retained",
+      "evidence": [],
+      "limitations": "No fallback, no rule removal, no latency win from fasterdecline"
+    },
+    {
+      "family": "ProfileCSA/rangeRAPTOR/TAD/nativeULTRA/CoreCH",
+      "variant": "separate native contracts",
+      "status": "Fourwindow smoke complete except nativeULTRA expected nonemptyGTFS-rule rejection; extra117anchor CoreCH positive-row audit complete",
+      "evidence": [
+        "resumed-0130/AUXILIARY_NATIVE_SMOKE_SUMMARY.json",
+        "resumed-0130/CORECH_FROZEN_SCREEN_SUMMARY.json"
+      ],
+      "limitations": "Profile whole61readiness, TAD oneEA, CoreCH transfer-only row; not primary450test qualification. CoreCH no demonstrated speedup"
+    },
+    {
+      "family": "OpenTripPlanner",
+      "variant": "external system",
+      "status": "absent from supplied implementation inventory",
+      "evidence": [],
+      "limitations": "No invented substitute or universal allsystems comparison"
+    },
+    {
+      "family": "Legacy Trip-Based",
+      "variant": "hardcoded900s transferwalking nativeindex,5m transferguard",
+      "status": "Preparation transferguard exhausted in broadsmoke; not unsupportedGTFS-rule semantics. Larger25m/100m primary scope retries apply cappedTB600, not this900s nativeindex.",
+      "evidence": [
+        "broad-morning/trip_based/artifact/summary.json"
+      ],
+      "limitations": "Not further resource-exhausted or latency-qualified; no global algorithm impossibility claim."
+    }
+  ],
+  "current_timed_campaign": "resumed-0130/final-test-release-v1",
+  "validation_outcomes_exposed": true,
+  "latest_measured_source_results": {
+    "raptor_dense_incremental": "resumed-0130/RAPTOR_DENSE_INCREMENTAL_COMPARISON.json",
+    "ea_combined": "resumed-0130/EA_COMBINED_COMPARISON.json",
+    "mc_500k_1m": "resumed-0130/MC_500K_1M_COMPARISON.json",
+    "richer_walking_quality": "resumed-0130/evalkit-round2-rich-walking/QUALITY_FRONTIER_SUMMARY.json"
+  },
+  "selector_hypothesis": {
+    "source": "existing tested finite_preferences_v2",
+    "scenario_file": "configs/finite20-choice-200k.json",
+    "status": "fourwindow train measured; candidate fullvalidation active",
+    "limitation": "Optimized to same20 preexisting hypothetical evaluation weights; heldoutOD cannot make preferences external truth.",
+    "evidence": [
+      "resumed-0130/FINITE20_SELECTOR_QUALITY_COMPARISON.json",
+      "resumed-0130/FINITE20_SELECTOR_LATENCY_COMPARISON.json"
+    ]
+  },
+  "latest_stage": "Blind test released after independent 177-file review and all 19 seals; no test-conditioned tuning or guard changes.",
+  "final_test_evidence_acceptance": "accepted_bounded_public_model_no_blockers",
+  "ordinary_test_offered_complete": 24120,
+  "forced_test_controls_separate": 24120,
+  "test_conditioned_source_config_budget_or_query_changes": false
+}

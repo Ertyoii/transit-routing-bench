@@ -1,0 +1,16 @@
+{
+  "generator_sha256": "3bcc01de589a497c7896e2add6bcce89b2d1c1d203697818f588c0219d071611",
+  "planned_main_records_per_stage": {
+    "full": 9000,
+    "screen": 1800,
+    "smoke": 60
+  },
+  "planned_workload_sha256": "93eda20e69bd3bd8ea552359d1531be09ca4ef2a10cbf1c00cd4335d25d30fd6",
+  "schema": "sg-workload-commitment-v1",
+  "selected_without_routing_outcomes": true,
+  "source_hashes": {
+    "raw_gtfs": "d92173127e9a5cbf8ecb5b4d50ab03f68deb7f8ddff73648b8ffb33c70ab4801",
+    "window_plan": "3575e950ca161d0a575b8b3b88dc95ffd3afb1ded372d938e734ec034f835dca"
+  },
+  "stop_metadata_sha256": "baf3847f6b7c0340b80ddfc4a081a9fe16ab0cb7c7ee82f4de5e4e280693ea42"
+}

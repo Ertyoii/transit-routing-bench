@@ -1,0 +1,418 @@
+diff --git a/README.md b/README.md
+index c3379cf1e4b252c72803ba8bb13cfddd414a028f..4186dd72b2910ec41c12dd474feb228b04e3fc5d 100644
+--- a/README.md
++++ b/README.md
+@@ -40,3 +40,21 @@ The Python 3 wrapper builds a source-bound binary and checks nine isolated tiny
+ ## Non-CSA qualification v2
+ 
+ The [instrumented aggregate report](results/non-csa-qualification-v2/RESULTS_AND_STATUS.md) records outcome denominators, constructor/resource costs and bounded negative results. Its [evidence scope](results/non-csa-qualification-v2/EVIDENCE_SCOPE.md) identifies the separately retained raw packet and subsequent native check status. Scoped retained TP completed the26-query panel plus78 warm calls; fixed-cap ranked T-REX certified0/26. Global TP construction remained incomplete at180 seconds. These are artifact measurements, with no timing inheritance to this clean public source. Confidence intervals remain unmet.
++
++## Diagnostic profiles
++
++`familybench` optionally accepts `-cpu-profile /new/file.pprof` and
++`-heap-profile /new/heap.pprof`. Paths are exclusively created, never overwritten.
++CPU profiling covers the whole run after output-directory creation, including
++source verification, loading, preparation, queries and artifact encoding. The
++heap/allocations profile is written at ordinary return without an extra GC or
++sampling-rate change. The output directory receives `diagnostic-profiles.json`
++with scope, completion/error status and an explicit timing warning. Existing
++ordinary error/deadline paths flush profiles; abrupt exit/SIGKILL cannot do so
++and may leave an empty metadata file or incomplete profile.
++
++These files are diagnostics only. Run final latency comparisons with both flags
++omitted. Disabled profiling creates no files or metadata and changes no output
++schema or router settings. Build through `scripts/build.sh` as usual; analyze
++with `go tool pprof -top BINARY CPU_PROFILE` or
++`go tool pprof -sample_index=alloc_space BINARY HEAP_PROFILE`.
+diff --git a/cmd/familybench/main.go b/cmd/familybench/main.go
+index e70bddf7334fab526c6c0517e9b3787ae0c4e572..5337bc1d9eae459a168cc24d2fe0de994559e4ab 100644
+--- a/cmd/familybench/main.go
++++ b/cmd/familybench/main.go
+@@ -149,7 +149,9 @@ func preparationOutcome(err error) (string, bool) {
+ 	return "routing_error", true
+ }
+ 
+-func run() error {
++func run() (runErr error) {
++	cpuProfile := flag.String("cpu-profile", "", "diagnostic whole-run CPU pprof file; exclusive create; excludes final latency claims")
++	heapProfile := flag.String("heap-profile", "", "diagnostic heap/alloc pprof file at return; no extra GC; exclusive create")
+ 	dp := flag.String("dataset", "", "normalized data")
+ 	fixture := flag.String("fixture", "", "pinned original-synthetic manifest; alternative to dataset and queries")
+ 	scopedPath := flag.String("scoped-config", "", "explicit configuration JSON required for scoped adapters")
+@@ -193,6 +195,13 @@ func run() error {
+ 	if e := os.Mkdir(*out, 0700); e != nil {
+ 		return e
+ 	}
++	profiles, profileErr := startDiagnosticProfiles(*cpuProfile, *heapProfile, filepath.Join(*out, "diagnostic-profiles.json"))
++	if profileErr != nil {
++		return profileErr
++	}
++	if profiles != nil {
++		defer func() { runErr = errors.Join(runErr, profiles.Close(runErr)) }()
++	}
+ 	prov, e := experiment.Identify(".")
+ 	if e != nil {
+ 		return e
+diff --git a/cmd/familybench/profiling.go b/cmd/familybench/profiling.go
+new file mode 100644
+index 0000000000000000000000000000000000000000..98251e5e8b79c1e43d1530ce76db72dccc953077
+--- /dev/null
++++ b/cmd/familybench/profiling.go
+@@ -0,0 +1,136 @@
++package main
++
++import (
++	"encoding/json"
++	"errors"
++	"fmt"
++	"os"
++	"runtime"
++	"runtime/pprof"
++)
++
++// Diagnostic profiles cover the complete run after flags/output-directory
++// creation, including source verification, load, preparation, queries and
++// artifact encoding. They are not an instrumented replacement for final timing.
++// Heap sampling is unchanged and no extra GC is forced.
++type diagnosticProfiles struct {
++	cpu, heap, metadata *os.File
++	cpuStarted          bool
++	closed              bool
++	hooks               profileHooks
++}
++
++type profileHooks struct {
++	startCPU  func(*os.File) error
++	stopCPU   func()
++	writeHeap func(*os.File) error
++}
++
++func startDiagnosticProfiles(cpuPath, heapPath, metadataPath string) (*diagnosticProfiles, error) {
++	return startDiagnosticProfilesWithHooks(cpuPath, heapPath, metadataPath, profileHooks{
++		startCPU:  func(f *os.File) error { return pprof.StartCPUProfile(f) },
++		stopCPU:   pprof.StopCPUProfile,
++		writeHeap: func(f *os.File) error { return pprof.WriteHeapProfile(f) },
++	})
++}
++
++func startDiagnosticProfilesWithHooks(cpuPath, heapPath, metadataPath string, hooks profileHooks) (*diagnosticProfiles, error) {
++	if cpuPath == "" && heapPath == "" {
++		return nil, nil
++	}
++	p := &diagnosticProfiles{hooks: hooks}
++	// Reserve every path before starting the process-global CPU profiler. Never
++	// truncate an existing artifact. Failed initialization removes only our files.
++	open := func(path string, target **os.File) error {
++		if path == "" {
++			return nil
++		}
++		f, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0600)
++		if err != nil {
++			return fmt.Errorf("diagnostic profile %q: %w", path, err)
++		}
++		*target = f
++		return nil
++	}
++	abort := func() {
++		for _, f := range []*os.File{p.cpu, p.heap, p.metadata} {
++			if f != nil {
++				_ = f.Close()
++				_ = os.Remove(f.Name())
++			}
++		}
++	}
++	if err := open(cpuPath, &p.cpu); err != nil {
++		abort()
++		return nil, err
++	}
++	if err := open(heapPath, &p.heap); err != nil {
++		abort()
++		return nil, err
++	}
++	if err := open(metadataPath, &p.metadata); err != nil {
++		abort()
++		return nil, err
++	}
++	if p.cpu != nil {
++		if err := p.hooks.startCPU(p.cpu); err != nil {
++			abort()
++			return nil, fmt.Errorf("start CPU profile: %w", err)
++		}
++		p.cpuStarted = true
++	}
++	return p, nil
++}
++
++// Close must be deferred immediately after successful initialization. It is
++// idempotent and runs for ordinary errors/deadlines as well as success. SIGKILL,
++// os.Exit and the existing abrupt RSS safety exit cannot run deferred cleanup.
++// A reserved but empty metadata file then identifies an unfinished diagnostic.
++func (p *diagnosticProfiles) Close(runErr error) error {
++	if p == nil || p.closed {
++		return nil
++	}
++	p.closed = true
++	var err error
++	cpuPath, heapPath := "", ""
++	if p.cpu != nil {
++		cpuPath = p.cpu.Name()
++		if p.cpuStarted {
++			p.hooks.stopCPU()
++			p.cpuStarted = false
++		}
++		err = errors.Join(err, p.cpu.Close())
++	}
++	if p.heap != nil {
++		heapPath = p.heap.Name()
++		err = errors.Join(err, p.hooks.writeHeap(p.heap), p.heap.Close())
++	}
++	if p.metadata != nil {
++		message, profileError := "", ""
++		if runErr != nil {
++			message = runErr.Error()
++		}
++		if err != nil {
++			profileError = err.Error()
++		}
++		value := map[string]any{
++			"schema":                "familybench_diagnostic_profiles_v1",
++			"diagnostic_only":       true,
++			"scope":                 "whole run after flags/output directory creation through return; includes source verification, input load, preparation, queries, validation/ranking and artifact encoding",
++			"cpu_profile":           cpuPath,
++			"heap_profile":          heapPath,
++			"heap_mem_profile_rate": runtime.MemProfileRate,
++			"heap_extra_gc_forced":  false,
++			"ordinary_return":       true,
++			"run_error":             message,
++			"profile_error":         profileError,
++			"profile_complete":      err == nil,
++			"timing_warning":        "diagnostic profiling overhead is present; do not use this run for final latency or speedup claims",
++		}
++		err = errors.Join(err, json.NewEncoder(p.metadata).Encode(value), p.metadata.Close())
++	}
++	if err != nil {
++		return fmt.Errorf("close diagnostic profiles: %w", err)
++	}
++	return nil
++}
+diff --git a/cmd/familybench/profiling_test.go b/cmd/familybench/profiling_test.go
+new file mode 100644
+index 0000000000000000000000000000000000000000..8c813cc75ab82b3215a5d3f5c06fd1493941840c
+--- /dev/null
++++ b/cmd/familybench/profiling_test.go
+@@ -0,0 +1,215 @@
++package main
++
++import (
++	"compress/gzip"
++	"context"
++	"errors"
++	"io"
++	"os"
++	"os/exec"
++	"path/filepath"
++	"reflect"
++	"strings"
++	"testing"
++	"time"
++)
++
++func TestDiagnosticProfilesDisabled(t *testing.T) {
++	calls := 0
++	hooks := profileHooks{
++		startCPU:  func(*os.File) error { calls++; return nil },
++		stopCPU:   func() { calls++ },
++		writeHeap: func(*os.File) error { calls++; return nil },
++	}
++	path := filepath.Join(t.TempDir(), "missing", "metadata.json")
++	p, err := startDiagnosticProfilesWithHooks("", "", path, hooks)
++	if err != nil || p != nil || p.Close(nil) != nil || calls != 0 {
++		t.Fatalf("disabled hooks changed behavior: profiler=%v error=%v calls=%d", p, err, calls)
++	}
++	if _, err := os.Stat(path); !errors.Is(err, os.ErrNotExist) {
++		t.Fatal("disabled profiling created a file", err)
++	}
++}
++
++func TestDiagnosticProfilesCleanup(t *testing.T) {
++	for _, failAt := range []string{"", "cpu-start", "heap-write", "reserved-heap", "reserved-metadata"} {
++		t.Run(failAt, func(t *testing.T) {
++			dir := t.TempDir()
++			cpu, heap, metadata := filepath.Join(dir, "cpu.pprof"), filepath.Join(dir, "heap.pprof"), filepath.Join(dir, "profiles.json")
++			var start, stop, write int
++			hooks := profileHooks{
++				startCPU: func(*os.File) error {
++					start++
++					if failAt == "cpu-start" {
++						return errors.New("start failed")
++					}
++					return nil
++				},
++				stopCPU: func() { stop++ },
++				writeHeap: func(f *os.File) error {
++					write++
++					if failAt == "heap-write" {
++						return errors.New("heap failed")
++					}
++					_, err := f.WriteString("heap")
++					return err
++				},
++			}
++			existing := ""
++			if failAt == "reserved-heap" {
++				existing = heap
++			}
++			if failAt == "reserved-metadata" {
++				existing = metadata
++			}
++			if existing != "" {
++				if err := os.WriteFile(existing, []byte("untouched"), 0600); err != nil {
++					t.Fatal(err)
++				}
++			}
++			p, err := startDiagnosticProfilesWithHooks(cpu, heap, metadata, hooks)
++			if failAt == "cpu-start" || existing != "" {
++				if err == nil || p != nil {
++					t.Fatal("expected initialization error", p, err)
++				}
++				for _, path := range []string{cpu, heap, metadata} {
++					b, e := os.ReadFile(path)
++					if path == existing {
++						if e != nil || string(b) != "untouched" {
++							t.Fatal("existing artifact modified", path, e)
++						}
++					} else if !errors.Is(e, os.ErrNotExist) {
++						t.Fatal("failed initialization leaked reserved file", path, e)
++					}
++				}
++				if stop != 0 || write != 0 {
++					t.Fatal("profiler unexpectedly active", start, stop, write)
++				}
++				return
++			}
++			if err != nil {
++				t.Fatal(err)
++			}
++			closeErr := p.Close(context.DeadlineExceeded)
++			if (closeErr != nil) != (failAt == "heap-write") {
++				t.Fatal("unexpected close error", closeErr)
++			}
++			if p.Close(nil) != nil || start != 1 || stop != 1 || write != 1 {
++				t.Fatal("close was not idempotent", start, stop, write)
++			}
++			for _, f := range []*os.File{p.cpu, p.heap, p.metadata} {
++				if _, err := f.WriteString("closed"); !errors.Is(err, os.ErrClosed) {
++					t.Fatal("descriptor leaked", f.Name(), err)
++				}
++			}
++			var m map[string]any
++			readProcessOutput(t, metadata, &m)
++			if m["run_error"] != context.DeadlineExceeded.Error() || m["profile_complete"] != (failAt != "heap-write") || m["heap_extra_gc_forced"] != false {
++				t.Fatal("incorrect diagnostic metadata", m)
++			}
++		})
++	}
++}
++
++// Exercise the source-bound process boundary, not just the profile helper.
++// Profiling can affect clocks but must not change outcomes, witnesses or exits.
++func TestDiagnosticProfilesCLI(t *testing.T) {
++	root, err := filepath.Abs("../..")
++	if err != nil {
++		t.Fatal(err)
++	}
++	env := append(os.Environ(), "GOTOOLCHAIN=local", "GOWORK=off", "GOPROXY=off", "GOSUMDB=off", "GOMAXPROCS=2")
++	binary := filepath.Join(t.TempDir(), "familybench")
++	ctx, cancel := context.WithTimeout(context.Background(), 90*time.Second)
++	defer cancel()
++	build := exec.CommandContext(ctx, "sh", "scripts/build.sh", "familybench", binary)
++	build.Dir, build.Env = root, env
++	if output, err := build.CombinedOutput(); err != nil {
++		t.Fatalf("source-bound build: %v\n%s", err, output)
++	}
++	for _, algorithm := range []string{"raptor", "deliberately_unknown"} {
++		t.Run(algorithm, func(t *testing.T) {
++			var control []map[string]any
++			for _, mode := range []string{"omitted", "disabled", "enabled"} {
++				dir := t.TempDir()
++				out := filepath.Join(dir, "results")
++				cpu, heap := filepath.Join(dir, "cpu.pprof"), filepath.Join(dir, "heap.pprof")
++				args := []string{"-fixture", "testdata/tiny.manifest.json", "-algorithm", algorithm, "-out-dir", out, "-warmups", "0", "-repetitions", "1", "-batch-size", "1"}
++				if mode == "disabled" {
++					args = append(args, "-cpu-profile=", "-heap-profile=")
++				}
++				if mode == "enabled" {
++					args = append(args, "-cpu-profile", cpu, "-heap-profile", heap)
++				}
++				cmd := exec.CommandContext(ctx, binary, args...)
++				cmd.Dir, cmd.Env = root, env
++				output, runErr := cmd.CombinedOutput()
++				if algorithm == "raptor" && runErr != nil {
++					t.Fatalf("%s: %v\n%s", mode, runErr, output)
++				}
++				if algorithm != "raptor" {
++					var exited *exec.ExitError
++					if !errors.As(runErr, &exited) || exited.ExitCode() != 1 || !strings.Contains(string(output), "unknown algorithm") {
++						t.Fatalf("%s changed failure exit: %v\n%s", mode, runErr, output)
++					}
++				}
++				var summary map[string]any
++				readProcessOutput(t, filepath.Join(out, "summary.json"), &summary)
++				if summary["success"] != (algorithm == "raptor") {
++					t.Fatal("summary outcome changed", mode)
++				}
++				var outcomes []map[string]any
++				for _, name := range []string{"pass-00.json", "forced-deadline.json"} {
++					var artifact struct {
++						Records []map[string]any `json:"records"`
++					}
++					readProcessOutput(t, filepath.Join(out, name), &artifact)
++					for _, r := range artifact.Records {
++						v := map[string]any{}
++						for _, key := range []string{"query", "raw", "final", "display_options", "completed", "attempted", "valid_empty", "transit", "status", "error", "certificates"} {
++							v[key] = r[key]
++						}
++						outcomes = append(outcomes, v)
++					}
++				}
++				if mode == "omitted" {
++					control = outcomes
++				} else if !reflect.DeepEqual(control, outcomes) {
++					t.Fatalf("%s changed non-timing output", mode)
++				}
++				metadata := filepath.Join(out, "diagnostic-profiles.json")
++				if mode != "enabled" {
++					if _, err := os.Stat(metadata); !errors.Is(err, os.ErrNotExist) {
++						t.Fatal("disabled mode wrote metadata", err)
++					}
++					continue
++				}
++				for _, path := range []string{cpu, heap} {
++					f, err := os.Open(path)
++					if err != nil {
++						t.Fatal(err)
++					}
++					z, err := gzip.NewReader(f)
++					if err != nil {
++						_ = f.Close()
++						t.Fatal("invalid pprof gzip", path, err)
++					}
++					b, err := io.ReadAll(z)
++					_ = z.Close()
++					_ = f.Close()
++					if err != nil || len(b) == 0 {
++						t.Fatal("empty/broken pprof payload", path, err)
++					}
++				}
++				var m map[string]any
++				readProcessOutput(t, metadata, &m)
++				if m["profile_complete"] != true || m["diagnostic_only"] != true {
++					t.Fatal("profiles not complete", m)
++				}
++				if (m["run_error"] == "") != (algorithm == "raptor") {
++					t.Fatal("failure diagnostic not retained", m)
++				}
++			}
++		})
++	}
++}

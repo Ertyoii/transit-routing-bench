@@ -1,0 +1,52 @@
+{
+  "schema": "sg_unordered_parent_od_cross_panel_audit_v1",
+  "generated_utc": "2026-10-21T03:07:31.200937+00:00",
+  "canonicalization": "sort(parent_group(origin), parent_group(destination)); frozenstopmetadata parent_group, same as frozen generator pair_key",
+  "parent_metadata_sha256": "baf3847f6b7c0340b80ddfc4a081a9fe16ab0cb7c7ee82f4de5e4e280693ea42",
+  "panel_counts": {
+    "smoke.tune": {
+      "directed_stop_od": 12,
+      "unordered_parent_od": 12
+    },
+    "screen.tune": {
+      "directed_stop_od": 60,
+      "unordered_parent_od": 60
+    },
+    "full.validation": {
+      "directed_stop_od": 150,
+      "unordered_parent_od": 150
+    },
+    "screen.validation": {
+      "directed_stop_od": 30,
+      "unordered_parent_od": 30
+    },
+    "full.test": {
+      "directed_stop_od": 150,
+      "unordered_parent_od": 150
+    },
+    "screen.test": {
+      "directed_stop_od": 30,
+      "unordered_parent_od": 30
+    }
+  },
+  "pairwise_unordered_parent_od_overlap": {
+    "smoke.tune|screen.tune": 0,
+    "smoke.tune|full.validation": 0,
+    "smoke.tune|screen.validation": 0,
+    "smoke.tune|full.test": 0,
+    "smoke.tune|screen.test": 0,
+    "screen.tune|full.validation": 0,
+    "screen.tune|screen.validation": 0,
+    "screen.tune|full.test": 0,
+    "screen.tune|screen.test": 0,
+    "full.validation|screen.validation": 0,
+    "full.validation|full.test": 0,
+    "full.validation|screen.test": 0,
+    "screen.validation|full.test": 0,
+    "screen.validation|screen.test": 0,
+    "full.test|screen.test": 0
+  },
+  "all_tune_validation_vs_test_overlap": 0,
+  "outcome_access": "frozen endpoints and parent mapping only, no test routing/outcome reads",
+  "no_outcome_conditioned_filtering": true
+}

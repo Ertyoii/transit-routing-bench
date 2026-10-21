@@ -1,5 +1,9 @@
 # Transit routing benchmark harness
 
+## Singapore public-model benchmark · 2026-10-21
+
+[Results and methodology](results/sg-public-model-2026-10-21/README.md): a bounded public-model snapshot with 24,120 heldout configuration executions, latency/quality/resource tables, retained failures, and complete reconstruction patches. Native contracts and evidence levels differ; this is not current official service, production latency, or global optimization. The source supplement does not replace the vendored baseline below.
+
 Independent finite-instance oracles, regression checks and reproducible measurement tools for [transit-routing-go](https://github.com/ertyoii/transit-routing-go). Original code and documentation are [MIT licensed](LICENSE). Bundled input fixtures are original synthetic data, under their separate CC0 notices. Aggregate reports summarize local model experiments whose inputs are excluded. See [data and third-party boundaries](THIRD_PARTY_NOTICES.md).
 
 Requires Go 1.27.x. The routing dependency is vendored with an exact version, commit and per-file hashes in `routing.lock.json`. The harness rejects missing, modified or extra vendor files. This is a reproducibility binding, not a signed attestation.

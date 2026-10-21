@@ -1,0 +1,3454 @@
+{
+  "schema": "auxiliary-native-smoke-public-v1",
+  "rows": [
+    {
+      "window": "morning",
+      "entrypoint": "profilebench",
+      "process_ok": true,
+      "returncode": 0,
+      "success": true,
+      "sampled_peak_rss_bytes": 1331998720,
+      "process_wall_s": 11.896364617,
+      "input_load_ns": 2085700023,
+      "preparation": {
+        "independent_checker": {
+          "allocated_bytes": 1153839536,
+          "elapsed_ns": 972458806,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 1009898752,
+              "total_alloc_bytes": 5400119008,
+              "num_gc": 23
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 1321160704,
+              "user_cpu_seconds": 6.939332,
+              "system_cpu_seconds": 1.666937,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        },
+        "profile_csa": {
+          "allocated_bytes": 1572140776,
+          "elapsed_ns": 1690224449,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 522895432,
+              "total_alloc_bytes": 2681990760,
+              "num_gc": 16
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 989552640,
+              "user_cpu_seconds": 3.8044219999999997,
+              "system_cpu_seconds": 0.914728,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        },
+        "range_raptor": {
+          "allocated_bytes": 1564287528,
+          "elapsed_ns": 1715662832,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 610245712,
+              "total_alloc_bytes": 4246279024,
+              "num_gc": 21
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 1118334976,
+              "user_cpu_seconds": 5.793133,
+              "system_cpu_seconds": 1.492756,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        }
+      },
+      "summaries": [
+        {
+          "algorithm": "profile_csa",
+          "repetition": 0,
+          "warmup": false,
+          "file": "00-profile_csa.json",
+          "sha256": "a5291e4dc42100d0085299d2edfbe15ce36ee7966211ecc5e734b9dbfaa19195",
+          "profile_queries": 12,
+          "ready_time_observations": 732,
+          "errors": 0,
+          "timeouts": 0,
+          "core_ns": {
+            "count": 12,
+            "p50": 342731436,
+            "p95": 436673860,
+            "max": 436673860,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "response_ns": {
+            "count": 12,
+            "p50": 342788350,
+            "p95": 438411794,
+            "max": 438411794,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "query_pass_makespan_ns": 4257654504,
+          "sum_response_ns": 4257162651,
+          "core_allocated_bytes": 891588704,
+          "successful_profiles_per_second": 2.8184532090911056
+        },
+        {
+          "algorithm": "range_raptor",
+          "repetition": 0,
+          "warmup": false,
+          "file": "00-range_raptor.json",
+          "sha256": "a31dac77c49084149b75b636e1d9fa9aa8616662b10c4e32b0644a3f28e2331b",
+          "profile_queries": 12,
+          "ready_time_observations": 732,
+          "errors": 0,
+          "timeouts": 0,
+          "core_ns": {
+            "count": 12,
+            "p50": 102520446,
+            "p95": 197119649,
+            "max": 197119649,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "response_ns": {
+            "count": 12,
+            "p50": 104470181,
+            "p95": 197183292,
+            "max": 197183292,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "query_pass_makespan_ns": 1117136897,
+          "sum_response_ns": 1116542121,
+          "core_allocated_bytes": 365379128,
+          "successful_profiles_per_second": 10.74174528853647
+        }
+      ],
+      "comparisons": [
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-e228e31d527a260c|weekday-morning-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-97cc5695a34511bf|weekday-morning-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-d5b885056d30120b|weekday-morning-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-7fd7c9bbefc23766|weekday-morning-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-6c5b7dd72f6c9504|weekday-morning-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-810f38c83a1d86b5|weekday-morning-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-0f6348895643f71e|weekday-morning-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-d0c82eb0feebc3bf|weekday-morning-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-8023f60fbab2f160|weekday-morning-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-3df9386aab04dc17|weekday-morning-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-5f454d6e79250f8b|weekday-morning-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-6b7e3a82619b6ec7|weekday-morning-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        }
+      ],
+      "summary_or_manifest": "public-campaign-20261021/resumed-0130/auxiliary-native-smoke-7gb/aux-morning-profilebench/artifact/manifest.json"
+    },
+    {
+      "window": "morning",
+      "entrypoint": "tadbench",
+      "process_ok": true,
+      "returncode": 0,
+      "success": true,
+      "sampled_peak_rss_bytes": 1685053440,
+      "process_wall_s": 10.713332442,
+      "input_load_ns": 2063616364,
+      "preparation": {
+        "ea_csa": {
+          "allocated_bytes": 1366856336,
+          "elapsed_ns": 1582017658,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 317986976,
+              "total_alloc_bytes": 2476694080,
+              "num_gc": 16
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 782749696,
+              "user_cpu_seconds": 3.775981,
+              "system_cpu_seconds": 0.68513,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        },
+        "independent_checker": {
+          "allocated_bytes": 1153847920,
+          "elapsed_ns": 1176233917,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 1185525160,
+              "total_alloc_bytes": 7001294400,
+              "num_gc": 26
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 1682444288,
+              "user_cpu_seconds": 9.138041,
+              "system_cpu_seconds": 2.191043,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        },
+        "raptor": {
+          "allocated_bytes": 1667222464,
+          "elapsed_ns": 1773208094,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 569968016,
+              "total_alloc_bytes": 4143917280,
+              "num_gc": 21
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 1236529152,
+              "user_cpu_seconds": 5.830876,
+              "system_cpu_seconds": 1.206169,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        },
+        "tad": {
+          "allocated_bytes": 1703528304,
+          "elapsed_ns": 1772001135,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 1292437256,
+              "total_alloc_bytes": 5847446032,
+              "num_gc": 24
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 1456476160,
+              "user_cpu_seconds": 7.756454,
+              "system_cpu_seconds": 1.815223,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        }
+      },
+      "summaries": [
+        {
+          "algorithm": "ea_csa",
+          "repetition": 0,
+          "warmup": false,
+          "file": "00-ea_csa.json",
+          "sha256": "cc609a27bf2be26bebb0c9a0c9918614f0e407b4c185bc9e48fd46c650b2dc97",
+          "queries": 12,
+          "errors": 0,
+          "timeouts": 0,
+          "core_ns": {
+            "count": 12,
+            "p50": 64073661,
+            "p95": 133006165,
+            "max": 133006165,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "response_ns": {
+            "count": 12,
+            "p50": 64164825,
+            "p95": 133052413,
+            "max": 133052413,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "core_allocated_bytes": 335480592,
+          "sum_response_ns": 860327914,
+          "query_pass_makespan_ns": 860896177,
+          "successful_throughput_qps": 13.938963048734736
+        },
+        {
+          "algorithm": "raptor",
+          "repetition": 0,
+          "warmup": false,
+          "file": "00-raptor.json",
+          "sha256": "a658e1dd0a2afd468e22a277f0f57cf5f7e66a941a54dfc52c900c945ecbd5c8",
+          "queries": 12,
+          "errors": 0,
+          "timeouts": 0,
+          "core_ns": {
+            "count": 12,
+            "p50": 59468082,
+            "p95": 95586116,
+            "max": 95586116,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "response_ns": {
+            "count": 12,
+            "p50": 59517705,
+            "p95": 95631983,
+            "max": 95631983,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "core_allocated_bytes": 328508568,
+          "sum_response_ns": 638211989,
+          "query_pass_makespan_ns": 639128278,
+          "successful_throughput_qps": 18.775573563340284
+        },
+        {
+          "algorithm": "tad",
+          "repetition": 0,
+          "warmup": false,
+          "file": "00-tad.json",
+          "sha256": "e0e95f7c52ed53efa03da09838ca65d4c27f0d069c1c6335c76e042a0584ba58",
+          "queries": 12,
+          "errors": 0,
+          "timeouts": 0,
+          "core_ns": {
+            "count": 12,
+            "p50": 39203619,
+            "p95": 188537842,
+            "max": 188537842,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "response_ns": {
+            "count": 12,
+            "p50": 39378447,
+            "p95": 188575237,
+            "max": 188575237,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "core_allocated_bytes": 352491752,
+          "sum_response_ns": 785720486,
+          "query_pass_makespan_ns": 786334869,
+          "successful_throughput_qps": 15.260673884728874
+        }
+      ],
+      "comparisons": [
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-e228e31d527a260c|weekday-morning-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 35249,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 35249,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-97cc5695a34511bf|weekday-morning-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-d5b885056d30120b|weekday-morning-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-7fd7c9bbefc23766|weekday-morning-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-6c5b7dd72f6c9504|weekday-morning-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-810f38c83a1d86b5|weekday-morning-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-0f6348895643f71e|weekday-morning-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-d0c82eb0feebc3bf|weekday-morning-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-8023f60fbab2f160|weekday-morning-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 33931,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 33931,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-3df9386aab04dc17|weekday-morning-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 30998,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 30998,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-5f454d6e79250f8b|weekday-morning-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-6b7e3a82619b6ec7|weekday-morning-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 30654,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 30654,
+          "warmup": false
+        }
+      ],
+      "summary_or_manifest": "public-campaign-20261021/resumed-0130/auxiliary-native-smoke-7gb/aux-morning-tadbench/artifact/manifest.json"
+    },
+    {
+      "window": "morning",
+      "entrypoint": "ultrabench",
+      "process_ok": false,
+      "returncode": 1,
+      "success": false,
+      "sampled_peak_rss_bytes": 583610368,
+      "process_wall_s": 2.04664693,
+      "input_load_ns": null,
+      "preparation": {
+        "shortcut_snapshot_io": {
+          "serialization_ns": 111664,
+          "write_ns": 59207,
+          "bytes": 1337,
+          "sha256": "ea31e1a3c886e7a05c8be4a269c2675cebe8eaf5fb52e3d05f8e61956c405b5c",
+          "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+        },
+        "ultra": {
+          "allocated_bytes": 1616,
+          "complete": false,
+          "elapsed_ns": 12569,
+          "error": "ULTRA capability: GTFS stop-pair rules are not implicit departure buffers; unsupported",
+          "resources": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 600266952,
+              "total_alloc_bytes": 1109986880,
+              "num_gc": 8
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 583602176,
+              "user_cpu_seconds": 1.898884,
+              "system_cpu_seconds": 0.23731,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        }
+      },
+      "summaries": null,
+      "comparisons": null,
+      "summary_or_manifest": "public-campaign-20261021/resumed-0130/auxiliary-native-smoke-7gb/aux-morning-ultrabench/artifact/summary.json",
+      "requested": 12,
+      "assessed": 0,
+      "unavailable": 12,
+      "phase": "preparation"
+    },
+    {
+      "window": "morning",
+      "entrypoint": "corechgraphbench",
+      "process_ok": true,
+      "returncode": 0,
+      "success": true,
+      "sampled_peak_rss_bytes": 598884352,
+      "process_wall_s": 2.500855809,
+      "input_load_ns": 2159031431,
+      "preparation": {
+        "core_ch": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 145852152,
+              "total_alloc_bytes": 1247956048,
+              "num_gc": 12
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 598667264,
+              "user_cpu_seconds": 2.283097,
+              "system_cpu_seconds": 0.356755,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 59840176,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 86011976,
+              "total_alloc_bytes": 1188115872,
+              "num_gc": 12
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 598667264,
+              "user_cpu_seconds": 2.158889,
+              "system_cpu_seconds": 0.356755,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 24,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 115234450,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 21952755,
+            "write_ns": 640281,
+            "bytes": 4434945,
+            "sha256": "6e5d43470a4001c26599df4bd7338dfb68b0e83994f2b474faf071904420142a",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 84595136,
+              "total_alloc_bytes": 1247956048,
+              "num_gc": 14
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 598667264,
+              "user_cpu_seconds": 2.343816,
+              "system_cpu_seconds": 0.357769,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": -1416840,
+          "post_gc_ns": 21663740,
+          "snapshot_copy_ns": 364826,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 3122,
+            "shortcuts": 2028,
+            "witness_searches": 4700,
+            "limited_witness_searches": 100,
+            "witness_settled": 117490,
+            "witness_edge_visits": 1464277,
+            "witness_omissions": 16230,
+            "core_vertices": 2328,
+            "core_edges": 32592,
+            "stop_reason": "average_core_out_degree"
+          }
+        },
+        "identity": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 105248912,
+              "total_alloc_bytes": 1154413592,
+              "num_gc": 10
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 598667264,
+              "user_cpu_seconds": 2.086576,
+              "system_cpu_seconds": 0.347995,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 28793912,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 76455000,
+              "total_alloc_bytes": 1125619680,
+              "num_gc": 10
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 598667264,
+              "user_cpu_seconds": 2.06894,
+              "system_cpu_seconds": 0.347937,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 5450,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 16317041,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 14439377,
+            "write_ns": 786696,
+            "bytes": 4336070,
+            "sha256": "fe16db6aac1b4764c3c0dd607b1d7326cd30ebf3b3bd1e5f7924b85996f9eb68",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 80588544,
+              "total_alloc_bytes": 1154413592,
+              "num_gc": 11
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 598667264,
+              "user_cpu_seconds": 2.112347,
+              "system_cpu_seconds": 0.352318,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": 4133544,
+          "post_gc_ns": 9203367,
+          "snapshot_copy_ns": 339839,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 0,
+            "shortcuts": 0,
+            "witness_searches": 0,
+            "limited_witness_searches": 0,
+            "witness_settled": 0,
+            "witness_edge_visits": 0,
+            "witness_omissions": 0,
+            "core_vertices": 5450,
+            "core_edges": 40230,
+            "stop_reason": "target_core_size"
+          }
+        }
+      },
+      "summaries": [
+        {
+          "algorithm": "identity",
+          "repetition": 0,
+          "warmup": false,
+          "file": "identity-pass-00.json",
+          "sha256": "bb076eb3569c534f9bd0884ae2944acfd1cbb822f8f1576e898f1aa51922ea61",
+          "rows": 24,
+          "cells": 576,
+          "errors": 0,
+          "makespan_ns": 1298389,
+          "successful_rows_per_second": 18484.444954478204,
+          "successful_cells_per_second": 443626.6789074769,
+          "whole_row_core_ns": {
+            "count": 24,
+            "p50": 6240,
+            "p95": 23284,
+            "max": 45867,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "whole_row_response_ns": {
+            "count": 24,
+            "p50": 7841,
+            "p95": 25397,
+            "max": 49232,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "core_allocated_bytes": 187680
+        },
+        {
+          "algorithm": "core_ch",
+          "repetition": 0,
+          "warmup": false,
+          "file": "core_ch-pass-00.json",
+          "sha256": "196c75031eb318cbdf88dea8e0fd355add63aa2d27669edbef48db74b84ee674",
+          "rows": 24,
+          "cells": 576,
+          "errors": 0,
+          "makespan_ns": 1008753,
+          "successful_rows_per_second": 23791.750805202068,
+          "successful_cells_per_second": 571002.0193248496,
+          "whole_row_core_ns": {
+            "count": 24,
+            "p50": 7661,
+            "p95": 24326,
+            "max": 79918,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "whole_row_response_ns": {
+            "count": 24,
+            "p50": 9745,
+            "p95": 27370,
+            "max": 84245,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "core_allocated_bytes": 183912
+        }
+      ],
+      "comparisons": null,
+      "summary_or_manifest": "public-campaign-20261021/resumed-0130/auxiliary-native-smoke-7gb/aux-morning-corechgraphbench/artifact/summary.json",
+      "original_point_queries": 12,
+      "row_targets": 24,
+      "independent_audit_ns": 21226226,
+      "cell_coverage": [
+        {
+          "algorithm": "identity",
+          "cells": 576,
+          "found": 24,
+          "self_found": 24,
+          "nonself_found": 0
+        },
+        {
+          "algorithm": "core_ch",
+          "cells": 576,
+          "found": 24,
+          "self_found": 24,
+          "nonself_found": 0
+        }
+      ]
+    },
+    {
+      "window": "midday",
+      "entrypoint": "profilebench",
+      "process_ok": true,
+      "returncode": 0,
+      "success": true,
+      "sampled_peak_rss_bytes": 1343979520,
+      "process_wall_s": 13.425520851,
+      "input_load_ns": 2180296409,
+      "preparation": {
+        "independent_checker": {
+          "allocated_bytes": 1155734320,
+          "elapsed_ns": 1193748656,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 726849328,
+              "total_alloc_bytes": 5309863640,
+              "num_gc": 23
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 1345617920,
+              "user_cpu_seconds": 7.784417,
+              "system_cpu_seconds": 2.345027,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        },
+        "profile_csa": {
+          "allocated_bytes": 1369752136,
+          "elapsed_ns": 1708853909,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 677834536,
+              "total_alloc_bytes": 2482791272,
+              "num_gc": 15
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 869224448,
+              "user_cpu_seconds": 3.858498,
+              "system_cpu_seconds": 1.013312,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        },
+        "range_raptor": {
+          "allocated_bytes": 1671336864,
+          "elapsed_ns": 2140618503,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 484565448,
+              "total_alloc_bytes": 4154128872,
+              "num_gc": 20
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 1260453888,
+              "user_cpu_seconds": 6.339369,
+              "system_cpu_seconds": 1.849962,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        }
+      },
+      "summaries": [
+        {
+          "algorithm": "profile_csa",
+          "repetition": 0,
+          "warmup": false,
+          "file": "00-profile_csa.json",
+          "sha256": "c0b0f1f97294482ecf3e9487e5567266ac741843c3381a26c42babab30013b07",
+          "profile_queries": 12,
+          "ready_time_observations": 732,
+          "errors": 0,
+          "timeouts": 0,
+          "core_ns": {
+            "count": 12,
+            "p50": 403240845,
+            "p95": 467732587,
+            "max": 467732587,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "response_ns": {
+            "count": 12,
+            "p50": 404563458,
+            "p95": 468627913,
+            "max": 468627913,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "query_pass_makespan_ns": 4922558476,
+          "sum_response_ns": 4922181343,
+          "core_allocated_bytes": 887688752,
+          "successful_profiles_per_second": 2.4377567190935694
+        },
+        {
+          "algorithm": "range_raptor",
+          "repetition": 0,
+          "warmup": false,
+          "file": "00-range_raptor.json",
+          "sha256": "dc9f15f02e9601418c3ee62ed61d70f10bef5535427d0eea1d06ab7bdb1c8617",
+          "profile_queries": 12,
+          "ready_time_observations": 732,
+          "errors": 0,
+          "timeouts": 0,
+          "core_ns": {
+            "count": 12,
+            "p50": 69694654,
+            "p95": 232245173,
+            "max": 232245173,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "response_ns": {
+            "count": 12,
+            "p50": 69756936,
+            "p95": 232485898,
+            "max": 232485898,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "query_pass_makespan_ns": 1232395857,
+          "sum_response_ns": 1232076479,
+          "core_allocated_bytes": 365313464,
+          "successful_profiles_per_second": 9.737131078330135
+        }
+      ],
+      "comparisons": [
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-e228e31d527a260c|weekday-midday-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-97cc5695a34511bf|weekday-midday-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-d5b885056d30120b|weekday-midday-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-7fd7c9bbefc23766|weekday-midday-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-6c5b7dd72f6c9504|weekday-midday-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-810f38c83a1d86b5|weekday-midday-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-0f6348895643f71e|weekday-midday-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-d0c82eb0feebc3bf|weekday-midday-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-8023f60fbab2f160|weekday-midday-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-3df9386aab04dc17|weekday-midday-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-5f454d6e79250f8b|weekday-midday-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-6b7e3a82619b6ec7|weekday-midday-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        }
+      ],
+      "summary_or_manifest": "public-campaign-20261021/resumed-0130/auxiliary-native-smoke-7gb/aux-midday-profilebench/artifact/manifest.json"
+    },
+    {
+      "window": "midday",
+      "entrypoint": "tadbench",
+      "process_ok": true,
+      "returncode": 0,
+      "success": true,
+      "sampled_peak_rss_bytes": 1579315200,
+      "process_wall_s": 11.776943745,
+      "input_load_ns": 2283049070,
+      "preparation": {
+        "ea_csa": {
+          "allocated_bytes": 1472384872,
+          "elapsed_ns": 2078535535,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 637105600,
+              "total_alloc_bytes": 2585409136,
+              "num_gc": 15
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 872124416,
+              "user_cpu_seconds": 4.158947,
+              "system_cpu_seconds": 1.438587,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        },
+        "independent_checker": {
+          "allocated_bytes": 1155811200,
+          "elapsed_ns": 1123926344,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 1125454408,
+              "total_alloc_bytes": 6811778480,
+              "num_gc": 25
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 1568464896,
+              "user_cpu_seconds": 9.710675,
+              "system_cpu_seconds": 3.485702,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        },
+        "raptor": {
+          "allocated_bytes": 1568627440,
+          "elapsed_ns": 2082562555,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 563908544,
+              "total_alloc_bytes": 4154037312,
+              "num_gc": 20
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 1154584576,
+              "user_cpu_seconds": 6.241665,
+              "system_cpu_seconds": 2.263391,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        },
+        "tad": {
+          "allocated_bytes": 1501929072,
+          "elapsed_ns": 1862388463,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 1090534280,
+              "total_alloc_bytes": 5655966832,
+              "num_gc": 23
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 1389944832,
+              "user_cpu_seconds": 8.203851,
+              "system_cpu_seconds": 3.102602,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        }
+      },
+      "summaries": [
+        {
+          "algorithm": "ea_csa",
+          "repetition": 0,
+          "warmup": false,
+          "file": "00-ea_csa.json",
+          "sha256": "297881160f3f85e28fe1eb4f2ea9b41ce6364b83a3961cd43ed116b42ca9c68f",
+          "queries": 12,
+          "errors": 0,
+          "timeouts": 0,
+          "core_ns": {
+            "count": 12,
+            "p50": 70131486,
+            "p95": 102384180,
+            "max": 102384180,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "response_ns": {
+            "count": 12,
+            "p50": 70316227,
+            "p95": 102428555,
+            "max": 102428555,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "core_allocated_bytes": 339490544,
+          "sum_response_ns": 845877884,
+          "query_pass_makespan_ns": 846406912,
+          "successful_throughput_qps": 14.177577982728005
+        },
+        {
+          "algorithm": "raptor",
+          "repetition": 0,
+          "warmup": false,
+          "file": "00-raptor.json",
+          "sha256": "1ed15e70e78526b59d6b236fcbc896e92ab7752887f1af5b48dc4ce72d57ddca",
+          "queries": 12,
+          "errors": 0,
+          "timeouts": 0,
+          "core_ns": {
+            "count": 12,
+            "p50": 45431658,
+            "p95": 95085342,
+            "max": 95085342,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "response_ns": {
+            "count": 12,
+            "p50": 45488191,
+            "p95": 95270855,
+            "max": 95270855,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "core_allocated_bytes": 331047176,
+          "sum_response_ns": 654521259,
+          "query_pass_makespan_ns": 654982529,
+          "successful_throughput_qps": 18.321099370881083
+        },
+        {
+          "algorithm": "tad",
+          "repetition": 0,
+          "warmup": false,
+          "file": "00-tad.json",
+          "sha256": "70c1ac92f72962b0fb02e878db7ba8d7eb7b6f4842190489353baa7da64be11a",
+          "queries": 12,
+          "errors": 0,
+          "timeouts": 0,
+          "core_ns": {
+            "count": 12,
+            "p50": 44472293,
+            "p95": 189391373,
+            "max": 189391373,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "response_ns": {
+            "count": 12,
+            "p50": 44624277,
+            "p95": 189427727,
+            "max": 189427727,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "core_allocated_bytes": 334153616,
+          "sum_response_ns": 761162774,
+          "query_pass_makespan_ns": 761567849,
+          "successful_throughput_qps": 15.756967702558567
+        }
+      ],
+      "comparisons": [
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-e228e31d527a260c|weekday-midday-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 51505,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 51505,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-97cc5695a34511bf|weekday-midday-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 52938,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 52938,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-d5b885056d30120b|weekday-midday-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-7fd7c9bbefc23766|weekday-midday-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-6c5b7dd72f6c9504|weekday-midday-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-810f38c83a1d86b5|weekday-midday-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-0f6348895643f71e|weekday-midday-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-d0c82eb0feebc3bf|weekday-midday-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-8023f60fbab2f160|weekday-midday-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 48365,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 48365,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-3df9386aab04dc17|weekday-midday-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 46950,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 46950,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-5f454d6e79250f8b|weekday-midday-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-6b7e3a82619b6ec7|weekday-midday-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 49854,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 49854,
+          "warmup": false
+        }
+      ],
+      "summary_or_manifest": "public-campaign-20261021/resumed-0130/auxiliary-native-smoke-7gb/aux-midday-tadbench/artifact/manifest.json"
+    },
+    {
+      "window": "midday",
+      "entrypoint": "ultrabench",
+      "process_ok": false,
+      "returncode": 1,
+      "success": false,
+      "sampled_peak_rss_bytes": 583434240,
+      "process_wall_s": 2.097330654,
+      "input_load_ns": null,
+      "preparation": {
+        "shortcut_snapshot_io": {
+          "serialization_ns": 110182,
+          "write_ns": 102991,
+          "bytes": 1337,
+          "sha256": "ea31e1a3c886e7a05c8be4a269c2675cebe8eaf5fb52e3d05f8e61956c405b5c",
+          "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+        },
+        "ultra": {
+          "allocated_bytes": 1616,
+          "complete": false,
+          "elapsed_ns": 11788,
+          "error": "ULTRA capability: GTFS stop-pair rules are not implicit departure buffers; unsupported",
+          "resources": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 601174864,
+              "total_alloc_bytes": 1113185128,
+              "num_gc": 8
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 585306112,
+              "user_cpu_seconds": 1.888305,
+              "system_cpu_seconds": 0.332971,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        }
+      },
+      "summaries": null,
+      "comparisons": null,
+      "summary_or_manifest": "public-campaign-20261021/resumed-0130/auxiliary-native-smoke-7gb/aux-midday-ultrabench/artifact/summary.json",
+      "requested": 12,
+      "assessed": 0,
+      "unavailable": 12,
+      "phase": "preparation"
+    },
+    {
+      "window": "midday",
+      "entrypoint": "corechgraphbench",
+      "process_ok": true,
+      "returncode": 0,
+      "success": true,
+      "sampled_peak_rss_bytes": 586346496,
+      "process_wall_s": 2.262765887,
+      "input_load_ns": 1995109792,
+      "preparation": {
+        "core_ch": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 145982712,
+              "total_alloc_bytes": 1251145952,
+              "num_gc": 12
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 599846912,
+              "user_cpu_seconds": 2.142433,
+              "system_cpu_seconds": 0.283509,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 59837136,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 86145576,
+              "total_alloc_bytes": 1191308816,
+              "num_gc": 12
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 599846912,
+              "user_cpu_seconds": 2.031829,
+              "system_cpu_seconds": 0.283509,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 24,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 109421153,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 13730091,
+            "write_ns": 685637,
+            "bytes": 4434945,
+            "sha256": "6e5d43470a4001c26599df4bd7338dfb68b0e83994f2b474faf071904420142a",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 84728992,
+              "total_alloc_bytes": 1251145952,
+              "num_gc": 13
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 599846912,
+              "user_cpu_seconds": 2.170284,
+              "system_cpu_seconds": 0.287638,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": -1416584,
+          "post_gc_ns": 10500633,
+          "snapshot_copy_ns": 323505,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 3122,
+            "shortcuts": 2028,
+            "witness_searches": 4700,
+            "limited_witness_searches": 100,
+            "witness_settled": 117490,
+            "witness_edge_visits": 1464277,
+            "witness_omissions": 16230,
+            "core_vertices": 2328,
+            "core_edges": 32592,
+            "stop_reason": "average_core_out_degree"
+          }
+        },
+        "identity": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 105382192,
+              "total_alloc_bytes": 1157606248,
+              "num_gc": 10
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 599846912,
+              "user_cpu_seconds": 1.9760309999999999,
+              "system_cpu_seconds": 0.27103,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 28793912,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 76588280,
+              "total_alloc_bytes": 1128812336,
+              "num_gc": 10
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 599846912,
+              "user_cpu_seconds": 1.957811,
+              "system_cpu_seconds": 0.270435,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 5450,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 17599706,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 13662941,
+            "write_ns": 904149,
+            "bytes": 4336070,
+            "sha256": "fe16db6aac1b4764c3c0dd607b1d7326cd30ebf3b3bd1e5f7924b85996f9eb68",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 80721824,
+              "total_alloc_bytes": 1157606248,
+              "num_gc": 11
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 599846912,
+              "user_cpu_seconds": 1.993748,
+              "system_cpu_seconds": 0.278686,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": 4133544,
+          "post_gc_ns": 7812654,
+          "snapshot_copy_ns": 258500,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 0,
+            "shortcuts": 0,
+            "witness_searches": 0,
+            "limited_witness_searches": 0,
+            "witness_settled": 0,
+            "witness_edge_visits": 0,
+            "witness_omissions": 0,
+            "core_vertices": 5450,
+            "core_edges": 40230,
+            "stop_reason": "target_core_size"
+          }
+        }
+      },
+      "summaries": [
+        {
+          "algorithm": "identity",
+          "repetition": 0,
+          "warmup": false,
+          "file": "identity-pass-00.json",
+          "sha256": "013f952d7a638657716d461a879b504a5e8f426fe324e84f57a798449ad6cd28",
+          "rows": 24,
+          "cells": 576,
+          "errors": 0,
+          "makespan_ns": 1170921,
+          "successful_rows_per_second": 20496.68594209174,
+          "successful_cells_per_second": 491920.46261020174,
+          "whole_row_core_ns": {
+            "count": 24,
+            "p50": 5608,
+            "p95": 22263,
+            "max": 63013,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "whole_row_response_ns": {
+            "count": 24,
+            "p50": 6820,
+            "p95": 24095,
+            "max": 66768,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "core_allocated_bytes": 187680
+        },
+        {
+          "algorithm": "core_ch",
+          "repetition": 0,
+          "warmup": false,
+          "file": "core_ch-pass-00.json",
+          "sha256": "19c3044df482715b378fed3ad343a2a0ea412c832af468915e8a7719fb3bf2b0",
+          "rows": 24,
+          "cells": 576,
+          "errors": 0,
+          "makespan_ns": 723864,
+          "successful_rows_per_second": 33155.39935678525,
+          "successful_cells_per_second": 795729.5845628461,
+          "whole_row_core_ns": {
+            "count": 24,
+            "p50": 4687,
+            "p95": 18907,
+            "max": 31186,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "whole_row_response_ns": {
+            "count": 24,
+            "p50": 6058,
+            "p95": 20088,
+            "max": 32749,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "core_allocated_bytes": 183912
+        }
+      ],
+      "comparisons": null,
+      "summary_or_manifest": "public-campaign-20261021/resumed-0130/auxiliary-native-smoke-7gb/aux-midday-corechgraphbench/artifact/summary.json",
+      "original_point_queries": 12,
+      "row_targets": 24,
+      "independent_audit_ns": 18703464,
+      "cell_coverage": [
+        {
+          "algorithm": "identity",
+          "cells": 576,
+          "found": 24,
+          "self_found": 24,
+          "nonself_found": 0
+        },
+        {
+          "algorithm": "core_ch",
+          "cells": 576,
+          "found": 24,
+          "self_found": 24,
+          "nonself_found": 0
+        }
+      ]
+    },
+    {
+      "window": "evening",
+      "entrypoint": "profilebench",
+      "process_ok": true,
+      "returncode": 0,
+      "success": true,
+      "sampled_peak_rss_bytes": 1353351168,
+      "process_wall_s": 11.918779736,
+      "input_load_ns": 2121923436,
+      "preparation": {
+        "independent_checker": {
+          "allocated_bytes": 1155934512,
+          "elapsed_ns": 882945831,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 1012385992,
+              "total_alloc_bytes": 5310695216,
+              "num_gc": 24
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 1347137536,
+              "user_cpu_seconds": 7.1519449999999996,
+              "system_cpu_seconds": 1.7789540000000001,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        },
+        "profile_csa": {
+          "allocated_bytes": 1472435888,
+          "elapsed_ns": 1660827571,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 488835280,
+              "total_alloc_bytes": 2586007536,
+              "num_gc": 16
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 820867072,
+              "user_cpu_seconds": 3.825423,
+              "system_cpu_seconds": 1.052149,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        },
+        "range_raptor": {
+          "allocated_bytes": 1568751984,
+          "elapsed_ns": 1797350562,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 498321040,
+              "total_alloc_bytes": 4154760256,
+              "num_gc": 22
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 1231622144,
+              "user_cpu_seconds": 6.006381,
+              "system_cpu_seconds": 1.676891,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        }
+      },
+      "summaries": [
+        {
+          "algorithm": "profile_csa",
+          "repetition": 0,
+          "warmup": false,
+          "file": "00-profile_csa.json",
+          "sha256": "a239c12eb93a7c5db30d55f3ae8f5fee7d74eeff02f0b5e3dcbd9b6014906d71",
+          "profile_queries": 12,
+          "ready_time_observations": 732,
+          "errors": 0,
+          "timeouts": 0,
+          "core_ns": {
+            "count": 12,
+            "p50": 360596041,
+            "p95": 404375952,
+            "max": 404375952,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "response_ns": {
+            "count": 12,
+            "p50": 360664301,
+            "p95": 404420608,
+            "max": 404420608,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "query_pass_makespan_ns": 4361184525,
+          "sum_response_ns": 4360651022,
+          "core_allocated_bytes": 897158712,
+          "successful_profiles_per_second": 2.7515460378278767
+        },
+        {
+          "algorithm": "range_raptor",
+          "repetition": 0,
+          "warmup": false,
+          "file": "00-range_raptor.json",
+          "sha256": "4b70ece18a0d9a675035cc69a669d6cd18f477a255e8583a6532d080379413b3",
+          "profile_queries": 12,
+          "ready_time_observations": 732,
+          "errors": 0,
+          "timeouts": 0,
+          "core_ns": {
+            "count": 12,
+            "p50": 93316258,
+            "p95": 161219004,
+            "max": 161219004,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "response_ns": {
+            "count": 12,
+            "p50": 93407913,
+            "p95": 161292281,
+            "max": 161292281,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "query_pass_makespan_ns": 1049696436,
+          "sum_response_ns": 1049150793,
+          "core_allocated_bytes": 354586408,
+          "successful_profiles_per_second": 11.431876482049901
+        }
+      ],
+      "comparisons": [
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-e228e31d527a260c|weekday-evening-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-97cc5695a34511bf|weekday-evening-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-d5b885056d30120b|weekday-evening-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-7fd7c9bbefc23766|weekday-evening-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-6c5b7dd72f6c9504|weekday-evening-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-810f38c83a1d86b5|weekday-evening-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-0f6348895643f71e|weekday-evening-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-d0c82eb0feebc3bf|weekday-evening-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-8023f60fbab2f160|weekday-evening-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-3df9386aab04dc17|weekday-evening-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-5f454d6e79250f8b|weekday-evening-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-6b7e3a82619b6ec7|weekday-evening-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        }
+      ],
+      "summary_or_manifest": "public-campaign-20261021/resumed-0130/auxiliary-native-smoke-7gb/aux-evening-profilebench/artifact/manifest.json"
+    },
+    {
+      "window": "evening",
+      "entrypoint": "tadbench",
+      "process_ok": true,
+      "returncode": 0,
+      "success": true,
+      "sampled_peak_rss_bytes": 1502433280,
+      "process_wall_s": 9.784405881,
+      "input_load_ns": 2117537910,
+      "preparation": {
+        "ea_csa": {
+          "allocated_bytes": 1472411120,
+          "elapsed_ns": 1536997341,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 458368728,
+              "total_alloc_bytes": 2585959632,
+              "num_gc": 16
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 861667328,
+              "user_cpu_seconds": 3.699264,
+              "system_cpu_seconds": 0.897302,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        },
+        "independent_checker": {
+          "allocated_bytes": 1155948312,
+          "elapsed_ns": 853551153,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 1239434536,
+              "total_alloc_bytes": 7018408176,
+              "num_gc": 27
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 1502302208,
+              "user_cpu_seconds": 8.849219,
+              "system_cpu_seconds": 1.613654,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        },
+        "raptor": {
+          "allocated_bytes": 1671654424,
+          "elapsed_ns": 1674871424,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 500530576,
+              "total_alloc_bytes": 4257614792,
+              "num_gc": 22
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 1204580352,
+              "user_cpu_seconds": 5.876251,
+              "system_cpu_seconds": 1.3128630000000001,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        },
+        "tad": {
+          "allocated_bytes": 1604844176,
+          "elapsed_ns": 1377771309,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 931410680,
+              "total_alloc_bytes": 5862459416,
+              "num_gc": 25
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 1502302208,
+              "user_cpu_seconds": 7.570384,
+              "system_cpu_seconds": 1.5314299999999998,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        }
+      },
+      "summaries": [
+        {
+          "algorithm": "ea_csa",
+          "repetition": 0,
+          "warmup": false,
+          "file": "00-ea_csa.json",
+          "sha256": "eb19a5addf3c7343960b109563717c24756762fce047751cac2b44a2ddc9cdcb",
+          "queries": 12,
+          "errors": 0,
+          "timeouts": 0,
+          "core_ns": {
+            "count": 12,
+            "p50": 65645954,
+            "p95": 120927936,
+            "max": 120927936,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "response_ns": {
+            "count": 12,
+            "p50": 65816364,
+            "p95": 120990798,
+            "max": 120990798,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "core_allocated_bytes": 329428152,
+          "sum_response_ns": 808416076,
+          "query_pass_makespan_ns": 808892836,
+          "successful_throughput_qps": 14.835092444804394
+        },
+        {
+          "algorithm": "raptor",
+          "repetition": 0,
+          "warmup": false,
+          "file": "00-raptor.json",
+          "sha256": "8a148560f10fe126ca03bc76429df477950ca0d73872bc09b48070ee23cfd665",
+          "queries": 12,
+          "errors": 0,
+          "timeouts": 0,
+          "core_ns": {
+            "count": 12,
+            "p50": 43750793,
+            "p95": 97683522,
+            "max": 97683522,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "response_ns": {
+            "count": 12,
+            "p50": 43799003,
+            "p95": 97896405,
+            "max": 97896405,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "core_allocated_bytes": 322225768,
+          "sum_response_ns": 634801900,
+          "query_pass_makespan_ns": 635698930,
+          "successful_throughput_qps": 18.876860466007077
+        },
+        {
+          "algorithm": "tad",
+          "repetition": 0,
+          "warmup": false,
+          "file": "00-tad.json",
+          "sha256": "a6b5050a962f9ec8b00dbdfcfae4b46ef14e8d950435e0d4bce7a823faca4a8f",
+          "queries": 12,
+          "errors": 0,
+          "timeouts": 0,
+          "core_ns": {
+            "count": 12,
+            "p50": 47367485,
+            "p95": 156177818,
+            "max": 156177818,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "response_ns": {
+            "count": 12,
+            "p50": 47492830,
+            "p95": 156216014,
+            "max": 156216014,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "core_allocated_bytes": 348947552,
+          "sum_response_ns": 724927949,
+          "query_pass_makespan_ns": 725330211,
+          "successful_throughput_qps": 16.544188864621827
+        }
+      ],
+      "comparisons": [
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-e228e31d527a260c|weekday-evening-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 68267,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 68267,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-97cc5695a34511bf|weekday-evening-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-d5b885056d30120b|weekday-evening-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 68454,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 68454,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-7fd7c9bbefc23766|weekday-evening-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-6c5b7dd72f6c9504|weekday-evening-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-810f38c83a1d86b5|weekday-evening-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-0f6348895643f71e|weekday-evening-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-d0c82eb0feebc3bf|weekday-evening-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-8023f60fbab2f160|weekday-evening-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 64215,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 64215,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-3df9386aab04dc17|weekday-evening-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 69398,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 69398,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-5f454d6e79250f8b|weekday-evening-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-6b7e3a82619b6ec7|weekday-evening-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 65454,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 65454,
+          "warmup": false
+        }
+      ],
+      "summary_or_manifest": "public-campaign-20261021/resumed-0130/auxiliary-native-smoke-7gb/aux-evening-tadbench/artifact/manifest.json"
+    },
+    {
+      "window": "evening",
+      "entrypoint": "ultrabench",
+      "process_ok": false,
+      "returncode": 1,
+      "success": false,
+      "sampled_peak_rss_bytes": 580009984,
+      "process_wall_s": 2.097328697,
+      "input_load_ns": null,
+      "preparation": {
+        "shortcut_snapshot_io": {
+          "serialization_ns": 133376,
+          "write_ns": 87488,
+          "bytes": 1337,
+          "sha256": "ea31e1a3c886e7a05c8be4a269c2675cebe8eaf5fb52e3d05f8e61956c405b5c",
+          "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+        },
+        "ultra": {
+          "allocated_bytes": 1616,
+          "complete": false,
+          "elapsed_ns": 12138,
+          "error": "ULTRA capability: GTFS stop-pair rules are not implicit departure buffers; unsupported",
+          "resources": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 601313352,
+              "total_alloc_bytes": 1113695424,
+              "num_gc": 8
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 585568256,
+              "user_cpu_seconds": 1.921148,
+              "system_cpu_seconds": 0.320879,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        }
+      },
+      "summaries": null,
+      "comparisons": null,
+      "summary_or_manifest": "public-campaign-20261021/resumed-0130/auxiliary-native-smoke-7gb/aux-evening-ultrabench/artifact/summary.json",
+      "requested": 12,
+      "assessed": 0,
+      "unavailable": 12,
+      "phase": "preparation"
+    },
+    {
+      "window": "evening",
+      "entrypoint": "corechgraphbench",
+      "process_ok": true,
+      "returncode": 0,
+      "success": true,
+      "sampled_peak_rss_bytes": 600023040,
+      "process_wall_s": 2.252531541,
+      "input_load_ns": 1981923769,
+      "preparation": {
+        "core_ch": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 146003816,
+              "total_alloc_bytes": 1251671976,
+              "num_gc": 12
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 599846912,
+              "user_cpu_seconds": 2.1348570000000002,
+              "system_cpu_seconds": 0.305047,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 59838960,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 86164856,
+              "total_alloc_bytes": 1191833016,
+              "num_gc": 12
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 599846912,
+              "user_cpu_seconds": 2.020306,
+              "system_cpu_seconds": 0.304351,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 24,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 108261379,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 13547591,
+            "write_ns": 751965,
+            "bytes": 4434945,
+            "sha256": "6e5d43470a4001c26599df4bd7338dfb68b0e83994f2b474faf071904420142a",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 84753336,
+              "total_alloc_bytes": 1251677296,
+              "num_gc": 14
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 599846912,
+              "user_cpu_seconds": 2.190586,
+              "system_cpu_seconds": 0.305567,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": -1411520,
+          "post_gc_ns": 17358794,
+          "snapshot_copy_ns": 269757,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 3122,
+            "shortcuts": 2028,
+            "witness_searches": 4700,
+            "limited_witness_searches": 100,
+            "witness_settled": 117490,
+            "witness_edge_visits": 1464277,
+            "witness_omissions": 16230,
+            "core_vertices": 2328,
+            "core_edges": 32592,
+            "stop_reason": "average_core_out_degree"
+          }
+        },
+        "identity": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 105401360,
+              "total_alloc_bytes": 1158130256,
+              "num_gc": 10
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 599846912,
+              "user_cpu_seconds": 1.948752,
+              "system_cpu_seconds": 0.296864,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 28793928,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 76607432,
+              "total_alloc_bytes": 1129336328,
+              "num_gc": 10
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 599846912,
+              "user_cpu_seconds": 1.933296,
+              "system_cpu_seconds": 0.296364,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 5450,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 14762203,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 13847143,
+            "write_ns": 632510,
+            "bytes": 4336070,
+            "sha256": "fe16db6aac1b4764c3c0dd607b1d7326cd30ebf3b3bd1e5f7924b85996f9eb68",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 80740944,
+              "total_alloc_bytes": 1158130256,
+              "num_gc": 11
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 599846912,
+              "user_cpu_seconds": 1.972772,
+              "system_cpu_seconds": 0.304351,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": 4133512,
+          "post_gc_ns": 9701052,
+          "snapshot_copy_ns": 277688,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 0,
+            "shortcuts": 0,
+            "witness_searches": 0,
+            "limited_witness_searches": 0,
+            "witness_settled": 0,
+            "witness_edge_visits": 0,
+            "witness_omissions": 0,
+            "core_vertices": 5450,
+            "core_edges": 40230,
+            "stop_reason": "target_core_size"
+          }
+        }
+      },
+      "summaries": [
+        {
+          "algorithm": "identity",
+          "repetition": 0,
+          "warmup": false,
+          "file": "identity-pass-00.json",
+          "sha256": "2ed2430d3f2b38d97ed135e5e1364e3300df8232fa6ecf678836f8574e2669f3",
+          "rows": 24,
+          "cells": 576,
+          "errors": 0,
+          "makespan_ns": 832594,
+          "successful_rows_per_second": 28825.574049296534,
+          "successful_cells_per_second": 691813.7771831169,
+          "whole_row_core_ns": {
+            "count": 24,
+            "p50": 5118,
+            "p95": 17786,
+            "max": 40590,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "whole_row_response_ns": {
+            "count": 24,
+            "p50": 6340,
+            "p95": 19619,
+            "max": 43995,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "core_allocated_bytes": 187680
+        },
+        {
+          "algorithm": "core_ch",
+          "repetition": 0,
+          "warmup": false,
+          "file": "core_ch-pass-00.json",
+          "sha256": "630da5f1fda311ae65adf0298a5d7af19d446c3cd0f7ac99971fc3422c2e3c3c",
+          "rows": 24,
+          "cells": 576,
+          "errors": 0,
+          "makespan_ns": 803952,
+          "successful_rows_per_second": 29852.528509164727,
+          "successful_cells_per_second": 716460.6842199535,
+          "whole_row_core_ns": {
+            "count": 24,
+            "p50": 4677,
+            "p95": 21361,
+            "max": 28202,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "whole_row_response_ns": {
+            "count": 24,
+            "p50": 5758,
+            "p95": 23033,
+            "max": 29784,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "core_allocated_bytes": 183912
+        }
+      ],
+      "comparisons": null,
+      "summary_or_manifest": "public-campaign-20261021/resumed-0130/auxiliary-native-smoke-7gb/aux-evening-corechgraphbench/artifact/summary.json",
+      "original_point_queries": 12,
+      "row_targets": 24,
+      "independent_audit_ns": 16887802,
+      "cell_coverage": [
+        {
+          "algorithm": "identity",
+          "cells": 576,
+          "found": 24,
+          "self_found": 24,
+          "nonself_found": 0
+        },
+        {
+          "algorithm": "core_ch",
+          "cells": 576,
+          "found": 24,
+          "self_found": 24,
+          "nonself_found": 0
+        }
+      ]
+    },
+    {
+      "window": "overnight",
+      "entrypoint": "profilebench",
+      "process_ok": true,
+      "returncode": 0,
+      "success": true,
+      "sampled_peak_rss_bytes": 626216960,
+      "process_wall_s": 4.636233617,
+      "input_load_ns": 823527405,
+      "preparation": {
+        "independent_checker": {
+          "allocated_bytes": 503211848,
+          "elapsed_ns": 460726849,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 424120600,
+              "total_alloc_bytes": 2504954808,
+              "num_gc": 24
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 625233920,
+              "user_cpu_seconds": 3.143883,
+              "system_cpu_seconds": 0.900949,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        },
+        "profile_csa": {
+          "allocated_bytes": 763809152,
+          "elapsed_ns": 758993843,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 256454816,
+              "total_alloc_bytes": 1262509768,
+              "num_gc": 17
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 382365696,
+              "user_cpu_seconds": 1.680708,
+              "system_cpu_seconds": 0.334485,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        },
+        "range_raptor": {
+          "allocated_bytes": 739232008,
+          "elapsed_ns": 812633904,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 205251624,
+              "total_alloc_bytes": 2001742512,
+              "num_gc": 22
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 532377600,
+              "user_cpu_seconds": 2.641521,
+              "system_cpu_seconds": 0.655558,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        }
+      },
+      "summaries": [
+        {
+          "algorithm": "profile_csa",
+          "repetition": 0,
+          "warmup": false,
+          "file": "00-profile_csa.json",
+          "sha256": "2b789e32bc968cf927166597ba4be8b304695a3593b9848f49c095d79a5135bd",
+          "profile_queries": 12,
+          "ready_time_observations": 732,
+          "errors": 0,
+          "timeouts": 0,
+          "core_ns": {
+            "count": 12,
+            "p50": 71027547,
+            "p95": 340150695,
+            "max": 340150695,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "response_ns": {
+            "count": 12,
+            "p50": 71098110,
+            "p95": 341009628,
+            "max": 341009628,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "query_pass_makespan_ns": 1495736782,
+          "sum_response_ns": 1495313258,
+          "core_allocated_bytes": 521413280,
+          "successful_profiles_per_second": 8.022801969176953
+        },
+        {
+          "algorithm": "range_raptor",
+          "repetition": 0,
+          "warmup": false,
+          "file": "00-range_raptor.json",
+          "sha256": "f222535efe083176daf896001e18497acf4fca7c086176fd11c7b5228fb9134b",
+          "profile_queries": 12,
+          "ready_time_observations": 732,
+          "errors": 0,
+          "timeouts": 0,
+          "core_ns": {
+            "count": 12,
+            "p50": 9714549,
+            "p95": 69823968,
+            "max": 69823968,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "response_ns": {
+            "count": 12,
+            "p50": 9756309,
+            "p95": 70714957,
+            "max": 70714957,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "query_pass_makespan_ns": 251504283,
+          "sum_response_ns": 250860367,
+          "core_allocated_bytes": 92691072,
+          "successful_profiles_per_second": 47.712905151599344
+        }
+      ],
+      "comparisons": [
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-e228e31d527a260c|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-97cc5695a34511bf|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-d5b885056d30120b|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-7fd7c9bbefc23766|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-6c5b7dd72f6c9504|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-810f38c83a1d86b5|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-0f6348895643f71e|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-d0c82eb0feebc3bf|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-8023f60fbab2f160|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-3df9386aab04dc17|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-5f454d6e79250f8b|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        },
+        {
+          "assessed": true,
+          "equal_whole_window": true,
+          "profile_csa_error": "",
+          "query_id": "smoke-6b7e3a82619b6ec7|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "range_raptor_error": "",
+          "repetition": 0,
+          "warmup": false,
+          "window_integer_seconds": 61
+        }
+      ],
+      "summary_or_manifest": "public-campaign-20261021/resumed-0130/auxiliary-native-smoke-7gb/aux-overnight-profilebench/artifact/manifest.json"
+    },
+    {
+      "window": "overnight",
+      "entrypoint": "tadbench",
+      "process_ok": true,
+      "returncode": 0,
+      "success": true,
+      "sampled_peak_rss_bytes": 786722816,
+      "process_wall_s": 4.070874788,
+      "input_load_ns": 848653955,
+      "preparation": {
+        "ea_csa": {
+          "allocated_bytes": 763686504,
+          "elapsed_ns": 768919330,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 256459352,
+              "total_alloc_bytes": 1262363312,
+              "num_gc": 16
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 415956992,
+              "user_cpu_seconds": 1.655115,
+              "system_cpu_seconds": 0.422366,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        },
+        "independent_checker": {
+          "allocated_bytes": 503224848,
+          "elapsed_ns": 443168516,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 546818352,
+              "total_alloc_bytes": 3216219032,
+              "num_gc": 26
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 784842752,
+              "user_cpu_seconds": 4.031765,
+              "system_cpu_seconds": 1.058727,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        },
+        "raptor": {
+          "allocated_bytes": 739086320,
+          "elapsed_ns": 751574193,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 301584696,
+              "total_alloc_bytes": 2001450368,
+              "num_gc": 21
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 481599488,
+              "user_cpu_seconds": 2.554766,
+              "system_cpu_seconds": 0.632126,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        },
+        "tad": {
+          "allocated_bytes": 711542920,
+          "elapsed_ns": 712924806,
+          "error": "",
+          "resources_after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 516415536,
+              "total_alloc_bytes": 2712993736,
+              "num_gc": 24
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 646168576,
+              "user_cpu_seconds": 3.408507,
+              "system_cpu_seconds": 0.888302,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        }
+      },
+      "summaries": [
+        {
+          "algorithm": "ea_csa",
+          "repetition": 0,
+          "warmup": false,
+          "file": "00-ea_csa.json",
+          "sha256": "a18332f389e7e957c1024563a65a5540acfc55b287bb0c9f7d4874c78ed18025",
+          "queries": 12,
+          "errors": 0,
+          "timeouts": 0,
+          "core_ns": {
+            "count": 12,
+            "p50": 3928685,
+            "p95": 52348062,
+            "max": 52348062,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "response_ns": {
+            "count": 12,
+            "p50": 3950957,
+            "p95": 52474167,
+            "max": 52474167,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "core_allocated_bytes": 84920912,
+          "sum_response_ns": 160991566,
+          "query_pass_makespan_ns": 161431675,
+          "successful_throughput_qps": 74.33485404893432
+        },
+        {
+          "algorithm": "raptor",
+          "repetition": 0,
+          "warmup": false,
+          "file": "00-raptor.json",
+          "sha256": "45e8cb6a0fe792a2f50fcfa4188174ff0bcfd9c05e8bd6df7c965df0f0dd32db",
+          "queries": 12,
+          "errors": 0,
+          "timeouts": 0,
+          "core_ns": {
+            "count": 12,
+            "p50": 5930096,
+            "p95": 46725990,
+            "max": 46725990,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "response_ns": {
+            "count": 12,
+            "p50": 5974922,
+            "p95": 46832807,
+            "max": 46832807,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "core_allocated_bytes": 89052632,
+          "sum_response_ns": 156905293,
+          "query_pass_makespan_ns": 157436874,
+          "successful_throughput_qps": 76.22102557752767
+        },
+        {
+          "algorithm": "tad",
+          "repetition": 0,
+          "warmup": false,
+          "file": "00-tad.json",
+          "sha256": "c5c144bfee38d2ec3e351b353afce86adea85bbdb43e7127b2c52fe2704bd0e0",
+          "queries": 12,
+          "errors": 0,
+          "timeouts": 0,
+          "core_ns": {
+            "count": 12,
+            "p50": 2333460,
+            "p95": 78916173,
+            "max": 78916173,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "response_ns": {
+            "count": 12,
+            "p50": 2393438,
+            "p95": 78966768,
+            "max": 78966768,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "core_allocated_bytes": 97979104,
+          "sum_response_ns": 178313239,
+          "query_pass_makespan_ns": 184900120,
+          "successful_throughput_qps": 64.89990379670927
+        }
+      ],
+      "comparisons": [
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-e228e31d527a260c|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-97cc5695a34511bf|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-d5b885056d30120b|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-7fd7c9bbefc23766|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-6c5b7dd72f6c9504|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-810f38c83a1d86b5|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-0f6348895643f71e|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-d0c82eb0feebc3bf|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-8023f60fbab2f160|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 85833,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 85833,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-3df9386aab04dc17|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 89821,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 89821,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-5f454d6e79250f8b|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        },
+        {
+          "equal_earliest_arrival": true,
+          "query_id": "smoke-6b7e3a82619b6ec7|weekday-overnight-20261020|d0|primary_1h_walk600",
+          "reference_available": true,
+          "reference_minimum_arrival": 4611686018427387904,
+          "repetition": 0,
+          "tad_earliest_arrival_assessed": true,
+          "tad_error": "",
+          "tad_minimum_arrival": 4611686018427387904,
+          "warmup": false
+        }
+      ],
+      "summary_or_manifest": "public-campaign-20261021/resumed-0130/auxiliary-native-smoke-7gb/aux-overnight-tadbench/artifact/manifest.json"
+    },
+    {
+      "window": "overnight",
+      "entrypoint": "ultrabench",
+      "process_ok": false,
+      "returncode": 1,
+      "success": false,
+      "sampled_peak_rss_bytes": 209633280,
+      "process_wall_s": 0.882679761,
+      "input_load_ns": null,
+      "preparation": {
+        "shortcut_snapshot_io": {
+          "serialization_ns": 129661,
+          "write_ns": 58696,
+          "bytes": 1337,
+          "sha256": "ea31e1a3c886e7a05c8be4a269c2675cebe8eaf5fb52e3d05f8e61956c405b5c",
+          "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+        },
+        "ultra": {
+          "allocated_bytes": 1616,
+          "complete": false,
+          "elapsed_ns": 12899,
+          "error": "ULTRA capability: GTFS stop-pair rules are not implicit departure buffers; unsupported",
+          "resources": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 224010152,
+              "total_alloc_bytes": 498838424,
+              "num_gc": 8
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 214896640,
+              "user_cpu_seconds": 0.83041,
+              "system_cpu_seconds": 0.110903,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          }
+        }
+      },
+      "summaries": null,
+      "comparisons": null,
+      "summary_or_manifest": "public-campaign-20261021/resumed-0130/auxiliary-native-smoke-7gb/aux-overnight-ultrabench/artifact/summary.json",
+      "requested": 12,
+      "assessed": 0,
+      "unavailable": 12,
+      "phase": "preparation"
+    },
+    {
+      "window": "overnight",
+      "entrypoint": "corechgraphbench",
+      "process_ok": true,
+      "returncode": 0,
+      "success": true,
+      "sampled_peak_rss_bytes": 209432576,
+      "process_wall_s": 1.119219293,
+      "input_load_ns": 858250980,
+      "preparation": {
+        "core_ch": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 72025416,
+              "total_alloc_bytes": 636803720,
+              "num_gc": 14
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 231010304,
+              "user_cpu_seconds": 1.059169,
+              "system_cpu_seconds": 0.163558,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 59836048,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 47815392,
+              "total_alloc_bytes": 576967672,
+              "num_gc": 13
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 231010304,
+              "user_cpu_seconds": 0.926309,
+              "system_cpu_seconds": 0.162784,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 24,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 117168863,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 14738113,
+            "write_ns": 796400,
+            "bytes": 4434945,
+            "sha256": "6e5d43470a4001c26599df4bd7338dfb68b0e83994f2b474faf071904420142a",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 46398952,
+              "total_alloc_bytes": 636803720,
+              "num_gc": 15
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 231010304,
+              "user_cpu_seconds": 1.070308,
+              "system_cpu_seconds": 0.168148,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": -1416440,
+          "post_gc_ns": 8982071,
+          "snapshot_copy_ns": 260543,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 3122,
+            "shortcuts": 2028,
+            "witness_searches": 4700,
+            "limited_witness_searches": 100,
+            "witness_settled": 117490,
+            "witness_edge_visits": 1464277,
+            "witness_omissions": 16230,
+            "core_vertices": 2328,
+            "core_edges": 32592,
+            "stop_reason": "average_core_out_degree"
+          }
+        },
+        "identity": {
+          "after": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 67057976,
+              "total_alloc_bytes": 543264648,
+              "num_gc": 9
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 230748160,
+              "user_cpu_seconds": 0.856816,
+              "system_cpu_seconds": 0.161032,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "allocated_bytes": 28793896,
+          "before": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 38264080,
+              "total_alloc_bytes": 514470752,
+              "num_gc": 9
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 230354944,
+              "user_cpu_seconds": 0.840196,
+              "system_cpu_seconds": 0.161032,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "complete": true,
+          "config": {
+            "target_core_vertices": 5450,
+            "maximum_average_core_out_degree": 14,
+            "witness_settled_per_search": 128,
+            "max_contractions": 1000000,
+            "max_archived_arcs": 3000000,
+            "max_witness_settled": 30000000,
+            "max_witness_edges": 150000000
+          },
+          "elapsed_ns": 15104560,
+          "error": "",
+          "index_io": {
+            "serialization_ns": 15055793,
+            "write_ns": 609466,
+            "bytes": 4336070,
+            "sha256": "fe16db6aac1b4764c3c0dd607b1d7326cd30ebf3b3bd1e5f7924b85996f9eb68",
+            "scope": "JSON marshal plus newline; file open/write/close; OS-buffered writes, no fsync; sidecar serialization/writing excluded"
+          },
+          "post_gc": {
+            "runtime_memory": {
+              "heap_alloc_bytes": 42391560,
+              "total_alloc_bytes": 543264664,
+              "num_gc": 11
+            },
+            "process": {
+              "available": true,
+              "max_rss_bytes": 231010304,
+              "user_cpu_seconds": 0.882361,
+              "system_cpu_seconds": 0.16214,
+              "scope": "whole process cumulatively through this snapshot; includes all prior loading, preparation, routing, validation, ranking and any previous artifact serialization/writes; not isolated per-router usage"
+            }
+          },
+          "post_gc_heap_delta_bytes": 4127480,
+          "post_gc_ns": 10433776,
+          "snapshot_copy_ns": 732036,
+          "stats": {
+            "original_vertices": 5450,
+            "original_edges": 40230,
+            "suppressed_parallel_or_self_edges": 0,
+            "contractions": 0,
+            "shortcuts": 0,
+            "witness_searches": 0,
+            "limited_witness_searches": 0,
+            "witness_settled": 0,
+            "witness_edge_visits": 0,
+            "witness_omissions": 0,
+            "core_vertices": 5450,
+            "core_edges": 40230,
+            "stop_reason": "target_core_size"
+          }
+        }
+      },
+      "summaries": [
+        {
+          "algorithm": "identity",
+          "repetition": 0,
+          "warmup": false,
+          "file": "identity-pass-00.json",
+          "sha256": "04284dfcdee0476c37b06736805d02151d1d4ff0f168e6ab83a49b3b45641f18",
+          "rows": 24,
+          "cells": 576,
+          "errors": 0,
+          "makespan_ns": 1216778,
+          "successful_rows_per_second": 19724.222495804494,
+          "successful_cells_per_second": 473381.3398993078,
+          "whole_row_core_ns": {
+            "count": 24,
+            "p50": 4737,
+            "p95": 18878,
+            "max": 41171,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "whole_row_response_ns": {
+            "count": 24,
+            "p50": 6539,
+            "p95": 20771,
+            "max": 44766,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "core_allocated_bytes": 187680
+        },
+        {
+          "algorithm": "core_ch",
+          "repetition": 0,
+          "warmup": false,
+          "file": "core_ch-pass-00.json",
+          "sha256": "00bbf144e657665610ee3d4d27ff1b1335d8849107de66a90351e345cb03f804",
+          "rows": 24,
+          "cells": 576,
+          "errors": 0,
+          "makespan_ns": 977146,
+          "successful_rows_per_second": 24561.324510359762,
+          "successful_cells_per_second": 589471.7882486343,
+          "whole_row_core_ns": {
+            "count": 24,
+            "p50": 4496,
+            "p95": 30735,
+            "max": 31737,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "whole_row_response_ns": {
+            "count": 24,
+            "p50": 5587,
+            "p95": 32588,
+            "max": 32779,
+            "method": "nearest-rank empirical; no population percentile claim"
+          },
+          "core_allocated_bytes": 183912
+        }
+      ],
+      "comparisons": null,
+      "summary_or_manifest": "public-campaign-20261021/resumed-0130/auxiliary-native-smoke-7gb/aux-overnight-corechgraphbench/artifact/summary.json",
+      "original_point_queries": 12,
+      "row_targets": 24,
+      "independent_audit_ns": 16594040,
+      "cell_coverage": [
+        {
+          "algorithm": "identity",
+          "cells": 576,
+          "found": 24,
+          "self_found": 24,
+          "nonself_found": 0
+        },
+        {
+          "algorithm": "core_ch",
+          "cells": 576,
+          "found": 24,
+          "self_found": 24,
+          "nonself_found": 0
+        }
+      ]
+    }
+  ],
+  "scope": "Distinct contracts: whole61-readiness profiles; TAD one earliest-arrival witness; nativeULTRA unsupported retained; CoreCH transfer-only one-to-many24target rows. Do not combine with point2D/3D frontier latency rankings, divide profiles by61, or divide CH rows by target count. Native multi-algorithm drivers share process/preprocessing; RSS cumulative, not isolated per algorithm.12 registered smoke requests/window, not population-tail or convergence evidence."
+}

@@ -1,0 +1,147 @@
+{
+  "all_six_go_source_bindings_identical": true,
+  "checked_utc": "2026-10-21T04:15:01.708126+00:00",
+  "current_overlay_patch_sha256": "6120f016c470ad0a0f55c98dd549ba42358f87b648f2a8d03223b2b479f2b23f",
+  "current_overlay_tree": "1b2a2eff5a05dbeed2a18634f8c88def62ebfcb3",
+  "data_and_binaries_included": false,
+  "historical_profile_campaign": "public-campaign-20261021/profile-tune-six",
+  "profile_or_router_executed": false,
+  "readme_and_support_file_caveat": {
+    "go_source_hash_excludes_readme": true,
+    "historical_full_tree_byte_equality_claim": false,
+    "readme_support_only_drift_established": false,
+    "reason": "Original command sources_before records commit, dirty filenames and Go-only source hash, but no full-tree/per-file digest for README or arbitrary support files. Matching dirty filenames do not establish their historical byte identity. Current README bytes are preserved and pinned in the four-file overlay; historical README/support-only drift is unknown, not asserted absent or present."
+  },
+  "records": [
+    {
+      "command_bytes": 8221,
+      "command_relative_path": "public-campaign-20261021/profile-tune-six/morning-ea_csa_layered-profile/command.json",
+      "command_sha256": "e6cb0300b24a52d692d28eb5443e88ee7c7106ac94ea74ece88aeb4753dfc193",
+      "executable_hash_binding_matches": true,
+      "recorded_dirty_file_sets_match_current_overlay": true,
+      "run_id": "morning-ea_csa_layered-profile",
+      "sources_before_go_hash_matches_current_overlay": true,
+      "sources_before_go_source_hashes": [
+        "057f9f9b26482c6b80aecfa7526615cff9f91d2510bac1fc338d311207b6ee3f"
+      ],
+      "summary_build_hash_matches_current_overlay": true,
+      "summary_build_source_sha256": "057f9f9b26482c6b80aecfa7526615cff9f91d2510bac1fc338d311207b6ee3f",
+      "summary_bytes": 5715,
+      "summary_relative_path": "public-campaign-20261021/profile-tune-six/morning-ea_csa_layered-profile/artifact/summary.json",
+      "summary_runtime_hash_matches_current_overlay": true,
+      "summary_runtime_matches_build": true,
+      "summary_runtime_tree_sha256": "057f9f9b26482c6b80aecfa7526615cff9f91d2510bac1fc338d311207b6ee3f",
+      "summary_sha256": "9af6ee25a9122dc78263015eba872f3495cd71faefbc08dd8e26241961570cb7",
+      "summary_source_binding": "embedded_build_source"
+    },
+    {
+      "command_bytes": 8226,
+      "command_relative_path": "public-campaign-20261021/profile-tune-six/morning-mc_raptor_early-profile/command.json",
+      "command_sha256": "af8b297d0104a709b42c2d690ac2873bb54ddc28aaf6e4aa609aea0caea6da48",
+      "executable_hash_binding_matches": true,
+      "recorded_dirty_file_sets_match_current_overlay": true,
+      "run_id": "morning-mc_raptor_early-profile",
+      "sources_before_go_hash_matches_current_overlay": true,
+      "sources_before_go_source_hashes": [
+        "057f9f9b26482c6b80aecfa7526615cff9f91d2510bac1fc338d311207b6ee3f"
+      ],
+      "summary_build_hash_matches_current_overlay": true,
+      "summary_build_source_sha256": "057f9f9b26482c6b80aecfa7526615cff9f91d2510bac1fc338d311207b6ee3f",
+      "summary_bytes": 5770,
+      "summary_relative_path": "public-campaign-20261021/profile-tune-six/morning-mc_raptor_early-profile/artifact/summary.json",
+      "summary_runtime_hash_matches_current_overlay": true,
+      "summary_runtime_matches_build": true,
+      "summary_runtime_tree_sha256": "057f9f9b26482c6b80aecfa7526615cff9f91d2510bac1fc338d311207b6ee3f",
+      "summary_sha256": "334201bb91c21aa7a0c2b8f6fc397f03cea73fb44ba5176d932e577a66476958",
+      "summary_source_binding": "embedded_build_source"
+    },
+    {
+      "command_bytes": 8179,
+      "command_relative_path": "public-campaign-20261021/profile-tune-six/morning-raptor-profile/command.json",
+      "command_sha256": "383328f1a29b725e15b531d487734d902f90af8e06c2cf850d9c9cbef2f2f8a8",
+      "executable_hash_binding_matches": true,
+      "recorded_dirty_file_sets_match_current_overlay": true,
+      "run_id": "morning-raptor-profile",
+      "sources_before_go_hash_matches_current_overlay": true,
+      "sources_before_go_source_hashes": [
+        "057f9f9b26482c6b80aecfa7526615cff9f91d2510bac1fc338d311207b6ee3f"
+      ],
+      "summary_build_hash_matches_current_overlay": true,
+      "summary_build_source_sha256": "057f9f9b26482c6b80aecfa7526615cff9f91d2510bac1fc338d311207b6ee3f",
+      "summary_bytes": 5715,
+      "summary_relative_path": "public-campaign-20261021/profile-tune-six/morning-raptor-profile/artifact/summary.json",
+      "summary_runtime_hash_matches_current_overlay": true,
+      "summary_runtime_matches_build": true,
+      "summary_runtime_tree_sha256": "057f9f9b26482c6b80aecfa7526615cff9f91d2510bac1fc338d311207b6ee3f",
+      "summary_sha256": "8c068da1cc6361240260ecac1c0a84e908e60f1882bb15251c1837525bde3861",
+      "summary_source_binding": "embedded_build_source"
+    },
+    {
+      "command_bytes": 8211,
+      "command_relative_path": "public-campaign-20261021/profile-tune-six/morning-raptor_early-profile/command.json",
+      "command_sha256": "c6be6ed8114a7764121d3ac42e2cbc3320cfa23638ec044cab92c1ad0aa7e470",
+      "executable_hash_binding_matches": true,
+      "recorded_dirty_file_sets_match_current_overlay": true,
+      "run_id": "morning-raptor_early-profile",
+      "sources_before_go_hash_matches_current_overlay": true,
+      "sources_before_go_source_hashes": [
+        "057f9f9b26482c6b80aecfa7526615cff9f91d2510bac1fc338d311207b6ee3f"
+      ],
+      "summary_build_hash_matches_current_overlay": true,
+      "summary_build_source_sha256": "057f9f9b26482c6b80aecfa7526615cff9f91d2510bac1fc338d311207b6ee3f",
+      "summary_bytes": 5732,
+      "summary_relative_path": "public-campaign-20261021/profile-tune-six/morning-raptor_early-profile/artifact/summary.json",
+      "summary_runtime_hash_matches_current_overlay": true,
+      "summary_runtime_matches_build": true,
+      "summary_runtime_tree_sha256": "057f9f9b26482c6b80aecfa7526615cff9f91d2510bac1fc338d311207b6ee3f",
+      "summary_sha256": "95d61c01e7f751f5a896baa2dd6b546cdaecd8e2ec9c7f0e2d4893e99ef5cb92",
+      "summary_source_binding": "embedded_build_source"
+    },
+    {
+      "command_bytes": 8712,
+      "command_relative_path": "public-campaign-20261021/profile-tune-six/morning-ultra_cap_safe_stay_witness_subset_v1-profile/command.json",
+      "command_sha256": "accd0542f6dc0443f2ccf8b787e6424ffdc0c9b7f178846bb47cad08834dc552",
+      "executable_hash_binding_matches": true,
+      "recorded_dirty_file_sets_match_current_overlay": true,
+      "run_id": "morning-ultra_cap_safe_stay_witness_subset_v1-profile",
+      "sources_before_go_hash_matches_current_overlay": true,
+      "sources_before_go_source_hashes": [
+        "057f9f9b26482c6b80aecfa7526615cff9f91d2510bac1fc338d311207b6ee3f"
+      ],
+      "summary_build_hash_matches_current_overlay": true,
+      "summary_build_source_sha256": "057f9f9b26482c6b80aecfa7526615cff9f91d2510bac1fc338d311207b6ee3f",
+      "summary_bytes": 49067127,
+      "summary_relative_path": "public-campaign-20261021/profile-tune-six/morning-ultra_cap_safe_stay_witness_subset_v1-profile/artifact/summary.json",
+      "summary_runtime_hash_matches_current_overlay": true,
+      "summary_runtime_matches_build": true,
+      "summary_runtime_tree_sha256": "057f9f9b26482c6b80aecfa7526615cff9f91d2510bac1fc338d311207b6ee3f",
+      "summary_sha256": "49f377fc131f55882d45dfd0a12e55a4d211134520051e7d2ae5460c5ed46862",
+      "summary_source_binding": "embedded_build_source"
+    },
+    {
+      "command_bytes": 8663,
+      "command_relative_path": "public-campaign-20261021/profile-tune-six/morning-ultra_transfer_complete_capped-profile/command.json",
+      "command_sha256": "0239643b717832f258d64f32d9b85f3a15e30bb023a692393cfaa61c02c66fce",
+      "executable_hash_binding_matches": true,
+      "recorded_dirty_file_sets_match_current_overlay": true,
+      "run_id": "morning-ultra_transfer_complete_capped-profile",
+      "sources_before_go_hash_matches_current_overlay": true,
+      "sources_before_go_source_hashes": [
+        "057f9f9b26482c6b80aecfa7526615cff9f91d2510bac1fc338d311207b6ee3f"
+      ],
+      "summary_build_hash_matches_current_overlay": true,
+      "summary_build_source_sha256": "057f9f9b26482c6b80aecfa7526615cff9f91d2510bac1fc338d311207b6ee3f",
+      "summary_bytes": 7531,
+      "summary_relative_path": "public-campaign-20261021/profile-tune-six/morning-ultra_transfer_complete_capped-profile/artifact/summary.json",
+      "summary_runtime_hash_matches_current_overlay": true,
+      "summary_runtime_matches_build": true,
+      "summary_runtime_tree_sha256": "057f9f9b26482c6b80aecfa7526615cff9f91d2510bac1fc338d311207b6ee3f",
+      "summary_sha256": "3305a210c4600ed9161887594d4aa591809a6fd33c0756e35120c8740f0a923e",
+      "summary_source_binding": "embedded_build_source"
+    }
+  ],
+  "runs_checked": 6,
+  "schema": "sg-profiling-overlay-historical-binding-v1",
+  "scope": "The current Go/module/lock source bytes match the runner sources_before hash and the embedded build/runtime hash in all six original whole-process diagnostic summary artifacts. This is source binding for diagnostic instrumentation, not a new execution or headline latency claim.",
+  "working_source_sha256": "057f9f9b26482c6b80aecfa7526615cff9f91d2510bac1fc338d311207b6ee3f"
+}

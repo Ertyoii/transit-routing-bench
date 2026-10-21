@@ -1,0 +1,33 @@
+{
+  "local_offline_patch_replay": {
+    "auxiliary_working_overlay": 1,
+    "candidate_exact_trees": 14,
+    "diagnostic_profiling_working_overlay": 1,
+    "network_required": false,
+    "scope": "Reconstruct source trees from known base objects and bundled complete patch bytes; separate from verifying public remote reachability."
+  },
+  "module_paths_changed": false,
+  "network_accessed_by_source_packager": false,
+  "public_commit_metadata_verified_by_release_owner": [
+    {
+      "commit": "b102816018b1db87304c751f2cd601a2abe4057a",
+      "default_branch": "main",
+      "private": false,
+      "public_access_not_private_authenticated_fetch": true,
+      "repository_license_spdx": "MIT",
+      "repository_url": "https://github.com/Ertyoii/transit-routing-go.git",
+      "tree": "c6f00e816557b6dda7bd59818ed64d081ed9c807"
+    },
+    {
+      "commit": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+      "private": false,
+      "public_access_not_private_authenticated_fetch": true,
+      "repository_license_spdx": "MIT",
+      "repository_url": "https://github.com/Ertyoii/transit-routing-bench.git",
+      "tree": "23f6411121c5d121db53dbbcc4febc09be2e2337"
+    }
+  ],
+  "reported_utc": "2026-10-21T03:58:34Z",
+  "schema": "sg-public-base-verification-v1",
+  "state": "Frozen source supplement; public remote evidence and local source replay are separate scopes."
+}

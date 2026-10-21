@@ -1,0 +1,8 @@
+Contains information from OpenStreetMap, made available under the Open Database License (ODbL) 1.0.
+© OpenStreetMap contributors.
+Copyright and attribution: https://www.openstreetmap.org/copyright
+License: https://opendatacommons.org/licenses/odbl/1-0/
+Extract processed by Geofabrik GmbH: https://download.geofabrik.de/asia/malaysia-singapore-brunei.html
+This local derived pedestrian graph is OSM-derived data, not MIT-licensed repository code.
+Keep attribution and ODbL obligations with derived databases and any authorized redistribution.
+No public redistribution has been performed. Source GTFS carries separate provenance and licensing cautions.

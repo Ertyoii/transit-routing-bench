@@ -1,0 +1,84 @@
+{
+  "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/csa-native-screen90-validation/validation-morning-csa_score_single-suffix-labels1000000-batch1",
+  "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/csa90-score-timing-replication/repeat-morning-csa_score_single-suffix-labels1000000-batch1",
+  "offered_pairs": 90,
+  "semantic_mismatch_count": 1,
+  "semantic_mismatches": [
+    {
+      "query_id": "screen-4a0cd5a11118639a|weekday-morning-20261020|d2|primary_1h_walk600",
+      "fields": [
+        "display_options",
+        "completed",
+        "transit",
+        "status",
+        "error",
+        "certificates"
+      ]
+    }
+  ],
+  "comparison_fields": [
+    "query",
+    "raw",
+    "final",
+    "display_options",
+    "completed",
+    "attempted",
+    "valid_empty",
+    "transit",
+    "status",
+    "error",
+    "certificates",
+    "recommendation_quality"
+  ],
+  "joint_complete": 89,
+  "median_paired_response_delta_ms": -23.168401,
+  "median_paired_response_ratio": 0.9643896191250458,
+  "baseline_metrics": {
+    "offered": 90,
+    "complete": 89,
+    "statuses": {
+      "complete": 89,
+      "deadline": 1
+    },
+    "response_p50_ms": 633.553263,
+    "response_max_ms": 2685.098042,
+    "batch_allocation_bytes": 6002716800,
+    "load_s": 2.085275703,
+    "router_prep_s": 1.877145121,
+    "router_prep_alloc_bytes": 1053243040,
+    "sampled_peak_group_rss_bytes": 1347854336
+  },
+  "candidate_metrics": {
+    "offered": 90,
+    "complete": 90,
+    "statuses": {
+      "complete": 90
+    },
+    "response_p50_ms": 606.752436,
+    "response_max_ms": 2365.192487,
+    "batch_allocation_bytes": 6006056320,
+    "load_s": 2.236881114,
+    "router_prep_s": 1.888808359,
+    "router_prep_alloc_bytes": 1053242848,
+    "sampled_peak_group_rss_bytes": 1275891712
+  },
+  "scope": "Predeclared same-config noise replication, original89/90 anddeadline remains primaryoriginaloutcome;90/90repeat notsilentreplacement. No causalattributionofdeadline toanalysis/hardware.",
+  "raw_field_difference_count": 1,
+  "joint_complete_native_witness_difference_count": 0,
+  "joint_complete_native_witness_differences": [],
+  "unavailable_or_status_difference_count": 1,
+  "unavailable_or_status_differences": [
+    {
+      "query_id": "screen-4a0cd5a11118639a|weekday-morning-20261020|d2|primary_1h_walk600",
+      "fields": [
+        "display_options",
+        "completed",
+        "transit",
+        "status",
+        "error",
+        "certificates"
+      ]
+    }
+  ],
+  "classification_scope": "Rawfielddifferences on deadlines/unavailable pairs are unknownnativeoutput, not demonstrated source correctness failures; originalfailuredenominators remain."
+}

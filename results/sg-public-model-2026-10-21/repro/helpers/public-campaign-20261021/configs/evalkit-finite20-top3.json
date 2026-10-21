@@ -1,0 +1,119 @@
+{
+  "schema_version": "sg-coldstart-evalkit-v1",
+  "display": {
+    "source": "finite_preferences",
+    "group": "explicit_twenty_hypotheses",
+    "method": "preference_minimax",
+    "k": 3
+  },
+  "secondary_display_k": 5,
+  "profiles": [
+    {
+      "id": "t0_w0",
+      "transfer_seconds": 0,
+      "extra_walk_weight": 0
+    },
+    {
+      "id": "t0_w1",
+      "transfer_seconds": 0,
+      "extra_walk_weight": 1
+    },
+    {
+      "id": "t0_w2",
+      "transfer_seconds": 0,
+      "extra_walk_weight": 2
+    },
+    {
+      "id": "t0_w4",
+      "transfer_seconds": 0,
+      "extra_walk_weight": 4
+    },
+    {
+      "id": "t150_w0",
+      "transfer_seconds": 150,
+      "extra_walk_weight": 0
+    },
+    {
+      "id": "t150_w1",
+      "transfer_seconds": 150,
+      "extra_walk_weight": 1
+    },
+    {
+      "id": "t150_w2",
+      "transfer_seconds": 150,
+      "extra_walk_weight": 2
+    },
+    {
+      "id": "t150_w4",
+      "transfer_seconds": 150,
+      "extra_walk_weight": 4
+    },
+    {
+      "id": "t300_w0",
+      "transfer_seconds": 300,
+      "extra_walk_weight": 0
+    },
+    {
+      "id": "t300_w1",
+      "transfer_seconds": 300,
+      "extra_walk_weight": 1
+    },
+    {
+      "id": "t300_w2",
+      "transfer_seconds": 300,
+      "extra_walk_weight": 2
+    },
+    {
+      "id": "t300_w4",
+      "transfer_seconds": 300,
+      "extra_walk_weight": 4
+    },
+    {
+      "id": "t600_w0",
+      "transfer_seconds": 600,
+      "extra_walk_weight": 0
+    },
+    {
+      "id": "t600_w1",
+      "transfer_seconds": 600,
+      "extra_walk_weight": 1
+    },
+    {
+      "id": "t600_w2",
+      "transfer_seconds": 600,
+      "extra_walk_weight": 2
+    },
+    {
+      "id": "t600_w4",
+      "transfer_seconds": 600,
+      "extra_walk_weight": 4
+    },
+    {
+      "id": "t900_w0",
+      "transfer_seconds": 900,
+      "extra_walk_weight": 0
+    },
+    {
+      "id": "t900_w1",
+      "transfer_seconds": 900,
+      "extra_walk_weight": 1
+    },
+    {
+      "id": "t900_w2",
+      "transfer_seconds": 900,
+      "extra_walk_weight": 2
+    },
+    {
+      "id": "t900_w4",
+      "transfer_seconds": 900,
+      "extra_walk_weight": 4
+    }
+  ],
+  "coverage_tolerance_seconds": 0,
+  "alternative_epsilon_seconds": 300,
+  "bootstrap": {
+    "seed": 20261020,
+    "replicates": 2000,
+    "confidence": 0.95
+  }
+}

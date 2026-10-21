@@ -1,0 +1,133 @@
+{
+  "schema": "sg_public_bounded_test_evidence_acceptance_summary_v1",
+  "generated_utc": "2026-10-21T04:49:40.325957+00:00",
+  "decision": "accept_bounded_public_model_final_test_evidence",
+  "review_blockers": [],
+  "evaluation_tier": "public_model",
+  "formal_baseline_eligible": false,
+  "latest_official_transit_feed": false,
+  "official_source_authenticity_established": false,
+  "findings": {
+    "release_ordering": {
+      "all_19_plan_and_seal_hashes_match": true,
+      "all_19_public_validation_gates_passed_before_launch_manifest_by_local_metadata": true,
+      "latest_seal_created_utc": "2026-10-21T03:46:04.965231+00:00",
+      "launch_manifest_created_utc": "2026-10-21T03:46:10.142306+00:00",
+      "first_campaign_started_utc": "2026-10-21T03:46:28.773110+00:00",
+      "scope": "Ordering established from local hash-bound artifacts and timestamps plus launcher control flow, not adversarial secrecy, immutable timestamp or independent no-other-execution proof."
+    },
+    "execution_and_accounting": {
+      "subcampaigns": 19,
+      "terminal_processes": 76,
+      "ordinary_offered": 24120,
+      "ordinary_attempted": 24120,
+      "ordinary_complete": 24120,
+      "ordinary_statuses": {
+        "complete": 24120
+      },
+      "primary_offered_complete": 21600,
+      "native_csa_offered_complete": 1440,
+      "same90_anchor_offered_complete": 1080,
+      "forced_deadline_offered": 24120,
+      "forced_deadline_complete": 0,
+      "warmup_rows": 0,
+      "exact_registered_query_and_stratum_binding": true,
+      "all_offered_rows_preserved": true,
+      "no_reruns_replace_original_test_outcomes": true,
+      "same_underlying_workloads_across_configs_not_24120_distinct_demand_queries": true
+    },
+    "source_integrity": {
+      "source_roots_rehashed": 12,
+      "source_files_rehashed": 2467,
+      "sealed_source_binary_input_environment_and_resource_bindings_match": true,
+      "primary_original_vs_optimized_offered_pairs": 7200,
+      "primary_joint_complete_pairs": 7200,
+      "primary_complete_emitted_semantic_mismatches": 0,
+      "primary_unavailable_pairs": 0,
+      "native_single_shared_offered_pairs": 720,
+      "native_joint_complete_pairs": 720,
+      "native_complete_emitted_semantic_mismatches": 0,
+      "native_unavailable_pairs": 0
+    },
+    "latency_and_resources": {
+      "all_76_aggregate_rows_reconciled_against_raw": true,
+      "attempted_successful_transit_p50_p95_p99_recomputed": true,
+      "all_failure_rows_retained": true,
+      "timing_offsets_and_quality_validation_response_boundaries_verified": true,
+      "load_router_checker_quality_phase_sum_verified": true,
+      "measured_batch_allocations_and_preparation_deltas_separate_from_cumulative_snapshots": true,
+      "sampled_group_rss_maxima_recomputed_from_all_samples": true,
+      "leader_wait4_rss_kept_separate": true,
+      "float_reconciliation_tolerance": "Only different floating-point addition order in phase-sum seconds: absolute1e-12, relative1e-14; integer raw timing/allocations exact."
+    },
+    "quality": {
+      "reports": 16,
+      "scoring_rows": 20880,
+      "unique_native_campaign_attempt_rows_in_reports": 16920,
+      "scoring_rows_are_unique_attempts": false,
+      "unique_pool_witnesses_reconstructed_again": 5787,
+      "cap_comparison_reports_reconciled": 200,
+      "invalid_or_certificate_counterexample_rows": 0,
+      "per_profile_scores_and_regret_recomputed": true,
+      "every_shared_pool_content_hash_recomputed": true,
+      "default_finite_pool_same_within_panel_and_window": true,
+      "partial_failed_outputs_never_delivered_as_success": true,
+      "primary_finite_top3": [
+        {
+          "algorithm": "mc_raptor",
+          "eligible": 14400,
+          "covered": 13985,
+          "missing": 0,
+          "maximum_pool_relative_regret_score_seconds": 406,
+          "grid_coverage": 0.9711805555555556
+        },
+        {
+          "algorithm": "mc_raptor_early",
+          "eligible": 14400,
+          "covered": 13985,
+          "missing": 0,
+          "maximum_pool_relative_regret_score_seconds": 406,
+          "grid_coverage": 0.9711805555555556
+        }
+      ],
+      "native90_finite_top3": [
+        {
+          "algorithm": "mc_raptor_early",
+          "eligible": 2420,
+          "covered": 2338,
+          "missing": 0,
+          "maximum_pool_relative_regret_score_seconds": 325,
+          "grid_coverage": 0.9661157024793389
+        }
+      ]
+    }
+  },
+  "required_qualifiers": [
+    "Bounded best-measured source/configuration slate, not global optimization or finite-protocol convergence.",
+    "July12 community GTFS deterministic phase0 frequency instances and conservative OSM walking model; not official/latest service, physical truth or passenger demand. Separate rail-interior hypothesis remains separate tune evidence.",
+    "Native2D,3D,arrival-topk,score cap-union and transfer-capped contracts remain distinct. Equal F[b] vectors do not imply equal walking-tie preference quality.",
+    "Ordinary RAPTOR control/candidate had source-differential and two-block tune qualification, not separate450 validation.",
+    "CSA arrival uses one strict identityk10 lane. CSA score uses union of boarding-cap0..4 lanes, eachk10/1m labels, then ranked score certificate; raw union may exceed10. Large evalkit does not certify strict identity top-k completeness; separate tiny/exhaustive qualification remains the evidence.",
+    "Quality is relative to the same incomplete observed witness pool/config. Zero observed regret or no feasible certificate counterexample is not proof of global completeness. Pool-empty rows remain unknown. Finite20 preference hypotheses are not learned rider preferences, welfare or demand.",
+    "Fresh processes and CPU0-3/GOMAXPROCS4 affinity do not establish exclusive cores or disk-cold cache. GOMEMLIMIT7GiB is soft; native7GB and sampled7.5GB RSS guards are not hard caps.",
+    "Single-pass empirical p99 values, especially90request/transit cohorts, are not production/population tails.",
+    "Explicit startup-phase sums and first setup-plus-response components exclude launch/prehash/gaps/serialization/transport, and are not complete process-cold first-byte latency. Cumulative heap/RSS snapshots must not be summed.",
+    "No raw GTFS/OSM, normalized datasets or binaries should be published. Only separately reviewed portable outcome projections may be shared; this acceptance is not license clearance."
+  ],
+  "publication_scope": "Accepts evidence consistency for a bounded public-model outcome report with all qualifiers and unknowns retained; does not publish or authorize raw-data redistribution.",
+  "original_evidence_bindings": [
+    {
+      "name": "FINAL_TEST_ACCEPTANCE.json",
+      "bytes": 9002,
+      "sha256": "baf3456246f2b29ea1f328d747d5b2d82323427321162144296824b9bea80d34"
+    },
+    {
+      "name": "FINAL_TEST_EVIDENCE_MANIFEST.json",
+      "bytes": 756784,
+      "sha256": "ea734e8e91f86f3ea26b1fc832fe8cd1abc69ce547c4deb0d4533dfe883bc959"
+    }
+  ],
+  "source_evidence_manifest_files": 3165,
+  "private_raw_evidence_redistributed": false,
+  "projection_scope": "Compact user-facing evidence summary; no raw reviewer work files, private local paths or underlying data/witness databases. Full evidence remains hash-bound locally."
+}

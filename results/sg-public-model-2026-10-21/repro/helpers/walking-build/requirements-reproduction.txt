@@ -1,0 +1,5 @@
+# Relevant parser/numerical pins only, not a complete wheel/hash lock.
+numpy==2.3.5
+osmium==4.3.2
+scipy==1.17.0
+shapely==2.2.0

@@ -1,0 +1,52 @@
+{
+  "baseline": "public-campaign-20261021/resumed-0130/round2-pilot-and-mc-quality/morning-mc-early-walking-labels500000",
+  "candidate": "public-campaign-20261021/resumed-0130/round2-pilot-and-mc-quality/morning-mc-early-walking-labels1000000",
+  "offered_pairs": 180,
+  "semantic_mismatch_count": 0,
+  "semantic_mismatches": [],
+  "comparison_fields": [
+    "query",
+    "raw",
+    "final",
+    "display_options",
+    "completed",
+    "attempted",
+    "valid_empty",
+    "transit",
+    "status",
+    "error",
+    "certificates"
+  ],
+  "joint_complete": 180,
+  "median_paired_response_delta_ms": -1.399909,
+  "median_paired_response_ratio": 0.9636047127081103,
+  "baseline_metrics": {
+    "offered": 180,
+    "complete": 180,
+    "statuses": {
+      "complete": 180
+    },
+    "response_p50_ms": 55.343398,
+    "response_max_ms": 161.828295,
+    "batch_allocation_bytes": 2317621440,
+    "load_s": 2.025176742,
+    "router_prep_s": 1.913271706,
+    "router_prep_alloc_bytes": 1566876528,
+    "sampled_peak_group_rss_bytes": 1439866880
+  },
+  "candidate_metrics": {
+    "offered": 180,
+    "complete": 180,
+    "statuses": {
+      "complete": 180
+    },
+    "response_p50_ms": 52.053818,
+    "response_max_ms": 142.997451,
+    "batch_allocation_bytes": 2317150888,
+    "load_s": 2.029594556,
+    "router_prep_s": 1.632872346,
+    "router_prep_alloc_bytes": 1771916680,
+    "sampled_peak_group_rss_bytes": 1441898496
+  },
+  "scope": "One measured process/pass, tune only. Exact emitted witness/status/certificate preservation checked; no global optimum, convergence, independent full-network oracle, or production tail claim."
+}

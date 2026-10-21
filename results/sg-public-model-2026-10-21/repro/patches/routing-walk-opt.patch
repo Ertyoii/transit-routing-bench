@@ -1,0 +1,1039 @@
+diff --git a/docs/CAPPED_WALKING_CLOSURE.md b/docs/CAPPED_WALKING_CLOSURE.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..6c9c7f002c2579d57322df70ee2b8c90816b4942
+--- /dev/null
++++ b/docs/CAPPED_WALKING_CLOSURE.md
+@@ -0,0 +1,97 @@
++# Capped-only walking closure candidate
++
++## Scope and unchanged paths
++
++Unrestricted `BuildFlash`, ordinary TP/scalable TP, `BuildTREX`, and
++`BuildTREXStaticRulesCandidate` retain the complete walking metric and existing
++nonbinding-cap checks. No resource limit is increased.
++
++The fixed-destination TP constructors (fresh, retained and explicit source-domain)
++know all four role caps. Their private FLASH backend now retains exact shortest
++paths up to `max(Access, Transfer, Egress, Direct)` and prepares TB transfers only
++up to `Transfer`. They already make the destination absorbing before either
++construction. Their one-cell static-rule restriction remains unchanged.
++
++`BuildBoundedWalkingTB` and `BuildTREXFixedTransferCapRankedCandidate` prepare only
++exact walks up to the fixed transfer cap. Access/direct and egress use immutable
++query-local exact forward searches, independently bounded by their own roles.
++The former builder makes its fixed destination absorbing first. The latter's
++transfer graph is still destination-independent and still requires the existing
++per-query witness replay and complete independent frontier certification. This
++change is not a theorem of ranked cap preservation and does not remove that gate.
++
++## Why radius truncation is exact
++
++Footpath durations are strictly positive. If a directed path has total duration
++at most C, every prefix also has duration at most C. Dijkstra may therefore omit
++an over-C relaxation without losing a feasible endpoint or any needed
++intermediate vertex. The bound is on the total contiguous walking block, not on
++each edge, and walking-only vertices are still expanded. Zero-duration self
++paths are retained even when C is zero.
++
++Every walking block of a supported fixed-role TP query is either access,
++transfer, egress or direct. Each is within its role cap and hence within their
++maximum. Removing paths longer than that maximum cannot remove an eligible
++block; preparing transfer links at Transfer cannot remove an eligible transfer.
++The TP graph's alternating ride/walk state does not permit repeated walking
++arcs to reset a role cap. Static stop-pair rules apply after the whole block as
++before. No transitive-metric transfer reduction is introduced.
++
++For TREX's capped adapters, only transfers consume the prepared bounded metric.
++Forward access search stops expansion at the query destination and separates
++Direct from Access at the endpoint. If Egress exceeds the transfer radius, its forward search ends at the
++destination and is cached per alighting source for the query. Otherwise the
++prepared endpoint lookup already contains its exact shortest path; positive
++paths ending at destination cannot visit it earlier and then leave again. Both traverse original directed
++edges and preserve predecessor selection by distance, stop-ID heap tie and
++footpath-ID adjacency order. TREX partitions still use weak components of the
++raw graph, never of the truncated closure.
++
++## Legacy queries and accounting
++
++`walking_closure_limit` explicitly identifies bounded storage. In its presence,
++`closure_diameter` is the largest retained shortest distance, not the complete
++metric diameter. Snapshot and compact cost diagnostics expose the limit.
++
++The ordinary nonbinding query entrypoints exposed by a fixed-cap TREX index must
++not certify against that truncated diameter. They reconstruct the complete
++metric in a query-local shallow view, retaining the prepared transfer graph,
++partition, ranks and fixed-cap identity. Previously supported full-metric checks
++and representatives are preserved, subject to visible resource exhaustion.
++The fallback cannot mutate the prepared index or recurse. Its construction work
++is charged against MaxQueryWork, and its original closure/path/settlement guards
++remain enforced. Capped endpoint search is likewise charged against query work
++and settlement limits, with `endpoint_walk_work` and `endpoint_walk_settled`
++reported separately. Exact old logical-budget equivalence on fixed-cap indexes
++is not claimed. Unrestricted builders and their counters are unchanged.
++
++## Validation design
++
++The new tests independently enumerate simple raw directed paths to compare the
++entire bounded distance relation. Integration tests enumerate physically
++contiguous raw-event words and assess complete itinerary semantics using the
++pre-existing independent specification, not another router. Cases cover:
++
++- Access, Egress and Direct larger than Transfer.
++- Multi-edge walks, exact-bound equality, zero-radius self paths and directed
++  asymmetry through walking-only intermediate nodes.
++- A transfer whose individual edges fit but whose total block exceeds its cap.
++- A shortest path through destination with a longer valid avoiding detour.
++- Fresh/retained fixed-role TP, bounded TB and the mandatory verified fixed-cap
++  TREX gate.
++- Full-metric legacy entrypoints, explicit work/settlement/cancellation failure,
++  owned radius metadata and concurrent immutable queries.
++
++Endpoint-specific checks additionally cover 16 generated seven-vertex directed
++graphs, four radii, parallel/equal-cost alternatives, destination absorption and
++target-only searches. Distances come from independent simple-path enumeration;
++representatives are compared with the original complete closure. Both lazy
++endpoint queries and complete-metric legacy fallback are exercised concurrently.
++
++Fresh recovery validation on 2026-10-21 with Go 1.27.3, GOMAXPROCS=4 and CPU 0-3
++affinity passed: `go test -p=4 -count=1 -timeout=360s -run TestWalkingScope -v
++./tripbased`, `go test -p=4 -count=1 -timeout=360s ./...`, `go test -race -p=4
++-count=1 -timeout=360s ./...`, `go vet -p=4 ./...`, and `git diff --check`.
++The interrupted older logs are not treated as completed gates. Public SG
++measurements belong to the separately serialized benchmark campaign; these
++correctness results are not performance claims.
+diff --git a/tripbased/bounded_walking.go b/tripbased/bounded_walking.go
+index 8d6394ed64056d5b4d8ab90fdb91e80fb2809d3c..766e6e97f889b4334cf0f8a9b1723f399c42abea 100644
+--- a/tripbased/bounded_walking.go
++++ b/tripbased/bounded_walking.go
+@@ -32,9 +32,9 @@ func (x *BoundedWalkingTBIndex) Snapshot() BoundedWalkingTBSnapshot {
+ 	return BoundedWalkingTBSnapshot{s.Profile, x.destination, x.removed, x.transferWalkingLimit, s}
+ }
+ 
+-// BuildBoundedWalkingTB retains the complete positive walking metric, but makes
+-// destination absorbing before computing it. This preserves detours that avoid
+-// destination when the unrestricted shortest path passes through destination.
++// BuildBoundedWalkingTB makes destination absorbing before preparing exact
++// transfer walks within transferWalkingLimit. Query-local exact endpoint walks
++// preserve larger Access/Egress/Direct caps and destination-avoiding detours.
+ // cfg must explicitly select level zero with no supplied partition. All existing
+ // preparation limits and fail-closed resource checks remain in force.
+ func BuildBoundedWalkingTB(ctx context.Context, d model.Dataset, destination string, transferWalkingLimit int64, cfg TREXConfig) (*BoundedWalkingTBIndex, error) {
+diff --git a/tripbased/capped_patterns.go b/tripbased/capped_patterns.go
+index 904d1a8c8930a6c89893f8e9f7d6bb1d85944403..0cd9804411ab6235623a8a35d0396adc8d3ed333 100644
+--- a/tripbased/capped_patterns.go
++++ b/tripbased/capped_patterns.go
+@@ -219,7 +219,10 @@ func buildDestinationCappedPatternsForDomain(ctx context.Context, d model.Datase
+ 	d.ID = fmt.Sprintf("%s::tp-absorbing-%x", x.sourceID, sha256.Sum256([]byte(c.Destination)))
+ 	x.conditionedID = d.ID
+ 	start := time.Now()
+-	p.base, err = BuildFlash(ctx, d, fc) // complete base links; no all-source profiles
++	// A complete walking block is bounded by its role, not by each raw edge.
++	// Keep the union of all four role radii for profiles, and only Transfer for
++	// the base links. The destination was made absorbing before either search.
++	p.base, err = buildFlashWithWalkingScope(ctx, d, fc, nil, &c.Walking)
+ 	p.snap.PhasesNS["conditioned_base_graph"] = time.Since(start).Nanoseconds()
+ 	if err != nil {
+ 		return
+@@ -350,7 +353,7 @@ func (x *DestinationCappedPatternIndex) buildProfiles(ctx context.Context) error
+ 				return fmt.Errorf("fixed-cap TP incomplete: native profile segment guard")
+ 			}
+ 			view := *b.base
+-			view.cfg.TransferWalkingLimit = model.MaxServiceSecond // COMPLETE metric, not a radius truncation
++			view.cfg.TransferWalkingLimit = x.cfg.Walking.Transfer // matches the prepared fixed transfer radius
+ 			view.cfg.MaxQueuedSegments = min(view.cfg.MaxQueuedSegments, remaining)
+ 			wl := x.cfg.Walking
+ 			q := model.Query{ID: "fixed-cap-tp-profile", Origin: name, Destination: x.cfg.Destination, Departure: at, LatestArrival: upper, MaxBoardings: p.cfg.Profile.MaxBoardings, MaxLegs: x.cfg.ProfileMaxLegs, MaxWalkSeconds: x.cfg.ProfileMaxWalkingSeconds, Walking: &wl}
+diff --git a/tripbased/cost_summary.go b/tripbased/cost_summary.go
+index f5db24a43470e39121ece7e0ba51b01f19b3db38..586e9cc3c03a319022c8984b52f2c94532f9dd9c 100644
+--- a/tripbased/cost_summary.go
++++ b/tripbased/cost_summary.go
+@@ -15,6 +15,9 @@ func (x *FlashIndex) CostSummary() json.RawMessage {
+ 		return json.RawMessage("null")
+ 	}
+ 	v := map[string]any{"complete": x.snap.Complete, "error": x.snap.Error, "stats": x.snap.Stats, "phases_ns": x.snap.PhasesNS, "lines": len(x.snap.Lines), "transfers": len(x.snap.Transfers), "witnesses": len(x.snap.Witnesses), "closure_diameter": x.snap.ClosureDiameter}
++	if x.snap.WalkingClosureLimit != nil {
++		v["walking_closure_limit"] = *x.snap.WalkingClosureLimit
++	}
+ 	if x.cfg.Semantics != "" {
+ 		v["profile"] = x.snap.Profile
+ 		v["transfer_construction"] = x.snap.TransferConstruction
+@@ -74,6 +77,10 @@ func (x *TREXIndex) CostSummary() json.RawMessage {
+ 	if x == nil {
+ 		return json.RawMessage("null")
+ 	}
+-	b, _ := json.Marshal(map[string]any{"complete": x.snap.Complete, "error": x.snap.Error, "stats": x.snap.Stats, "phases": x.snap.Phases, "lines": len(x.snap.Lines), "transfers": len(x.edges), "witnesses": x.proofs.count, "closure_diameter": x.snap.ClosureDiameter})
++	v := map[string]any{"complete": x.snap.Complete, "error": x.snap.Error, "stats": x.snap.Stats, "phases": x.snap.Phases, "lines": len(x.snap.Lines), "transfers": len(x.edges), "witnesses": x.proofs.count, "closure_diameter": x.snap.ClosureDiameter}
++	if x.snap.WalkingClosureLimit != nil {
++		v["walking_closure_limit"] = *x.snap.WalkingClosureLimit
++	}
++	b, _ := json.Marshal(v)
+ 	return b
+ }
+diff --git a/tripbased/flash.go b/tripbased/flash.go
+index e4574f73a3d20c74dbb25763494e40c96d950b5c..7ea2601ab1b5aa5ce90425b74240b92531f3ca2d 100644
+--- a/tripbased/flash.go
++++ b/tripbased/flash.go
+@@ -119,6 +119,7 @@ type FlashTransferDiagnostics struct {
+ }
+ 
+ type FlashSnapshot struct {
++	WalkingClosureLimit    *int64                    `json:"walking_closure_limit,omitempty"` // nil means the complete metric
+ 	TransferDiagnostics    *FlashTransferDiagnostics `json:"transfer_diagnostics,omitempty"`
+ 	OmittedTransferRecords int                       `json:"omitted_transfer_records,omitempty"`
+ 	TransferConstruction   string                    `json:"transfer_construction,omitempty"`
+@@ -184,6 +185,10 @@ func (w *flashWork) run(profile bool) error {
+ func (x *FlashIndex) Complete() bool { return x.snap.Complete }
+ func (x *FlashIndex) Snapshot() FlashSnapshot {
+ 	s := x.snap
++	if s.WalkingClosureLimit != nil {
++		limit := *s.WalkingClosureLimit
++		s.WalkingClosureLimit = &limit
++	}
+ 	if x.cfg.Semantics == "static_stop_pair_v1" {
+ 		diagnostic := x.ruleTransferDiagnostics()
+ 		s.TransferDiagnostics = &diagnostic
+@@ -228,7 +233,13 @@ func (x *FlashIndex) Snapshot() FlashSnapshot {
+ func BuildFlash(ctx context.Context, d model.Dataset, c FlashConfig) (*FlashIndex, error) {
+ 	return buildFlash(ctx, d, c, nil)
+ }
+-func buildFlash(ctx context.Context, d model.Dataset, c FlashConfig, sink func(FlashWitness) error) (x *FlashIndex, err error) {
++func buildFlash(ctx context.Context, d model.Dataset, c FlashConfig, sink func(FlashWitness) error) (*FlashIndex, error) {
++	return buildFlashWithWalkingScope(ctx, d, c, sink, nil)
++}
++
++// Only the destination/fixed-role TP builders may supply a bounded scope.
++// Public FLASH and ordinary TP retain their complete nonbinding metric.
++func buildFlashWithWalkingScope(ctx context.Context, d model.Dataset, c FlashConfig, sink func(FlashWitness) error, walking *model.WalkingLimits) (x *FlashIndex, err error) {
+ 	x = &FlashIndex{profileSink: sink, cfg: c, ids: map[string]int{}, snap: FlashSnapshot{Profile: "flash_tb_positive_transitive_nonbinding_v1", Config: c, Transfers: []FlashTransfer{}, Witnesses: []FlashWitness{}, PhasesNS: map[string]int64{}}}
+ 	defer func() {
+ 		x.snap.Complete = err == nil
+@@ -318,12 +329,22 @@ func buildFlash(ctx context.Context, d model.Dataset, c FlashConfig, sink func(F
+ 	}
+ 	w := &flashWork{ctx, x}
+ 	start := time.Now()
+-	if err = x.closeWalks(d, w); err != nil {
++	var closureLimit *int64
++	if walking != nil {
++		limit := max(walking.Access, walking.Transfer, walking.Egress, walking.Direct)
++		closureLimit = &limit
++		x.snap.WalkingClosureLimit = &limit
++	}
++	if err = x.closeWalksWithin(d, w, closureLimit); err != nil {
+ 		return
+ 	}
+ 	x.snap.PhasesNS["walking_closure"] = time.Since(start).Nanoseconds()
+ 	start = time.Now()
+-	x.base, err = New(ctx, d, Config{StrictLineOrder: true, TransferWalkingLimit: x.snap.ClosureDiameter, MaxTransfers: l.MaxTransfers, MaxQueuedSegments: l.MaxQuerySegments})
++	transferLimit := x.snap.ClosureDiameter
++	if walking != nil {
++		transferLimit = walking.Transfer
++	}
++	x.base, err = New(ctx, d, Config{StrictLineOrder: true, TransferWalkingLimit: transferLimit, MaxTransfers: l.MaxTransfers, MaxQueuedSegments: l.MaxQuerySegments})
+ 	if err != nil {
+ 		return
+ 	}
+diff --git a/tripbased/flash_graph.go b/tripbased/flash_graph.go
+index b4344905c0a6a51cf352a27ef8481972b244b75b..c722ea338d3a772cbacfa28c8e1fcc3d2f77a1e5 100644
+--- a/tripbased/flash_graph.go
++++ b/tripbased/flash_graph.go
+@@ -25,6 +25,14 @@ func (h flashHeap) Swap(i, j int) { h[i], h[j] = h[j], h[i] }
+ func (h *flashHeap) Push(v any)   { *h = append(*h, v.(flashHeapItem)) }
+ func (h *flashHeap) Pop() any     { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
+ func (x *FlashIndex) closeWalks(d model.Dataset, w *flashWork) error {
++	return x.closeWalksWithin(d, w, nil)
++}
++
++// closeWalksWithin retains exact directed shortest paths of length <= limit.
++// A positive path within the radius has every prefix within that radius, so
++// pruning only over-radius relaxations cannot discard a feasible endpoint or
++// intermediate vertex. Nil preserves the complete legacy metric and guards.
++func (x *FlashIndex) closeWalksWithin(d model.Dataset, w *flashWork, limit *int64) error {
+ 	n := len(x.names)
+ 	adj := make([][]model.Footpath, n)
+ 	for _, e := range d.Footpaths {
+@@ -57,6 +65,9 @@ func (x *FlashIndex) closeWalks(d model.Dataset, w *flashWork) error {
+ 				}
+ 				v := x.ids[e.To]
+ 				value := u.distance + e.Duration
++				if limit != nil && value > *limit {
++					continue
++				}
+ 				old, ok := dist[v]
+ 				if !ok || value < old {
+ 					dist[v] = value
+diff --git a/tripbased/trex.go b/tripbased/trex.go
+index 05bbe0ec2171a6f815e9df51ba0eeb2d0e8d17e7..b3b8a899b5a0bd830a1e9ab2a90facc938190aef 100644
+--- a/tripbased/trex.go
++++ b/tripbased/trex.go
+@@ -86,6 +86,7 @@ type TREXPhase struct {
+ 	Work           int    `json:"work"`
+ }
+ type TREXSnapshot struct {
++	WalkingClosureLimit     *int64               `json:"walking_closure_limit,omitempty"` // nil means the complete metric
+ 	FixedTransferWalkingCap *int64               `json:"fixed_transfer_walking_cap,omitempty"`
+ 	Profile                 string               `json:"profile"`
+ 	Complete                bool                 `json:"complete"`
+@@ -181,8 +182,8 @@ func BuildTREXStaticRulesCandidate(ctx context.Context, d model.Dataset, cfg TRE
+ // graph. Ranks and overlays remain active; per-query replay and independent
+ // frontier certification are still required. Query transfer caps must match.
+ func BuildTREXFixedTransferCapRankedCandidate(ctx context.Context, d model.Dataset, cfg TREXConfig, transferWalkingCap int64) (*TREXIndex, error) {
+-	if transferWalkingCap < 0 {
+-		return nil, fmt.Errorf("fixed transfer walking cap must be nonnegative")
++	if transferWalkingCap < 0 || transferWalkingCap > model.MaxServiceSecond {
++		return nil, fmt.Errorf("fixed transfer walking cap must be within the service-time domain")
+ 	}
+ 	return buildTREXPolicy(ctx, d, cfg, &transferWalkingCap, true)
+ }
+@@ -278,7 +279,13 @@ func buildTREXPolicy(ctx context.Context, d model.Dataset, cfg TREXConfig, trans
+ 	}
+ 	err = x.phase("walking_closure", func() error {
+ 		carrier := &FlashIndex{names: x.names, ids: x.ids, cfg: FlashConfig{Limits: FlashLimits{MaxWork: l.MaxWork, MaxClosurePaths: l.MaxClosurePaths, MaxWalkSettled: l.MaxWalkSettled}}, snap: FlashSnapshot{Stats: FlashStats{Work: x.snap.Stats.Work}}}
+-		e := carrier.closeWalks(x.base.p.Data, &flashWork{ctx, carrier})
++		// Only the explicit fixed-transfer-cap adapters use a radius. Access,
++		// direct and egress remain query-local and can exceed that radius.
++		if transferWalkLimit != nil {
++			limit := *transferWalkLimit
++			x.snap.WalkingClosureLimit = &limit
++		}
++		e := carrier.closeWalksWithin(x.base.p.Data, &flashWork{ctx, carrier}, transferWalkLimit)
+ 		x.snap.Stats.Work = carrier.snap.Stats.Work
+ 		x.snap.Stats.ClosurePaths = carrier.snap.Stats.ClosurePaths
+ 		x.snap.Stats.WalkSettled = carrier.snap.Stats.WalkSettled
+diff --git a/tripbased/trex_diagnostic.go b/tripbased/trex_diagnostic.go
+index c7e2fa61f5ead97312f0021b53818503d57bba9c..55fde2a9b9ee07ccbaabbd5c38504f3f10bcb575 100644
+--- a/tripbased/trex_diagnostic.go
++++ b/tripbased/trex_diagnostic.go
+@@ -4,6 +4,7 @@ package tripbased
+ // remain in Snapshot; this view never expands or copies those large collections.
+ // Call only after preparation returns, as with Snapshot.
+ type TREXDiagnostic struct {
++	WalkingClosureLimit     *int64               `json:"walking_closure_limit,omitempty"`
+ 	FixedTransferWalkingCap *int64               `json:"fixed_transfer_walking_cap,omitempty"`
+ 	Profile                 string               `json:"profile"`
+ 	Complete                bool                 `json:"complete"`
+@@ -25,6 +26,10 @@ func (x *TREXIndex) Diagnostic() TREXDiagnostic {
+ 		RetainedTransfers: len(x.edges), RetainedWitnesses: x.proofs.count,
+ 		PartitionStops: len(s.Partition.Cells), WalkingComponents: s.Partition.Components,
+ 		Phases: make(map[string]TREXPhase, len(s.Phases))}
++	if s.WalkingClosureLimit != nil {
++		limit := *s.WalkingClosureLimit
++		out.WalkingClosureLimit = &limit
++	}
+ 	if x.staticRulesCandidate && x.transferWalkLimit != nil {
+ 		cap := *x.transferWalkLimit
+ 		out.FixedTransferWalkingCap = &cap
+diff --git a/tripbased/trex_query.go b/tripbased/trex_query.go
+index 6020cd13760e3b169eb303e96eac04351de5606a..bb845f62e43fff4f35fb1382842395492a0b9e89 100644
+--- a/tripbased/trex_query.go
++++ b/tripbased/trex_query.go
+@@ -10,18 +10,20 @@ import (
+ )
+ 
+ type TREXQueryStats struct {
+-	Mode           string `json:"mode"`
+-	Work           int    `json:"work"`
+-	Rounds         int    `json:"rounds"`
+-	QueuedSegments int    `json:"queued_segments"`
+-	SplitSegments  int    `json:"split_segments"`
+-	TargetEvents   int    `json:"target_events"`
+-	TargetPruned   int    `json:"target_pruned"`
+-	TransferVisits int    `json:"transfer_visits"`
+-	RankTests      int    `json:"rank_tests"`
+-	RankRejected   int    `json:"rank_rejected"`
+-	ReachedUpdates int    `json:"reached_updates"`
+-	UnpackedLegs   int    `json:"unpacked_legs"`
++	EndpointWalkWork    int    `json:"endpoint_walk_work,omitempty"`
++	EndpointWalkSettled int    `json:"endpoint_walk_settled,omitempty"`
++	Mode                string `json:"mode"`
++	Work                int    `json:"work"`
++	Rounds              int    `json:"rounds"`
++	QueuedSegments      int    `json:"queued_segments"`
++	SplitSegments       int    `json:"split_segments"`
++	TargetEvents        int    `json:"target_events"`
++	TargetPruned        int    `json:"target_pruned"`
++	TransferVisits      int    `json:"transfer_visits"`
++	RankTests           int    `json:"rank_tests"`
++	RankRejected        int    `json:"rank_rejected"`
++	ReachedUpdates      int    `json:"reached_updates"`
++	UnpackedLegs        int    `json:"unpacked_legs"`
+ }
+ type TREXResult struct {
+ 	Journeys []model.Journey `json:"journeys"`
+@@ -59,6 +61,12 @@ func (x *TREXIndex) searchTREXForCertificate(ctx context.Context, q model.Query,
+ 	// original unrestricted customization is not a cap-preservation proof.
+ 	roleCaps := bounded || mode == "overlay-role-caps"
+ 	overlay := mode == "overlay" || mode == "overlay-role-caps"
++	if x.snap.WalkingClosureLimit != nil && !roleCaps {
++		// Preserve the original public nonbinding entrypoints on fixed-cap
++		// indexes. Their certification needs the COMPLETE metric, never the
++		// bounded transfer diameter. The immutable fallback is charged here.
++		return x.searchTREXCompleteWalking(ctx, q, mode, capCertificate)
++	}
+ 	if bounded || capCertificate {
+ 		err = x.checkTREXResources(ctx, q)
+ 	} else {
+@@ -122,8 +130,22 @@ func (x *TREXIndex) searchTREXForCertificate(ctx context.Context, q model.Query,
+ 		return nil
+ 	}
+ 	bestArrival := q.LatestArrival + 1
+-	for wi := range x.walks[source] {
+-		w := &x.walks[source][wi]
++	access := x.walks[source]
++	var egressCache map[int]*paper.Path
++	if x.snap.WalkingClosureLimit != nil {
++		access, err = x.endpointWalks(ctx, source, -1, max(q.Walking.Access, q.Walking.Direct), target, charge, &out.Stats)
++		if err != nil {
++			return
++		}
++		// A shortest path ending at destination cannot pass through it and
++		// leave again (positive edges). Prepared paths already suffice when
++		// Egress fits the transfer radius; only a larger role needs lazy work.
++		if q.Walking.Egress > *x.snap.WalkingClosureLimit {
++			egressCache = map[int]*paper.Path{}
++		}
++	}
++	for wi := range access {
++		w := &access[wi]
+ 		if err = charge(); err != nil {
+ 			return
+ 		}
+@@ -216,6 +238,23 @@ func (x *TREXIndex) searchTREXForCertificate(ctx context.Context, q model.Query,
+ 					break
+ 				}
+ 				p := x.walkMap[x.ids[c.To]][target]
++				if egressCache != nil {
++					from := x.ids[c.To]
++					var exists bool
++					p, exists = egressCache[from]
++					if !exists {
++						p = nil
++						var paths []paper.Path
++						paths, err = x.endpointWalks(ctx, from, target, q.Walking.Egress, target, charge, &out.Stats)
++						if err != nil {
++							return
++						}
++						if len(paths) > 0 {
++							p = &paths[0]
++						}
++						egressCache[from] = p
++					}
++				}
+ 				if p != nil && (!roleCaps || p.Duration <= q.Walking.Egress) && c.Arrival+p.Duration < arrival {
+ 					arrival = c.Arrival + p.Duration
+ 					found = s.node
+diff --git a/tripbased/trex_walking_scope.go b/tripbased/trex_walking_scope.go
+new file mode 100644
+index 0000000000000000000000000000000000000000..dec7615cc0d7dacefcf44b28976f226e34508445
+--- /dev/null
++++ b/tripbased/trex_walking_scope.go
+@@ -0,0 +1,138 @@
++package tripbased
++
++import (
++	"container/heap"
++	"context"
++	"fmt"
++	"sort"
++
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/paper"
++)
++
++// endpointWalks is query-local: only explicit fixed-transfer-cap adapters use it.
++// target < 0 emits every reachable endpoint; otherwise it emits only target.
++// Every raw walking vertex remains available as an intermediate. Positive edges
++// make radius pruning exact and mean reaching stopAt is terminal, never a new
++// walking-block origin. Output paths retain raw directed edge provenance.
++func (x *TREXIndex) endpointWalks(ctx context.Context, source, target int, limit int64, stopAt int, charge func() error, stats *TREXQueryStats) (out []paper.Path, err error) {
++	before := stats.Work
++	defer func() { stats.EndpointWalkWork += stats.Work - before }()
++	dist := map[int]int64{source: 0}
++	prev := map[int]model.Footpath{}
++	h := &flashHeap{{source, 0}}
++	found := false
++	for h.Len() > 0 {
++		if err = charge(); err != nil {
++			return nil, err
++		}
++		u := heap.Pop(h).(flashHeapItem)
++		if dist[u.v] != u.distance {
++			continue
++		}
++		if stats.EndpointWalkSettled >= x.cfg.Limits.MaxWalkSettled {
++			return nil, fmt.Errorf("T-REX incomplete: query walking settlement budget exhausted")
++		}
++		stats.EndpointWalkSettled++
++		if u.v == target {
++			found = true
++			break
++		}
++		if u.v == stopAt {
++			continue
++		}
++		for _, edge := range x.base.p.Outgoing[x.names[u.v]] {
++			if err = charge(); err != nil {
++				return nil, err
++			}
++			value := u.distance + edge.Duration
++			if value > limit {
++				continue
++			}
++			v := x.ids[edge.To]
++			old, ok := dist[v]
++			if !ok || value < old {
++				dist[v] = value
++				prev[v] = edge
++				heap.Push(h, flashHeapItem{v, value})
++			}
++		}
++	}
++	stops := []int{}
++	if target >= 0 {
++		if found {
++			stops = append(stops, target)
++		}
++	} else {
++		for v := range dist {
++			stops = append(stops, v)
++		}
++		sort.Ints(stops)
++	}
++	for _, v := range stops {
++		if err = charge(); err != nil {
++			return nil, err
++		}
++		p := paper.Path{To: x.names[v], Duration: dist[v], Edges: []model.Footpath{}}
++		for u := v; u != source; {
++			if err = charge(); err != nil {
++				return nil, err
++			}
++			edge := prev[u]
++			p.Edges = append(p.Edges, edge)
++			u = x.ids[edge.From]
++		}
++		for i, j := 0, len(p.Edges)-1; i < j; i, j = i+1, j-1 {
++			p.Edges[i], p.Edges[j] = p.Edges[j], p.Edges[i]
++		}
++		out = append(out, p)
++	}
++	return out, ctx.Err()
++}
++
++// A fixed-cap index still exposes the original nonbinding query entrypoints.
++// Reconstruct their original complete walking metric locally instead of ever
++// using a truncated diameter as a nonbinding certificate. This fallback is not
++// used by the capped adapters and never changes the prepared index.
++func (x *TREXIndex) searchTREXCompleteWalking(ctx context.Context, q model.Query, mode string, capCertificate bool) (out TREXResult, err error) {
++	out.Journeys = []model.Journey{}
++	out.Stats.Mode = mode
++	defer func() {
++		out.Complete = err == nil
++		if err != nil {
++			out.Error = err.Error()
++		}
++	}()
++	if err = x.checkTREXResources(ctx, q); err != nil {
++		return
++	}
++	l := x.cfg.Limits
++	// Original closure construction began immediately after timetable work.
++	startWork := x.snap.Phases["timetable"].Work
++	maxWork := startWork + min(l.MaxWork-startWork, l.MaxQueryWork)
++	carrier := &FlashIndex{names: x.names, ids: x.ids,
++		cfg:  FlashConfig{Limits: FlashLimits{MaxWork: maxWork, MaxClosurePaths: l.MaxClosurePaths, MaxWalkSettled: l.MaxWalkSettled}},
++		snap: FlashSnapshot{Stats: FlashStats{Work: startWork}}}
++	err = carrier.closeWalks(x.base.p.Data, &flashWork{ctx, carrier})
++	work := carrier.snap.Stats.Work - startWork
++	out.Stats.Work, out.Stats.EndpointWalkWork = work, work
++	out.Stats.EndpointWalkSettled = carrier.snap.Stats.WalkSettled
++	if err != nil {
++		return
++	}
++	if work >= l.MaxQueryWork {
++		err = fmt.Errorf("T-REX incomplete: query work budget exhausted by complete walking fallback")
++		return
++	}
++	view := *x
++	view.snap = x.snap
++	view.snap.WalkingClosureLimit = nil // terminates the fallback, not the fixed transfer policy
++	view.snap.ClosureDiameter = carrier.snap.ClosureDiameter
++	view.walks, view.walkMap = carrier.walks, carrier.walkMap
++	view.cfg.Limits.MaxQueryWork -= work
++	out, err = view.searchTREXForCertificate(ctx, q, mode, capCertificate)
++	out.Stats.Work += work
++	out.Stats.EndpointWalkWork += work
++	out.Stats.EndpointWalkSettled += carrier.snap.Stats.WalkSettled
++	return
++}
+diff --git a/tripbased/walking_scope_internal_test.go b/tripbased/walking_scope_internal_test.go
+new file mode 100644
+index 0000000000000000000000000000000000000000..98df38ce388645ad1a6251017f9cbc278da7d6d5
+--- /dev/null
++++ b/tripbased/walking_scope_internal_test.go
+@@ -0,0 +1,276 @@
++package tripbased
++
++import (
++	"context"
++	"encoding/json"
++	"fmt"
++	"math/rand"
++	"reflect"
++	"sort"
++	"strings"
++	"sync"
++	"testing"
++
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/paper"
++)
++
++// Independently enumerate all SIMPLE raw directed paths. Positive edges mean
++// some simple path attains every shortest distance; no production closure,
++// Dijkstra, dominance, transfer preparation or search helper is used here.
++func rawSimpleWalking(d model.Dataset, source string, radius int64) map[string]int64 {
++	out := map[string]int64{source: 0}
++	seen := map[string]bool{source: true}
++	var visit func(string, int64)
++	visit = func(at string, distance int64) {
++		for _, edge := range d.Footpaths {
++			if edge.From != at || seen[edge.To] || distance+edge.Duration > radius {
++				continue
++			}
++			next := distance + edge.Duration
++			if old, ok := out[edge.To]; !ok || next < old {
++				out[edge.To] = next
++			}
++			seen[edge.To] = true
++			visit(edge.To, next)
++			delete(seen, edge.To)
++		}
++	}
++	visit(source, 0)
++	return out
++}
++
++func TestWalkingScopeExactDirectedRadius(t *testing.T) {
++	names := []string{"A", "B", "C", "D", "E", "X"}
++	d := model.Dataset{Footpaths: []model.Footpath{
++		{ID: "ab", From: "A", To: "B", Duration: 2},
++		{ID: "bc", From: "B", To: "C", Duration: 2},
++		{ID: "cd", From: "C", To: "D", Duration: 2},
++		{ID: "da", From: "D", To: "A", Duration: 2},
++		{ID: "ae", From: "A", To: "E", Duration: 10},
++		{ID: "ax", From: "A", To: "X", Duration: 1},
++		{ID: "xe", From: "X", To: "E", Duration: 3},
++	}}
++	for _, radius := range []int64{0, 1, 3, 4, 6} {
++		x := &FlashIndex{names: names, ids: map[string]int{}, cfg: FlashConfig{Limits: FlashLimits{MaxWork: 10000, MaxWalkSettled: 1000, MaxClosurePaths: 1000}}}
++		for i, name := range names {
++			x.ids[name] = i
++		}
++		if e := x.closeWalksWithin(d, &flashWork{context.Background(), x}, &radius); e != nil {
++			t.Fatal(e)
++		}
++		for source, name := range names {
++			got := map[string]int64{}
++			for _, p := range x.walks[source] {
++				got[p.To] = p.Duration
++				at, cost := name, int64(0)
++				for _, edge := range p.Edges {
++					if edge.From != at {
++						t.Fatal("lost directed intermediate", p)
++					}
++					at, cost = edge.To, cost+edge.Duration
++				}
++				if at != p.To || cost != p.Duration || cost > radius {
++					t.Fatal("invalid bounded witness", p)
++				}
++			}
++			if want := rawSimpleWalking(d, name, radius); !reflect.DeepEqual(got, want) {
++				t.Fatal(radius, name, got, want)
++			}
++		}
++	}
++}
++
++// Check endpoint searches independently of any router, including parallel
++// equal-cost alternatives and destination absorption. The raw simple-path
++// enumeration determines distances; the complete closure additionally checks
++// that radius truncation preserves the legacy deterministic representative.
++func TestWalkingScopeEndpointRawPathOracle(t *testing.T) {
++	const n = 7
++	for seed := int64(0); seed < 16; seed++ {
++		rng := rand.New(rand.NewSource(seed))
++		d := model.Dataset{}
++		x := &TREXIndex{names: make([]string, n), ids: map[string]int{},
++			cfg:  TREXConfig{Limits: TREXLimits{MaxWalkSettled: 10000}},
++			base: &Index{p: &paper.Profile{Outgoing: map[string][]model.Footpath{}}}}
++		for i := range x.names {
++			x.names[i] = fmt.Sprintf("s%d", i)
++			x.ids[x.names[i]] = i
++		}
++		for i := 0; i < 24; i++ {
++			from, to := rng.Intn(n), rng.Intn(n)
++			e := model.Footpath{ID: fmt.Sprintf("e%02d", i), From: x.names[from], To: x.names[to], Duration: int64(1 + rng.Intn(5))}
++			d.Footpaths = append(d.Footpaths, e)
++			x.base.p.Outgoing[e.From] = append(x.base.p.Outgoing[e.From], e)
++		}
++		for _, edges := range x.base.p.Outgoing {
++			sort.Slice(edges, func(i, j int) bool { return edges[i].ID < edges[j].ID })
++		}
++		for _, stopAt := range []int{-1, n - 1} {
++			conditioned := model.Dataset{}
++			for _, e := range d.Footpaths {
++				if stopAt < 0 || e.From != x.names[stopAt] {
++					conditioned.Footpaths = append(conditioned.Footpaths, e)
++				}
++			}
++			full := &FlashIndex{names: x.names, ids: x.ids, cfg: FlashConfig{Limits: FlashLimits{MaxWork: 100000, MaxWalkSettled: 10000, MaxClosurePaths: 10000}}}
++			if e := full.closeWalks(conditioned, &flashWork{context.Background(), full}); e != nil {
++				t.Fatal(e)
++			}
++			for _, radius := range []int64{0, 1, 5, 12} {
++				for source := range x.names {
++					stats := TREXQueryStats{}
++					charge := func() error { stats.Work++; return nil }
++					paths, e := x.endpointWalks(context.Background(), source, -1, radius, stopAt, charge, &stats)
++					if e != nil {
++						t.Fatal(e)
++					}
++					got := map[string]int64{}
++					for _, p := range paths {
++						got[p.To] = p.Duration
++						if want := full.walkMap[source][x.ids[p.To]]; want == nil || !reflect.DeepEqual(p, *want) {
++							t.Fatal("endpoint representative changed", seed, stopAt, radius, source, p, want)
++						}
++						targetStats := TREXQueryStats{}
++						one, e := x.endpointWalks(context.Background(), source, x.ids[p.To], radius, stopAt, func() error { targetStats.Work++; return nil }, &targetStats)
++						if e != nil || len(one) != 1 || !reflect.DeepEqual(one[0], p) {
++							t.Fatal("target-only endpoint representative changed", one, p, e)
++						}
++					}
++					if want := rawSimpleWalking(conditioned, x.names[source], radius); !reflect.DeepEqual(got, want) || stats.EndpointWalkWork != stats.Work || stats.EndpointWalkSettled != len(got) {
++						t.Fatal("raw endpoint relation/accounting", seed, stopAt, radius, source, got, want, stats)
++					}
++				}
++			}
++		}
++	}
++}
++
++func TestWalkingScopeTREXLegacyFallbackAndGuards(t *testing.T) {
++	d, q, _, cfg := fixedRankLiteral(t)
++	// Add a long one-way walking-only tail. It must not enter the radius or
++	// make a legacy nonbinding check accidentally use the truncated diameter.
++	d.Stops = append(d.Stops, model.Stop{ID: "tail", Accessible: model.Yes})
++	d.Footpaths = append(d.Footpaths, model.Footpath{ID: "long-tail", From: q.Origin, To: "tail", Duration: 1000, Accessible: model.Yes})
++	cfg.Partition["tail"] = cfg.Partition[q.Origin]
++	x, e := BuildTREXFixedTransferCapRankedCandidate(context.Background(), d, cfg, 900)
++	if e != nil {
++		t.Fatal(e)
++	}
++	if x.snap.WalkingClosureLimit == nil || x.snap.ClosureDiameter >= 1000 || x.walkMap[x.ids[q.Origin]][x.ids["tail"]] != nil {
++		t.Fatal("transfer closure was not radius-bounded")
++	}
++	before, _ := json.Marshal(x.Snapshot())
++	for _, search := range []func(context.Context, model.Query) (TREXResult, error){x.Search, x.SearchRanked, x.SearchUnranked} {
++		if r, e := search(context.Background(), q); e == nil || r.Complete || !strings.Contains(e.Error(), "cap may bind") {
++			t.Fatal("truncated metric certified a legacy query", r, e)
++		}
++	}
++	after, _ := json.Marshal(x.Snapshot())
++	if string(before) != string(after) {
++		t.Fatal("query-local fallback mutated prepared index")
++	}
++	legacy, e := BuildTREXStaticRulesCandidate(context.Background(), d, cfg)
++	if e != nil || legacy.snap.WalkingClosureLimit != nil || legacy.snap.ClosureDiameter < 1000 {
++		t.Fatal("unrestricted builder changed", e)
++	}
++	// For a nonbinding query, every original legacy mode must retain its full
++	// metric semantics and ordered representatives, despite bounded storage.
++	wide := q
++	wide.Walking = &model.WalkingLimits{Access: 1000, Transfer: 1000, Egress: 1000, Direct: 1000}
++	wide.MaxWalkSeconds = model.MaxServiceSecond
++	control := *x
++	control.snap = x.snap
++	control.snap.WalkingClosureLimit = nil
++	control.snap.ClosureDiameter = legacy.snap.ClosureDiameter
++	control.walks, control.walkMap = legacy.walks, legacy.walkMap
++	for _, mode := range []string{"overlay", "rank-test", "unranked"} {
++		want, e := control.searchTREX(context.Background(), wide, mode)
++		got, err := x.searchTREX(context.Background(), wide, mode)
++		if e != nil || err != nil || !got.Complete || !reflect.DeepEqual(got.Journeys, want.Journeys) || got.Stats.EndpointWalkWork == 0 {
++			t.Fatal("legacy full-metric fallback changed representatives", mode, got, want, e, err)
++		}
++	}
++	// Complete-metric reconstruction must remain query-local under concurrent
++	// legacy queries, not merely under the bounded adapter's endpoint searches.
++	var wg sync.WaitGroup
++	for i := 0; i < 4; i++ {
++		wg.Add(1)
++		go func() {
++			defer wg.Done()
++			if r, e := x.Search(context.Background(), wide); e != nil || !r.Complete {
++				t.Error("concurrent complete-metric fallback", r, e)
++			}
++		}()
++	}
++	wg.Wait()
++	after, _ = json.Marshal(x.Snapshot())
++	if string(before) != string(after) {
++		t.Fatal("concurrent complete-metric fallback mutated prepared index")
++	}
++	budgeted := *x
++	budgeted.cfg.Limits.MaxQueryWork = 1
++	if r, e := budgeted.Search(context.Background(), wide); e == nil || r.Complete || r.Stats.Work > 1 || r.Stats.EndpointWalkWork > 1 {
++		t.Fatal("legacy closure ignored query work bound", r, e)
++	}
++	diagnostic := x.Diagnostic()
++	*diagnostic.WalkingClosureLimit = 123
++	snapshot := x.Snapshot()
++	*snapshot.WalkingClosureLimit = 456
++	if *x.snap.WalkingClosureLimit != 900 {
++		t.Fatal("radius metadata aliases index")
++	}
++	for _, kind := range []string{"work", "settled", "cancelled"} {
++		view := *x
++		ctx := context.Background()
++		query := q
++		if kind == "work" {
++			view.cfg.Limits.MaxQueryWork = 1
++		}
++		if kind == "settled" {
++			view.cfg.Limits.MaxWalkSettled = 1
++			w := *q.Walking
++			w.Access = 1000
++			query.Walking = &w
++			query.MaxWalkSeconds = model.MaxServiceSecond
++		}
++		if kind == "cancelled" {
++			var cancel context.CancelFunc
++			ctx, cancel = context.WithCancel(ctx)
++			cancel()
++		}
++		r, e := view.searchTREXForCertificate(ctx, query, "overlay-role-caps", true)
++		if e == nil || r.Complete {
++			t.Fatal("query-local endpoint guard bypassed", kind, r, e)
++		}
++		if kind == "settled" && !strings.Contains(e.Error(), "settlement budget") {
++			t.Fatal("settlement guard test failed for another reason", e)
++		}
++	}
++}
++
++func TestWalkingScopeExistingGuardsRemainBinding(t *testing.T) {
++	const n = 100
++	d := model.Dataset{}
++	newCarrier := func() *FlashIndex {
++		x := &FlashIndex{ids: map[string]int{}, cfg: FlashConfig{Limits: FlashLimits{MaxWork: 10000, MaxWalkSettled: 300, MaxClosurePaths: 300}}}
++		for i := 0; i < n; i++ {
++			name := fmt.Sprintf("%03d", i)
++			x.names = append(x.names, name)
++			x.ids[name] = i
++		}
++		return x
++	}
++	x := newCarrier()
++	for i := 0; i+1 < n; i++ {
++		d.Footpaths = append(d.Footpaths, model.Footpath{ID: fmt.Sprintf("e%03d", i), From: x.names[i], To: x.names[i+1], Duration: 1})
++	}
++	radius := int64(2)
++	if e := x.closeWalksWithin(d, &flashWork{context.Background(), x}, &radius); e != nil || x.snap.Stats.WalkSettled != 3*n-3 || x.snap.Stats.ClosurePaths != 3*n-3 || x.snap.ClosureDiameter != 2 {
++		t.Fatal("bounded closure did not complete under original guards", x.snap, e)
++	}
++	legacy := newCarrier()
++	if e := legacy.closeWalks(d, &flashWork{context.Background(), legacy}); e == nil || !strings.Contains(e.Error(), "budget exhausted") {
++		t.Fatal("complete legacy closure should still hit the unchanged guards", e)
++	}
++}
+diff --git a/tripbased/walking_scope_oracle_test.go b/tripbased/walking_scope_oracle_test.go
+new file mode 100644
+index 0000000000000000000000000000000000000000..8d55f1178534c65cb792845ff5074865ea7de115
+--- /dev/null
++++ b/tripbased/walking_scope_oracle_test.go
+@@ -0,0 +1,184 @@
++package tripbased_test
++
++import (
++	"context"
++	"encoding/json"
++	"reflect"
++	"sync"
++	"testing"
++
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/tripbased"
++)
++
++func walkingScopeConfig() tripbased.TREXConfig {
++	return tripbased.TREXConfig{Levels: 0, MaxBoardings: 3, Limits: tripbased.TREXLimits{
++		MaxStops: 100, MaxTrips: 100, MaxInputEdges: 1000, MaxClosurePaths: 1000,
++		MaxWalkSettled: 10000, MaxTransfers: 1000, MaxRuns: 1000, MaxWork: 1000000,
++		MaxWitnesses: 1000, MaxOverlayEntries: 10000, MaxQueuedSegments: 10000, MaxQueryWork: 1000000,
++	}}
++}
++
++func walkingScopeFixture() (model.Dataset, model.Query) {
++	d := data()
++	for _, name := range []string{"O", "T", "Z", "W", "tail"} {
++		d.Stops = append(d.Stops, model.Stop{ID: name, Accessible: model.Yes})
++	}
++	d.Window = &model.TimeWindow{Start: 0, End: 100}
++	trip(&d, "first", []string{"A", "B"}, 10, 12)
++	trip(&d, "second", []string{"C", "D"}, 16, 18)
++	for _, e := range []struct {
++		id, from, to string
++		seconds      int64
++	}{
++		{"ox", "O", "X", 3}, {"xa", "X", "A", 3},
++		{"by", "B", "Y", 2}, {"yc", "Y", "C", 2},
++		{"dz", "D", "Z", 3}, {"zt", "Z", "T", 3},
++		{"ow", "O", "W", 20}, {"wt", "W", "T", 20},
++		{"tail", "A", "tail", 1000},
++	} {
++		d.Footpaths = append(d.Footpaths, model.Footpath{ID: e.id, From: e.from, To: e.to, Duration: e.seconds, Accessible: model.Yes})
++	}
++	q := query()
++	q.Origin, q.Destination, q.MaxBoardings, q.MaxWalkSeconds, q.MaxLegs = "O", "T", 2, 1000, 128
++	q.Walking = &model.WalkingLimits{Access: 6, Transfer: 4, Egress: 6, Direct: 40}
++	return d, q
++}
++
++// Prefix enumeration is physically contiguous raw-edge enumeration followed by
++// the independently authored whole-word assessment. No production walking,
++// transfer graph or router is involved in the expected frontier or replay.
++func compareWalkingScope(t *testing.T, d model.Dataset, q model.Query, want []int64, ranked bool) {
++	t.Helper()
++	ctx := context.Background()
++	metrics, _ := prefixSpec(t, d, q)
++	if independent := objectives(metrics, q.MaxBoardings); !reflect.DeepEqual(independent, want) {
++		t.Fatal("literal/spec disagreement", independent, want)
++	}
++	bounded, e := tripbased.BuildBoundedWalkingTB(ctx, d, q.Destination, q.Walking.Transfer, walkingScopeConfig())
++	if e != nil {
++		t.Fatal(e)
++	}
++	before, _ := json.Marshal(bounded.Snapshot())
++	r, e := bounded.Search(ctx, q)
++	if e != nil || !r.Complete || r.Stats.EndpointWalkWork == 0 {
++		t.Fatal("bounded endpoint query failed/unaccounted", r, e)
++	}
++	if got := objectives(reconstructed(t, d, q, r.Journeys), q.MaxBoardings); !reflect.DeepEqual(got, want) {
++		t.Fatal("bounded frontier", got, want)
++	}
++	var wg sync.WaitGroup
++	for i := 0; i < 4; i++ {
++		wg.Add(1)
++		go func() {
++			defer wg.Done()
++			if _, e := bounded.Search(ctx, q); e != nil {
++				t.Error(e)
++			}
++		}()
++	}
++	wg.Wait()
++	after, _ := json.Marshal(bounded.Snapshot())
++	if string(before) != string(after) {
++		t.Fatal("lazy endpoint walks mutated index")
++	}
++	for _, retained := range []bool{false, true} {
++		pc := fixedPatternConfig(d, q)
++		var p *tripbased.DestinationCappedPatternIndex
++		if retained {
++			p, e = tripbased.BuildDestinationRetainedCappedPatterns(ctx, d, tripbased.DestinationRetainedCappedConfig{Scope: pc, MaxPendingSegments: 10000, MaxSourceSeeds: 10000})
++		} else {
++			p, e = tripbased.BuildDestinationCappedPatterns(ctx, d, pc)
++		}
++		if e != nil {
++			t.Fatal(retained, e)
++		}
++		r, e := p.Search(ctx, q)
++		if e != nil || !r.Complete {
++			t.Fatal(retained, e, r)
++		}
++		if got := objectives(reconstructed(t, d, q, r.Journeys), q.MaxBoardings); !reflect.DeepEqual(got, want) {
++			t.Fatal("TP frontier", retained, got, want)
++		}
++		base := p.Snapshot().Patterns.Backend
++		if base.WalkingClosureLimit == nil || *base.WalkingClosureLimit != max(q.Walking.Access, q.Walking.Transfer, q.Walking.Egress, q.Walking.Direct) || base.ClosureDiameter > *base.WalkingClosureLimit {
++			t.Fatal("TP closure radius omitted/misreported", base)
++		}
++	}
++	domain, e := tripbased.BuildDestinationSourceDomainPatterns(ctx, d, tripbased.DestinationSourceDomainConfig{
++		Retained: tripbased.DestinationRetainedCappedConfig{Scope: fixedPatternConfig(d, q), MaxPendingSegments: 10000, MaxSourceSeeds: 10000},
++		Sources:  []string{q.Origin},
++	})
++	if e != nil || !domain.DomainComplete() {
++		t.Fatal("source-domain construction", e)
++	}
++	dr, e := domain.Search(ctx, q)
++	if e != nil || !dr.Complete || !reflect.DeepEqual(objectives(reconstructed(t, d, q, dr.Journeys), q.MaxBoardings), want) {
++		t.Fatal("source-domain frontier", dr, e)
++	}
++	if ranked {
++		x, e := tripbased.BuildTREXFixedTransferCapRankedCandidate(ctx, d, walkingScopeConfig(), q.Walking.Transfer)
++		if e != nil {
++			t.Fatal(e)
++		}
++		gate, _, e := tripbased.PrepareTREXFixedTransferCapCandidate(ctx, x,
++			tripbased.TREXStaticCapVerifyLimits{MaxStates: 10000, MaxJourneys: 10000, MaxScans: 1000000},
++			tripbased.TREXRawVerifierPreparationLimits{MaxRows: 1000, MaxWork: 10000, MaxPayloadBytes: 1000000})
++		if e != nil {
++			t.Fatal(e)
++		}
++		r, e := gate.Search(ctx, q)
++		if e != nil || !r.Complete || !r.Certificate.Accepted || !r.VerificationComplete {
++			t.Fatal("fixed-ranked gate", r, e)
++		}
++		if got := objectives(reconstructed(t, d, q, r.Journeys), q.MaxBoardings); !reflect.DeepEqual(got, want) {
++			t.Fatal("fixed-ranked frontier", got, want)
++		}
++	}
++}
++
++func TestWalkingScopeIndependentRoleSeparation(t *testing.T) {
++	d, q := walkingScopeFixture()
++	t.Run("larger_access_egress_direct", func(t *testing.T) {
++		compareWalkingScope(t, d, q, []int64{40, 40, 24}, true)
++	})
++	t.Run("cannot_split_transfer_block", func(t *testing.T) {
++		q := q
++		w := *q.Walking
++		w.Transfer = 3 // each raw edge costs 2, but the one block costs 4
++		q.Walking = &w
++		compareWalkingScope(t, d, q, []int64{40, 40, 40}, true)
++	})
++	t.Run("directed_asymmetry", func(t *testing.T) {
++		q := q
++		q.Origin, q.Destination = "T", "O"
++		compareWalkingScope(t, d, q, []int64{inf, inf, inf}, true)
++	})
++	t.Run("zero_radius_self_paths", func(t *testing.T) {
++		q := q
++		q.Origin, q.Destination = "A", "B"
++		q.Walking = &model.WalkingLimits{}
++		compareWalkingScope(t, d, q, []int64{inf, 12, 12}, true)
++	})
++}
++
++func TestWalkingScopeIndependentAbsorbingDetour(t *testing.T) {
++	d := data()
++	d.Window = &model.TimeWindow{Start: 0, End: 100}
++	trip(&d, "first", []string{"A", "B"}, 0, 1)
++	trip(&d, "second", []string{"C", "D"}, 5, 6)
++	for _, edge := range []model.Footpath{
++		{ID: "bd", From: "B", To: "D", Duration: 1, Accessible: model.Yes},
++		{ID: "dc", From: "D", To: "C", Duration: 1, Accessible: model.Yes},
++		{ID: "bx", From: "B", To: "X", Duration: 2, Accessible: model.Yes},
++		{ID: "xc", From: "X", To: "C", Duration: 2, Accessible: model.Yes},
++	} {
++		d.Footpaths = append(d.Footpaths, edge)
++	}
++	q := query()
++	q.MaxBoardings, q.MaxWalkSeconds, q.MaxLegs = 2, 1000, 128
++	q.Walking = &model.WalkingLimits{Transfer: 4}
++	// The unrestricted B-D-C shortcut is invalid: D is terminal. The retained
++	// path must be the longer B-X-C block, exactly on the transfer radius.
++	compareWalkingScope(t, d, q, []int64{inf, inf, 6}, false)
++}

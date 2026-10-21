@@ -1,0 +1,855 @@
+{
+  "stage": "test",
+  "pairs": [
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-raptor-baseline/test-morning-raptor-baseline",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-raptor-dense/test-morning-raptor-dense",
+      "offered_pairs": 450,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 450,
+      "median_paired_response_delta_ms": -12.929279,
+      "median_paired_response_ratio": 0.7438024853494384,
+      "baseline_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 54.259676,
+        "response_max_ms": 140.744589,
+        "batch_allocation_bytes": 11587649288,
+        "load_s": 2.012426912,
+        "router_prep_s": 1.883738369,
+        "router_prep_alloc_bytes": 1667146496,
+        "sampled_peak_group_rss_bytes": 1219366912
+      },
+      "candidate_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 39.363099,
+        "response_max_ms": 92.568715,
+        "batch_allocation_bytes": 5371051888,
+        "load_s": 2.102411211,
+        "router_prep_s": 1.803460634,
+        "router_prep_alloc_bytes": 1569722720,
+        "sampled_peak_group_rss_bytes": 1305481216
+      },
+      "scope": "test exactnative emitted witness/status/certification comparison; resource/deadline differences remain visible, not fullmodel independent oracle"
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-raptor-early-baseline/test-morning-raptor-early-baseline",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-raptor-early-dense/test-morning-raptor-early-dense",
+      "offered_pairs": 450,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 450,
+      "median_paired_response_delta_ms": -12.226324,
+      "median_paired_response_ratio": 0.7246662929482359,
+      "baseline_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 46.781896,
+        "response_max_ms": 133.47085,
+        "batch_allocation_bytes": 11057608456,
+        "load_s": 2.557727098,
+        "router_prep_s": 2.388661316,
+        "router_prep_alloc_bytes": 1769699856,
+        "sampled_peak_group_rss_bytes": 1355116544
+      },
+      "candidate_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 33.782008,
+        "response_max_ms": 81.528115,
+        "batch_allocation_bytes": 5413551408,
+        "load_s": 2.33131311,
+        "router_prep_s": 2.66321333,
+        "router_prep_alloc_bytes": 1569552864,
+        "sampled_peak_group_rss_bytes": 1330098176
+      },
+      "scope": "test exactnative emitted witness/status/certification comparison; resource/deadline differences remain visible, not fullmodel independent oracle"
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-ea-baseline/test-morning-ea-baseline",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-ea-combined/test-morning-ea-combined",
+      "offered_pairs": 450,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 450,
+      "median_paired_response_delta_ms": -30.421155,
+      "median_paired_response_ratio": 0.5201292370168051,
+      "baseline_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 68.965906,
+        "response_max_ms": 150.25975,
+        "batch_allocation_bytes": 11905322208,
+        "load_s": 2.198636034,
+        "router_prep_s": 1.768579988,
+        "router_prep_alloc_bytes": 1469495208,
+        "sampled_peak_group_rss_bytes": 1261797376
+      },
+      "candidate_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 36.062819,
+        "response_max_ms": 105.324225,
+        "batch_allocation_bytes": 5694179128,
+        "load_s": 1.935586558,
+        "router_prep_s": 1.853083253,
+        "router_prep_alloc_bytes": 1380739480,
+        "sampled_peak_group_rss_bytes": 1149050880
+      },
+      "scope": "test exactnative emitted witness/status/certification comparison; resource/deadline differences remain visible, not fullmodel independent oracle"
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-ultra-control-baseline/test-morning-ultra-control-baseline",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-ultra-control-dense/test-morning-ultra-control-dense",
+      "offered_pairs": 450,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 450,
+      "median_paired_response_delta_ms": -9.5107635,
+      "median_paired_response_ratio": 0.6231632261152897,
+      "baseline_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 27.41994,
+        "response_max_ms": 87.357683,
+        "batch_allocation_bytes": 2235210696,
+        "load_s": 2.164169771,
+        "router_prep_s": 2.143954134,
+        "router_prep_alloc_bytes": 1820663272,
+        "sampled_peak_group_rss_bytes": 1330049024
+      },
+      "candidate_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 16.573061,
+        "response_max_ms": 57.544956,
+        "batch_allocation_bytes": 2528993904,
+        "load_s": 2.156525953,
+        "router_prep_s": 2.096602353,
+        "router_prep_alloc_bytes": 1726864376,
+        "sampled_peak_group_rss_bytes": 1324097536
+      },
+      "scope": "test exactnative emitted witness/status/certification comparison; resource/deadline differences remain visible, not fullmodel independent oracle"
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-raptor-baseline/test-midday-raptor-baseline",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-raptor-dense/test-midday-raptor-dense",
+      "offered_pairs": 450,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 450,
+      "median_paired_response_delta_ms": -13.8317605,
+      "median_paired_response_ratio": 0.7254631108034221,
+      "baseline_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 55.269313,
+        "response_max_ms": 199.816131,
+        "batch_allocation_bytes": 11518626760,
+        "load_s": 2.149969506,
+        "router_prep_s": 1.545401222,
+        "router_prep_alloc_bytes": 1568759800,
+        "sampled_peak_group_rss_bytes": 1293578240
+      },
+      "candidate_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 38.791978,
+        "response_max_ms": 122.04062,
+        "batch_allocation_bytes": 5342078248,
+        "load_s": 2.038158385,
+        "router_prep_s": 1.65517557,
+        "router_prep_alloc_bytes": 1676398128,
+        "sampled_peak_group_rss_bytes": 1330647040
+      },
+      "scope": "test exactnative emitted witness/status/certification comparison; resource/deadline differences remain visible, not fullmodel independent oracle"
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-raptor-early-baseline/test-midday-raptor-early-baseline",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-raptor-early-dense/test-midday-raptor-early-dense",
+      "offered_pairs": 450,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 450,
+      "median_paired_response_delta_ms": -10.369431500000001,
+      "median_paired_response_ratio": 0.7451458485812761,
+      "baseline_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 43.567658,
+        "response_max_ms": 130.310696,
+        "batch_allocation_bytes": 10999059304,
+        "load_s": 2.111510659,
+        "router_prep_s": 1.985569071,
+        "router_prep_alloc_bytes": 1671014136,
+        "sampled_peak_group_rss_bytes": 1436229632
+      },
+      "candidate_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 32.819727,
+        "response_max_ms": 89.730249,
+        "batch_allocation_bytes": 5387892720,
+        "load_s": 2.218607138,
+        "router_prep_s": 1.765767577,
+        "router_prep_alloc_bytes": 1778862800,
+        "sampled_peak_group_rss_bytes": 1437024256
+      },
+      "scope": "test exactnative emitted witness/status/certification comparison; resource/deadline differences remain visible, not fullmodel independent oracle"
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-ea-baseline/test-midday-ea-baseline",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-ea-combined/test-midday-ea-combined",
+      "offered_pairs": 450,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 450,
+      "median_paired_response_delta_ms": -32.6111175,
+      "median_paired_response_ratio": 0.4993387556526968,
+      "baseline_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 68.925948,
+        "response_max_ms": 158.941123,
+        "batch_allocation_bytes": 11828674832,
+        "load_s": 2.075318147,
+        "router_prep_s": 1.706139928,
+        "router_prep_alloc_bytes": 1369839384,
+        "sampled_peak_group_rss_bytes": 1273163776
+      },
+      "candidate_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 35.253758,
+        "response_max_ms": 88.037375,
+        "batch_allocation_bytes": 5663448152,
+        "load_s": 1.960576757,
+        "router_prep_s": 1.472306642,
+        "router_prep_alloc_bytes": 1383758592,
+        "sampled_peak_group_rss_bytes": 1297108992
+      },
+      "scope": "test exactnative emitted witness/status/certification comparison; resource/deadline differences remain visible, not fullmodel independent oracle"
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-ultra-control-baseline/test-midday-ultra-control-baseline",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-ultra-control-dense/test-midday-ultra-control-dense",
+      "offered_pairs": 450,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 450,
+      "median_paired_response_delta_ms": -8.360648000000001,
+      "median_paired_response_ratio": 0.6538770782781745,
+      "baseline_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 26.908117,
+        "response_max_ms": 107.493099,
+        "batch_allocation_bytes": 2238007072,
+        "load_s": 2.200637245,
+        "router_prep_s": 1.693457799,
+        "router_prep_alloc_bytes": 1619700904,
+        "sampled_peak_group_rss_bytes": 1351110656
+      },
+      "candidate_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 17.200762,
+        "response_max_ms": 56.289025,
+        "batch_allocation_bytes": 2526048576,
+        "load_s": 2.144903401,
+        "router_prep_s": 1.88092328,
+        "router_prep_alloc_bytes": 1731819512,
+        "sampled_peak_group_rss_bytes": 1369358336
+      },
+      "scope": "test exactnative emitted witness/status/certification comparison; resource/deadline differences remain visible, not fullmodel independent oracle"
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-raptor-baseline/test-evening-raptor-baseline",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-raptor-dense/test-evening-raptor-dense",
+      "offered_pairs": 450,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 450,
+      "median_paired_response_delta_ms": -13.827388,
+      "median_paired_response_ratio": 0.7242940173395048,
+      "baseline_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 56.084589,
+        "response_max_ms": 153.34889,
+        "batch_allocation_bytes": 11565869528,
+        "load_s": 2.306318147,
+        "router_prep_s": 2.226429288,
+        "router_prep_alloc_bytes": 1671572488,
+        "sampled_peak_group_rss_bytes": 1502355456
+      },
+      "candidate_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 40.094702,
+        "response_max_ms": 109.56156,
+        "batch_allocation_bytes": 5373130320,
+        "load_s": 2.161691973,
+        "router_prep_s": 2.150118791,
+        "router_prep_alloc_bytes": 1676363360,
+        "sampled_peak_group_rss_bytes": 1323409408
+      },
+      "scope": "test exactnative emitted witness/status/certification comparison; resource/deadline differences remain visible, not fullmodel independent oracle"
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-raptor-early-baseline/test-evening-raptor-early-baseline",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-raptor-early-dense/test-evening-raptor-early-dense",
+      "offered_pairs": 450,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 450,
+      "median_paired_response_delta_ms": -12.2837695,
+      "median_paired_response_ratio": 0.711353341365101,
+      "baseline_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 46.508507,
+        "response_max_ms": 145.278897,
+        "batch_allocation_bytes": 11042345912,
+        "load_s": 2.183091402,
+        "router_prep_s": 1.79004142,
+        "router_prep_alloc_bytes": 1671356416,
+        "sampled_peak_group_rss_bytes": 1598590976
+      },
+      "candidate_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 33.798037,
+        "response_max_ms": 115.987951,
+        "batch_allocation_bytes": 5416149368,
+        "load_s": 2.130871266,
+        "router_prep_s": 1.80083109,
+        "router_prep_alloc_bytes": 1676440816,
+        "sampled_peak_group_rss_bytes": 1356255232
+      },
+      "scope": "test exactnative emitted witness/status/certification comparison; resource/deadline differences remain visible, not fullmodel independent oracle"
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-ea-baseline/test-evening-ea-baseline",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-ea-combined/test-evening-ea-combined",
+      "offered_pairs": 450,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 450,
+      "median_paired_response_delta_ms": -31.146966,
+      "median_paired_response_ratio": 0.5067095502325898,
+      "baseline_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 69.067843,
+        "response_max_ms": 176.933809,
+        "batch_allocation_bytes": 11873898776,
+        "load_s": 2.201118063,
+        "router_prep_s": 1.905315397,
+        "router_prep_alloc_bytes": 1472463496,
+        "sampled_peak_group_rss_bytes": 1339580416
+      },
+      "candidate_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 35.738304,
+        "response_max_ms": 91.846476,
+        "batch_allocation_bytes": 5684645488,
+        "load_s": 2.095867361,
+        "router_prep_s": 1.877748038,
+        "router_prep_alloc_bytes": 1589204888,
+        "sampled_peak_group_rss_bytes": 1320742912
+      },
+      "scope": "test exactnative emitted witness/status/certification comparison; resource/deadline differences remain visible, not fullmodel independent oracle"
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-ultra-control-baseline/test-evening-ultra-control-baseline",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-ultra-control-dense/test-evening-ultra-control-dense",
+      "offered_pairs": 450,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 450,
+      "median_paired_response_delta_ms": -9.890304,
+      "median_paired_response_ratio": 0.6339311901311591,
+      "baseline_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 27.551105,
+        "response_max_ms": 90.768698,
+        "batch_allocation_bytes": 2262487360,
+        "load_s": 2.128425434,
+        "router_prep_s": 2.028463835,
+        "router_prep_alloc_bytes": 1722610656,
+        "sampled_peak_group_rss_bytes": 1464762368
+      },
+      "candidate_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 17.2221,
+        "response_max_ms": 59.965035,
+        "batch_allocation_bytes": 2551315544,
+        "load_s": 2.130840984,
+        "router_prep_s": 1.890460242,
+        "router_prep_alloc_bytes": 1834595352,
+        "sampled_peak_group_rss_bytes": 1542270976
+      },
+      "scope": "test exactnative emitted witness/status/certification comparison; resource/deadline differences remain visible, not fullmodel independent oracle"
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-raptor-baseline/test-overnight-raptor-baseline",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-raptor-dense/test-overnight-raptor-dense",
+      "offered_pairs": 450,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 450,
+      "median_paired_response_delta_ms": -1.0581095,
+      "median_paired_response_ratio": 0.7758614716012131,
+      "baseline_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 6.235731,
+        "response_max_ms": 85.412593,
+        "batch_allocation_bytes": 3737880264,
+        "load_s": 0.902132388,
+        "router_prep_s": 1.010770882,
+        "router_prep_alloc_bytes": 841716352,
+        "sampled_peak_group_rss_bytes": 685744128
+      },
+      "candidate_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 4.632611,
+        "response_max_ms": 99.550961,
+        "batch_allocation_bytes": 1873192216,
+        "load_s": 0.870205476,
+        "router_prep_s": 0.998609408,
+        "router_prep_alloc_bytes": 948313232,
+        "sampled_peak_group_rss_bytes": 594669568
+      },
+      "scope": "test exactnative emitted witness/status/certification comparison; resource/deadline differences remain visible, not fullmodel independent oracle"
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-raptor-early-baseline/test-overnight-raptor-early-baseline",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-raptor-early-dense/test-overnight-raptor-early-dense",
+      "offered_pairs": 450,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 450,
+      "median_paired_response_delta_ms": -0.8661665000000001,
+      "median_paired_response_ratio": 0.81106455618966,
+      "baseline_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 6.006799,
+        "response_max_ms": 88.635929,
+        "batch_allocation_bytes": 3684487808,
+        "load_s": 0.883371017,
+        "router_prep_s": 0.87676205,
+        "router_prep_alloc_bytes": 841888296,
+        "sampled_peak_group_rss_bytes": 623730688
+      },
+      "candidate_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 4.687169,
+        "response_max_ms": 60.663611,
+        "batch_allocation_bytes": 1935900712,
+        "load_s": 0.847699794,
+        "router_prep_s": 0.79892394,
+        "router_prep_alloc_bytes": 845470008,
+        "sampled_peak_group_rss_bytes": 613437440
+      },
+      "scope": "test exactnative emitted witness/status/certification comparison; resource/deadline differences remain visible, not fullmodel independent oracle"
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-ea-baseline/test-overnight-ea-baseline",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-ea-combined/test-overnight-ea-combined",
+      "offered_pairs": 450,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 450,
+      "median_paired_response_delta_ms": -3.6236550000000003,
+      "median_paired_response_ratio": 0.547665503639309,
+      "baseline_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 7.791842,
+        "response_max_ms": 89.936092,
+        "batch_allocation_bytes": 3583076664,
+        "load_s": 0.858742177,
+        "router_prep_s": 0.830867485,
+        "router_prep_alloc_bytes": 763950136,
+        "sampled_peak_group_rss_bytes": 567558144
+      },
+      "candidate_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 3.791086,
+        "response_max_ms": 63.141332,
+        "batch_allocation_bytes": 1868557784,
+        "load_s": 0.980337709,
+        "router_prep_s": 0.863336344,
+        "router_prep_alloc_bytes": 770514840,
+        "sampled_peak_group_rss_bytes": 604405760
+      },
+      "scope": "test exactnative emitted witness/status/certification comparison; resource/deadline differences remain visible, not fullmodel independent oracle"
+    },
+    {
+      "baseline": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-ultra-control-baseline/test-overnight-ultra-control-baseline",
+      "candidate": "${SG_ROOT}/public-campaign-20261021/resumed-0130/final-test-release-v1/out-ultra-control-dense/test-overnight-ultra-control-dense",
+      "offered_pairs": 450,
+      "semantic_mismatch_count": 0,
+      "semantic_mismatches": [],
+      "comparison_fields": [
+        "query",
+        "raw",
+        "final",
+        "display_options",
+        "completed",
+        "attempted",
+        "valid_empty",
+        "transit",
+        "status",
+        "error",
+        "certificates",
+        "recommendation_quality"
+      ],
+      "joint_complete": 450,
+      "median_paired_response_delta_ms": -0.8830530000000001,
+      "median_paired_response_ratio": 0.7158826204300932,
+      "baseline_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 3.96569,
+        "response_max_ms": 43.110482,
+        "batch_allocation_bytes": 742742208,
+        "load_s": 0.889258649,
+        "router_prep_s": 0.793517283,
+        "router_prep_alloc_bytes": 996909456,
+        "sampled_peak_group_rss_bytes": 609845248
+      },
+      "candidate_metrics": {
+        "offered": 450,
+        "complete": 450,
+        "statuses": {
+          "complete": 450
+        },
+        "response_p50_ms": 2.88344,
+        "response_max_ms": 20.076679,
+        "batch_allocation_bytes": 992882568,
+        "load_s": 0.867593419,
+        "router_prep_s": 0.876247553,
+        "router_prep_alloc_bytes": 798495656,
+        "sampled_peak_group_rss_bytes": 620584960
+      },
+      "scope": "test exactnative emitted witness/status/certification comparison; resource/deadline differences remain visible, not fullmodel independent oracle"
+    }
+  ],
+  "semantic_mismatch_count": 0,
+  "unknown_pairs": 0
+}
