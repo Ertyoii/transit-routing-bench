@@ -1,0 +1,87 @@
+{
+  "bounds": {
+    "address_space_bytes": 1073741824,
+    "bundle_ceiling_bytes": 33554432,
+    "cpu_affinity": [
+      4
+    ],
+    "cpu_seconds": 120,
+    "minimum_workspace_free_reserve_bytes": 1073741824,
+    "wall_seconds": 180
+  },
+  "checks": {
+    "CSA_package_changed_paths": [],
+    "allowed_original_source_drift_check": "all matched after copying",
+    "benchmark_base_pinned_git_blobs": {
+      "original_patch_sha256": "c3897a7c26b754c92b723208353be7793a6b6e0c6532e876c369b89e34616c1a",
+      "pin": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+      "pinned_git_projection_mismatches": [],
+      "pinned_git_projection_verified": true,
+      "reverse_forward_exact": true,
+      "scope": "allowlisted source/config/fixture projection, not entire repository Git tree"
+    },
+    "copy_exact_byte_comparisons": 792,
+    "fresh_free_bytes_after_copy": 1759715328,
+    "fresh_reserve_before_copy": true,
+    "generated_branch_in_memory_replay_exact": true,
+    "generated_branch_patch_count": 42,
+    "original_baseline_patch_reverse_forward_replay": "exact for routing and benchmark allowlisted projections",
+    "per_file_source_and_test_hashes": true,
+    "private_review_payload_excluded": true,
+    "routing_base_vendor_crosscheck": {
+      "baseline_vendor_common_go_files": 92,
+      "baseline_vendor_mismatches": [],
+      "original_patch_sha256": "a4a5b28a045deb9463925614505770aefc365f8b1e2a783854df47151a0faf94",
+      "reverse_forward_exact": true,
+      "scope": "allowlisted source/config/fixture projection, not entire repository Git tree"
+    },
+    "runtime640_two_source_freeze_match": [
+      {
+        "all_three_equal": true,
+        "branch": "bench-v3-control",
+        "bundled_reconstruction_fingerprint": "05a41ecd0b4687e83b57d8a548835137c2d049755815dcbef01bb92590a17800",
+        "expected_from_runtime_freeze": "05a41ecd0b4687e83b57d8a548835137c2d049755815dcbef01bb92590a17800",
+        "recomputed_from_original_frozen_source": "05a41ecd0b4687e83b57d8a548835137c2d049755815dcbef01bb92590a17800",
+        "reconstruction": "all file bytes match branch source-hash map; branch patch replay previously exact",
+        "role": "old_native",
+        "source_hash_files": 198,
+        "source_hash_manifest": "source-hashes/bench-v3-control.json"
+      },
+      {
+        "all_three_equal": true,
+        "branch": "bench-safe-fill-B-q01",
+        "bundled_reconstruction_fingerprint": "8f13517d8a75df4c155e735eb1a03bbfd80012f3cd0de7e32827d1cb13b3628f",
+        "expected_from_runtime_freeze": "8f13517d8a75df4c155e735eb1a03bbfd80012f3cd0de7e32827d1cb13b3628f",
+        "recomputed_from_original_frozen_source": "8f13517d8a75df4c155e735eb1a03bbfd80012f3cd0de7e32827d1cb13b3628f",
+        "reconstruction": "all file bytes match branch source-hash map; branch patch replay previously exact",
+        "role": "source_B",
+        "source_hash_files": 281,
+        "source_hash_manifest": "source-hashes/bench-safe-fill-B-q01.json"
+      }
+    ],
+    "source_configuration_inspection": "Small candidate scientific configuration files were reviewed. Query-bearing configuration is hash-only/withheld; real-domain recipes have explicit placeholders. Blocked payload directories were not read.",
+    "static_python_ast_parse_files": 156,
+    "transitive_dependency_review": "Core evaluator/checker, hypothetical preference metadata, native scientific readers, serialization/preservation source and named harness dependencies reviewed and included. Historical operational receipts/data remain withheld.",
+    "unresolved_inline_content_flags": []
+  },
+  "created_utc": "2026-10-22T04:16:04.430487+00:00",
+  "limits": [
+    "This is byte-level source reconstruction, not end-to-end scientific reproduction or a final selected-results release.",
+    "Routing base source projection is exact by inverse/forward frozen patch replay and 92-file pinned-vendor crosscheck; complete routing Git object/tree identity was not independently reconstructed.",
+    "Exact helper copies retain original fixed paths and source hash assertions. Internal orchestration/qualification wrappers and uncleared real-data inputs are withheld; see the public clearance categories in SOURCE_ALLOWLIST.json.",
+    "No final selected candidates, heldout outcome claims or latency winner are asserted.",
+    "The runtime source freeze declares 640 offers; this code receipt verifies only old_native and source_B exact source fingerprints, never 640 process outcomes.",
+    "Dirty-tree/build-path limits are explicit in RUNTIME_SOURCE_BINDING_REVIEW.json; source hashes do not replace historical executable/build verification."
+  ],
+  "not_performed": [
+    "project tests or source builds",
+    "deliverable materializer execution",
+    "router/search/scalar/evaluator/helper execution",
+    "model, actual-result, witness/proof/index/actual-feature-pool payload read",
+    "headline timing or RSS experiments",
+    "network/public-reachability check, push, account setup",
+    "full Git commit/mode replay"
+  ],
+  "schema": "sg-v2-code-packaging-validation-v1",
+  "status": "SOURCE_BYTE_REVIEW_CANDIDATE_ONLY"
+}

@@ -1,0 +1,1091 @@
+--- a/cmd/familybench/main.go
++++ b/cmd/familybench/main.go
+@@ -171,10 +171,20 @@
+ 	workLimit := flag.Int("max-work", 2000000000, "development algorithm work guard")
+ 	witnesses := flag.Int("max-witnesses", 2000000, "development retained preprocessing witness guard")
+ 	rssStop := flag.Int64("rss-safety-stop", 12000000000, "sampled development peakRSS stop; not hard memory confinement")
++	displayK := flag.Int("display-k", 0, "-1 omits fixed-score controls;0 historical1/3/5/10;positive emits only that fixed-score display control")
+ 	quality := flag.Bool("quality", false, "measure validated candidates and pattern_anchors_v1 selection; included in response time")
+ 	streamResponses := flag.Bool("stream-responses", false, "write each measured ordinary validated answer immediately to available-responses.jsonl; separately time publication")
+ 	preferencesPath := flag.String("preference-scenarios", "", "explicit finite choice scenarios; requires quality; measured within response")
+ 	flag.Parse()
++	if *displayK < -1 || *displayK > 10 {
++		return fmt.Errorf("invalid display-k")
++	}
++	displayLimits := []int{1, 3, 5, 10}
++	if *displayK > 0 {
++		displayLimits = []int{*displayK}
++	} else if *displayK == -1 {
++		displayLimits = []int{}
++	}
+ 	var choiceConfig *recommend.ChoiceConfig
+ 	preferenceSHA := ""
+ 	if *preferencesPath != "" {
+@@ -340,14 +350,25 @@
+ 	qualityPrepStart := time.Now()
+ 	var qualityIndex *recommend.Index
+ 	if *quality {
+-		qualityIndex, e = recommend.New(d)
++		if choiceConfig != nil && (choiceConfig.Bounded != nil || choiceConfig.LeanDelivery) {
++			qualityIndex, e = recommend.NewBoundedFromChecker(checker)
++		} else {
++			qualityIndex, e = recommend.New(d)
++		}
+ 		if e != nil {
+ 			return e
+ 		}
+ 	}
+ 	qualityPrepNS := time.Since(qualityPrepStart).Nanoseconds()
+ 	runtime.ReadMemStats(&after)
+-	qualityPrep := map[string]any{"elapsed_ns": qualityPrepNS, "allocated_bytes": after.TotalAlloc - before.TotalAlloc, "resources": experiment.SnapshotResources()}
++	qualityMode := "disabled"
++	if *quality {
++		qualityMode = "legacy_full_recovery"
++		if choiceConfig != nil && (choiceConfig.Bounded != nil || choiceConfig.LeanDelivery) {
++			qualityMode = "bounded_shared_checker_no_recovery"
++		}
++	}
++	qualityPrep := map[string]any{"index_mode": qualityMode, "checker_dataset_fingerprint": checker.DatasetFingerprint(), "elapsed_ns": qualityPrepNS, "allocated_bytes": after.TotalAlloc - before.TotalAlloc, "resources": experiment.SnapshotResources()}
+ 	fmt.Println(*alg, "preparation", prepNS, "ns", prepErr)
+ 	summaries := []any{}
+ 	qps := []float64{}
+@@ -387,7 +408,7 @@
+ 			}
+ 		}
+ 		if validationErr == nil {
+-			for _, displayK := range []int{1, 3, 5, 10} {
++			for _, displayK := range displayLimits {
+ 				v, e := presentation.Rank(i.Query, z.Final, displayK, 300)
+ 				if e != nil {
+ 					validationErr = e
+@@ -629,7 +650,7 @@
+ 	if r.cost != nil {
+ 		finalCost = r.cost()
+ 	}
+-	_, e = experiment.WriteArtifact(filepath.Join(*out, "summary.json"), map[string]any{"success": !fatal, "success_scope": "No malformed route/adapter/unknown routing failure; budget/unsupported/deadline rows retained. Cross-process quality audited separately.", "algorithm": *alg, "kind": r.kind, "configuration": r.config, "quality_preparation": qualityPrep, "quality_enabled": *quality, "preference_config": choiceConfig, "preference_config_sha256": preferenceSHA, "candidate_k": *k, "display_k": []int{1, 3, 5, 10}, "penalty": 300, "batch_size": *size, "repetitions": *reps, "warmups": *warm, "batch_deadline_ns": deadline.Nanoseconds(), "preparation_deadline_ns": prepTimeout.Nanoseconds(), "rss_sampled_safety_stop_bytes": *rssStop, "rss_sampling_interval_ns": int64(100000000), "hard_memory_cap": false, "hard_cpu_confinement": false, "gomaxprocs": runtime.GOMAXPROCS(0), "go_version": runtime.Version(), "goos": runtime.GOOS, "goarch": runtime.GOARCH, "hardware": os.Getenv("TRANSIT_BENCH_HARDWARE"), "provenance": prov, "dataset_sha256": dh, "queries_sha256": qh, "fixture_manifest_sha256": fixtureSHA, "scoped_configuration_sha256": scopedSHA, "seed": w.Seed, "method": w.Method, "input_load_ns": loadNS, "preparation": prep, "checker_preparation": checkPrep, "passes": summaries, "throughput_interval": ci, "index_cost_final": finalCost, "response_stream": publisher.summary(), "resources_final": experiment.SnapshotResources(), "scope": "Native development with recorded resources;8GB/four cores is a cost reference, not an acceptance gate. One router/process. Common batch submission deadline includes queue/search/validation/ranking. No divided shared-core latency; process RSS separate from cumulative allocations; no worker subprocesses."})
++	_, e = experiment.WriteArtifact(filepath.Join(*out, "summary.json"), map[string]any{"success": !fatal, "success_scope": "No malformed route/adapter/unknown routing failure; budget/unsupported/deadline rows retained. Cross-process quality audited separately.", "algorithm": *alg, "kind": r.kind, "configuration": r.config, "quality_preparation": qualityPrep, "quality_enabled": *quality, "preference_config": choiceConfig, "preference_config_sha256": preferenceSHA, "candidate_k": *k, "display_k": displayLimits, "penalty": 300, "batch_size": *size, "repetitions": *reps, "warmups": *warm, "batch_deadline_ns": deadline.Nanoseconds(), "preparation_deadline_ns": prepTimeout.Nanoseconds(), "rss_sampled_safety_stop_bytes": *rssStop, "rss_sampling_interval_ns": int64(100000000), "hard_memory_cap": false, "hard_cpu_confinement": false, "gomaxprocs": runtime.GOMAXPROCS(0), "go_version": runtime.Version(), "goos": runtime.GOOS, "goarch": runtime.GOARCH, "hardware": os.Getenv("TRANSIT_BENCH_HARDWARE"), "provenance": prov, "dataset_sha256": dh, "queries_sha256": qh, "fixture_manifest_sha256": fixtureSHA, "scoped_configuration_sha256": scopedSHA, "seed": w.Seed, "method": w.Method, "input_load_ns": loadNS, "preparation": prep, "checker_preparation": checkPrep, "passes": summaries, "throughput_interval": ci, "index_cost_final": finalCost, "response_stream": publisher.summary(), "resources_final": experiment.SnapshotResources(), "scope": "Native development with recorded resources;8GB/four cores is a cost reference, not an acceptance gate. One router/process. Common batch submission deadline includes queue/search/validation/ranking. No divided shared-core latency; process RSS separate from cumulative allocations; no worker subprocesses."})
+ 	if e != nil {
+ 		return e
+ 	}
+--- a/routing.lock.json
++++ b/routing.lock.json
+@@ -2,8 +2,11 @@
+   "baseline_source_sha256": "f7cf70d1a970fb70077fa13299cdb8c991e8712c44fe1fb19ba10a5befccdd2d",
+   "commit": "725520af0cff62792f70b941d4d69066eecb1010",
+   "files": {
++    ".gitignore": "9974b0356fd24da7a600b197652a8bad9922f7b41f3b61dd8281f5043fdb61c6",
+     "LICENSE": "3c524d60abb36a8a9d25782594ea2f8665f56b5811b38c53ff62754b96f49da7",
++    "README.md": "d2af5d4bfb6e6372390489751c9f7ead7adc20a89e86f7c4149bc077d9d9c959",
+     "THIRD_PARTY_NOTICES.md": "6016bae242130d6a43b111a0457427b43f047f4bd0aa607cccda2000577bce0b",
++    "cmd/walkserve/main.go": "19b7b249815a5071d636936017923987328b2438bee49be347a4cc25193b1433",
+     "comparison/binding.go": "4fd42d34b858963eae916a9128ccdadea94d3e9ce9f4e7d98ff86f22b7f40b9a",
+     "comparison/ranked.go": "8449c35c043726c0227e96a6b95a00e73d55aa7a93888b0d923fb9c036fc54a6",
+     "corech/core.go": "ba0e68aba190cdea80b708895687b5bf4461accc35187159af399023e3576681",
+@@ -13,7 +16,14 @@
+     "csa/stratified.go": "b3c14867b7b360f20dfefd983cf4ce56a39ab4dd6de542bb8d16a2145aa095a2",
+     "csa/topk.go": "66920572e1d2c86de18ed4b336007452f2d562702738dee02eac6522a1934a6e",
+     "csa/trace.go": "076300f8a651677e1b75f6074b932267ca08c71dce8db3e6df7e54badbb140e9",
++    "docs/CONTRACT.md": "e6c07be14eaf0432ec1b04d82c4d4256b8cd26320697256ea9642e7a26063f9e",
++    "docs/CONTRACT_0.2.md": "54bdb3815b149ed85fe71f99715c9057d451088a5874356b43b96ba7d301325b",
++    "docs/NON_CSA_QUALIFICATION_V2.md": "007332781d723ea942cab08cf7eb8aa0bbc95569cf055743df7bbd7c7ac9f3d0",
++    "docs/RESEARCH_CHECKPOINT.md": "4c04642c7ccaf295929c3af4c896fdb0349fa30d640fac9562000a75334112f8",
++    "docs/SCOPE.md": "f5168a8ad3d7290fd045b6b25ce6ac1288f808a6b3fab91e5a2e0a8a51584726",
++    "docs/WALKING.md": "f64177dcff29b10cb780af8a509fc9c678ee076db99c6fa093407f201e2d4188",
+     "eacsa/scan.go": "9c82785e51d311e66b36c463dcd2ecb3338f3747165e1f1b4c7def96936a9d06",
++    "go.mod": "85eef43891c31f75b74f1815609f3abdfce139039ea0262ed269db74892f8ce8",
+     "gtfs/import.go": "d2fb180f26394f35feae163ad83d53c2ffe8aee504dff4a0260cde2e13fa8584",
+     "internal/capverify/enumerate.go": "a5b79d48444815f6042b592bd8aac0adce8a732bc10a676d923491155736b40c",
+     "internal/capverify/frontier.go": "d381db7923af16899a3454be5e1440c306f5eb8e4c13f93c3e7e0d31cd45202f",
+@@ -46,8 +56,10 @@
+     "raptor/range.go": "81f63bb9d674bd0e9955b4aa493b1657ed9c8c7992d04c9fc76960ef92805a15",
+     "raptor/raptor.go": "85e8bb804971f1768910952bbe1c9a59928061b54acd64eaed8288f9ddc26d75",
+     "raptor/round_queue.go": "1f86bcfbed13072e69aa7fb04783d1fd916e824e697956bfdf7c128cbdcfa55a",
+-    "recommend/choices.go": "f92dc795483533d0c7d1bbfeecff3c56a8b9e516d30c85cfc48a92c515a9e8d2",
+-    "recommend/quality.go": "0305ce81032f25cb01a721a7567330d8339babbcebdf889ad61404b35e70d627",
++    "recommend/bounded.go": "790b7ce92915f742208057440e5a8864fa7ec74602d440b5c95601cc5ba390f2",
++    "recommend/choices.go": "ae61c9819d9b00679c7fcae1836b1570be84612e2f6ea2b25d8ceebc6522ad25",
++    "recommend/lean.go": "9db7855a5cea9469e039fe8bfa5c543df8d0183d9cd3c5bb57b453b75b6a5927",
++    "recommend/quality.go": "fcb35c8914345f9eebbbf78cb0bf18df19f0e5d1dc7054833d7f9ca90f9bd8fe",
+     "selection/reserved.go": "180080a439d9aadb56b5245cd614d850751352026f1ea3c4e1ce2c8f8de246ca",
+     "selection/select.go": "6d0531acccf41a7348f7f0e18ace5242459ec72f168da9c8248023c0b387edfb",
+     "strictjson/decode.go": "9a47b1a00708ca467f650ecdf192d794d0e7bf4cf7ff0082ba1f2fc4a699a163",
+@@ -80,6 +92,17 @@
+     "tripbased/scalable_hierarchy.go": "56c98501fbce4faa6ff75d3347a9fdf47f3992f8ac1a91eab87ba666e29f1e89",
+     "tripbased/scalable_partition.go": "c156bf61ccb7808b900199c113f3115f527a3d48e723b233903abd155d44624d",
+     "tripbased/scalable_reduce.go": "4e40925a72332a37c41b6fc33defb28b0627854bcc80c04a2ab16b4ebe9a3f19",
++    "tripbased/testdata/LICENSE-CC0.txt": "82e3e0f4eb7c6493beffa627566cb14a6aab7a1cfd84834bb36d91b4b8aa303b",
++    "tripbased/testdata/README.md": "87ee4c689f41c7fe5873622b8dc909049f97e1057d3f53a94ec8eadc27715d5e",
++    "tripbased/testdata/exact_storage_cases.json": "8bc41246d8676453f32e58bf6363e8821970ec9c90d9a60d0bc6d1004c4a4af0",
++    "tripbased/testdata/fixed_caps_cases.jsonl": "bf2d8cd4caf243e797b28e7585801b98408303be17ebd3c426e443f5299a675f",
++    "tripbased/testdata/trex_cap_certification/LICENSE-CC0.txt": "82e3e0f4eb7c6493beffa627566cb14a6aab7a1cfd84834bb36d91b4b8aa303b",
++    "tripbased/testdata/trex_cap_certification/README.md": "92532bc5314792da3537774a60604b4697acf3780590f4e35000dad5bf5f082d",
++    "tripbased/testdata/trex_cap_certification/fixtures.json": "c29033f66b1df7049ef4aa328c8fec9c5517b84be107beee71b615b8a283fdac",
++    "tripbased/testdata/trex_fixed_transfer_cap/README.md": "a5641efb335ac18e9f3da58aac12c12a413cc3c2750ff447ae177c0e4a147365",
++    "tripbased/testdata/trex_fixed_transfer_cap/rank-loss.json": "a034bfb37691ec030b7fcbbf7e26a03b3aadcd8fd77284d56e168fc6d5f897ab",
++    "tripbased/testdata/trex_preprocessing/README.md": "adf2864b1c3b7cfdaeab663d5400b67e84fb47ea9b87b271b7f39513e2a99dae",
++    "tripbased/testdata/trex_preprocessing/fixtures.json": "3f90746a970f2d1303df8de5b7f15356e9e5f1b3937cbe7f36e6a462af9d487b",
+     "tripbased/transfer_storage.go": "5c3fff927b5143a367f5129e59701be4e2e9fe11e511a659c7e7078c12586c34",
+     "tripbased/trex.go": "0cb573f7cf9cedcee86931596b67f2e9333bdf911d6b80ec34d6f359e49d1801",
+     "tripbased/trex_cap_certificate.go": "6a7e9889828bd1c8e40f6b70d4193ce7bc949e2708d9d6b8ba7e244fe9b749c8",
+@@ -101,7 +124,7 @@
+     "ultra/routes.go": "f01d85ecf9b01b381cb0081e02bd958b1a65705d8988e971a3512de08e7ad283",
+     "ultra/search.go": "719be0b0fef669a83dece8f86ca5e4258399c48a1586f7158c2f431804d7cbfe",
+     "ultra/sparse.go": "f87a6d7953394cd64d87b9ec2ef68949e49f4495c78d851213080af6183a03ed",
+-    "validate/journey.go": "467b568a761fb7e1bbb45da32d54fa1539f9fceca1e6cbb6a7e04d3d71e298ef",
++    "validate/journey.go": "18a068d4feedf9390f212a13d34859bdc2d57b9b5d8a82a49631e0f5c35e9f89",
+     "walking/cache.go": "a6ce8c4ca31beba49587aa1d4a00f10aafc4994c9531e53a98caff5baec73f3d",
+     "walking/contract.go": "03921ca99783454f3f4556782e6421257bb149e2708cb22af4a376216a86445f",
+     "walking/graph/graph.go": "5fcc482edb45eb11d01928e8dffb148f00dd2a32f4649a0bb0f6cf27109cd998",
+@@ -113,7 +136,7 @@
+     "walking/transit/graph.go": "07ec2ac36311597ed657b686be7bc222ef3ac7ec022473d1f55729f5754b6fbe"
+   },
+   "module": "github.com/ertyoii/transit-routing-go",
+-  "origin": "V2 local non-CSA candidate: ancestry 725520a (walking/RAPTOR) plus cd88c9c ULTRA; query-local round/route/dense-walking reuse, pointer-free Trip-Based retained links, separately named local walking ties. commit retains ancestry; full file hashes identify changes. No GitHub push.",
+-  "source_sha256": "5f0131d0170104085b1f9dbabe85f32b9f4b1b5da8f4f9a06fba00e750014850",
++  "origin": "V2 independent composed storage, exact full-file lock, optional no-default-control serving. Ancestry commit only, no remote push.",
++  "source_sha256": "edd01b829f160af3198b335f4c26f78ebc3f5406af8d4a2e0020fc45f7ada657",
+   "version": "v0.1.0-pre.3"
+ }
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/.gitignore
+@@ -0,0 +1,5 @@
++.cache/
++artifacts/
++*.out
++*.prof
++.DS_Store
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/cmd/walkserve/main.go
+@@ -0,0 +1,80 @@
++// walkserve serves a prepared normalized or audited OSM walking graph locally.
++package main
++
++import (
++	"context"
++	"encoding/json"
++	"flag"
++	"fmt"
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/walking"
++	"github.com/ertyoii/transit-routing-go/walking/graph"
++	"github.com/ertyoii/transit-routing-go/walking/httpapi"
++	"github.com/ertyoii/transit-routing-go/walking/osm"
++	"github.com/ertyoii/transit-routing-go/walking/transit"
++	"net/http"
++	"os"
++	"os/signal"
++	"syscall"
++	"time"
++)
++
++func run() error {
++	dataset := flag.String("dataset", "", "normalized dataset JSON")
++	osmPath := flag.String("osm-graph", "", "audited graph JSON (alternative to dataset)")
++	osmHash := flag.String("osm-graph-sha256", "", "required graph hash")
++	pbfHash := flag.String("osm-source-sha256", "", "required source PBF hash")
++	policy := flag.String("osm-permission-policy", "pedestrian_allowlist_v2", "audited permission profile")
++	address := flag.String("listen", "127.0.0.1:8080", "listen address; no authentication, keep local")
++	flag.Parse()
++	if (*dataset == "") == (*osmPath == "") {
++		return fmt.Errorf("choose exactly one of -dataset or -osm-graph")
++	}
++	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
++	defer cancel()
++	var p walking.Provider
++	var e error
++	if *dataset != "" {
++		var d model.Dataset
++		var b []byte
++		b, e = os.ReadFile(*dataset)
++		if e == nil {
++			e = json.Unmarshal(b, &d)
++		}
++		if e == nil {
++			p, e = transit.FromDataset(d, graph.DefaultLimits())
++		}
++	} else {
++		var f *os.File
++		f, e = os.Open(*osmPath)
++		if e == nil {
++			p, e = osm.Load(ctx, f, osm.Options{MaxBytes: 256 << 20, ExpectedGraphSHA256: *osmHash, ExpectedSourceSHA256: *pbfHash, PermissionPolicy: *policy, Limits: graph.DefaultLimits()})
++			_ = f.Close()
++		}
++	}
++	if e != nil {
++		return e
++	}
++	handler, e := httpapi.New(p, httpapi.DefaultLimits())
++	if e != nil {
++		return e
++	}
++	server := &http.Server{Addr: *address, Handler: handler, ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 10 * time.Second, WriteTimeout: 10 * time.Second, IdleTimeout: 30 * time.Second, MaxHeaderBytes: 16384}
++	go func() {
++		<-ctx.Done()
++		shutdown, c := context.WithTimeout(context.Background(), 3*time.Second)
++		defer c()
++		_ = server.Shutdown(shutdown)
++	}()
++	fmt.Fprintf(os.Stderr, "walking snapshot %s at %s\n", p.Descriptor().SnapshotID, *address)
++	if e = server.ListenAndServe(); e != nil && e != http.ErrServerClosed {
++		return e
++	}
++	return nil
++}
++func main() {
++	if e := run(); e != nil {
++		fmt.Fprintln(os.Stderr, e)
++		os.Exit(1)
++	}
++}
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/go.mod
+@@ -0,0 +1,3 @@
++module github.com/ertyoii/transit-routing-go
++
++go 1.27.0
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/recommend/bounded.go
+@@ -0,0 +1,534 @@
++package recommend
++
++// This selector has no training/evaluation preference grid. Its specification is
++// a bounded two-dimensional rectangle of hypothetical nonnegative weights.
++import (
++	"context"
++	"fmt"
++	"math"
++	"sort"
++
++	"github.com/ertyoii/transit-routing-go/model"
++)
++
++type BoundedConfig struct {
++	MinTransfer       float64 `json:"min_transfer_seconds"`
++	MaxTransfer       float64 `json:"max_transfer_seconds"`
++	MinWalk           float64 `json:"min_extra_walk_weight"`
++	MaxWalk           float64 `json:"max_extra_walk_weight"`
++	Objective         string  `json:"objective"`
++	Limits            []int   `json:"limits"`
++	DistinctPatterns  bool    `json:"distinct_patterns"`
++	Nested            bool    `json:"nested"`
++	MaxCriticalPoints int     `json:"max_critical_points"`
++	MaxWork           int64   `json:"max_work"`
++	MaxMatrixBytes    int64   `json:"max_matrix_bytes,omitempty"`
++	Exact             bool    `json:"exact_subset_search"`
++}
++
++func (c BoundedConfig) Validate() error {
++	if math.IsNaN(c.MinTransfer) || math.IsNaN(c.MaxTransfer) || math.IsNaN(c.MinWalk) || math.IsNaN(c.MaxWalk) || c.MinTransfer < 0 || c.MaxTransfer < c.MinTransfer || c.MaxTransfer > float64(model.MaxServiceSecond) || c.MinWalk < 0 || c.MaxWalk < c.MinWalk || c.MaxWalk > 1000 {
++		return fmt.Errorf("invalid continuous weight rectangle")
++	}
++	if c.Objective != "absolute" && c.Objective != "normalized" {
++		return fmt.Errorf("bounded objective must be absolute or normalized")
++	}
++	if len(c.Limits) < 1 || len(c.Limits) > 4 || c.MaxCriticalPoints < 4 || c.MaxCriticalPoints > 1000000 || c.MaxWork < 1 || c.MaxWork > 10000000000 || c.MaxMatrixBytes < 0 || c.MaxMatrixBytes > 268435456 {
++		return fmt.Errorf("invalid continuous compute bounds")
++	}
++	prev := 0
++	for _, k := range c.Limits {
++		if k < 1 || k > 10 || k <= prev {
++			return fmt.Errorf("limits must be increasing in [1,10]")
++		}
++		prev = k
++	}
++	return nil
++}
++
++type WeightPoint struct {
++	Transfer float64 `json:"transfer_seconds"`
++	Walk     float64 `json:"extra_walk_weight"`
++}
++type ContinuousSelection struct {
++	Limit                 int          `json:"limit"`
++	Selected              []string     `json:"selected"`
++	Method                string       `json:"method"`
++	Complete              bool         `json:"complete"`
++	SubsetOptimal         bool         `json:"subset_optimal"`
++	GlobalOptimalityClaim bool         `json:"global_optimality_claim"`
++	WorstAbsolute         *float64     `json:"worst_pool_absolute_regret"`
++	WorstNormalized       *float64     `json:"worst_pool_normalized_regret"`
++	AbsoluteWitness       *WeightPoint `json:"absolute_worst_weight"`
++	NormalizedWitness     *WeightPoint `json:"normalized_worst_weight"`
++	DistinctPatternCount  int          `json:"distinct_pattern_count"`
++	EvaluatedSubsets      int          `json:"evaluated_subsets"`
++}
++type ContinuousChoices struct {
++	NormalizedDenominator string                `json:"normalized_denominator"`
++	Policy                string                `json:"policy"`
++	Config                BoundedConfig         `json:"config"`
++	Complete              bool                  `json:"complete"`
++	Error                 string                `json:"error,omitempty"`
++	GuaranteeScope        string                `json:"guarantee_scope"`
++	InputCandidates       int                   `json:"input_candidates"`
++	InputPatterns         int                   `json:"input_patterns"`
++	RetainedCandidates    int                   `json:"retained_candidates"`
++	Exclusions            map[string]string     `json:"exclusions"`
++	CriticalPoints        int                   `json:"critical_points"`
++	Work                  int64                 `json:"work"`
++	Selections            []ContinuousSelection `json:"selections"`
++}
++
++// EvaluateBounded is the lean delivery path. It does not compute recovery search,
++// the legacy envelope controls, finite20 choices, or an unrequested k5 output.
++// Every original validated identity/pattern remains in Features for diagnostics.
++func (x *Index) EvaluateBounded(ctx context.Context, q model.Query, js []model.Journey, cfg ChoiceConfig) (out Result, err error) {
++	if err = cfg.Validate(); err != nil {
++		return
++	}
++	if cfg.Bounded == nil {
++		return out, fmt.Errorf("missing bounded config")
++	}
++	out = Result{Policy: "bounded_continuous_regret_v3", FeatureMode: "validated_objective_pattern_slack_no_recovery", Features: []Feature{}, Selections: []Selection{}}
++	if _, err = x.checker.Binding(q); err != nil {
++		return
++	}
++	seen := map[string]bool{}
++	for _, j := range js {
++		if err = ctx.Err(); err != nil {
++			return
++		}
++		var v model.Validated
++		v, err = x.checker.Check(q, j)
++		if err != nil {
++			return
++		}
++		if seen[v.Identity] {
++			continue
++		}
++		seen[v.Identity] = true
++		var f Feature
++		f, err = x.measure(q, v, false)
++		if err != nil {
++			return
++		}
++		out.Features = append(out.Features, f)
++	}
++	sort.Slice(out.Features, func(i, j int) bool { return out.Features[i].Identity < out.Features[j].Identity })
++	out.ContinuousChoices, err = SelectBounded(ctx, out.Features, cfg)
++	return
++}
++
++type boundedEngine struct {
++	ctx        context.Context
++	cfg        BoundedConfig
++	fs         []Feature
++	points     []WeightPoint
++	abs, rel   [][]float64
++	work       int64
++	subsets    int
++	maxSubsets int
++}
++
++func (e *boundedEngine) charge(n int64) error {
++	e.work += n
++	if e.work > e.cfg.MaxWork {
++		return ErrSelectionBudget
++	}
++	return e.ctx.Err()
++}
++func vector(f Feature) [3]int64 {
++	return [3]int64{f.Duration, int64(f.Metrics.Transfers), f.Metrics.WalkingSeconds}
++}
++func boundedPool(fs []Feature, distinct bool, excluded map[string]string) []Feature {
++	out := []Feature{}
++	for _, f := range fs {
++		v := vector(f)
++		duplicate := false
++		for _, o := range out {
++			if vector(o) == v && (!distinct || o.Pattern == f.Pattern) {
++				duplicate = true
++				break
++			}
++		}
++		if duplicate {
++			excluded[f.Identity] = "equal_score_vector_within_constraint"
++			continue
++		}
++		dominated := false
++		if !distinct {
++			for _, o := range fs {
++				a := vector(o)
++				if a != v && a[0] <= v[0] && a[1] <= v[1] && a[2] <= v[2] {
++					dominated = true
++					break
++				}
++			}
++		}
++		if dominated {
++			excluded[f.Identity] = "monotone_vector_dominated_score_only"
++			continue
++		}
++		out = append(out, f)
++	}
++	return out
++}
++
++// critical constructs every possible vertex of a selected affine lower-envelope
++// cell: rectangle corners, two-plane equality at a rectangle edge, and three-plane
++// equality in its interior. On a cell, additive regret is a max of affine maps;
++// normalized regret/(1+pool best score) is a max of positive-denominator
++// linear-fractional maps (one-score-second smoothing avoids zero singularity).
++// Each reaches its maximum at a cell vertex. The set is valid for EVERY subset,
++// not only the complete-pool lower envelope. A corners-only set is not sufficient.
++func (e *boundedEngine) critical() error {
++	c := e.cfg
++	seen := map[[2]uint64]bool{}
++	add := func(t, w float64) error {
++		if math.IsNaN(t) || math.IsNaN(w) || math.IsInf(t, 0) || math.IsInf(w, 0) || t < c.MinTransfer-1e-8 || t > c.MaxTransfer+1e-8 || w < c.MinWalk-1e-8 || w > c.MaxWalk+1e-8 {
++			return nil
++		}
++		t = math.Max(c.MinTransfer, math.Min(c.MaxTransfer, t))
++		w = math.Max(c.MinWalk, math.Min(c.MaxWalk, w))
++		key := [2]uint64{math.Float64bits(t), math.Float64bits(w)}
++		if !seen[key] {
++			if len(e.points) >= c.MaxCriticalPoints {
++				return ErrSelectionBudget
++			}
++			seen[key] = true
++			e.points = append(e.points, WeightPoint{t, w})
++		}
++		return nil
++	}
++	for _, t := range []float64{c.MinTransfer, c.MaxTransfer} {
++		for _, w := range []float64{c.MinWalk, c.MaxWalk} {
++			if err := add(t, w); err != nil {
++				return err
++			}
++		}
++	}
++	for i, a := range e.fs {
++		for j := i + 1; j < len(e.fs); j++ {
++			if err := e.charge(1); err != nil {
++				return err
++			}
++			b := e.fs[j]
++			da := float64(a.Duration - b.Duration)
++			dt := float64(a.Metrics.Transfers - b.Metrics.Transfers)
++			dw := float64(a.Metrics.WalkingSeconds - b.Metrics.WalkingSeconds)
++			if dw != 0 {
++				for _, t := range []float64{c.MinTransfer, c.MaxTransfer} {
++					if err := add(t, (-da-dt*t)/dw); err != nil {
++						return err
++					}
++				}
++			}
++			if dt != 0 {
++				for _, w := range []float64{c.MinWalk, c.MaxWalk} {
++					if err := add((-da-dw*w)/dt, w); err != nil {
++						return err
++					}
++				}
++			}
++			for k := j + 1; k < len(e.fs); k++ {
++				if err := e.charge(1); err != nil {
++					return err
++				}
++				z := e.fs[k]
++				ea := float64(a.Duration - z.Duration)
++				et := float64(a.Metrics.Transfers - z.Metrics.Transfers)
++				ew := float64(a.Metrics.WalkingSeconds - z.Metrics.WalkingSeconds)
++				det := dt*ew - et*dw
++				if det == 0 {
++					continue
++				}
++				if err := add((-da*ew+ea*dw)/det, (-dt*ea+et*da)/det); err != nil {
++					return err
++				}
++			}
++		}
++	}
++	matrixLimit := e.cfg.MaxMatrixBytes
++	if matrixLimit == 0 {
++		matrixLimit = 64 * 1024 * 1024
++	}
++	elements := int64(len(e.fs)) * int64(len(e.points))
++	if elements > matrixLimit/16 || elements > e.cfg.MaxWork-e.work {
++		return ErrSelectionBudget
++	}
++	e.abs = make([][]float64, len(e.fs))
++	e.rel = make([][]float64, len(e.fs))
++	for i := range e.fs {
++		if err := e.ctx.Err(); err != nil {
++			return err
++		}
++		e.abs[i] = make([]float64, len(e.points))
++		e.rel[i] = make([]float64, len(e.points))
++	}
++	for p, w := range e.points {
++		if err := e.charge(int64(len(e.fs))); err != nil {
++			return err
++		}
++		opt := math.Inf(1)
++		for _, f := range e.fs {
++			opt = math.Min(opt, float64(f.Duration)+w.Transfer*float64(f.Metrics.Transfers)+w.Walk*float64(f.Metrics.WalkingSeconds))
++		}
++		for i, f := range e.fs {
++			reg := math.Max(0, float64(f.Duration)+w.Transfer*float64(f.Metrics.Transfers)+w.Walk*float64(f.Metrics.WalkingSeconds)-opt)
++			e.abs[i][p] = reg
++			e.rel[i][p] = reg / (1 + opt)
++		}
++	}
++	return nil
++}
++
++type boundedValue struct {
++	a, r   float64
++	ai, ri int
++}
++
++func (e *boundedEngine) evaluate(s []int) (v boundedValue, err error) {
++	if e.subsets >= e.maxSubsets {
++		return v, ErrSelectionBudget
++	}
++	e.subsets++
++	if err = e.charge(int64(len(s) * len(e.points))); err != nil {
++		return
++	}
++	for p := range e.points {
++		a, r := math.Inf(1), math.Inf(1)
++		for _, i := range s {
++			a = math.Min(a, e.abs[i][p])
++			r = math.Min(r, e.rel[i][p])
++		}
++		if a > v.a {
++			v.a = a
++			v.ai = p
++		}
++		if r > v.r {
++			v.r = r
++			v.ri = p
++		}
++	}
++	return
++}
++func (e *boundedEngine) better(a, b boundedValue) bool {
++	if e.cfg.Objective == "normalized" {
++		if math.Abs(a.r-b.r) > 1e-12 {
++			return a.r < b.r
++		}
++		return a.a < b.a-1e-8
++	}
++	if math.Abs(a.a-b.a) > 1e-8 {
++		return a.a < b.a
++	}
++	return a.r < b.r-1e-12
++}
++func (e *boundedEngine) allowed(s []int, i int) bool {
++	for _, j := range s {
++		if j == i || e.cfg.DistinctPatterns && e.fs[i].Pattern == e.fs[j].Pattern {
++			return false
++		}
++	}
++	return true
++}
++func (e *boundedEngine) greedy(k int, forced []int) ([]int, boundedValue, error) {
++	s := append([]int{}, forced...)
++	var v boundedValue
++	for len(s) < k {
++		pick := -1
++		var best boundedValue
++		for i := range e.fs {
++			if !e.allowed(s, i) {
++				continue
++			}
++			cur, err := e.evaluate(append(append([]int{}, s...), i))
++			if err != nil {
++				return nil, v, err
++			}
++			if pick < 0 || e.better(cur, best) {
++				pick = i
++				best = cur
++			}
++		}
++		if pick < 0 {
++			break
++		}
++		s = append(s, pick)
++		v = best
++	}
++	if len(s) == len(forced) {
++		var err error
++		v, err = e.evaluate(s)
++		if err != nil {
++			return nil, v, err
++		}
++	}
++	// Deterministic best-improvement swaps, with forced nested identities locked.
++	for {
++		var swap []int
++		best := v
++		for pos := len(forced); pos < len(s); pos++ {
++			rest := append([]int{}, s[:pos]...)
++			rest = append(rest, s[pos+1:]...)
++			for i := range e.fs {
++				if !e.allowed(rest, i) {
++					continue
++				}
++				trial := append(append([]int{}, s...), 0)
++				trial = trial[:len(s)]
++				trial[pos] = i
++				cur, err := e.evaluate(trial)
++				if err != nil {
++					return nil, v, err
++				}
++				if e.better(cur, best) {
++					best = cur
++					swap = trial
++				}
++			}
++		}
++		if swap == nil {
++			break
++		}
++		s = swap
++		v = best
++	}
++	return s, v, nil
++}
++func (e *boundedEngine) exact(k int, forced []int) ([]int, boundedValue, error) {
++	var best []int
++	var value boundedValue
++	chosen := append([]int{}, forced...)
++	for size := max(1, len(forced)); size <= k; size++ {
++		var visit func(int) error
++		visit = func(start int) error {
++			if len(chosen) == size {
++				v, err := e.evaluate(chosen)
++				if err != nil {
++					return err
++				}
++				if best == nil || e.better(v, value) {
++					best = append([]int{}, chosen...)
++					value = v
++				}
++				return nil
++			}
++			for i := start; i < len(e.fs); i++ {
++				if !e.allowed(chosen, i) {
++					continue
++				}
++				chosen = append(chosen, i)
++				if err := visit(i + 1); err != nil {
++					return err
++				}
++				chosen = chosen[:len(chosen)-1]
++			}
++			return nil
++		}
++		if err := visit(0); err != nil {
++			return nil, value, err
++		}
++	}
++	return best, value, nil
++}
++
++// SelectBounded accepts already validated features for replay/offline evaluation.
++// Its only exactness claim is supplied-pool score regret over the declared domain;
++// IEEE-754 geometry is tested at tolerance, not a formal real-arithmetic proof.
++func SelectBounded(ctx context.Context, fs []Feature, cfg ChoiceConfig) (out *ContinuousChoices, err error) {
++	if err = cfg.Validate(); err != nil {
++		return
++	}
++	if cfg.Bounded == nil {
++		return nil, fmt.Errorf("missing bounded config")
++	}
++	c := *cfg.Bounded
++	if c.MaxMatrixBytes == 0 {
++		c.MaxMatrixBytes = 64 * 1024 * 1024
++	}
++	out = &ContinuousChoices{Policy: "bounded_continuous_regret_v3", NormalizedDenominator: "1 score-second + minimum supplied-pool score at this weight", Config: c, InputCandidates: len(fs), Exclusions: map[string]string{}, Selections: []ContinuousSelection{}, GuaranteeScope: "supplied validated pool; continuous hypothetical rectangle only; float64 geometry tolerance 1e-8 score-s/1e-12 relative; not journey completeness or authentic rider utility"}
++	e := &boundedEngine{ctx: ctx, cfg: c, maxSubsets: cfg.MaxSubsets}
++	defer func() {
++		out.Work = e.work
++		if err != nil {
++			out.Error = err.Error()
++			out.Complete = false
++			for i := range out.Selections {
++				out.Selections[i].Complete = false
++				out.Selections[i].SubsetOptimal = false
++			}
++		}
++	}()
++	if err = ctx.Err(); err != nil {
++		return
++	}
++	if len(fs) > cfg.MaxCandidates {
++		err = ErrSelectionBudget
++		return
++	}
++	fs = append([]Feature{}, fs...)
++	sort.Slice(fs, func(i, j int) bool { return fs[i].Identity < fs[j].Identity })
++	pats := map[string]bool{}
++	for _, f := range fs {
++		if f.Duration < 0 || f.Metrics.Transfers < 0 || f.Metrics.WalkingSeconds < 0 {
++			err = fmt.Errorf("negative score feature")
++			return
++		}
++		pats[f.Pattern] = true
++	}
++	out.InputPatterns = len(pats)
++	e.fs = boundedPool(fs, c.DistinctPatterns, out.Exclusions)
++	out.RetainedCandidates = len(e.fs)
++	if len(e.fs) == 0 {
++		for _, k := range c.Limits {
++			out.Selections = append(out.Selections, ContinuousSelection{Limit: k, Selected: []string{}, Method: "empty_pool", Complete: true, SubsetOptimal: true})
++		}
++		out.Complete = true
++		return
++	}
++	if err = e.critical(); err != nil {
++		return
++	}
++	out.CriticalPoints = len(e.points)
++	forced := []int{}
++	for _, limit := range c.Limits {
++		k := min(limit, len(e.fs))
++		if c.DistinctPatterns {
++			k = min(k, len(pats))
++		}
++		before := e.subsets
++		var selected []int
++		var v boundedValue
++		method := "greedy_best_swap_local"
++		exact := false
++		if c.Exact {
++			selected, v, err = e.exact(k, forced)
++			method = "exhaustive_subset"
++			exact = true
++		} else {
++			selected, v, err = e.greedy(k, forced)
++		}
++		if err != nil {
++			return
++		}
++		sort.Ints(selected)
++		s := ContinuousSelection{Limit: limit, Selected: []string{}, Method: method, Complete: true, SubsetOptimal: exact, WorstAbsolute: &v.a, WorstNormalized: &v.r, EvaluatedSubsets: e.subsets - before}
++		aw, rw := e.points[v.ai], e.points[v.ri]
++		s.AbsoluteWitness = &aw
++		s.NormalizedWitness = &rw
++		ps := map[string]bool{}
++		for _, i := range selected {
++			s.Selected = append(s.Selected, e.fs[i].Identity)
++			ps[e.fs[i].Pattern] = true
++		}
++		s.DistinctPatternCount = len(ps)
++		out.Selections = append(out.Selections, s)
++		if c.Nested {
++			forced = append([]int{}, selected...)
++		}
++	}
++	out.Complete = true
++	return
++}
+--- a/vendor/github.com/ertyoii/transit-routing-go/recommend/choices.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/recommend/choices.go
+@@ -21,12 +21,40 @@
+ 	Preferences []Preference `json:"preferences"`
+ }
+ type ChoiceConfig struct {
+-	MaxSubsets    int               `json:"max_subsets"`
+-	MaxCandidates int               `json:"max_candidates"`
+-	Groups        []PreferenceGroup `json:"groups"`
++	LeanDelivery   bool              `json:"lean_delivery,omitempty"`
++	DeliveryPolicy string            `json:"delivery_policy,omitempty"`
++	DeliveryLimits []int             `json:"delivery_limits,omitempty"`
++	Bounded        *BoundedConfig    `json:"bounded,omitempty"`
++	MaxSubsets     int               `json:"max_subsets"`
++	MaxCandidates  int               `json:"max_candidates"`
++	Groups         []PreferenceGroup `json:"groups"`
+ }
+ 
+ func (c ChoiceConfig) Validate() error {
++	if c.LeanDelivery {
++		if c.DeliveryPolicy != "" && c.DeliveryPolicy != "finite_preferences_v2" && c.DeliveryPolicy != "pattern_anchors_v1" {
++			return fmt.Errorf("invalid lean delivery policy")
++		}
++		prev := 0
++		for _, k := range c.DeliveryLimits {
++			if k < 1 || k > 10 || k <= prev {
++				return fmt.Errorf("lean delivery limits must be increasing in [1,10]")
++			}
++			prev = k
++		}
++		if c.DeliveryPolicy == "pattern_anchors_v1" {
++			if c.MaxCandidates < 1 || c.MaxCandidates > 10000 {
++				return fmt.Errorf("invalid lean candidate guard")
++			}
++			return nil
++		}
++	}
++	if c.Bounded != nil {
++		if c.MaxCandidates < 1 || c.MaxCandidates > 10000 || c.MaxSubsets < 1 || c.MaxSubsets > 10000000 {
++			return fmt.Errorf("invalid bounded candidate/subset limits")
++		}
++		return c.Bounded.Validate()
++	}
+ 	if c.MaxSubsets < 1 || c.MaxSubsets > 10000000 || c.MaxCandidates < 1 || c.MaxCandidates > 10000 || len(c.Groups) < 1 || len(c.Groups) > 8 {
+ 		return fmt.Errorf("invalid choice configuration bounds")
+ 	}
+@@ -88,6 +116,12 @@
+ func (x *Index) EvaluateChoices(ctx context.Context, q model.Query, js []model.Journey, cfg ChoiceConfig) (out Result, err error) {
+ 	if err = cfg.Validate(); err != nil {
+ 		return
++	}
++	if cfg.Bounded != nil {
++		return x.EvaluateBounded(ctx, q, js, cfg)
++	}
++	if cfg.LeanDelivery {
++		return x.EvaluateLeanChoices(ctx, q, js, cfg)
+ 	}
+ 	if err = ctx.Err(); err != nil {
+ 		return
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/recommend/lean.go
+@@ -0,0 +1,88 @@
++package recommend
++
++import (
++	"context"
++	"github.com/ertyoii/transit-routing-go/model"
++	"sort"
++)
++
++// EvaluateLeanChoices is an equal-requested-output control. It preserves legacy
++// finite-grid minimax and pattern-anchor selections but omits unrequested k5,
++// legacy anchor controls and recovery enumeration. It is not a new quality model.
++func (x *Index) EvaluateLeanChoices(ctx context.Context, q model.Query, js []model.Journey, cfg ChoiceConfig) (out Result, err error) {
++	if err = cfg.Validate(); err != nil {
++		return
++	}
++	out = Result{Policy: "finite_preferences_v2_lean_delivery", FeatureMode: "validated_objective_pattern_slack_no_recovery", Features: []Feature{}, Selections: []Selection{}}
++	if _, err = x.checker.Binding(q); err != nil {
++		return
++	}
++	seen := map[string]bool{}
++	for _, j := range js {
++		if err = ctx.Err(); err != nil {
++			return
++		}
++		var v model.Validated
++		v, err = x.checker.Check(q, j)
++		if err != nil {
++			return
++		}
++		if seen[v.Identity] {
++			continue
++		}
++		seen[v.Identity] = true
++		var f Feature
++		f, err = x.measure(q, v, false)
++		if err != nil {
++			return
++		}
++		out.Features = append(out.Features, f)
++	}
++	sort.Slice(out.Features, func(i, j int) bool { return out.Features[i].Identity < out.Features[j].Identity })
++	if len(out.Features) > cfg.MaxCandidates {
++		return out, ErrSelectionBudget
++	}
++	limits := cfg.DeliveryLimits
++	if len(limits) == 0 {
++		limits = []int{3}
++	}
++	if cfg.DeliveryPolicy == "pattern_anchors_v1" {
++		out.Policy = "pattern_anchors_v1_lean_delivery"
++		for _, k := range limits {
++			out.Selections = append(out.Selections, selectFeatures(out.Features, k, 300))
++		}
++		return
++	}
++	choices := &Choices{Policy: out.Policy, InputCandidates: len(out.Features), Representatives: []string{}, Exclusions: map[string]string{}, Groups: []GroupChoices{}}
++	out.Choices = choices
++	defer func() {
++		if err != nil {
++			choices.Error = err.Error()
++			choices.Complete = false
++			choices.Groups = []GroupChoices{}
++		}
++	}()
++	pool := choiceRepresentatives(out.Features, choices.Exclusions)
++	for _, f := range pool {
++		choices.Representatives = append(choices.Representatives, f.Identity)
++	}
++	for _, g := range cfg.Groups {
++		group := GroupChoices{Group: g, Selections: []Choice{}}
++		for _, k := range limits {
++			var selected []int
++			var states int
++			selected, states, err = minimax(ctx, pool, g.Preferences, k, cfg.MaxSubsets)
++			if err != nil {
++				return
++			}
++			c := describeChoice(pool, g.Preferences, selected, "preference_minimax", k)
++			c.Complete = true
++			c.PoolOptimal = true
++			c.EvaluatedSubsets = states
++			group.Selections = append(group.Selections, c)
++		}
++		choices.Groups = append(choices.Groups, group)
++	}
++	choices.Complete = true
++	return
++}
+--- a/vendor/github.com/ertyoii/transit-routing-go/recommend/quality.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/recommend/quality.go
+@@ -45,10 +45,12 @@
+ 	GlobalOptimalityClaim bool              `json:"global_optimality_claim"`
+ }
+ type Result struct {
+-	Choices    *Choices    `json:"choices,omitempty"`
+-	Policy     string      `json:"policy"`
+-	Features   []Feature   `json:"features"`
+-	Selections []Selection `json:"selections"`
++	ContinuousChoices *ContinuousChoices `json:"continuous_choices,omitempty"`
++	FeatureMode       string             `json:"feature_mode,omitempty"`
++	Choices           *Choices           `json:"choices,omitempty"`
++	Policy            string             `json:"policy"`
++	Features          []Feature          `json:"features"`
++	Selections        []Selection        `json:"selections"`
+ }
+ type routeIdentity struct {
+ 	Missing bool
+@@ -56,6 +58,7 @@
+ }
+ 
+ type Index struct {
++	lean            bool
+ 	checker         *validate.Checker
+ 	rules           *transfer.Resolver
+ 	connections     map[string]model.Connection
+@@ -97,9 +100,47 @@
+ 	return x, nil
+ }
+ 
++// NewBoundedFromChecker reuses exactly the checker's owned immutable snapshot.
++// No Dataset argument exists, so a recommendation/checker snapshot mismatch is
++// impossible by construction. No duplicate validation/connection/recovery index
++// is built. This index supports EvaluateBounded/EvaluateChoices bounded only.
++func NewBoundedFromChecker(c *validate.Checker) (*Index, error) {
++	if c == nil || c.DatasetFingerprint() == "" {
++		return nil, fmt.Errorf("bounded recommendation requires an initialized checker")
++	}
++	return &Index{checker: c, lean: true}, nil
++}
++func (x *Index) connection(id string) model.Connection {
++	if x.lean {
++		v, _ := x.checker.Connection(id)
++		return v
++	}
++	return x.connections[id]
++}
++func (x *Index) route(tid string) (string, routeIdentity) {
++	if !x.lean {
++		return x.routes[tid], x.routeKeys[tid]
++	}
++	t, _ := x.checker.Trip(tid)
++	if t.RouteID == "" {
++		return "trip:" + t.ID, routeIdentity{Missing: true, ID: t.ID}
++	}
++	return t.RouteID, routeIdentity{ID: t.RouteID}
++}
++func (x *Index) decision(from, to model.Connection, fallback int64) (transfer.Decision, error) {
++	if !x.lean {
++		return x.rules.Resolve(from, to, fallback)
++	}
++	allowed, minimum, err := x.checker.TransferDecision(from, to, fallback)
++	return transfer.Decision{Allowed: allowed, Minimum: minimum}, err
++}
++
+ // Evaluate independently validates every supplied witness, including its times.
+ // Its cost is presentation overhead; it does not upgrade the pool's certificate.
+ func (x *Index) Evaluate(q model.Query, js []model.Journey) (Result, error) {
++	if x.lean {
++		return Result{}, fmt.Errorf("lean recommendation index supports bounded evaluation only")
++	}
+ 	if _, e := x.checker.Binding(q); e != nil {
+ 		return Result{}, e
+ 	}
+@@ -114,7 +155,7 @@
+ 			continue
+ 		}
+ 		seen[v.Identity] = true
+-		f, e := x.measure(q, v)
++		f, e := x.measure(q, v, true)
+ 		if e != nil {
+ 			return Result{}, e
+ 		}
+@@ -128,7 +169,7 @@
+ 	}
+ 	return out, nil
+ }
+-func (x *Index) measure(q model.Query, v model.Validated) (Feature, error) {
++func (x *Index) measure(q model.Query, v model.Validated, recovery bool) (Feature, error) {
+ 	f := Feature{Identity: v.Identity, Metrics: v.Metrics, Duration: v.Metrics.Arrival - q.Departure, Transfers: []Interchange{}}
+ 	type token struct {
+ 		Kind         string
+@@ -153,21 +194,21 @@
+ 			tokens = append(tokens, token{Kind: "walk", Walk: l.Ref})
+ 			last = nil
+ 		} else {
+-			c := x.connections[l.Ref]
++			c := x.connection(l.Ref)
+ 			continuing := last != nil && last.TripID == c.TripID && last.Sequence+1 == c.Sequence
+ 			f.Ride += l.Arrival - l.Departure
+ 			if !continuing {
+-				route := x.routes[c.TripID]
+-				if seenRoutes[x.routeKeys[c.TripID]] {
++				route, key := x.route(c.TripID)
++				if seenRoutes[key] {
+ 					f.SameRouteReboardings++
+ 				}
+-				seenRoutes[x.routeKeys[c.TripID]] = true
++				seenRoutes[key] = true
+ 				if firstRide {
+ 					f.InitialWait = l.Departure - q.Departure - v.Metrics.AccessWalking
+ 					firstRide = false
+ 				}
+ 				if previous != nil {
+-					rule, e := x.rules.Resolve(*previous, c, q.TransferBuffer)
++					rule, e := x.decision(*previous, c, q.TransferBuffer)
+ 					if e != nil {
+ 						return Feature{}, e
+ 					}
+@@ -177,7 +218,7 @@
+ 					}
+ 					f.Transfers = append(f.Transfers, Interchange{From: previous.ID, To: c.ID, Ready: ready, Slack: c.Departure - ready, Recovery: []Recovery{}})
+ 				}
+-				tokens = append(tokens, token{Kind: "ride", Route: route, MissingRoute: x.routeKeys[c.TripID].Missing, Stops: []string{c.From, c.To}})
++				tokens = append(tokens, token{Kind: "ride", Route: route, MissingRoute: key.Missing, Stops: []string{c.From, c.To}})
+ 				blocks = append(blocks, []model.Connection{c})
+ 			} else {
+ 				tokens[len(tokens)-1].Stops = append(tokens[len(tokens)-1].Stops, c.To)
+@@ -191,6 +232,9 @@
+ 	}
+ 	b, _ := json.Marshal(tokens)
+ 	f.Pattern = string(b)
++	if !recovery {
++		return f, nil
++	}
+ 	for i := range f.Transfers {
+ 		block := blocks[i+1]
+ 		first, end := block[0], block[len(block)-1]
+--- a/vendor/github.com/ertyoii/transit-routing-go/validate/journey.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/validate/journey.go
+@@ -237,3 +237,17 @@
+ 	}
+ 	return true, fallback, nil
+ }
++
++// DatasetFingerprint identifies the checker's owned immutable snapshot. It does
++// not hash or clone the dataset again and exposes no mutable internal tables.
++func (c *Checker) DatasetFingerprint() string { return c.datasetSHA256 }
++
++// Connection and Trip return value copies from the checker-owned snapshot.
++func (c *Checker) Connection(id string) (model.Connection, bool) { v, ok := c.rides[id]; return v, ok }
++func (c *Checker) Trip(id string) (model.Trip, bool)             { v, ok := c.trips[id]; return v, ok }
++
++// TransferDecision applies this checker's independent rule interpretation for
++// presentation features; it is metadata, not a substitute for Check.
++func (c *Checker) TransferDecision(from, to model.Connection, fallback int64) (bool, int64, error) {
++	return c.checkTransfer(from, to, fallback)
++}

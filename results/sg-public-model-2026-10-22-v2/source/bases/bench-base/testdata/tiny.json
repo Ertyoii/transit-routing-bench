@@ -1,0 +1,42 @@
+{
+  "dataset": {
+    "schema_version": "0.1",
+    "id": "synthetic-singapore-clock-v1",
+    "time_zone": "Asia/Singapore",
+    "service_date": "2026-10-17",
+    "stops": [
+      {"id":"A","accessible":"yes"},
+      {"id":"B","accessible":"no"},
+      {"id":"C","accessible":"yes"},
+      {"id":"D","accessible":"yes"},
+      {"id":"X","accessible":"yes"}
+    ],
+    "trips": [
+      {"id":"stay","accessible":"yes"},
+      {"id":"fast","accessible":"unknown"},
+      {"id":"tie","accessible":"yes"},
+      {"id":"slow","accessible":"no"},
+      {"id":"night","accessible":"yes"}
+    ],
+    "connections": [
+      {"id":"stay-0","trip_id":"stay","sequence":0,"from":"A","to":"B","departure":100,"arrival":110,"pickup":true,"dropoff":false},
+      {"id":"stay-1","trip_id":"stay","sequence":1,"from":"B","to":"D","departure":110,"arrival":130,"pickup":false,"dropoff":true},
+      {"id":"fast-0","trip_id":"fast","sequence":0,"from":"B","to":"D","departure":120,"arrival":125,"pickup":true,"dropoff":true},
+      {"id":"tie-0","trip_id":"tie","sequence":0,"from":"A","to":"D","departure":105,"arrival":130,"pickup":true,"dropoff":true},
+      {"id":"slow-0","trip_id":"slow","sequence":0,"from":"A","to":"D","departure":105,"arrival":140,"pickup":true,"dropoff":true},
+      {"id":"night-0","trip_id":"night","sequence":0,"from":"D","to":"X","departure":90000,"arrival":90060,"pickup":true,"dropoff":true}
+    ],
+    "footpaths": [
+      {"id":"ab","from":"A","to":"B","duration":5,"accessible":"yes"},
+      {"id":"bc","from":"B","to":"C","duration":5,"accessible":"yes"},
+      {"id":"cd","from":"C","to":"D","duration":40,"accessible":"yes"}
+    ]
+  },
+  "queries": [
+    {"id":"base","origin":"A","destination":"D","departure":90,"latest_arrival":160,"transfer_buffer":10,"max_walk_seconds":10,"max_boardings":2,"max_legs":4,"accessible_only":false},
+    {"id":"accessible","origin":"A","destination":"D","departure":90,"latest_arrival":160,"transfer_buffer":10,"max_walk_seconds":10,"max_boardings":2,"max_legs":4,"accessible_only":true},
+    {"id":"midnight","origin":"D","destination":"X","departure":89990,"latest_arrival":90100,"transfer_buffer":10,"max_walk_seconds":10,"max_boardings":2,"max_legs":4,"accessible_only":false},
+    {"id":"unreachable","origin":"X","destination":"A","departure":90,"latest_arrival":160,"transfer_buffer":10,"max_walk_seconds":10,"max_boardings":2,"max_legs":4,"accessible_only":false},
+    {"id":"same","origin":"A","destination":"A","departure":90,"latest_arrival":160,"transfer_buffer":10,"max_walk_seconds":10,"max_boardings":2,"max_legs":4,"accessible_only":false}
+  ]
+}

@@ -1,0 +1,260 @@
+--- a/tripbased/flash_graph.go
++++ b/tripbased/flash_graph.go
+@@ -46,6 +46,10 @@
+ 	for source := 0; source < n; source++ {
+ 		dist := map[int]int64{source: 0}
+ 		prev := map[int]model.Footpath{}
++		// Strictly positive validated edges make every final predecessor point
++		// to a vertex settled earlier. Depth is final when a vertex settles.
++		depth := map[int]int{source: 0}
++		settled := []int{}
+ 		h := &flashHeap{{source, 0}}
+ 		for h.Len() > 0 {
+ 			if e := w.tick(); e != nil {
+@@ -59,6 +63,7 @@
+ 				return fmt.Errorf("FLASH-TB incomplete: walking settlement budget exhausted")
+ 			}
+ 			x.snap.Stats.WalkSettled++
++			settled = append(settled, u.v)
+ 			for _, e := range adj[u.v] {
+ 				if e2 := w.tick(); e2 != nil {
+ 					return e2
+@@ -72,6 +77,7 @@
+ 				if !ok || value < old {
+ 					dist[v] = value
+ 					prev[v] = e
++					depth[v] = depth[u.v] + 1
+ 					heap.Push(h, flashHeapItem{v, value})
+ 				}
+ 			}
+@@ -81,6 +87,22 @@
+ 			stops = append(stops, v)
+ 		}
+ 		sort.Ints(stops)
++		// Pick one descendant leaf for each vertex. Reverse settlement order
++		// visits children before their parents, without walking any raw word
++		// ahead of its existing charged reconstruction. All metadata is local
++		// to this source and never changes routing or logical work accounting.
++		leaf := make(map[int]int, len(stops))
++		for _, v := range stops {
++			leaf[v] = v
++		}
++		for i := len(settled) - 1; i >= 0; i-- {
++			v := settled[i]
++			if v != source {
++				leaf[x.ids[prev[v].From]] = leaf[v]
++			}
++		}
++		words := map[int][]model.Footpath{}
++		published := map[int]int{}
+ 		for _, v := range stops {
+ 			if e := w.tick(); e != nil {
+ 				return e
+@@ -90,16 +112,31 @@
+ 			}
+ 			x.snap.Stats.ClosurePaths++
+ 			p := paper.Path{To: x.names[v], Duration: dist[v], Edges: []model.Footpath{}}
++			owner := leaf[v]
++			word := words[owner]
+ 			for u := v; u != source; {
+ 				if e := w.tick(); e != nil {
+ 					return e
+ 				}
+ 				edge := prev[u]
+-				p.Edges = append(p.Edges, edge)
++				if word == nil {
++					// Allocate only after the original first successful hop tick.
++					// The unseen suffix may remain uninitialized until a later
++					// target, but no published prefix is ever written again.
++					word = make([]model.Footpath, depth[owner])
++					words[owner] = word
++				}
++				position := depth[u] - 1
++				if position >= published[owner] {
++					word[position] = edge
++				}
+ 				u = x.ids[edge.From]
+ 			}
+-			for i, j := 0, len(p.Edges)-1; i < j; i, j = i+1, j-1 {
+-				p.Edges[i], p.Edges[j] = p.Edges[j], p.Edges[i]
++			if length := depth[v]; length > 0 {
++				published[owner] = max(published[owner], length)
++				// Capacity limiting prevents append from touching another path's
++				// suffix. Consumers must also keep visible elements immutable.
++				p.Edges = word[:length:length]
+ 			}
+ 			x.walks[source] = append(x.walks[source], p)
+ 			x.snap.ClosureDiameter = max(x.snap.ClosureDiameter, p.Duration)
+--- /dev/null
++++ b/tripbased/walking_prefix_internal_test.go
+@@ -0,0 +1,170 @@
++package tripbased
++
++import (
++	"context"
++	"encoding/json"
++	"fmt"
++	"reflect"
++	"sync"
++	"testing"
++
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/paper"
++)
++
++func TestWalkingPrefixCapacityLeafSharingAndAppendOwnership(t *testing.T) {
++	for _, reverse := range []bool{false, true} {
++		for _, branch := range []bool{false, true} {
++			names := []string{"A", "B", "C", "D", "E", "X"}
++			d := model.Dataset{}
++			for i := 0; i < 4; i++ {
++				from, to := names[i], names[i+1]
++				if reverse {
++					from, to = to, from
++				}
++				d.Footpaths = append(d.Footpaths, model.Footpath{ID: fmt.Sprintf("e%d", i), From: from, To: to, Duration: 1, Accessible: model.Yes})
++			}
++			if branch {
++				d.Footpaths = append(d.Footpaths, model.Footpath{ID: "branch", From: "B", To: "X", Duration: 1, Accessible: model.Yes})
++			}
++			x := &FlashIndex{names: names, ids: map[string]int{}, cfg: FlashConfig{Limits: FlashLimits{MaxWork: 10000, MaxWalkSettled: 1000, MaxClosurePaths: 1000}}}
++			for i, name := range names {
++				x.ids[name] = i
++			}
++			if e := x.closeWalks(d, &flashWork{context.Background(), x}); e != nil {
++				t.Fatal(e)
++			}
++			for source, row := range x.walks {
++				unique := map[*model.Footpath]int{}
++				logical := 0
++				for i, p := range row {
++					if cap(p.Edges) != len(p.Edges) {
++						t.Fatal("shared prefix capacity escapes", source, p)
++					}
++					if x.walkMap[source][x.ids[p.To]] != &x.walks[source][i] {
++						t.Fatal("lost distinct stable Path identity")
++					}
++					logical += len(p.Edges)
++					if len(p.Edges) > 0 {
++						key := &p.Edges[0]
++						unique[key] = max(unique[key], len(p.Edges))
++					}
++					before, _ := json.Marshal(x.walks)
++					copyOfHeader := p.Edges
++					copyOfHeader = append(copyOfHeader, model.Footpath{ID: "caller-append"})
++					copyOfHeader[len(copyOfHeader)-1].ID = "caller-mutated-new-element"
++					after, _ := json.Marshal(x.walks)
++					if string(before) != string(after) {
++						t.Fatal("append wrote into a shared suffix")
++					}
++				}
++				retained := 0
++				for _, n := range unique {
++					retained += n
++				}
++				children := map[string]int{}
++				for _, p := range row {
++					if len(p.Edges) > 0 {
++						children[p.Edges[len(p.Edges)-1].From]++
++					}
++				}
++				leaves, leafSlots := 0, 0
++				for _, p := range row {
++					if len(p.Edges) > 0 && children[p.To] == 0 {
++						leaves++
++						leafSlots += len(p.Edges)
++					}
++				}
++				if retained > logical || len(unique) != leaves || retained != leafSlots {
++					t.Fatal("retained arrays must be exactly the predecessor leaves", source, retained, logical, len(unique), leaves, leafSlots)
++				}
++			}
++		}
++	}
++}
++
++func TestWalkingPrefixPublishedWordsConcurrentReadOnly(t *testing.T) {
++	d, q, _, cfg := fixedRankLiteral(t)
++	// Extend the walking predecessor tree with immutable multi-hop prefixes.
++	d.Stops = append(d.Stops, model.Stop{ID: "prefix-tail-1", Accessible: model.Yes}, model.Stop{ID: "prefix-tail-2", Accessible: model.Yes})
++	d.Footpaths = append(d.Footpaths,
++		model.Footpath{ID: "prefix-edge-1", From: q.Origin, To: "prefix-tail-1", Duration: 1, Accessible: model.Yes},
++		model.Footpath{ID: "prefix-edge-2", From: "prefix-tail-1", To: "prefix-tail-2", Duration: 1, Accessible: model.Yes})
++	cfg.Partition["prefix-tail-1"] = cfg.Partition[q.Origin]
++	cfg.Partition["prefix-tail-2"] = cfg.Partition[q.Origin]
++	x, e := BuildTREXStaticRulesCandidate(context.Background(), d, cfg)
++	if e != nil {
++		t.Fatal(e)
++	}
++	q.MaxWalkSeconds = model.MaxServiceSecond
++	q.Walking = &model.WalkingLimits{Access: 1000, Transfer: 1000, Egress: 1000, Direct: 1000}
++	before, _ := json.Marshal(x.Snapshot())
++	wordsBefore, _ := json.Marshal(x.walks)
++	want, e := x.Search(context.Background(), q)
++	if e != nil || !want.Complete {
++		t.Fatal(want, e)
++	}
++	// Input ownership: closure copies values, not the caller's mutable slice.
++	for i := range d.Footpaths {
++		d.Footpaths[i].ID = "caller-mutation"
++		d.Footpaths[i].Duration = 123
++	}
++	var wg sync.WaitGroup
++	for i := 0; i < 6; i++ {
++		wg.Add(1)
++		go func() {
++			defer wg.Done()
++			for j := 0; j < 4; j++ {
++				got, e := x.Search(context.Background(), q)
++				if e != nil || !reflect.DeepEqual(got, want) {
++					t.Error("concurrent query changed", got, e)
++				}
++				for _, row := range x.walks {
++					for _, p := range row {
++						_ = p.Append((*paper.Node)(nil), 0)
++					}
++				}
++				s := x.Snapshot()
++				for k := range s.Transfers {
++					for j := range s.Transfers[k].RawEdges {
++						s.Transfers[k].RawEdges[j] = "caller-owned"
++					}
++				}
++				for k := range s.Witnesses {
++					for j := range s.Witnesses[k].Journey.Legs {
++						s.Witnesses[k].Journey.Legs[j].Ref = "caller-owned"
++					}
++				}
++			}
++		}()
++	}
++	wg.Wait()
++	after, _ := json.Marshal(x.Snapshot())
++	wordsAfter, _ := json.Marshal(x.walks)
++	if string(before) != string(after) || string(wordsBefore) != string(wordsAfter) {
++		t.Fatal("input/snapshot/query aliased prepared walking words")
++	}
++}
++
++func TestWalkingPrefixZeroNegativeAndPositiveSelfQualification(t *testing.T) {
++	d, _, _, cfg := fixedRankLiteral(t)
++	for _, duration := range []int64{0, -1} {
++		bad := d.Clone()
++		bad.Footpaths = append(bad.Footpaths, model.Footpath{ID: "invalid-zero-negative", From: d.Stops[0].ID, To: d.Stops[0].ID, Duration: duration, Accessible: model.Yes})
++		if x, e := BuildTREXStaticRulesCandidate(context.Background(), bad, cfg); e == nil || x.Snapshot().Complete {
++			t.Fatal("unqualified nonpositive edge admitted", duration, e)
++		}
++	}
++	good := d.Clone()
++	good.Footpaths = append(good.Footpaths, model.Footpath{ID: "positive-self", From: d.Stops[0].ID, To: d.Stops[0].ID, Duration: 1, Accessible: model.Yes})
++	x, e := BuildTREXStaticRulesCandidate(context.Background(), good, cfg)
++	if e != nil {
++		t.Fatal(e)
++	}
++	for source := range x.walks {
++		p := x.walkMap[source][source]
++		if p == nil || p.Duration != 0 || len(p.Edges) != 0 || p.Edges == nil {
++			t.Fatal("zero stay changed", source, p)
++		}
++	}
++}

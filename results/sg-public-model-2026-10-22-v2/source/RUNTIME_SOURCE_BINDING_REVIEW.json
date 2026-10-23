@@ -1,0 +1,39 @@
+{
+  "checks": [
+    {
+      "all_three_equal": true,
+      "branch": "bench-v3-control",
+      "bundled_reconstruction_fingerprint": "05a41ecd0b4687e83b57d8a548835137c2d049755815dcbef01bb92590a17800",
+      "expected_from_runtime_freeze": "05a41ecd0b4687e83b57d8a548835137c2d049755815dcbef01bb92590a17800",
+      "recomputed_from_original_frozen_source": "05a41ecd0b4687e83b57d8a548835137c2d049755815dcbef01bb92590a17800",
+      "reconstruction": "all file bytes match branch source-hash map; branch patch replay previously exact",
+      "role": "old_native",
+      "source_hash_files": 198,
+      "source_hash_manifest": "source-hashes/bench-v3-control.json"
+    },
+    {
+      "all_three_equal": true,
+      "branch": "bench-safe-fill-B-q01",
+      "bundled_reconstruction_fingerprint": "8f13517d8a75df4c155e735eb1a03bbfd80012f3cd0de7e32827d1cb13b3628f",
+      "expected_from_runtime_freeze": "8f13517d8a75df4c155e735eb1a03bbfd80012f3cd0de7e32827d1cb13b3628f",
+      "recomputed_from_original_frozen_source": "8f13517d8a75df4c155e735eb1a03bbfd80012f3cd0de7e32827d1cb13b3628f",
+      "reconstruction": "all file bytes match branch source-hash map; branch patch replay previously exact",
+      "role": "source_B",
+      "source_hash_files": 281,
+      "source_hash_manifest": "source-hashes/bench-safe-fill-B-q01.json"
+    }
+  ],
+  "limitations": [
+    "SourceHash binds exact working source bytes including tests/vendor/module metadata/lock, not a guessed Git HEAD or directory name.",
+    "No claim of clean worktree, committed-tree equality, recreated Git author/commit metadata, executable modes or unchanged build path is made.",
+    "No binary was copied, executed, rebuilt or independently matched to a historical build. Original absolute paths and source-hash assertions remain in exact helper bytes.",
+    "No model/result/workload input or outcome completeness was validated here. A future source build, qualified authorized-input reconstruction and result audit remain separate."
+  ],
+  "schema": "sg-v2-runtime640-source-binding-review-v1",
+  "scope": "Source identities only for the two sources named by the runtime selection freeze, not process outcome counts or result acceptance.",
+  "source_freeze_identity": {
+    "bytes": 8957,
+    "declared_runtime_offers": 672,
+    "sha256": "627b8c75227f3346573788e14bec8c86770286c7a67560f63ac5a6d62edb7e51"
+  }
+}

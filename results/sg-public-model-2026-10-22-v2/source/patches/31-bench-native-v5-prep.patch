@@ -1,0 +1,1553 @@
+--- /dev/null
++++ b/cmd/corechgraphbench/audit.go
+@@ -0,0 +1,80 @@
++package main
++
++import (
++	"context"
++	"fmt"
++	"github.com/ertyoii/transit-routing-bench/workloadseed"
++	"github.com/ertyoii/transit-routing-go/model"
++)
++
++type pointWorkload struct {
++	Seed          workloadseed.Seed `json:"seed"`
++	Method        string            `json:"method"`
++	DatasetSHA256 string            `json:"dataset_sha256"`
++	Items         []struct {
++		Stratum string      `json:"stratum"`
++		Query   model.Query `json:"query"`
++	} `json:"items"`
++}
++
++// auditDistances is independent of Core-CH. Positive raw edges are relaxed to
++// a fixed point; values above the finite cap are deliberately unreachable.
++func auditDistances(ctx context.Context, vertices []string, edges []model.Footpath, sources []string, cap int64) (map[string]map[string]int64, map[string]int, error) {
++	if cap < 0 {
++		return nil, nil, fmt.Errorf("negative cap")
++	}
++	known := map[string]bool{}
++	for _, v := range vertices {
++		if v == "" || known[v] {
++			return nil, nil, fmt.Errorf("bad vertex")
++		}
++		known[v] = true
++	}
++	for _, e := range edges {
++		if !known[e.From] || !known[e.To] || e.Duration <= 0 {
++			return nil, nil, fmt.Errorf("invalid edge")
++		}
++	}
++	result, passes := map[string]map[string]int64{}, map[string]int{}
++	for _, source := range sources {
++		if !known[source] {
++			return nil, nil, fmt.Errorf("unknown source")
++		}
++		distances := map[string]int64{source: 0}
++		complete := false
++		for pass := 0; pass < len(vertices); pass++ {
++			if e := ctx.Err(); e != nil {
++				return nil, nil, e
++			}
++			changed := false
++			for i, edge := range edges {
++				if i%1024 == 0 {
++					if e := ctx.Err(); e != nil {
++						return nil, nil, e
++					}
++				}
++				d, ok := distances[edge.From]
++				// Subtraction avoids overflow even on malformed extreme inputs.
++				if !ok || edge.Duration > cap-d {
++					continue
++				}
++				candidate := d + edge.Duration
++				old, exists := distances[edge.To]
++				if !exists || candidate < old {
++					distances[edge.To] = candidate
++					changed = true
++				}
++			}
++			passes[source]++
++			if !changed {
++				complete = true
++				break
++			}
++		}
++		if !complete {
++			return nil, nil, fmt.Errorf("no fixed point after vertex bound")
++		}
++		result[source] = distances
++	}
++	return result, passes, nil
++}
+--- /dev/null
++++ b/cmd/corechgraphbench/audit_test.go
+@@ -0,0 +1,222 @@
++package main
++
++import (
++	"context"
++	"errors"
++	"fmt"
++	"github.com/ertyoii/transit-routing-go/corech"
++	"github.com/ertyoii/transit-routing-go/model"
++	"reflect"
++	"testing"
++)
++
++func edge(id, from, to string, duration int64) model.Footpath {
++	return model.Footpath{ID: id, From: from, To: to, Duration: duration}
++}
++
++func TestIndependentAuditKnownDirectedCapCases(t *testing.T) {
++	vertices := []string{"A", "B", "C", "D"}
++	// Deliberately reversed path order, parallel edges, a self loop and a disconnected vertex.
++	edges := []model.Footpath{edge("bc", "B", "C", 3), edge("ab-slow", "A", "B", 8), edge("ab", "A", "B", 2), edge("cc", "C", "C", 1)}
++	got, _, err := auditDistances(context.Background(), vertices, edges, []string{"A", "C", "D"}, 5)
++	want := map[string]map[string]int64{"A": {"A": 0, "B": 2, "C": 5}, "C": {"C": 0}, "D": {"D": 0}}
++	if err != nil || !reflect.DeepEqual(got, want) {
++		t.Fatalf("got %v err %v", got, err)
++	}
++	got, _, err = auditDistances(context.Background(), vertices, edges, []string{"A"}, 4)
++	if err != nil || !reflect.DeepEqual(got, map[string]map[string]int64{"A": {"A": 0, "B": 2}}) {
++		t.Fatalf("cap got %v err %v", got, err)
++	}
++	got, _, err = auditDistances(context.Background(), vertices, edges, []string{"A"}, 0)
++	if err != nil || !reflect.DeepEqual(got, map[string]map[string]int64{"A": {"A": 0}}) {
++		t.Fatalf("zero cap got %v err %v", got, err)
++	}
++}
++
++// This independent Floyd-Warshall corpus checks every directed 3-node graph
++// whose six possible edges are absent or have weight 1 or 2 (729 graphs).
++func TestAuditAgainstIndependentFloydCorpus(t *testing.T) {
++	vertices := []string{"A", "B", "C"}
++	for code := 0; code < 729; code++ {
++		value := code
++		var edges []model.Footpath
++		d := [3][3]int64{{0, 99, 99}, {99, 0, 99}, {99, 99, 0}}
++		for i := 0; i < 3; i++ {
++			for j := 0; j < 3; j++ {
++				if i == j {
++					continue
++				}
++				weight := value % 3
++				value /= 3
++				if weight > 0 {
++					edges = append(edges, edge(vertices[i]+vertices[j], vertices[i], vertices[j], int64(weight)))
++					d[i][j] = int64(weight)
++				}
++			}
++		}
++		for k := 0; k < 3; k++ {
++			for i := 0; i < 3; i++ {
++				for j := 0; j < 3; j++ {
++					if d[i][k]+d[k][j] < d[i][j] {
++						d[i][j] = d[i][k] + d[k][j]
++					}
++				}
++			}
++		}
++		for _, cap := range []int64{0, 1, 2, 4} {
++			got, _, err := auditDistances(context.Background(), vertices, edges, vertices, cap)
++			if err != nil {
++				t.Fatal(code, cap, err)
++			}
++			for i, from := range vertices {
++				for j, to := range vertices {
++					want := d[i][j] <= cap
++					distance, found := got[from][to]
++					if found != want || found && distance != d[i][j] {
++						t.Fatalf("graph %d cap %d %s->%s got %d/%v want %d/%v", code, cap, from, to, distance, found, d[i][j], want)
++					}
++				}
++			}
++		}
++	}
++}
++
++func TestAuditRejectsInvalidAndCancelled(t *testing.T) {
++	ctx, cancel := context.WithCancel(context.Background())
++	cancel()
++	for _, tc := range []struct {
++		ctx      context.Context
++		vertices []string
++		edges    []model.Footpath
++		sources  []string
++		cap      int64
++	}{
++		{ctx, []string{"A"}, nil, []string{"A"}, 5},
++		{context.Background(), []string{"A"}, nil, []string{"Z"}, 5},
++		{context.Background(), []string{"A", "A"}, nil, []string{"A"}, 5},
++		{context.Background(), []string{"A"}, []model.Footpath{edge("bad", "A", "Z", 1)}, []string{"A"}, 5},
++		{context.Background(), []string{"A"}, []model.Footpath{edge("bad", "A", "A", 0)}, []string{"A"}, 5},
++		{context.Background(), []string{"A"}, nil, []string{"A"}, -1},
++	} {
++		if _, _, err := auditDistances(tc.ctx, tc.vertices, tc.edges, tc.sources, tc.cap); err == nil {
++			t.Fatal("invalid audit accepted", tc)
++		}
++	}
++}
++
++func TestValidatorRetainsExactDenominatorAndWitness(t *testing.T) {
++	raw := map[string]model.Footpath{"ab": edge("ab", "A", "B", 2)}
++	want := map[string]map[string]int64{"A": {"A": 0, "B": 2}}
++	valid := corech.Row{Source: "A", MaximumDuration: 5, Complete: true, Paths: []corech.Path{{Target: "A", Found: true}, {Target: "B", Found: true, Duration: 2, RawEdges: []string{"ab"}}, {Target: "C"}}}
++	targets := []string{"A", "B", "C"}
++	if err := validate(valid, "A", targets, 5, raw, want); err != nil {
++		t.Fatal(err)
++	}
++	for _, mutate := range []func(*corech.Row){
++		func(r *corech.Row) { r.Paths = r.Paths[:2] },
++		func(r *corech.Row) { r.Source = "Z" },
++		func(r *corech.Row) { r.MaximumDuration = 6 },
++		func(r *corech.Row) { r.Complete = false },
++		func(r *corech.Row) { r.Error = "failed" },
++		func(r *corech.Row) { r.Paths[1].Target = "C" },
++		func(r *corech.Row) { r.Paths[1].Duration = 1 },
++		func(r *corech.Row) { r.Paths[1].Found = false },
++		func(r *corech.Row) { r.Paths[1].RawEdges = []string{"unknown"} },
++		func(r *corech.Row) { r.Paths[1].RawEdges = []string{"ab", "ab"} },
++		func(r *corech.Row) { r.Paths[2].RawEdges = []string{"ab"} },
++	} {
++		changed := valid
++		changed.Paths = append([]corech.Path{}, valid.Paths...)
++		mutate(&changed)
++		if validate(changed, "A", targets, 5, raw, want) == nil {
++			t.Fatal("mutation accepted", changed)
++		}
++	}
++}
++
++// Failed rows must preserve the original request even when their raw paths are
++// only diagnostic and are intentionally not accepted as complete witnesses.
++func TestFailedRowsRetainExactBindingAndDenominator(t *testing.T) {
++	targets := []string{"A", "B", "C"}
++	failed := corech.Row{Source: "A", MaximumDuration: 5, Complete: false, Error: context.DeadlineExceeded.Error(), Paths: []corech.Path{{Target: "A"}, {Target: "B", Found: true, RawEdges: []string{"partial-not-a-witness"}}, {Target: "C"}}}
++	good := assessRow(failed, context.DeadlineExceeded, nil, "A", targets, 5, nil, nil)
++	if good.Complete || !good.RequestShapeValid || len(good.Final) != 0 || !expectedDeadlineFailure(good, "A", targets, 5) || good.RequestedSource != "A" || good.RequestedMaximumDuration != 5 || !reflect.DeepEqual(good.RequestedTargets, targets) {
++		t.Fatal("honest failed row rejected/promoted", good)
++	}
++	for _, mutate := range []func(*corech.Row){
++		func(r *corech.Row) { r.Paths = r.Paths[:2] },
++		func(r *corech.Row) { r.Paths = append(r.Paths, corech.Path{Target: "D"}) },
++		func(r *corech.Row) { r.Paths[0], r.Paths[1] = r.Paths[1], r.Paths[0] },
++		func(r *corech.Row) { r.Paths[1].Target = "A" },
++		func(r *corech.Row) { r.Source = "B" },
++		func(r *corech.Row) { r.MaximumDuration = 6 },
++	} {
++		changed := failed
++		changed.Paths = append([]corech.Path{}, failed.Paths...)
++		mutate(&changed)
++		rec := assessRow(changed, context.DeadlineExceeded, nil, "A", targets, 5, nil, nil)
++		if rec.Complete || rec.RequestShapeValid || rec.RequestShapeError == "" || len(rec.Final) != 0 || expectedDeadlineFailure(rec, "A", targets, 5) || len(rec.RequestedTargets) != len(targets) {
++			t.Fatal("malformed failed request accepted", rec)
++		}
++	}
++}
++
++func TestForcedDeadlineRequiresGenuineContextError(t *testing.T) {
++	targets := []string{"A", "B"}
++	failed := corech.Row{Source: "A", MaximumDuration: 5, Complete: false, Error: "diagnostic", Paths: []corech.Path{{Target: "A"}, {Target: "B"}}}
++	for _, err := range []error{context.DeadlineExceeded, context.Canceled, fmt.Errorf("wrapped search: %w", context.DeadlineExceeded), errors.Join(fmt.Errorf("detail"), context.Canceled)} {
++		rec := assessRow(failed, err, nil, "A", targets, 5, nil, nil)
++		if !expectedDeadlineFailure(rec, "A", targets, 5) {
++			t.Fatal("real context failure rejected", rec)
++		}
++	}
++	for _, err := range []error{nil, fmt.Errorf("edge budget exhausted"), fmt.Errorf("context deadline exceeded"), fmt.Errorf("context canceled")} {
++		rec := assessRow(failed, err, nil, "A", targets, 5, nil, nil)
++		if expectedDeadlineFailure(rec, "A", targets, 5) {
++			t.Fatal("non-context forced failure accepted", rec)
++		}
++	}
++	// An over-budget driver observation is not a genuine SearchMany context error.
++	rec := assessRow(failed, nil, context.DeadlineExceeded, "A", targets, 5, nil, nil)
++	if expectedDeadlineFailure(rec, "A", targets, 5) {
++		t.Fatal("cooperative budget observation accepted as native context error", rec)
++	}
++	genuine := assessRow(failed, context.DeadlineExceeded, nil, "A", targets, 5, nil, nil)
++	for _, mutate := range []func(*record){
++		func(r *record) { r.Complete = true },
++		func(r *record) { r.Raw.Complete = true },
++		func(r *record) { r.Final = []corech.Path{{Target: "A"}} },
++		func(r *record) { r.CoreErrorKind = "other_search_error" },
++		func(r *record) { r.RequestShapeValid = false },
++		func(r *record) { r.Error = "" },
++		func(r *record) { r.RequestShapeError = "shape failed" },
++		func(r *record) { r.RequestedSource = "B" },
++		func(r *record) { r.RequestedMaximumDuration = 6 },
++		func(r *record) { r.RequestedTargets = []string{"B", "A"} },
++	} {
++		changed := genuine
++		mutate(&changed)
++		if expectedDeadlineFailure(changed, "A", targets, 5) {
++			t.Fatal("wrong forced-failure metadata accepted", changed)
++		}
++	}
++}
++
++func TestCanceledPreparationRejectionHasExactShape(t *testing.T) {
++	ctx, cancel := context.WithCancel(context.Background())
++	cancel()
++	cfg := corech.Config{TargetCoreVertices: 2, MaximumAverageCoreOutDegree: 14, WitnessSettledPerSearch: 128, MaxContractions: 10, MaxArcs: 100, MaxWitnessSettled: 100, MaxWitnessEdges: 100}
++	index, err := corech.Build(ctx, []string{"A", "B"}, []model.Footpath{edge("ab", "A", "B", 2)}, []string{"A", "B"}, cfg)
++	if !errors.Is(err, context.Canceled) || index.Complete() {
++		t.Fatal("canceled build not rejected", err)
++	}
++	targets := []string{"A", "B"}
++	rejected, err := index.SearchMany(context.Background(), "A", targets, 5, corech.QueryLimits{MaxSettled: 10, MaxEdges: 100, MaxUnpackedEdges: 100})
++	if err == nil || rejected.Complete || validateRequestShape(rejected, "A", targets, 5) != nil {
++		t.Fatal("rejected query lost binding/denominator", rejected, err)
++	}
++	rejected.Paths[0], rejected.Paths[1] = rejected.Paths[1], rejected.Paths[0]
++	if validateRequestShape(rejected, "A", targets, 5) == nil {
++		t.Fatal("reordered canceled-prep targets accepted")
++	}
++}
+--- /dev/null
++++ b/cmd/corechgraphbench/main.go
+@@ -0,0 +1,461 @@
++// corechgraphbench audits a supplied public transfer graph; no transit SLA is measured.
++package main
++
++import (
++	"context"
++	"encoding/json"
++	"errors"
++	"flag"
++	"fmt"
++	"github.com/ertyoii/transit-routing-bench/nativeinputprobe"
++	"math/rand/v2"
++	"os"
++	"path/filepath"
++	"runtime"
++	"slices"
++	"sort"
++	"time"
++
++	"github.com/ertyoii/transit-routing-bench/evaluation"
++	"github.com/ertyoii/transit-routing-bench/experiment"
++	"github.com/ertyoii/transit-routing-bench/fixtures"
++	"github.com/ertyoii/transit-routing-go/corech"
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/strictjson"
++)
++
++type record struct {
++	RequestedSource          string   `json:"requested_source"`
++	RequestedTargets         []string `json:"requested_targets"`
++	RequestedMaximumDuration int64    `json:"requested_maximum_duration"`
++	RequestShapeValid        bool     `json:"request_shape_valid"`
++	RequestShapeError        string   `json:"request_shape_error,omitempty"`
++	CoreErrorKind            string   `json:"core_error_kind"`
++	searchError              error
++	Raw                      corech.Row    `json:"raw"`
++	Final                    []corech.Path `json:"final"`
++	Complete                 bool          `json:"complete"`
++	Error                    string        `json:"error,omitempty"`
++	CoreNS                   int64         `json:"core_ns"`
++	ResponseNS               int64         `json:"response_ns"`
++	AllocatedBytes           uint64        `json:"core_allocated_bytes"`
++}
++type pass struct {
++	Algorithm  string   `json:"algorithm"`
++	Repetition int      `json:"repetition"`
++	Warmup     bool     `json:"warmup"`
++	Records    []record `json:"records"`
++}
++type summary struct {
++	Algorithm                string                  `json:"algorithm"`
++	Repetition               int                     `json:"repetition"`
++	Warmup                   bool                    `json:"warmup"`
++	File                     string                  `json:"file"`
++	SHA256                   string                  `json:"sha256"`
++	Rows                     int                     `json:"rows"`
++	Cells                    int                     `json:"cells"`
++	Errors                   int                     `json:"errors"`
++	MakespanNS               int64                   `json:"makespan_ns"`
++	SuccessfulRowsPerSecond  float64                 `json:"successful_rows_per_second"`
++	SuccessfulCellsPerSecond float64                 `json:"successful_cells_per_second"`
++	Core                     evaluation.Distribution `json:"whole_row_core_ns"`
++	Response                 evaluation.Distribution `json:"whole_row_response_ns"`
++	AllocatedBytes           uint64                  `json:"core_allocated_bytes"`
++}
++
++func read(p string, v any, strict bool) (string, error) {
++	b, e := os.ReadFile(p)
++	if e != nil {
++		return "", e
++	}
++	if strict {
++		e = strictjson.Decode(b, v)
++	} else {
++		e = json.Unmarshal(b, v)
++	}
++	return fixtures.Sum(b), e
++}
++
++// validateRequestShape applies to every result, including failed/partial rows.
++// The original requested denominator is never inferred from returned paths.
++func validateRequestShape(r corech.Row, source string, targets []string, maximum int64) error {
++	if r.Source != source || r.MaximumDuration != maximum {
++		return fmt.Errorf("row source/cap identity differs")
++	}
++	if len(r.Paths) != len(targets) {
++		return fmt.Errorf("target denominator differs")
++	}
++	for i, p := range r.Paths {
++		if p.Target != targets[i] {
++			return fmt.Errorf("target identity/order differs")
++		}
++	}
++	return nil
++}
++
++func coreErrorKind(err error) string {
++	if err == nil {
++		return "none"
++	}
++	if errors.Is(err, context.DeadlineExceeded) {
++		return "context_deadline_exceeded"
++	}
++	if errors.Is(err, context.Canceled) {
++		return "context_canceled"
++	}
++	return "other_search_error"
++}
++
++// assessRow always checks request binding/shape. A failed raw row and all partial
++// paths remain diagnostic only; they are never promoted into final witnesses.
++func assessRow(r corech.Row, searchErr, budgetErr error, source string, targets []string, maximum int64, raw map[string]model.Footpath, want map[string]map[string]int64) record {
++	shapeErr := validateRequestShape(r, source, targets, maximum)
++	var witnessErr error
++	if searchErr == nil && budgetErr == nil {
++		witnessErr = validate(r, source, targets, maximum, raw, want)
++	}
++	err := errors.Join(searchErr, budgetErr, shapeErr, witnessErr)
++	rec := record{Raw: r, Final: []corech.Path{}, RequestedSource: source, RequestedTargets: append([]string{}, targets...), RequestedMaximumDuration: maximum, RequestShapeValid: shapeErr == nil, CoreErrorKind: coreErrorKind(searchErr), searchError: searchErr, Complete: err == nil}
++	if shapeErr != nil {
++		rec.RequestShapeError = shapeErr.Error()
++	}
++	if err != nil {
++		rec.Error = err.Error()
++	} else {
++		rec.Final = r.Paths
++	}
++	return rec
++}
++
++// A generic incomplete/error record is not evidence of a forced deadline.
++// Require a real SearchMany context error, an incomplete raw result, preserved
++// request shape and no accepted final/partial witnesses. Error text is not used.
++func expectedDeadlineFailure(r record, source string, targets []string, maximum int64) bool {
++	return !r.Complete && !r.Raw.Complete && len(r.Final) == 0 && r.Error != "" && r.RequestShapeValid && r.RequestShapeError == "" && r.RequestedSource == source && r.RequestedMaximumDuration == maximum && slices.Equal(r.RequestedTargets, targets) && validateRequestShape(r.Raw, source, targets, maximum) == nil && (errors.Is(r.searchError, context.DeadlineExceeded) || errors.Is(r.searchError, context.Canceled)) && r.CoreErrorKind == coreErrorKind(r.searchError)
++}
++
++// This validator follows supplied original-edge IDs and consults independently
++// audited expected distances. It does not use the contraction or search code.
++func validate(r corech.Row, source string, targets []string, maximum int64, raw map[string]model.Footpath, want map[string]map[string]int64) error {
++	if err := validateRequestShape(r, source, targets, maximum); err != nil {
++		return err
++	}
++	if want[source] == nil {
++		return fmt.Errorf("missing independent source audit")
++	}
++	if !r.Complete || r.Error != "" {
++		return fmt.Errorf("incomplete row: %s", r.Error)
++	}
++	for _, p := range r.Paths {
++		cost, found := want[r.Source][p.Target]
++		if r.Source == p.Target {
++			cost, found = 0, true
++		}
++		if p.Found != found || found && p.Duration != cost {
++			return fmt.Errorf("audited distance differs: %s -> %s: got %v/%d want %v/%d", r.Source, p.Target, p.Found, p.Duration, found, cost)
++		}
++		if !found {
++			if len(p.RawEdges) > 0 || len(p.CoreArcs) > 0 {
++				return fmt.Errorf("unreachable cell has path")
++			}
++			continue
++		}
++		at, sum := r.Source, int64(0)
++		for _, id := range p.RawEdges {
++			e, ok := raw[id]
++			if !ok || e.From != at {
++				return fmt.Errorf("invalid raw witness edge %q", id)
++			}
++			at = e.To
++			if e.Duration <= 0 || e.Duration > maximum-sum {
++				return fmt.Errorf("raw witness exceeds cap")
++			}
++			sum += e.Duration
++		}
++		if at != p.Target || sum != p.Duration || sum > r.MaximumDuration {
++			return fmt.Errorf("raw witness endpoint/duration mismatch")
++		}
++	}
++	return nil
++}
++func run() error {
++	inputOnly := flag.Bool("input-only", false, "parse and bind exact consuming-driver inputs; no constructor or search")
++	dp := flag.String("dataset", "", "explicit normalized public dataset; only stops and positive directed footpaths are measured")
++	qp := flag.String("queries", "", "hash-bound tune point workload; distinct OD endpoints become protected row anchors")
++	maximum := flag.Int64("maximum-duration", 600, "whole-row transfer distance cap in seconds")
++	out := flag.String("out-dir", "", "new output directory")
++	reps := flag.Int("repetitions", 3, "measured repetitions")
++	warmups := flag.Int("warmups", 1, "retained warmups")
++	prepTimeout := flag.Duration("prep-timeout", 180*time.Second, "cooperative preparation deadline")
++	timeout := flag.Duration("timeout", 5*time.Second, "whole row core deadline")
++	localWitness := flag.Int("witness-settled", 128, "per-search conservative witness limit")
++	globalSettled := flag.Int("max-witness-settled", 30000000, "global witness settled limit; exhaustion fails")
++	globalEdges := flag.Int("max-witness-edges", 150000000, "global witness edge limit; exhaustion fails")
++	maxDegree := flag.Float64("maximum-average-core-out-degree", 14, "natural partial contraction stop")
++	hardware := flag.String("hardware", "unrecorded", "verified hardware description")
++	flag.Parse()
++	if *dp == "" || *qp == "" || *out == "" || *maximum < 0 || *maximum >= corech.Infinity || *reps < 1 || *warmups < 0 || *prepTimeout <= 0 || *timeout <= 0 {
++		return fmt.Errorf("invalid arguments")
++	}
++	if e := os.Mkdir(*out, 0700); e != nil {
++		return e
++	}
++	prov, e := experiment.Identify(".")
++	if e != nil {
++		return e
++	}
++	if !prov.RuntimeMatchesBuild {
++		return fmt.Errorf("build with scripts/build.sh")
++	}
++	started := time.Now()
++	var d model.Dataset
++	var w pointWorkload
++	dh, e := read(*dp, &d, true)
++	if e != nil {
++		return e
++	}
++	qh, e := read(*qp, &w, true)
++	if e != nil {
++		return e
++	}
++	if w.DatasetSHA256 != dh || len(w.Items) == 0 {
++		return fmt.Errorf("workload dataset hash differs or workload empty")
++	}
++	vertices, protected, anchors := []string{}, []string{}, []string{}
++	vertexSet, anchorSet, querySet := map[string]bool{}, map[string]bool{}, map[string]bool{}
++	for _, s := range d.Stops {
++		if s.ID == "" || vertexSet[s.ID] {
++			return fmt.Errorf("empty or duplicate vertex")
++		}
++		vertexSet[s.ID] = true
++		vertices = append(vertices, s.ID)
++	}
++	for _, item := range w.Items {
++		q := item.Query
++		if q.ID == "" || querySet[q.ID] {
++			return fmt.Errorf("empty or duplicate query ID")
++		}
++		querySet[q.ID] = true
++		if e := q.Validate(d); e != nil {
++			return e
++		}
++		anchorSet[q.Origin], anchorSet[q.Destination] = true, true
++	}
++	for id := range anchorSet {
++		anchors = append(anchors, id)
++	}
++	sort.Strings(anchors)
++	protected = append(protected, anchors...)
++	loadNS := time.Since(started).Nanoseconds()
++	started = time.Now()
++	raw := map[string]model.Footpath{}
++	for _, edge := range d.Footpaths {
++		if edge.ID == "" || raw[edge.ID].ID != "" || !vertexSet[edge.From] || !vertexSet[edge.To] || edge.Duration <= 0 || edge.Duration >= corech.Infinity/int64(len(vertices)+1) {
++			return fmt.Errorf("invalid/duplicate original edge %q", edge.ID)
++		}
++		raw[edge.ID] = edge
++	}
++	if *inputOnly {
++		return nativeinputprobe.Emit("corechgraphbench", "graph-point-anchors", dh, qh, "", w.Seed, len(w.Items), anchors)
++	}
++	// Independent label-correcting Bellman-Ford relaxation, never the production
++	// heap, contraction, query, shortcut, or unpacking routines. This preparation
++	// is excluded from query timing and its work/time are reported separately.
++	auditStart := time.Now()
++	auditCtx, auditCancel := context.WithTimeout(context.Background(), *prepTimeout)
++	want, auditPasses, e := auditDistances(auditCtx, vertices, d.Footpaths, anchors, *maximum)
++	auditCancel()
++	auditNS := time.Since(auditStart).Nanoseconds()
++	if e != nil {
++		_, writeErr := experiment.WriteArtifact(filepath.Join(*out, "summary.json"), map[string]any{"success": false, "phase": "independent_audit", "provenance": prov, "dataset_sha256": dh, "queries_sha256": qh, "original_point_queries": len(w.Items), "anchors": anchors, "maximum_duration": *maximum, "requested_rows_per_pass": len(anchors), "requested_cells_per_pass": len(anchors) * len(anchors), "assessed_rows_per_pass": 0, "unavailable_rows_per_pass": len(anchors), "independent_audit_ns": auditNS, "error": e.Error(), "resources": experiment.SnapshotResources()})
++		if writeErr != nil {
++			return writeErr
++		}
++		return fmt.Errorf("independent raw-graph audit: %w", e)
++	}
++	checkerNS := time.Since(started).Nanoseconds()
++	if _, e = experiment.WriteArtifact(filepath.Join(*out, "independent-audit.json"), map[string]any{"contract": "bounded_positive_directed_raw_edge_shortest_distances_v1", "dataset_sha256": dh, "queries_sha256": qh, "maximum_duration": *maximum, "anchors": anchors, "expected_distances": want, "passes": auditPasses, "elapsed_ns": auditNS}); e != nil {
++		return e
++	}
++	cfg := corech.Config{TargetCoreVertices: len(protected), MaximumAverageCoreOutDegree: *maxDegree, WitnessSettledPerSearch: *localWitness, MaxContractions: 1000000, MaxArcs: 3000000, MaxWitnessSettled: *globalSettled, MaxWitnessEdges: *globalEdges}
++	limits := corech.QueryLimits{MaxSettled: 1000000, MaxEdges: 5000000, MaxUnpackedEdges: 1000000}
++	prep := map[string]any{}
++	indices := map[string]*corech.Index{}
++	for _, name := range []string{"identity", "core_ch"} {
++		c := cfg
++		if name == "identity" {
++			c.TargetCoreVertices = len(vertices)
++		}
++		runtime.GC()
++		before := experiment.SnapshotResources()
++		t := time.Now()
++		ctx, cancel := context.WithTimeout(context.Background(), *prepTimeout)
++		x, buildErr := corech.Build(ctx, vertices, d.Footpaths, protected, c)
++		elapsed := time.Since(t).Nanoseconds()
++		cancel()
++		after := experiment.SnapshotResources()
++		gcStart := time.Now()
++		runtime.GC()
++		gcNS := time.Since(gcStart).Nanoseconds()
++		retained := experiment.SnapshotResources()
++		snapshotStart := time.Now()
++		snap := x.Snapshot()
++		copyNS := time.Since(snapshotStart).Nanoseconds()
++		io, writeErr := experiment.WriteArtifact(filepath.Join(*out, name+"-index.json"), snap)
++		if writeErr != nil {
++			return writeErr
++		}
++		msg := ""
++		if buildErr != nil {
++			msg = buildErr.Error()
++		}
++		ok := buildErr == nil && elapsed <= prepTimeout.Nanoseconds()
++		prep[name] = map[string]any{"complete": ok, "error": msg, "elapsed_ns": elapsed, "allocated_bytes": after.Memory.TotalAllocBytes - before.Memory.TotalAllocBytes, "before": before, "after": after, "post_gc": retained, "post_gc_ns": gcNS, "post_gc_heap_delta_bytes": int64(retained.Memory.HeapAllocBytes) - int64(before.Memory.HeapAllocBytes), "snapshot_copy_ns": copyNS, "index_io": io, "stats": x.Stats(), "config": c}
++		if _, e = experiment.WriteArtifact(filepath.Join(*out, name+"-preparation.json"), prep[name]); e != nil {
++			return e
++		}
++		fmt.Printf("%s preparation complete=%v elapsed=%.3fs core=%d edges=%d shortcuts=%d\n", name, ok, float64(elapsed)/1e9, x.Stats().CoreVertices, x.Stats().CoreEdges, x.Stats().Shortcuts)
++		if !ok {
++			_, writeErr = experiment.WriteArtifact(filepath.Join(*out, "summary.json"), map[string]any{"success": false, "phase": "preparation", "provenance": prov, "dataset_sha256": dh, "queries_sha256": qh, "original_point_queries": len(w.Items), "maximum_duration": *maximum, "assessed_rows_per_pass": 0, "unavailable_rows_per_pass": len(anchors), "preparation": prep, "error": msg, "requested_rows_per_pass": len(anchors), "requested_cells_per_pass": len(anchors) * len(anchors), "resources": experiment.SnapshotResources()})
++			if writeErr != nil {
++				return writeErr
++			}
++			return fmt.Errorf("preparation incomplete; saved diagnostics")
++		}
++		indices[name] = x
++	}
++	measure := func(name, source string, targets []string, deadline time.Duration) record {
++		ctx, cancel := context.WithTimeout(context.Background(), deadline)
++		defer cancel()
++		var before, after runtime.MemStats
++		runtime.ReadMemStats(&before)
++		t := time.Now()
++		r, err := indices[name].SearchMany(ctx, source, targets, *maximum, limits)
++		coreNS := time.Since(t).Nanoseconds()
++		runtime.ReadMemStats(&after)
++		var budgetErr error
++		if err == nil && coreNS > deadline.Nanoseconds() {
++			budgetErr = fmt.Errorf("cooperative core duration exceeded: %w", context.DeadlineExceeded)
++		}
++		responseStart := time.Now()
++		rec := assessRow(r, err, budgetErr, source, targets, *maximum, raw, want)
++		rec.CoreNS, rec.AllocatedBytes = coreNS, after.TotalAlloc-before.TotalAlloc
++		rec.ResponseNS = coreNS + time.Since(responseStart).Nanoseconds()
++		return rec
++	}
++	summaries := []summary{}
++	allOK := true
++	throughputs := map[string][]float64{}
++	seed := w.Seed
++	for rep := 0; rep < *warmups+*reps; rep++ {
++		sources := append([]string{}, anchors...)
++		targets := append([]string{}, anchors...)
++		rng := rand.New(rand.NewPCG(seed.Uint64(), uint64(rep)))
++		rng.Shuffle(len(sources), func(i, j int) { sources[i], sources[j] = sources[j], sources[i] })
++		rng.Shuffle(len(targets), func(i, j int) { targets[i], targets[j] = targets[j], targets[i] })
++		names := []string{"identity", "core_ch"}
++		if rep%2 == 1 {
++			names[0], names[1] = names[1], names[0]
++		}
++		for _, name := range names {
++			p := pass{Algorithm: name, Repetition: rep, Warmup: rep < *warmups, Records: []record{}}
++			coreTimes, responseTimes := []float64{}, []float64{}
++			allocated := uint64(0)
++			errors := 0
++			start := time.Now()
++			for _, source := range sources {
++				r := measure(name, source, targets, *timeout)
++				p.Records = append(p.Records, r)
++				coreTimes = append(coreTimes, float64(r.CoreNS))
++				responseTimes = append(responseTimes, float64(r.ResponseNS))
++				allocated += r.AllocatedBytes
++				if !r.Complete {
++					errors++
++				}
++			}
++			makespan := time.Since(start).Nanoseconds()
++			file := fmt.Sprintf("%s-pass-%02d.json", name, rep)
++			io, e := experiment.WriteArtifact(filepath.Join(*out, file), p)
++			if e != nil {
++				return e
++			}
++			s := summary{Algorithm: name, Repetition: rep, Warmup: p.Warmup, File: file, SHA256: io.SHA256, Rows: len(sources), Cells: len(sources) * len(targets), Errors: errors, MakespanNS: makespan, SuccessfulRowsPerSecond: float64(len(sources)-errors) * 1e9 / float64(makespan), SuccessfulCellsPerSecond: float64((len(sources)-errors)*len(targets)) * 1e9 / float64(makespan), Core: evaluation.Summarize(coreTimes), Response: evaluation.Summarize(responseTimes), AllocatedBytes: allocated}
++			summaries = append(summaries, s)
++			if errors != 0 {
++				allOK = false
++			}
++			if !p.Warmup {
++				throughputs[name] = append(throughputs[name], s.SuccessfulRowsPerSecond)
++			}
++			fmt.Printf("%s pass=%d rows=%d errors=%d makespan=%.3fs\n", name, rep, len(sources), errors, float64(makespan)/1e9)
++		}
++	}
++	// Diagnostic partitions and forced deadlines retain every requested cell.
++	partitions := []any{}
++	deadlines := []any{}
++	for _, name := range []string{"identity", "core_ch"} {
++		for i, source := range anchors {
++			failed := measure(name, source, anchors, time.Nanosecond)
++			expectedFailure := expectedDeadlineFailure(failed, source, anchors, *maximum)
++			if !expectedFailure {
++				allOK = false
++			}
++			deadlines = append(deadlines, map[string]any{"algorithm": name, "expected_context_failure_observed": expectedFailure, "record": failed})
++			if i < 8 {
++				for start := 0; start < len(anchors); start += 17 {
++					ts := anchors[start:min(start+17, len(anchors))]
++					r := measure(name, source, ts, *timeout)
++					if !r.Complete {
++						allOK = false
++					}
++					partitions = append(partitions, map[string]any{"algorithm": name, "record": r})
++				}
++			}
++		}
++	}
++	if _, e = experiment.WriteArtifact(filepath.Join(*out, "target-partitions.json"), partitions); e != nil {
++		return e
++	}
++	if _, e = experiment.WriteArtifact(filepath.Join(*out, "forced-deadlines.json"), deadlines); e != nil {
++		return e
++	}
++	// Cancellation deterministically verifies that an incomplete generic build
++	// cannot be queried, without assuming a specific graph has two contractions.
++	start := time.Now()
++	ctx, cancel := context.WithCancel(context.Background())
++	cancel()
++	failed, fe := corech.Build(ctx, vertices, d.Footpaths, protected, cfg)
++	failedNS := time.Since(start).Nanoseconds()
++	rejected, re := failed.SearchMany(context.Background(), anchors[0], anchors, *maximum, limits)
++	shapeErr := validateRequestShape(rejected, anchors[0], anchors, *maximum)
++	failureOK := errors.Is(fe, context.Canceled) && !failed.Complete() && re != nil && !rejected.Complete && shapeErr == nil
++	allOK = allOK && failureOK
++	if _, e = experiment.WriteArtifact(filepath.Join(*out, "forced-preparation.json"), map[string]any{"expected_failure_observed": failureOK, "preparation_error_kind": coreErrorKind(fe), "query_request_shape_valid": shapeErr == nil, "elapsed_ns": failedNS, "snapshot": failed.Snapshot(), "attempted_query": rejected}); e != nil {
++		return e
++	}
++	cis := map[string]experiment.Interval{}
++	if *reps >= 2 {
++		for _, name := range []string{"identity", "core_ch"} {
++			ci, e := experiment.ThroughputConfidence(throughputs[name], seed.Uint64())
++			if e != nil {
++				return e
++			}
++			ci.Statistic = "whole_row_throughput_rows_per_second"
++			cis[name] = ci
++		}
++	}
++	_, e = experiment.WriteArtifact(filepath.Join(*out, "summary.json"), map[string]any{"success": allOK, "created_utc": time.Now().UTC().Format(time.RFC3339Nano), "provenance": prov, "dataset_sha256": dh, "queries_sha256": qh, "original_point_queries": len(w.Items), "workload_contract": "positive_directed_transfer_graph_protected_anchor_rows_v1", "maximum_duration": *maximum, "independent_audit_ns": auditNS, "independent_audit_passes": auditPasses, "independent_audit": "bounded Bellman-Ford fixed-point relaxation over original raw directed edges", "anchors": anchors, "protected_vertices": len(protected), "seed": seed, "seed_metadata": seed.Metadata(), "hardware": *hardware, "go_version": runtime.Version(), "goos": runtime.GOOS, "goarch": runtime.GOARCH, "logical_cpus": runtime.NumCPU(), "gomaxprocs": runtime.GOMAXPROCS(0), "repetitions": *reps, "warmups": *warmups, "input_load_ns": loadNS, "checker_preparation_ns": checkerNS, "preparation": prep, "query_limits": limits, "query_timeout_ns": timeout.Nanoseconds(), "preparation_timeout_ns": prepTimeout.Nanoseconds(), "passes": summaries, "throughput_intervals": cis, "resources_final": experiment.SnapshotResources(), "scope": []string{"Exact ordinary walking duration only. Core-to-core one-to-many row includes path unpacking. No transit algorithm or ULTRA shortcut preprocessing claim.", "Each row has len(anchors) target cells. Row latency is never divided by target count. Core excludes independent original-edge validation; response adds it. Pass makespan includes per-row memory instrumentation and record collection, excludes result serialization. Core allocation measurements exclude validator allocations. Every row, including failures, preserves and independently checks the exact request source/cap/target count/order. Partial raw witnesses are diagnostic only; forced deadlines require a genuine context deadline/cancellation error, not any failure.", "Identity graph uses same search routine as performance control, not correctness oracle. Expected distances come from independently formulated bounded Bellman-Ford raw-edge relaxation; all original paths checked. This establishes model-graph agreement, not physical walking truth.", "Post-GC heap differences are process-level approximations, not isolated ownership sizes. Snapshot copying/serialization separate. Confidence intervals resample three repetition units when repetitions=3 and are weak descriptive estimates.", "Only supplied positive directed footpaths are used. Timetable connections, boardings, transfer rules, accessibility, endpoint role caps and total walking budgets are not evaluated. Anchors come solely from registered tune OD endpoints; no heldout outcomes were read. Not a transit latency comparison, native ULTRA benchmark, within-request multiseed benchmark, or real-world Singapore service validation."}})
++	if e != nil {
++		return e
++	}
++	if !allOK {
++		return fmt.Errorf("one or more checks failed; all records retained")
++	}
++	return nil
++}
++func main() {
++	if e := run(); e != nil {
++		fmt.Fprintln(os.Stderr, e)
++		os.Exit(1)
++	}
++}
+--- a/cmd/familybench/main.go
++++ b/cmd/familybench/main.go
+@@ -9,6 +9,7 @@
+ 	"github.com/ertyoii/transit-routing-bench/evaluation"
+ 	"github.com/ertyoii/transit-routing-bench/experiment"
+ 	"github.com/ertyoii/transit-routing-bench/fixtures"
++	"github.com/ertyoii/transit-routing-bench/nativeinputprobe"
+ 	"github.com/ertyoii/transit-routing-bench/workloadseed"
+ 	"github.com/ertyoii/transit-routing-go/comparison"
+ 	"github.com/ertyoii/transit-routing-go/csa"
+@@ -155,6 +156,7 @@
+ }
+ 
+ func run() error {
++	inputOnly := flag.Bool("input-only", false, "parse and bind exact consuming-driver inputs; no constructor or search")
+ 	dp := flag.String("dataset", "", "normalized data")
+ 	fixture := flag.String("fixture", "", "pinned original-synthetic manifest; alternative to dataset and queries")
+ 	scopedPath := flag.String("scoped-config", "", "explicit configuration JSON required for scoped adapters")
+@@ -315,6 +317,9 @@
+ 	} else if *scopedPath != "" {
+ 		return fmt.Errorf("scoped configuration supplied for a legacy adapter")
+ 	}
++	if *inputOnly {
++		return nativeinputprobe.Emit("familybench", "point", dh, qh, scopedSHA, w.Seed, len(w.Items), *alg)
++	}
+ 	runtime.GC()
+ 	var before, after runtime.MemStats
+ 	runtime.ReadMemStats(&before)
+--- a/cmd/profilebench/main.go
++++ b/cmd/profilebench/main.go
+@@ -9,6 +9,7 @@
+ 	"github.com/ertyoii/transit-routing-bench/evaluation"
+ 	"github.com/ertyoii/transit-routing-bench/experiment"
+ 	"github.com/ertyoii/transit-routing-bench/fixtures"
++	"github.com/ertyoii/transit-routing-bench/nativeinputprobe"
+ 	"github.com/ertyoii/transit-routing-bench/workloadseed"
+ 	"github.com/ertyoii/transit-routing-go/model"
+ 	"github.com/ertyoii/transit-routing-go/paper"
+@@ -150,6 +151,7 @@
+ 	return nil
+ }
+ func run() error {
++	inputOnly := flag.Bool("input-only", false, "parse and bind exact consuming-driver inputs; no constructor or search")
+ 	selected := flag.String("algorithms", "profile_csa,range_raptor", "comma separated native algorithms; v2 non-CSA uses range_raptor only")
+ 	dataset := flag.String("dataset", "", "normalized dataset")
+ 	queries := flag.String("queries", "", "frozen profile queries, or registered point queries with -point-workload")
+@@ -220,6 +222,13 @@
+ 			return fmt.Errorf("invalid or over-budget verification window")
+ 		}
+ 	}
++	if *inputOnly {
++		schema := "profile"
++		if *pointWorkload {
++			schema = "profile-from-point"
++		}
++		return nativeinputprobe.Emit("profilebench", schema, dh, qh, "", w.Seed, len(w.Items), names)
++	}
+ 	provenance, e := experiment.Identify(".")
+ 	if e != nil {
+ 		return e
+--- a/cmd/tadbench/main.go
++++ b/cmd/tadbench/main.go
+@@ -8,6 +8,7 @@
+ 	"github.com/ertyoii/transit-routing-bench/evaluation"
+ 	"github.com/ertyoii/transit-routing-bench/experiment"
+ 	"github.com/ertyoii/transit-routing-bench/fixtures"
++	"github.com/ertyoii/transit-routing-bench/nativeinputprobe"
+ 	"github.com/ertyoii/transit-routing-bench/workloadseed"
+ 	"github.com/ertyoii/transit-routing-go/eacsa"
+ 	"github.com/ertyoii/transit-routing-go/model"
+@@ -89,6 +90,7 @@
+ 	return best
+ }
+ func run() error {
++	inputOnly := flag.Bool("input-only", false, "parse and bind exact consuming-driver inputs; no constructor or search")
+ 	selected := flag.String("algorithms", "ea_csa,raptor,tad", "comma separated native algorithms; v2 non-CSA uses tad or raptor,tad")
+ 	dataset := flag.String("dataset", "", "normalized model")
+ 	queries := flag.String("queries", "", "frozen workload")
+@@ -142,6 +144,9 @@
+ 		if e = i.Query.Validate(d); e != nil {
+ 			return e
+ 		}
++	}
++	if *inputOnly {
++		return nativeinputprobe.Emit("tadbench", "point", dh, qh, "", w.Seed, len(w.Items), names)
+ 	}
+ 	provenance, e := experiment.Identify(".")
+ 	if e != nil {
+--- a/cmd/ultrabench/main.go
++++ b/cmd/ultrabench/main.go
+@@ -8,6 +8,8 @@
+ 	"github.com/ertyoii/transit-routing-bench/evaluation"
+ 	"github.com/ertyoii/transit-routing-bench/experiment"
+ 	"github.com/ertyoii/transit-routing-bench/fixtures"
++	"github.com/ertyoii/transit-routing-bench/nativeinputprobe"
++	"github.com/ertyoii/transit-routing-bench/workloadseed"
+ 	"github.com/ertyoii/transit-routing-go/corech"
+ 	"github.com/ertyoii/transit-routing-go/model"
+ 	"github.com/ertyoii/transit-routing-go/paper"
+@@ -29,10 +31,10 @@
+ 	Query   model.Query `json:"query"`
+ }
+ type workload struct {
+-	Seed          uint64 `json:"seed"`
+-	Method        string `json:"method"`
+-	DatasetSHA256 string `json:"dataset_sha256"`
+-	Items         []item `json:"items"`
++	Seed          workloadseed.Seed `json:"seed"`
++	Method        string            `json:"method"`
++	DatasetSHA256 string            `json:"dataset_sha256"`
++	Items         []item            `json:"items"`
+ }
+ type record struct {
+ 	item
+@@ -75,6 +77,7 @@
+ 	return out
+ }
+ func run() error {
++	inputOnly := flag.Bool("input-only", false, "parse and bind exact consuming-driver inputs; no constructor or search")
+ 	dp := flag.String("dataset", "", "normalized dataset")
+ 	qp := flag.String("queries", "", "frozen queries")
+ 	out := flag.String("out-dir", "", "new directory")
+@@ -125,6 +128,9 @@
+ 		if e = i.Query.Validate(d); e != nil {
+ 			return e
+ 		}
++	}
++	if *inputOnly {
++		return nativeinputprobe.Emit("ultrabench", "point", dh, qh, "", work.Seed, len(work.Items), "ultra_native")
+ 	}
+ 	cfg := ultra.Config{ActiveRoutes: *activeRoutes, ReuseDepartures: *reuseDepartures, RouteMode: *routeMode, Core: corech.Config{MaximumAverageCoreOutDegree: 14, WitnessSettledPerSearch: 128, MaxContractions: 1000000, MaxArcs: 3000000, MaxWitnessSettled: 30000000, MaxWitnessEdges: 250000000}, Limits: ultra.Limits{MaxRuns: *maxRuns, MaxConnectionVisits: 100000000, MaxWalkSettled: 20000000, MaxWalkEdges: 100000000, MaxShortcuts: 1000000, MaxOutputLegs: 50000000}}
+ 	limits := ultra.Limits{MaxRuns: 1, MaxConnectionVisits: 5000000, MaxWalkSettled: 1000000, MaxWalkEdges: 5000000, MaxShortcuts: 1, MaxOutputLegs: 10000}
+@@ -236,7 +242,7 @@
+ 	success := true
+ 	for rep := 0; rep < *warmups+*reps; rep++ {
+ 		items := append([]item{}, work.Items...)
+-		rng := rand.New(rand.NewPCG(work.Seed, uint64(rep)))
++		rng := rand.New(rand.NewPCG(work.Seed.Uint64(), uint64(rep)))
+ 		rng.Shuffle(len(items), func(i, j int) { items[i], items[j] = items[j], items[i] })
+ 		names := []string{"ultra_raptor", "unaccelerated_raptor"}
+ 		if rep%2 != 0 {
+@@ -314,7 +320,7 @@
+ 	intervals := map[string]experiment.Interval{}
+ 	if *reps >= 2 {
+ 		for _, name := range []string{"ultra_raptor", "unaccelerated_raptor"} {
+-			ci, e := experiment.ThroughputConfidence(throughput[name], work.Seed)
++			ci, e := experiment.ThroughputConfidence(throughput[name], work.Seed.Uint64())
+ 			if e != nil {
+ 				return e
+ 			}
+@@ -322,7 +328,7 @@
+ 			intervals[name] = ci
+ 		}
+ 	}
+-	_, e = experiment.WriteArtifact(filepath.Join(*out, "summary.json"), map[string]any{"success": success, "success_definition": "No mismatched accepted comparison or unexpected query failure; unsupported cases remain unavailable, never counted correct.", "created_utc": time.Now().UTC().Format(time.RFC3339Nano), "provenance": prov, "dataset_sha256": dh, "queries_sha256": qh, "seed": work.Seed, "method": work.Method, "hardware": *hardware, "go_version": runtime.Version(), "goos": runtime.GOOS, "goarch": runtime.GOARCH, "logical_cpus": runtime.NumCPU(), "gomaxprocs": runtime.GOMAXPROCS(0), "input_load_ns": loadNS, "preparation": prep, "configuration": cfg, "query_limits": limits, "query_timeout_ns": deadline.Nanoseconds(), "preparation_timeout_ns": prepDeadline.Nanoseconds(), "repetitions": *reps, "warmups": *warmups, "passes": summaries, "comparisons": comparisons, "throughput_intervals": intervals, "resources_final": experiment.SnapshotResources(), "scope": []string{fmt.Sprintf("Independent canonical two-round ULTRA shortcut search and one-hop ULTRA-RAPTOR query. Route mode: %s. Active-route and departure-reuse flags are recorded explicitly. No Bucket-CH, event shortcuts or reference runtime parity claim.", cfg.RouteMode), "Access/egress/direct stay at frozen 600 seconds. Queries are accepted only when exact distance checks certify nonbinding endpoint walking limits, and intermediate limit covers query horizon. Other cases explicitly unsupported.", "Core includes capability proof, actual forward/reverse raw access/egress searches, timetable scan, shortcut relaxation and path reconstruction. Response adds independent full-itinerary validation. Loading, preprocessing and serialization are separate.", "Actual sequential makespan includes every supported/unsupported/failed attempt and instrumentation. Per-query latency is never makespan divided by batch size. Three shared-host repeats give weak descriptive confidence intervals.", "Full same-contract unaccelerated RAPTOR outputs retained for every query, including unsupported ULTRA cases. Bounded test evidence cannot guarantee bug freedom; real Singapore and regional gates remain closed."}})
++	_, e = experiment.WriteArtifact(filepath.Join(*out, "summary.json"), map[string]any{"success": success, "success_definition": "No mismatched accepted comparison or unexpected query failure; unsupported cases remain unavailable, never counted correct.", "created_utc": time.Now().UTC().Format(time.RFC3339Nano), "provenance": prov, "dataset_sha256": dh, "queries_sha256": qh, "seed": work.Seed, "seed_metadata": work.Seed.Metadata(), "method": work.Method, "hardware": *hardware, "go_version": runtime.Version(), "goos": runtime.GOOS, "goarch": runtime.GOARCH, "logical_cpus": runtime.NumCPU(), "gomaxprocs": runtime.GOMAXPROCS(0), "input_load_ns": loadNS, "preparation": prep, "configuration": cfg, "query_limits": limits, "query_timeout_ns": deadline.Nanoseconds(), "preparation_timeout_ns": prepDeadline.Nanoseconds(), "repetitions": *reps, "warmups": *warmups, "passes": summaries, "comparisons": comparisons, "throughput_intervals": intervals, "resources_final": experiment.SnapshotResources(), "scope": []string{fmt.Sprintf("Independent canonical two-round ULTRA shortcut search and one-hop ULTRA-RAPTOR query. Route mode: %s. Active-route and departure-reuse flags are recorded explicitly. No Bucket-CH, event shortcuts or reference runtime parity claim.", cfg.RouteMode), "Access/egress/direct stay at frozen 600 seconds. Queries are accepted only when exact distance checks certify nonbinding endpoint walking limits, and intermediate limit covers query horizon. Other cases explicitly unsupported.", "Core includes capability proof, actual forward/reverse raw access/egress searches, timetable scan, shortcut relaxation and path reconstruction. Response adds independent full-itinerary validation. Loading, preprocessing and serialization are separate.", "Actual sequential makespan includes every supported/unsupported/failed attempt and instrumentation. Per-query latency is never makespan divided by batch size. Three shared-host repeats give weak descriptive confidence intervals.", "Full same-contract unaccelerated RAPTOR outputs retained for every query, including unsupported ULTRA cases. Bounded test evidence cannot guarantee bug freedom; real Singapore and regional gates remain closed."}})
+ 	if e != nil {
+ 		return e
+ 	}
+--- /dev/null
++++ b/cmd/ultrabench/native_seed_test.go
+@@ -0,0 +1,84 @@
++package main
++
++import (
++	"bytes"
++	"crypto/sha256"
++	"encoding/binary"
++	"encoding/json"
++	"github.com/ertyoii/transit-routing-bench/workloadseed"
++	"math/rand/v2"
++	"os"
++	"path/filepath"
++	"strconv"
++	"testing"
++)
++
++// Test the REAL canonical ULTRA workload type and read function. No constructor
++// or search is involved. Generic point-schema success is not this evidence.
++func TestNativeULTRASeedParserSummaryAndRNG(t *testing.T) {
++	for _, raw := range []string{`0`, `9007199254740993`, `18446744073709551615`, `"phaseA-tune-seed"`} {
++		body := []byte(`{"seed":` + raw + `,"method":"input-only","dataset_sha256":"bound","items":[]}`)
++		path := filepath.Join(t.TempDir(), "workload.json")
++		if e := os.WriteFile(path, body, 0600); e != nil {
++			t.Fatal(e)
++		}
++		var w workload
++		hash, e := read(path, &w)
++		if e != nil {
++			t.Fatal(raw, e)
++		}
++		after, _ := os.ReadFile(path)
++		if !bytes.Equal(body, after) || hash == "" {
++			t.Fatal("read mutated original workload")
++		}
++		var scalar workloadseed.Seed
++		if e = json.Unmarshal([]byte(raw), &scalar); e != nil {
++			t.Fatal(e)
++		}
++		if w.Seed.Uint64() != scalar.Uint64() {
++			t.Fatal("wrong seed adapter")
++		}
++		expected := uint64(0)
++		if raw[0] != '"' {
++			expected, e = strconv.ParseUint(raw, 10, 64)
++			if e != nil {
++				t.Fatal(e)
++			}
++		}
++		if raw[0] == '"' {
++			sum := sha256.Sum256([]byte(workloadseed.Domain + "phaseA-tune-seed"))
++			expected = binary.BigEndian.Uint64(sum[:8])
++			if w.Seed.Metadata().SourceText != "phaseA-tune-seed" {
++				t.Fatal("text provenance lost")
++			}
++		}
++		a, b := rand.NewPCG(w.Seed.Uint64(), 17), rand.NewPCG(expected, 17)
++		for i := 0; i < 16; i++ {
++			if a.Uint64() != b.Uint64() {
++				t.Fatal("RNG changed")
++			}
++		}
++		summary, e := json.Marshal(map[string]any{"seed": w.Seed, "seed_metadata": w.Seed.Metadata()})
++		if e != nil {
++			t.Fatal(e)
++		}
++		var got struct {
++			Seed uint64                `json:"seed"`
++			Meta workloadseed.Metadata `json:"seed_metadata"`
++		}
++		if e = json.Unmarshal(summary, &got); e != nil || got.Seed != expected || got.Meta.Uint64 != expected {
++			t.Fatal("summary mapping", string(summary), e)
++		}
++		if raw[0] == '"' && got.Meta.SourceKind != "text" {
++			t.Fatal("summary dropped text kind")
++		}
++	}
++	for _, raw := range []string{`-1`, `1.0`, `1e2`, `null`, `true`, `""`, `"has space"`, `18446744073709551616`} {
++		path := filepath.Join(t.TempDir(), "bad.json")
++		os.WriteFile(path, []byte(`{"seed":`+raw+`,"method":"bad","dataset_sha256":"bound","items":[]}`), 0600)
++		var w workload
++		if _, e := read(path, &w); e == nil {
++			t.Fatal("invalid seed accepted", raw)
++		}
++	}
++}
+--- /dev/null
++++ b/nativeinputprobe/probe.go
+@@ -0,0 +1,22 @@
++// Package nativeinputprobe reports only strict parsing/binding on the actual
++// consuming driver path. It constructs no routing, checking or quality index.
++package nativeinputprobe
++
++import (
++	"encoding/json"
++	"fmt"
++	"github.com/ertyoii/transit-routing-bench/experiment"
++	"github.com/ertyoii/transit-routing-bench/workloadseed"
++	"os"
++)
++
++func Emit(driver, schema, datasetHash, queriesHash, configHash string, seed workloadseed.Seed, count int, selection any) error {
++	p, e := experiment.Identify(".")
++	if e != nil {
++		return e
++	}
++	if !p.RuntimeMatchesBuild {
++		return fmt.Errorf("input-only requires source-bound build")
++	}
++	return json.NewEncoder(os.Stdout).Encode(map[string]any{"event": "input_only_acceptance", "accepted": true, "driver": driver, "schema": schema, "dataset_sha256": datasetHash, "queries_sha256": queriesHash, "scoped_configuration_sha256": configHash, "seed_metadata": seed.Metadata(), "query_count": count, "selection": selection, "argv": os.Args[1:], "provenance": p, "scope": "actual_consuming_driver_parser_only_no_router_constructor_no_search_no_quality_no_outcomes"})
++}
+--- a/routing.lock.json
++++ b/routing.lock.json
+@@ -16,6 +16,7 @@
+     "csa/stratified.go": "b3c14867b7b360f20dfefd983cf4ce56a39ab4dd6de542bb8d16a2145aa095a2",
+     "csa/topk.go": "66920572e1d2c86de18ed4b336007452f2d562702738dee02eac6522a1934a6e",
+     "csa/trace.go": "076300f8a651677e1b75f6074b932267ca08c71dce8db3e6df7e54badbb140e9",
++    "docs/CAPPED_WALKING_CLOSURE.md": "b25f5c6ea9aa76b593604b9105ea375d87eb976692808bde63d5d80dc01a6fa5",
+     "docs/CONTRACT.md": "e6c07be14eaf0432ec1b04d82c4d4256b8cd26320697256ea9642e7a26063f9e",
+     "docs/CONTRACT_0.2.md": "54bdb3815b149ed85fe71f99715c9057d451088a5874356b43b96ba7d301325b",
+     "docs/NON_CSA_QUALIFICATION_V2.md": "007332781d723ea942cab08cf7eb8aa0bbc95569cf055743df7bbd7c7ac9f3d0",
+@@ -65,17 +66,17 @@
+     "strictjson/decode.go": "9a47b1a00708ca467f650ecdf192d794d0e7bf4cf7ff0082ba1f2fc4a699a163",
+     "tad/dijkstra.go": "8a78e2f6a92f182aed85fb061e793b94243afd1219f6664a6de47895cc35fb99",
+     "transfer/rules.go": "7cdd1b1fa67cdc27b6e16d00a51e52b5e8532dce3d35a1957b2e2da3b3e72172",
+-    "tripbased/bounded_walking.go": "e071918fcd8db1941a791108d0f54c787420fe76d3df161ae3ee7cc5e2e64eb9",
+-    "tripbased/capped_patterns.go": "640b9cd381f4995d3591315d11a3860e18cb7f8cd89db68a5a0d9641cea83c71",
++    "tripbased/bounded_walking.go": "0c9590242b29b11ee049b223c828e511a16785a6c3eda65a4d3810f5ff29fa34",
++    "tripbased/capped_patterns.go": "f63854c75da62f1dd48fdae03357a7ec2871bac8fda60b22d41778acd525740e",
+     "tripbased/capped_query.go": "507df1a5dbafc58bee3c06eeb6ee2220889611f9efc24677f0933fae694ff8e2",
+     "tripbased/capped_retained.go": "d961cf22818d4a30a471313267c4b6123dcf9f8b025dde118889f9e0c309ef50",
+     "tripbased/capped_source_domain.go": "b65293af7afcc05e3c8fd6c25d07d4ee618d1e49e91ca53cf3a6b1c9757179f8",
+     "tripbased/compact_links.go": "85f66d312381ee13a9a8617e85edd664c4fc3351e6961304e1a3f2cfc251fc09",
+-    "tripbased/cost_summary.go": "d686016f8800364ad351da9bab8a440d4daa50042b5c59164ea526c168ec649c",
+-    "tripbased/flash.go": "4888ff851c113d1ba9378166601bdf53accab7de1171428125dbac3d7ffaf7d0",
++    "tripbased/cost_summary.go": "41148da11b11ac8e38aca3150b847571bfa78a9bb06794ee70ca3dd701a60083",
++    "tripbased/flash.go": "fc6c1977c7952d31023106e2d651ed2dc9736fc2862ea412e795414f31cb2c28",
+     "tripbased/flash_breakpoints.go": "af8a66abc935a28445495a40a043b47d2f884a3b161779a254905f39e2af4bb3",
+     "tripbased/flash_capped.go": "4d0b3ae6b31ae1c0545e3db70339aefc1b8ae6fd4b0d9769004ab3bbb51d7cdb",
+-    "tripbased/flash_graph.go": "00206c170c2e0dd1b05126d5efd02d75ff05d6873c0434e57254b3620ee0914e",
++    "tripbased/flash_graph.go": "20c480930e61705b5f55d08397401bfecfd63c9b1358f11f543a0daaf354dea3",
+     "tripbased/flash_profile.go": "69a2a37340fe46c29ea70645b7e68457000bc73a1e9a806f9173be10d0c7fd5b",
+     "tripbased/flash_retained.go": "217ab3ffdcc071e44e3499fae1049fd0149132211f4fda60e6bd57a7fd5a95a8",
+     "tripbased/flash_rules.go": "ee3eced244a67a3e9f5007c16272a395c06f4da4bf830e936fe1b94dd9d063bc",
+@@ -104,17 +105,18 @@
+     "tripbased/testdata/trex_preprocessing/README.md": "adf2864b1c3b7cfdaeab663d5400b67e84fb47ea9b87b271b7f39513e2a99dae",
+     "tripbased/testdata/trex_preprocessing/fixtures.json": "3f90746a970f2d1303df8de5b7f15356e9e5f1b3937cbe7f36e6a462af9d487b",
+     "tripbased/transfer_storage.go": "5c3fff927b5143a367f5129e59701be4e2e9fe11e511a659c7e7078c12586c34",
+-    "tripbased/trex.go": "0cb573f7cf9cedcee86931596b67f2e9333bdf911d6b80ec34d6f359e49d1801",
++    "tripbased/trex.go": "8490e05e837dfac1f4943dd524c273083554537f37e557f4d99b3c0126ef4f76",
+     "tripbased/trex_cap_certificate.go": "6a7e9889828bd1c8e40f6b70d4193ce7bc949e2708d9d6b8ba7e244fe9b749c8",
+     "tripbased/trex_customization.go": "6b2014268e6b19b1ebb9d0744a23fafe745f3e6e2d591a712b8da0d8dbc89b40",
+-    "tripbased/trex_diagnostic.go": "6051dc45d12e3a535ab2f02bf31090d0cd386d5e22c408132dca13a6f43ac0d7",
++    "tripbased/trex_diagnostic.go": "d71a3c0c009a53e3fac7a9b30f654bc9710f0bcb18c9e18f3c71e9739f80bf89",
+     "tripbased/trex_fixed_transfer_cap_candidate.go": "0ee0759b01f95f839152f7b18659100e58ede0fe7926a02879898248aade50c4",
+     "tripbased/trex_partition.go": "5593e6b73434b7055884d00a205ec1567dd34204527819d44ab0b1e1570f76d3",
+     "tripbased/trex_proofs.go": "731aac977eeb4ddb81df4c6dd0c144e5f4b3a94697ce9a69814d4516210a60bd",
+-    "tripbased/trex_query.go": "b4ef29a963f239feb16b08e42a91dfc479c90c3ab479b7abea9df4b941cd7913",
++    "tripbased/trex_query.go": "86d8c09216d6051cf7c617ad19096f7124cba58792fb4c1656caa12f7b79f3cc",
+     "tripbased/trex_role_cap_candidate.go": "cb9f721b5bb3b1f42b26545c50cfefb0a79a73a1beedaaaa1dd3e3f2c7d38ba5",
+     "tripbased/trex_static_cap_certificate.go": "f586f354b5c231dcc6f74cf14e1a16f6a3aa2d3c01aa56c34a94395cfe602a50",
+     "tripbased/trex_storage.go": "05385e29ecb9dcb98baec226568f2a026b07a7c10149a38f5da0174102d74531",
++    "tripbased/trex_walking_scope.go": "1f6dcbcdb3743866f5fa698805c5235e41d99136a4dca7b346c298d83da765ca",
+     "tripbased/trex_work.go": "d1019998737e5d5df302dfc6134d6a039eac1949facc62cc44e18152ff8d9cf7",
+     "ultra/active.go": "2ff9e41a15f9877dbc1e4f147c0999bec7db8455372ff632c4d825df355dec93",
+     "ultra/capped.go": "2cd79a4b4e1397bb6120f6d747798e53f5789f86a70d0094ecfb1e525f763fca",
+@@ -136,7 +138,7 @@
+     "walking/transit/graph.go": "07ec2ac36311597ed657b686be7bc222ef3ac7ec022473d1f55729f5754b6fbe"
+   },
+   "module": "github.com/ertyoii/transit-routing-go",
+-  "origin": "V2 independent composed storage, exact full-file lock, optional no-default-control serving. Ancestry commit only, no remote push.",
+-  "source_sha256": "edd01b829f160af3198b335f4c26f78ebc3f5406af8d4a2e0020fc45f7ada657",
++  "origin": "Native auxiliary prep; targeted V1 66b bounded closure only when declared; current seed-fixed common driver/checker/selector retained. Local ancestry only, no remote push.",
++  "source_sha256": "6b4a5d13cbf915b8f184731c7b15ef989dedbcfa859cacb8e6da4fb444a2dea0",
+   "version": "v0.1.0-pre.3"
+ }
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/bounded_walking.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/bounded_walking.go
+@@ -32,9 +32,9 @@
+ 	return BoundedWalkingTBSnapshot{s.Profile, x.destination, x.removed, x.transferWalkingLimit, s}
+ }
+ 
+-// BuildBoundedWalkingTB retains the complete positive walking metric, but makes
+-// destination absorbing before computing it. This preserves detours that avoid
+-// destination when the unrestricted shortest path passes through destination.
++// BuildBoundedWalkingTB makes destination absorbing before preparing exact
++// transfer walks within transferWalkingLimit. Query-local exact endpoint walks
++// preserve larger Access/Egress/Direct caps and destination-avoiding detours.
+ // cfg must explicitly select level zero with no supplied partition. All existing
+ // preparation limits and fail-closed resource checks remain in force.
+ func BuildBoundedWalkingTB(ctx context.Context, d model.Dataset, destination string, transferWalkingLimit int64, cfg TREXConfig) (*BoundedWalkingTBIndex, error) {
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_patterns.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_patterns.go
+@@ -219,7 +219,10 @@
+ 	d.ID = fmt.Sprintf("%s::tp-absorbing-%x", x.sourceID, sha256.Sum256([]byte(c.Destination)))
+ 	x.conditionedID = d.ID
+ 	start := time.Now()
+-	p.base, err = BuildFlash(ctx, d, fc) // complete base links; no all-source profiles
++	// A complete walking block is bounded by its role, not by each raw edge.
++	// Keep the union of all four role radii for profiles, and only Transfer for
++	// the base links. The destination was made absorbing before either search.
++	p.base, err = buildFlashWithWalkingScope(ctx, d, fc, nil, &c.Walking)
+ 	p.snap.PhasesNS["conditioned_base_graph"] = time.Since(start).Nanoseconds()
+ 	if err != nil {
+ 		return
+@@ -350,7 +353,7 @@
+ 				return fmt.Errorf("fixed-cap TP incomplete: native profile segment guard")
+ 			}
+ 			view := *b.base
+-			view.cfg.TransferWalkingLimit = model.MaxServiceSecond // COMPLETE metric, not a radius truncation
++			view.cfg.TransferWalkingLimit = x.cfg.Walking.Transfer // matches the prepared fixed transfer radius
+ 			view.cfg.MaxQueuedSegments = min(view.cfg.MaxQueuedSegments, remaining)
+ 			wl := x.cfg.Walking
+ 			q := model.Query{ID: "fixed-cap-tp-profile", Origin: name, Destination: x.cfg.Destination, Departure: at, LatestArrival: upper, MaxBoardings: p.cfg.Profile.MaxBoardings, MaxLegs: x.cfg.ProfileMaxLegs, MaxWalkSeconds: x.cfg.ProfileMaxWalkingSeconds, Walking: &wl}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/cost_summary.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/cost_summary.go
+@@ -15,6 +15,9 @@
+ 		return json.RawMessage("null")
+ 	}
+ 	v := map[string]any{"complete": x.snap.Complete, "error": x.snap.Error, "stats": x.snap.Stats, "phases_ns": x.snap.PhasesNS, "lines": len(x.snap.Lines), "transfers": len(x.snap.Transfers), "witnesses": len(x.snap.Witnesses), "closure_diameter": x.snap.ClosureDiameter}
++	if x.snap.WalkingClosureLimit != nil {
++		v["walking_closure_limit"] = *x.snap.WalkingClosureLimit
++	}
+ 	if x.cfg.Semantics != "" {
+ 		v["profile"] = x.snap.Profile
+ 		v["transfer_construction"] = x.snap.TransferConstruction
+@@ -74,6 +77,10 @@
+ 	if x == nil {
+ 		return json.RawMessage("null")
+ 	}
+-	b, _ := json.Marshal(map[string]any{"complete": x.snap.Complete, "error": x.snap.Error, "stats": x.snap.Stats, "phases": x.snap.Phases, "lines": len(x.snap.Lines), "transfers": len(x.edges), "witnesses": x.proofs.count, "closure_diameter": x.snap.ClosureDiameter})
++	v := map[string]any{"complete": x.snap.Complete, "error": x.snap.Error, "stats": x.snap.Stats, "phases": x.snap.Phases, "lines": len(x.snap.Lines), "transfers": len(x.edges), "witnesses": x.proofs.count, "closure_diameter": x.snap.ClosureDiameter}
++	if x.snap.WalkingClosureLimit != nil {
++		v["walking_closure_limit"] = *x.snap.WalkingClosureLimit
++	}
++	b, _ := json.Marshal(v)
+ 	return b
+ }
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash.go
+@@ -119,6 +119,7 @@
+ }
+ 
+ type FlashSnapshot struct {
++	WalkingClosureLimit    *int64                    `json:"walking_closure_limit,omitempty"` // nil means the complete metric
+ 	TransferDiagnostics    *FlashTransferDiagnostics `json:"transfer_diagnostics,omitempty"`
+ 	OmittedTransferRecords int                       `json:"omitted_transfer_records,omitempty"`
+ 	TransferConstruction   string                    `json:"transfer_construction,omitempty"`
+@@ -184,6 +185,10 @@
+ func (x *FlashIndex) Complete() bool { return x.snap.Complete }
+ func (x *FlashIndex) Snapshot() FlashSnapshot {
+ 	s := x.snap
++	if s.WalkingClosureLimit != nil {
++		limit := *s.WalkingClosureLimit
++		s.WalkingClosureLimit = &limit
++	}
+ 	if x.cfg.Semantics == "static_stop_pair_v1" {
+ 		diagnostic := x.ruleTransferDiagnostics()
+ 		s.TransferDiagnostics = &diagnostic
+@@ -228,7 +233,13 @@
+ func BuildFlash(ctx context.Context, d model.Dataset, c FlashConfig) (*FlashIndex, error) {
+ 	return buildFlash(ctx, d, c, nil)
+ }
+-func buildFlash(ctx context.Context, d model.Dataset, c FlashConfig, sink func(FlashWitness) error) (x *FlashIndex, err error) {
++func buildFlash(ctx context.Context, d model.Dataset, c FlashConfig, sink func(FlashWitness) error) (*FlashIndex, error) {
++	return buildFlashWithWalkingScope(ctx, d, c, sink, nil)
++}
++
++// Only the destination/fixed-role TP builders may supply a bounded scope.
++// Public FLASH and ordinary TP retain their complete nonbinding metric.
++func buildFlashWithWalkingScope(ctx context.Context, d model.Dataset, c FlashConfig, sink func(FlashWitness) error, walking *model.WalkingLimits) (x *FlashIndex, err error) {
+ 	x = &FlashIndex{profileSink: sink, cfg: c, ids: map[string]int{}, snap: FlashSnapshot{Profile: "flash_tb_positive_transitive_nonbinding_v1", Config: c, Transfers: []FlashTransfer{}, Witnesses: []FlashWitness{}, PhasesNS: map[string]int64{}}}
+ 	defer func() {
+ 		x.snap.Complete = err == nil
+@@ -318,12 +329,22 @@
+ 	}
+ 	w := &flashWork{ctx, x}
+ 	start := time.Now()
+-	if err = x.closeWalks(d, w); err != nil {
++	var closureLimit *int64
++	if walking != nil {
++		limit := max(walking.Access, walking.Transfer, walking.Egress, walking.Direct)
++		closureLimit = &limit
++		x.snap.WalkingClosureLimit = &limit
++	}
++	if err = x.closeWalksWithin(d, w, closureLimit); err != nil {
+ 		return
+ 	}
+ 	x.snap.PhasesNS["walking_closure"] = time.Since(start).Nanoseconds()
+ 	start = time.Now()
+-	x.base, err = New(ctx, d, Config{StrictLineOrder: true, TransferWalkingLimit: x.snap.ClosureDiameter, MaxTransfers: l.MaxTransfers, MaxQueuedSegments: l.MaxQuerySegments})
++	transferLimit := x.snap.ClosureDiameter
++	if walking != nil {
++		transferLimit = walking.Transfer
++	}
++	x.base, err = New(ctx, d, Config{StrictLineOrder: true, TransferWalkingLimit: transferLimit, MaxTransfers: l.MaxTransfers, MaxQueuedSegments: l.MaxQuerySegments})
+ 	if err != nil {
+ 		return
+ 	}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_graph.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_graph.go
+@@ -25,6 +25,14 @@
+ func (h *flashHeap) Push(v any)   { *h = append(*h, v.(flashHeapItem)) }
+ func (h *flashHeap) Pop() any     { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
+ func (x *FlashIndex) closeWalks(d model.Dataset, w *flashWork) error {
++	return x.closeWalksWithin(d, w, nil)
++}
++
++// closeWalksWithin retains exact directed shortest paths of length <= limit.
++// A positive path within the radius has every prefix within that radius, so
++// pruning only over-radius relaxations cannot discard a feasible endpoint or
++// intermediate vertex. Nil preserves the complete legacy metric and guards.
++func (x *FlashIndex) closeWalksWithin(d model.Dataset, w *flashWork, limit *int64) error {
+ 	n := len(x.names)
+ 	adj := make([][]model.Footpath, n)
+ 	for _, e := range d.Footpaths {
+@@ -57,6 +65,9 @@
+ 				}
+ 				v := x.ids[e.To]
+ 				value := u.distance + e.Duration
++				if limit != nil && value > *limit {
++					continue
++				}
+ 				old, ok := dist[v]
+ 				if !ok || value < old {
+ 					dist[v] = value
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex.go
+@@ -86,6 +86,7 @@
+ 	Work           int    `json:"work"`
+ }
+ type TREXSnapshot struct {
++	WalkingClosureLimit     *int64               `json:"walking_closure_limit,omitempty"` // nil means the complete metric
+ 	FixedTransferWalkingCap *int64               `json:"fixed_transfer_walking_cap,omitempty"`
+ 	Profile                 string               `json:"profile"`
+ 	Complete                bool                 `json:"complete"`
+@@ -181,8 +182,8 @@
+ // graph. Ranks and overlays remain active; per-query replay and independent
+ // frontier certification are still required. Query transfer caps must match.
+ func BuildTREXFixedTransferCapRankedCandidate(ctx context.Context, d model.Dataset, cfg TREXConfig, transferWalkingCap int64) (*TREXIndex, error) {
+-	if transferWalkingCap < 0 {
+-		return nil, fmt.Errorf("fixed transfer walking cap must be nonnegative")
++	if transferWalkingCap < 0 || transferWalkingCap > model.MaxServiceSecond {
++		return nil, fmt.Errorf("fixed transfer walking cap must be within the service-time domain")
+ 	}
+ 	return buildTREXPolicy(ctx, d, cfg, &transferWalkingCap, true)
+ }
+@@ -278,7 +279,13 @@
+ 	}
+ 	err = x.phase("walking_closure", func() error {
+ 		carrier := &FlashIndex{names: x.names, ids: x.ids, cfg: FlashConfig{Limits: FlashLimits{MaxWork: l.MaxWork, MaxClosurePaths: l.MaxClosurePaths, MaxWalkSettled: l.MaxWalkSettled}}, snap: FlashSnapshot{Stats: FlashStats{Work: x.snap.Stats.Work}}}
+-		e := carrier.closeWalks(x.base.p.Data, &flashWork{ctx, carrier})
++		// Only the explicit fixed-transfer-cap adapters use a radius. Access,
++		// direct and egress remain query-local and can exceed that radius.
++		if transferWalkLimit != nil {
++			limit := *transferWalkLimit
++			x.snap.WalkingClosureLimit = &limit
++		}
++		e := carrier.closeWalksWithin(x.base.p.Data, &flashWork{ctx, carrier}, transferWalkLimit)
+ 		x.snap.Stats.Work = carrier.snap.Stats.Work
+ 		x.snap.Stats.ClosurePaths = carrier.snap.Stats.ClosurePaths
+ 		x.snap.Stats.WalkSettled = carrier.snap.Stats.WalkSettled
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_diagnostic.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_diagnostic.go
+@@ -4,6 +4,7 @@
+ // remain in Snapshot; this view never expands or copies those large collections.
+ // Call only after preparation returns, as with Snapshot.
+ type TREXDiagnostic struct {
++	WalkingClosureLimit     *int64               `json:"walking_closure_limit,omitempty"`
+ 	FixedTransferWalkingCap *int64               `json:"fixed_transfer_walking_cap,omitempty"`
+ 	Profile                 string               `json:"profile"`
+ 	Complete                bool                 `json:"complete"`
+@@ -25,6 +26,10 @@
+ 		RetainedTransfers: len(x.edges), RetainedWitnesses: x.proofs.count,
+ 		PartitionStops: len(s.Partition.Cells), WalkingComponents: s.Partition.Components,
+ 		Phases: make(map[string]TREXPhase, len(s.Phases))}
++	if s.WalkingClosureLimit != nil {
++		limit := *s.WalkingClosureLimit
++		out.WalkingClosureLimit = &limit
++	}
+ 	if x.staticRulesCandidate && x.transferWalkLimit != nil {
+ 		cap := *x.transferWalkLimit
+ 		out.FixedTransferWalkingCap = &cap
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_query.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_query.go
+@@ -10,18 +10,20 @@
+ )
+ 
+ type TREXQueryStats struct {
+-	Mode           string `json:"mode"`
+-	Work           int    `json:"work"`
+-	Rounds         int    `json:"rounds"`
+-	QueuedSegments int    `json:"queued_segments"`
+-	SplitSegments  int    `json:"split_segments"`
+-	TargetEvents   int    `json:"target_events"`
+-	TargetPruned   int    `json:"target_pruned"`
+-	TransferVisits int    `json:"transfer_visits"`
+-	RankTests      int    `json:"rank_tests"`
+-	RankRejected   int    `json:"rank_rejected"`
+-	ReachedUpdates int    `json:"reached_updates"`
+-	UnpackedLegs   int    `json:"unpacked_legs"`
++	EndpointWalkWork    int    `json:"endpoint_walk_work,omitempty"`
++	EndpointWalkSettled int    `json:"endpoint_walk_settled,omitempty"`
++	Mode                string `json:"mode"`
++	Work                int    `json:"work"`
++	Rounds              int    `json:"rounds"`
++	QueuedSegments      int    `json:"queued_segments"`
++	SplitSegments       int    `json:"split_segments"`
++	TargetEvents        int    `json:"target_events"`
++	TargetPruned        int    `json:"target_pruned"`
++	TransferVisits      int    `json:"transfer_visits"`
++	RankTests           int    `json:"rank_tests"`
++	RankRejected        int    `json:"rank_rejected"`
++	ReachedUpdates      int    `json:"reached_updates"`
++	UnpackedLegs        int    `json:"unpacked_legs"`
+ }
+ type TREXResult struct {
+ 	Journeys []model.Journey `json:"journeys"`
+@@ -59,6 +61,12 @@
+ 	// original unrestricted customization is not a cap-preservation proof.
+ 	roleCaps := bounded || mode == "overlay-role-caps"
+ 	overlay := mode == "overlay" || mode == "overlay-role-caps"
++	if x.snap.WalkingClosureLimit != nil && !roleCaps {
++		// Preserve the original public nonbinding entrypoints on fixed-cap
++		// indexes. Their certification needs the COMPLETE metric, never the
++		// bounded transfer diameter. The immutable fallback is charged here.
++		return x.searchTREXCompleteWalking(ctx, q, mode, capCertificate)
++	}
+ 	if bounded || capCertificate {
+ 		err = x.checkTREXResources(ctx, q)
+ 	} else {
+@@ -122,8 +130,22 @@
+ 		return nil
+ 	}
+ 	bestArrival := q.LatestArrival + 1
+-	for wi := range x.walks[source] {
+-		w := &x.walks[source][wi]
++	access := x.walks[source]
++	var egressCache map[int]*paper.Path
++	if x.snap.WalkingClosureLimit != nil {
++		access, err = x.endpointWalks(ctx, source, -1, max(q.Walking.Access, q.Walking.Direct), target, charge, &out.Stats)
++		if err != nil {
++			return
++		}
++		// A shortest path ending at destination cannot pass through it and
++		// leave again (positive edges). Prepared paths already suffice when
++		// Egress fits the transfer radius; only a larger role needs lazy work.
++		if q.Walking.Egress > *x.snap.WalkingClosureLimit {
++			egressCache = map[int]*paper.Path{}
++		}
++	}
++	for wi := range access {
++		w := &access[wi]
+ 		if err = charge(); err != nil {
+ 			return
+ 		}
+@@ -216,6 +238,23 @@
+ 					break
+ 				}
+ 				p := x.walkMap[x.ids[c.To]][target]
++				if egressCache != nil {
++					from := x.ids[c.To]
++					var exists bool
++					p, exists = egressCache[from]
++					if !exists {
++						p = nil
++						var paths []paper.Path
++						paths, err = x.endpointWalks(ctx, from, target, q.Walking.Egress, target, charge, &out.Stats)
++						if err != nil {
++							return
++						}
++						if len(paths) > 0 {
++							p = &paths[0]
++						}
++						egressCache[from] = p
++					}
++				}
+ 				if p != nil && (!roleCaps || p.Duration <= q.Walking.Egress) && c.Arrival+p.Duration < arrival {
+ 					arrival = c.Arrival + p.Duration
+ 					found = s.node
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_walking_scope.go
+@@ -0,0 +1,138 @@
++package tripbased
++
++import (
++	"container/heap"
++	"context"
++	"fmt"
++	"sort"
++
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/paper"
++)
++
++// endpointWalks is query-local: only explicit fixed-transfer-cap adapters use it.
++// target < 0 emits every reachable endpoint; otherwise it emits only target.
++// Every raw walking vertex remains available as an intermediate. Positive edges
++// make radius pruning exact and mean reaching stopAt is terminal, never a new
++// walking-block origin. Output paths retain raw directed edge provenance.
++func (x *TREXIndex) endpointWalks(ctx context.Context, source, target int, limit int64, stopAt int, charge func() error, stats *TREXQueryStats) (out []paper.Path, err error) {
++	before := stats.Work
++	defer func() { stats.EndpointWalkWork += stats.Work - before }()
++	dist := map[int]int64{source: 0}
++	prev := map[int]model.Footpath{}
++	h := &flashHeap{{source, 0}}
++	found := false
++	for h.Len() > 0 {
++		if err = charge(); err != nil {
++			return nil, err
++		}
++		u := heap.Pop(h).(flashHeapItem)
++		if dist[u.v] != u.distance {
++			continue
++		}
++		if stats.EndpointWalkSettled >= x.cfg.Limits.MaxWalkSettled {
++			return nil, fmt.Errorf("T-REX incomplete: query walking settlement budget exhausted")
++		}
++		stats.EndpointWalkSettled++
++		if u.v == target {
++			found = true
++			break
++		}
++		if u.v == stopAt {
++			continue
++		}
++		for _, edge := range x.base.p.Outgoing[x.names[u.v]] {
++			if err = charge(); err != nil {
++				return nil, err
++			}
++			value := u.distance + edge.Duration
++			if value > limit {
++				continue
++			}
++			v := x.ids[edge.To]
++			old, ok := dist[v]
++			if !ok || value < old {
++				dist[v] = value
++				prev[v] = edge
++				heap.Push(h, flashHeapItem{v, value})
++			}
++		}
++	}
++	stops := []int{}
++	if target >= 0 {
++		if found {
++			stops = append(stops, target)
++		}
++	} else {
++		for v := range dist {
++			stops = append(stops, v)
++		}
++		sort.Ints(stops)
++	}
++	for _, v := range stops {
++		if err = charge(); err != nil {
++			return nil, err
++		}
++		p := paper.Path{To: x.names[v], Duration: dist[v], Edges: []model.Footpath{}}
++		for u := v; u != source; {
++			if err = charge(); err != nil {
++				return nil, err
++			}
++			edge := prev[u]
++			p.Edges = append(p.Edges, edge)
++			u = x.ids[edge.From]
++		}
++		for i, j := 0, len(p.Edges)-1; i < j; i, j = i+1, j-1 {
++			p.Edges[i], p.Edges[j] = p.Edges[j], p.Edges[i]
++		}
++		out = append(out, p)
++	}
++	return out, ctx.Err()
++}
++
++// A fixed-cap index still exposes the original nonbinding query entrypoints.
++// Reconstruct their original complete walking metric locally instead of ever
++// using a truncated diameter as a nonbinding certificate. This fallback is not
++// used by the capped adapters and never changes the prepared index.
++func (x *TREXIndex) searchTREXCompleteWalking(ctx context.Context, q model.Query, mode string, capCertificate bool) (out TREXResult, err error) {
++	out.Journeys = []model.Journey{}
++	out.Stats.Mode = mode
++	defer func() {
++		out.Complete = err == nil
++		if err != nil {
++			out.Error = err.Error()
++		}
++	}()
++	if err = x.checkTREXResources(ctx, q); err != nil {
++		return
++	}
++	l := x.cfg.Limits
++	// Original closure construction began immediately after timetable work.
++	startWork := x.snap.Phases["timetable"].Work
++	maxWork := startWork + min(l.MaxWork-startWork, l.MaxQueryWork)
++	carrier := &FlashIndex{names: x.names, ids: x.ids,
++		cfg:  FlashConfig{Limits: FlashLimits{MaxWork: maxWork, MaxClosurePaths: l.MaxClosurePaths, MaxWalkSettled: l.MaxWalkSettled}},
++		snap: FlashSnapshot{Stats: FlashStats{Work: startWork}}}
++	err = carrier.closeWalks(x.base.p.Data, &flashWork{ctx, carrier})
++	work := carrier.snap.Stats.Work - startWork
++	out.Stats.Work, out.Stats.EndpointWalkWork = work, work
++	out.Stats.EndpointWalkSettled = carrier.snap.Stats.WalkSettled
++	if err != nil {
++		return
++	}
++	if work >= l.MaxQueryWork {
++		err = fmt.Errorf("T-REX incomplete: query work budget exhausted by complete walking fallback")
++		return
++	}
++	view := *x
++	view.snap = x.snap
++	view.snap.WalkingClosureLimit = nil // terminates the fallback, not the fixed transfer policy
++	view.snap.ClosureDiameter = carrier.snap.ClosureDiameter
++	view.walks, view.walkMap = carrier.walks, carrier.walkMap
++	view.cfg.Limits.MaxQueryWork -= work
++	out, err = view.searchTREXForCertificate(ctx, q, mode, capCertificate)
++	out.Stats.Work += work
++	out.Stats.EndpointWalkWork += work
++	out.Stats.EndpointWalkSettled += carrier.snap.Stats.WalkSettled
++	return
++}

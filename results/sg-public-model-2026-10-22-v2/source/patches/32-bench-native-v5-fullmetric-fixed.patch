@@ -1,0 +1,510 @@
+--- a/routing.lock.json
++++ b/routing.lock.json
+@@ -16,7 +16,6 @@
+     "csa/stratified.go": "b3c14867b7b360f20dfefd983cf4ce56a39ab4dd6de542bb8d16a2145aa095a2",
+     "csa/topk.go": "66920572e1d2c86de18ed4b336007452f2d562702738dee02eac6522a1934a6e",
+     "csa/trace.go": "076300f8a651677e1b75f6074b932267ca08c71dce8db3e6df7e54badbb140e9",
+-    "docs/CAPPED_WALKING_CLOSURE.md": "b25f5c6ea9aa76b593604b9105ea375d87eb976692808bde63d5d80dc01a6fa5",
+     "docs/CONTRACT.md": "e6c07be14eaf0432ec1b04d82c4d4256b8cd26320697256ea9642e7a26063f9e",
+     "docs/CONTRACT_0.2.md": "54bdb3815b149ed85fe71f99715c9057d451088a5874356b43b96ba7d301325b",
+     "docs/NON_CSA_QUALIFICATION_V2.md": "007332781d723ea942cab08cf7eb8aa0bbc95569cf055743df7bbd7c7ac9f3d0",
+@@ -66,17 +65,17 @@
+     "strictjson/decode.go": "9a47b1a00708ca467f650ecdf192d794d0e7bf4cf7ff0082ba1f2fc4a699a163",
+     "tad/dijkstra.go": "8a78e2f6a92f182aed85fb061e793b94243afd1219f6664a6de47895cc35fb99",
+     "transfer/rules.go": "7cdd1b1fa67cdc27b6e16d00a51e52b5e8532dce3d35a1957b2e2da3b3e72172",
+-    "tripbased/bounded_walking.go": "0c9590242b29b11ee049b223c828e511a16785a6c3eda65a4d3810f5ff29fa34",
+-    "tripbased/capped_patterns.go": "f63854c75da62f1dd48fdae03357a7ec2871bac8fda60b22d41778acd525740e",
++    "tripbased/bounded_walking.go": "e071918fcd8db1941a791108d0f54c787420fe76d3df161ae3ee7cc5e2e64eb9",
++    "tripbased/capped_patterns.go": "640b9cd381f4995d3591315d11a3860e18cb7f8cd89db68a5a0d9641cea83c71",
+     "tripbased/capped_query.go": "507df1a5dbafc58bee3c06eeb6ee2220889611f9efc24677f0933fae694ff8e2",
+     "tripbased/capped_retained.go": "d961cf22818d4a30a471313267c4b6123dcf9f8b025dde118889f9e0c309ef50",
+     "tripbased/capped_source_domain.go": "b65293af7afcc05e3c8fd6c25d07d4ee618d1e49e91ca53cf3a6b1c9757179f8",
+     "tripbased/compact_links.go": "85f66d312381ee13a9a8617e85edd664c4fc3351e6961304e1a3f2cfc251fc09",
+-    "tripbased/cost_summary.go": "41148da11b11ac8e38aca3150b847571bfa78a9bb06794ee70ca3dd701a60083",
+-    "tripbased/flash.go": "fc6c1977c7952d31023106e2d651ed2dc9736fc2862ea412e795414f31cb2c28",
++    "tripbased/cost_summary.go": "d686016f8800364ad351da9bab8a440d4daa50042b5c59164ea526c168ec649c",
++    "tripbased/flash.go": "4888ff851c113d1ba9378166601bdf53accab7de1171428125dbac3d7ffaf7d0",
+     "tripbased/flash_breakpoints.go": "af8a66abc935a28445495a40a043b47d2f884a3b161779a254905f39e2af4bb3",
+     "tripbased/flash_capped.go": "4d0b3ae6b31ae1c0545e3db70339aefc1b8ae6fd4b0d9769004ab3bbb51d7cdb",
+-    "tripbased/flash_graph.go": "20c480930e61705b5f55d08397401bfecfd63c9b1358f11f543a0daaf354dea3",
++    "tripbased/flash_graph.go": "00206c170c2e0dd1b05126d5efd02d75ff05d6873c0434e57254b3620ee0914e",
+     "tripbased/flash_profile.go": "69a2a37340fe46c29ea70645b7e68457000bc73a1e9a806f9173be10d0c7fd5b",
+     "tripbased/flash_retained.go": "217ab3ffdcc071e44e3499fae1049fd0149132211f4fda60e6bd57a7fd5a95a8",
+     "tripbased/flash_rules.go": "ee3eced244a67a3e9f5007c16272a395c06f4da4bf830e936fe1b94dd9d063bc",
+@@ -105,18 +104,17 @@
+     "tripbased/testdata/trex_preprocessing/README.md": "adf2864b1c3b7cfdaeab663d5400b67e84fb47ea9b87b271b7f39513e2a99dae",
+     "tripbased/testdata/trex_preprocessing/fixtures.json": "3f90746a970f2d1303df8de5b7f15356e9e5f1b3937cbe7f36e6a462af9d487b",
+     "tripbased/transfer_storage.go": "5c3fff927b5143a367f5129e59701be4e2e9fe11e511a659c7e7078c12586c34",
+-    "tripbased/trex.go": "8490e05e837dfac1f4943dd524c273083554537f37e557f4d99b3c0126ef4f76",
++    "tripbased/trex.go": "0cb573f7cf9cedcee86931596b67f2e9333bdf911d6b80ec34d6f359e49d1801",
+     "tripbased/trex_cap_certificate.go": "6a7e9889828bd1c8e40f6b70d4193ce7bc949e2708d9d6b8ba7e244fe9b749c8",
+     "tripbased/trex_customization.go": "6b2014268e6b19b1ebb9d0744a23fafe745f3e6e2d591a712b8da0d8dbc89b40",
+-    "tripbased/trex_diagnostic.go": "d71a3c0c009a53e3fac7a9b30f654bc9710f0bcb18c9e18f3c71e9739f80bf89",
++    "tripbased/trex_diagnostic.go": "6051dc45d12e3a535ab2f02bf31090d0cd386d5e22c408132dca13a6f43ac0d7",
+     "tripbased/trex_fixed_transfer_cap_candidate.go": "0ee0759b01f95f839152f7b18659100e58ede0fe7926a02879898248aade50c4",
+     "tripbased/trex_partition.go": "5593e6b73434b7055884d00a205ec1567dd34204527819d44ab0b1e1570f76d3",
+     "tripbased/trex_proofs.go": "731aac977eeb4ddb81df4c6dd0c144e5f4b3a94697ce9a69814d4516210a60bd",
+-    "tripbased/trex_query.go": "86d8c09216d6051cf7c617ad19096f7124cba58792fb4c1656caa12f7b79f3cc",
++    "tripbased/trex_query.go": "b4ef29a963f239feb16b08e42a91dfc479c90c3ab479b7abea9df4b941cd7913",
+     "tripbased/trex_role_cap_candidate.go": "cb9f721b5bb3b1f42b26545c50cfefb0a79a73a1beedaaaa1dd3e3f2c7d38ba5",
+     "tripbased/trex_static_cap_certificate.go": "f586f354b5c231dcc6f74cf14e1a16f6a3aa2d3c01aa56c34a94395cfe602a50",
+     "tripbased/trex_storage.go": "05385e29ecb9dcb98baec226568f2a026b07a7c10149a38f5da0174102d74531",
+-    "tripbased/trex_walking_scope.go": "1f6dcbcdb3743866f5fa698805c5235e41d99136a4dca7b346c298d83da765ca",
+     "tripbased/trex_work.go": "d1019998737e5d5df302dfc6134d6a039eac1949facc62cc44e18152ff8d9cf7",
+     "ultra/active.go": "2ff9e41a15f9877dbc1e4f147c0999bec7db8455372ff632c4d825df355dec93",
+     "ultra/capped.go": "2cd79a4b4e1397bb6120f6d747798e53f5789f86a70d0094ecfb1e525f763fca",
+@@ -138,7 +136,7 @@
+     "walking/transit/graph.go": "07ec2ac36311597ed657b686be7bc222ef3ac7ec022473d1f55729f5754b6fbe"
+   },
+   "module": "github.com/ertyoii/transit-routing-go",
+-  "origin": "Native auxiliary prep; targeted V1 66b bounded closure only when declared; current seed-fixed common driver/checker/selector retained. Local ancestry only, no remote push.",
+-  "source_sha256": "6b4a5d13cbf915b8f184731c7b15ef989dedbcfa859cacb8e6da4fb444a2dea0",
++  "origin": "Native auxiliary fullmetric-fixed; targeted V1 66b bounded closure only when declared; current seed-fixed common driver/checker/selector retained. Local ancestry only, no remote push.",
++  "source_sha256": "edd01b829f160af3198b335f4c26f78ebc3f5406af8d4a2e0020fc45f7ada657",
+   "version": "v0.1.0-pre.3"
+ }
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/bounded_walking.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/bounded_walking.go
+@@ -32,9 +32,9 @@
+ 	return BoundedWalkingTBSnapshot{s.Profile, x.destination, x.removed, x.transferWalkingLimit, s}
+ }
+ 
+-// BuildBoundedWalkingTB makes destination absorbing before preparing exact
+-// transfer walks within transferWalkingLimit. Query-local exact endpoint walks
+-// preserve larger Access/Egress/Direct caps and destination-avoiding detours.
++// BuildBoundedWalkingTB retains the complete positive walking metric, but makes
++// destination absorbing before computing it. This preserves detours that avoid
++// destination when the unrestricted shortest path passes through destination.
+ // cfg must explicitly select level zero with no supplied partition. All existing
+ // preparation limits and fail-closed resource checks remain in force.
+ func BuildBoundedWalkingTB(ctx context.Context, d model.Dataset, destination string, transferWalkingLimit int64, cfg TREXConfig) (*BoundedWalkingTBIndex, error) {
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_patterns.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_patterns.go
+@@ -219,10 +219,7 @@
+ 	d.ID = fmt.Sprintf("%s::tp-absorbing-%x", x.sourceID, sha256.Sum256([]byte(c.Destination)))
+ 	x.conditionedID = d.ID
+ 	start := time.Now()
+-	// A complete walking block is bounded by its role, not by each raw edge.
+-	// Keep the union of all four role radii for profiles, and only Transfer for
+-	// the base links. The destination was made absorbing before either search.
+-	p.base, err = buildFlashWithWalkingScope(ctx, d, fc, nil, &c.Walking)
++	p.base, err = BuildFlash(ctx, d, fc) // complete base links; no all-source profiles
+ 	p.snap.PhasesNS["conditioned_base_graph"] = time.Since(start).Nanoseconds()
+ 	if err != nil {
+ 		return
+@@ -353,7 +350,7 @@
+ 				return fmt.Errorf("fixed-cap TP incomplete: native profile segment guard")
+ 			}
+ 			view := *b.base
+-			view.cfg.TransferWalkingLimit = x.cfg.Walking.Transfer // matches the prepared fixed transfer radius
++			view.cfg.TransferWalkingLimit = model.MaxServiceSecond // COMPLETE metric, not a radius truncation
+ 			view.cfg.MaxQueuedSegments = min(view.cfg.MaxQueuedSegments, remaining)
+ 			wl := x.cfg.Walking
+ 			q := model.Query{ID: "fixed-cap-tp-profile", Origin: name, Destination: x.cfg.Destination, Departure: at, LatestArrival: upper, MaxBoardings: p.cfg.Profile.MaxBoardings, MaxLegs: x.cfg.ProfileMaxLegs, MaxWalkSeconds: x.cfg.ProfileMaxWalkingSeconds, Walking: &wl}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/cost_summary.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/cost_summary.go
+@@ -15,9 +15,6 @@
+ 		return json.RawMessage("null")
+ 	}
+ 	v := map[string]any{"complete": x.snap.Complete, "error": x.snap.Error, "stats": x.snap.Stats, "phases_ns": x.snap.PhasesNS, "lines": len(x.snap.Lines), "transfers": len(x.snap.Transfers), "witnesses": len(x.snap.Witnesses), "closure_diameter": x.snap.ClosureDiameter}
+-	if x.snap.WalkingClosureLimit != nil {
+-		v["walking_closure_limit"] = *x.snap.WalkingClosureLimit
+-	}
+ 	if x.cfg.Semantics != "" {
+ 		v["profile"] = x.snap.Profile
+ 		v["transfer_construction"] = x.snap.TransferConstruction
+@@ -77,10 +74,6 @@
+ 	if x == nil {
+ 		return json.RawMessage("null")
+ 	}
+-	v := map[string]any{"complete": x.snap.Complete, "error": x.snap.Error, "stats": x.snap.Stats, "phases": x.snap.Phases, "lines": len(x.snap.Lines), "transfers": len(x.edges), "witnesses": x.proofs.count, "closure_diameter": x.snap.ClosureDiameter}
+-	if x.snap.WalkingClosureLimit != nil {
+-		v["walking_closure_limit"] = *x.snap.WalkingClosureLimit
+-	}
+-	b, _ := json.Marshal(v)
++	b, _ := json.Marshal(map[string]any{"complete": x.snap.Complete, "error": x.snap.Error, "stats": x.snap.Stats, "phases": x.snap.Phases, "lines": len(x.snap.Lines), "transfers": len(x.edges), "witnesses": x.proofs.count, "closure_diameter": x.snap.ClosureDiameter})
+ 	return b
+ }
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash.go
+@@ -119,7 +119,6 @@
+ }
+ 
+ type FlashSnapshot struct {
+-	WalkingClosureLimit    *int64                    `json:"walking_closure_limit,omitempty"` // nil means the complete metric
+ 	TransferDiagnostics    *FlashTransferDiagnostics `json:"transfer_diagnostics,omitempty"`
+ 	OmittedTransferRecords int                       `json:"omitted_transfer_records,omitempty"`
+ 	TransferConstruction   string                    `json:"transfer_construction,omitempty"`
+@@ -185,10 +184,6 @@
+ func (x *FlashIndex) Complete() bool { return x.snap.Complete }
+ func (x *FlashIndex) Snapshot() FlashSnapshot {
+ 	s := x.snap
+-	if s.WalkingClosureLimit != nil {
+-		limit := *s.WalkingClosureLimit
+-		s.WalkingClosureLimit = &limit
+-	}
+ 	if x.cfg.Semantics == "static_stop_pair_v1" {
+ 		diagnostic := x.ruleTransferDiagnostics()
+ 		s.TransferDiagnostics = &diagnostic
+@@ -233,13 +228,7 @@
+ func BuildFlash(ctx context.Context, d model.Dataset, c FlashConfig) (*FlashIndex, error) {
+ 	return buildFlash(ctx, d, c, nil)
+ }
+-func buildFlash(ctx context.Context, d model.Dataset, c FlashConfig, sink func(FlashWitness) error) (*FlashIndex, error) {
+-	return buildFlashWithWalkingScope(ctx, d, c, sink, nil)
+-}
+-
+-// Only the destination/fixed-role TP builders may supply a bounded scope.
+-// Public FLASH and ordinary TP retain their complete nonbinding metric.
+-func buildFlashWithWalkingScope(ctx context.Context, d model.Dataset, c FlashConfig, sink func(FlashWitness) error, walking *model.WalkingLimits) (x *FlashIndex, err error) {
++func buildFlash(ctx context.Context, d model.Dataset, c FlashConfig, sink func(FlashWitness) error) (x *FlashIndex, err error) {
+ 	x = &FlashIndex{profileSink: sink, cfg: c, ids: map[string]int{}, snap: FlashSnapshot{Profile: "flash_tb_positive_transitive_nonbinding_v1", Config: c, Transfers: []FlashTransfer{}, Witnesses: []FlashWitness{}, PhasesNS: map[string]int64{}}}
+ 	defer func() {
+ 		x.snap.Complete = err == nil
+@@ -329,22 +318,12 @@
+ 	}
+ 	w := &flashWork{ctx, x}
+ 	start := time.Now()
+-	var closureLimit *int64
+-	if walking != nil {
+-		limit := max(walking.Access, walking.Transfer, walking.Egress, walking.Direct)
+-		closureLimit = &limit
+-		x.snap.WalkingClosureLimit = &limit
+-	}
+-	if err = x.closeWalksWithin(d, w, closureLimit); err != nil {
++	if err = x.closeWalks(d, w); err != nil {
+ 		return
+ 	}
+ 	x.snap.PhasesNS["walking_closure"] = time.Since(start).Nanoseconds()
+ 	start = time.Now()
+-	transferLimit := x.snap.ClosureDiameter
+-	if walking != nil {
+-		transferLimit = walking.Transfer
+-	}
+-	x.base, err = New(ctx, d, Config{StrictLineOrder: true, TransferWalkingLimit: transferLimit, MaxTransfers: l.MaxTransfers, MaxQueuedSegments: l.MaxQuerySegments})
++	x.base, err = New(ctx, d, Config{StrictLineOrder: true, TransferWalkingLimit: x.snap.ClosureDiameter, MaxTransfers: l.MaxTransfers, MaxQueuedSegments: l.MaxQuerySegments})
+ 	if err != nil {
+ 		return
+ 	}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_graph.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_graph.go
+@@ -25,14 +25,6 @@
+ func (h *flashHeap) Push(v any)   { *h = append(*h, v.(flashHeapItem)) }
+ func (h *flashHeap) Pop() any     { a := *h; v := a[len(a)-1]; *h = a[:len(a)-1]; return v }
+ func (x *FlashIndex) closeWalks(d model.Dataset, w *flashWork) error {
+-	return x.closeWalksWithin(d, w, nil)
+-}
+-
+-// closeWalksWithin retains exact directed shortest paths of length <= limit.
+-// A positive path within the radius has every prefix within that radius, so
+-// pruning only over-radius relaxations cannot discard a feasible endpoint or
+-// intermediate vertex. Nil preserves the complete legacy metric and guards.
+-func (x *FlashIndex) closeWalksWithin(d model.Dataset, w *flashWork, limit *int64) error {
+ 	n := len(x.names)
+ 	adj := make([][]model.Footpath, n)
+ 	for _, e := range d.Footpaths {
+@@ -65,9 +57,6 @@
+ 				}
+ 				v := x.ids[e.To]
+ 				value := u.distance + e.Duration
+-				if limit != nil && value > *limit {
+-					continue
+-				}
+ 				old, ok := dist[v]
+ 				if !ok || value < old {
+ 					dist[v] = value
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex.go
+@@ -86,7 +86,6 @@
+ 	Work           int    `json:"work"`
+ }
+ type TREXSnapshot struct {
+-	WalkingClosureLimit     *int64               `json:"walking_closure_limit,omitempty"` // nil means the complete metric
+ 	FixedTransferWalkingCap *int64               `json:"fixed_transfer_walking_cap,omitempty"`
+ 	Profile                 string               `json:"profile"`
+ 	Complete                bool                 `json:"complete"`
+@@ -182,8 +181,8 @@
+ // graph. Ranks and overlays remain active; per-query replay and independent
+ // frontier certification are still required. Query transfer caps must match.
+ func BuildTREXFixedTransferCapRankedCandidate(ctx context.Context, d model.Dataset, cfg TREXConfig, transferWalkingCap int64) (*TREXIndex, error) {
+-	if transferWalkingCap < 0 || transferWalkingCap > model.MaxServiceSecond {
+-		return nil, fmt.Errorf("fixed transfer walking cap must be within the service-time domain")
++	if transferWalkingCap < 0 {
++		return nil, fmt.Errorf("fixed transfer walking cap must be nonnegative")
+ 	}
+ 	return buildTREXPolicy(ctx, d, cfg, &transferWalkingCap, true)
+ }
+@@ -279,13 +278,7 @@
+ 	}
+ 	err = x.phase("walking_closure", func() error {
+ 		carrier := &FlashIndex{names: x.names, ids: x.ids, cfg: FlashConfig{Limits: FlashLimits{MaxWork: l.MaxWork, MaxClosurePaths: l.MaxClosurePaths, MaxWalkSettled: l.MaxWalkSettled}}, snap: FlashSnapshot{Stats: FlashStats{Work: x.snap.Stats.Work}}}
+-		// Only the explicit fixed-transfer-cap adapters use a radius. Access,
+-		// direct and egress remain query-local and can exceed that radius.
+-		if transferWalkLimit != nil {
+-			limit := *transferWalkLimit
+-			x.snap.WalkingClosureLimit = &limit
+-		}
+-		e := carrier.closeWalksWithin(x.base.p.Data, &flashWork{ctx, carrier}, transferWalkLimit)
++		e := carrier.closeWalks(x.base.p.Data, &flashWork{ctx, carrier})
+ 		x.snap.Stats.Work = carrier.snap.Stats.Work
+ 		x.snap.Stats.ClosurePaths = carrier.snap.Stats.ClosurePaths
+ 		x.snap.Stats.WalkSettled = carrier.snap.Stats.WalkSettled
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_diagnostic.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_diagnostic.go
+@@ -4,7 +4,6 @@
+ // remain in Snapshot; this view never expands or copies those large collections.
+ // Call only after preparation returns, as with Snapshot.
+ type TREXDiagnostic struct {
+-	WalkingClosureLimit     *int64               `json:"walking_closure_limit,omitempty"`
+ 	FixedTransferWalkingCap *int64               `json:"fixed_transfer_walking_cap,omitempty"`
+ 	Profile                 string               `json:"profile"`
+ 	Complete                bool                 `json:"complete"`
+@@ -26,10 +25,6 @@
+ 		RetainedTransfers: len(x.edges), RetainedWitnesses: x.proofs.count,
+ 		PartitionStops: len(s.Partition.Cells), WalkingComponents: s.Partition.Components,
+ 		Phases: make(map[string]TREXPhase, len(s.Phases))}
+-	if s.WalkingClosureLimit != nil {
+-		limit := *s.WalkingClosureLimit
+-		out.WalkingClosureLimit = &limit
+-	}
+ 	if x.staticRulesCandidate && x.transferWalkLimit != nil {
+ 		cap := *x.transferWalkLimit
+ 		out.FixedTransferWalkingCap = &cap
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_query.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_query.go
+@@ -10,20 +10,18 @@
+ )
+ 
+ type TREXQueryStats struct {
+-	EndpointWalkWork    int    `json:"endpoint_walk_work,omitempty"`
+-	EndpointWalkSettled int    `json:"endpoint_walk_settled,omitempty"`
+-	Mode                string `json:"mode"`
+-	Work                int    `json:"work"`
+-	Rounds              int    `json:"rounds"`
+-	QueuedSegments      int    `json:"queued_segments"`
+-	SplitSegments       int    `json:"split_segments"`
+-	TargetEvents        int    `json:"target_events"`
+-	TargetPruned        int    `json:"target_pruned"`
+-	TransferVisits      int    `json:"transfer_visits"`
+-	RankTests           int    `json:"rank_tests"`
+-	RankRejected        int    `json:"rank_rejected"`
+-	ReachedUpdates      int    `json:"reached_updates"`
+-	UnpackedLegs        int    `json:"unpacked_legs"`
++	Mode           string `json:"mode"`
++	Work           int    `json:"work"`
++	Rounds         int    `json:"rounds"`
++	QueuedSegments int    `json:"queued_segments"`
++	SplitSegments  int    `json:"split_segments"`
++	TargetEvents   int    `json:"target_events"`
++	TargetPruned   int    `json:"target_pruned"`
++	TransferVisits int    `json:"transfer_visits"`
++	RankTests      int    `json:"rank_tests"`
++	RankRejected   int    `json:"rank_rejected"`
++	ReachedUpdates int    `json:"reached_updates"`
++	UnpackedLegs   int    `json:"unpacked_legs"`
+ }
+ type TREXResult struct {
+ 	Journeys []model.Journey `json:"journeys"`
+@@ -61,12 +59,6 @@
+ 	// original unrestricted customization is not a cap-preservation proof.
+ 	roleCaps := bounded || mode == "overlay-role-caps"
+ 	overlay := mode == "overlay" || mode == "overlay-role-caps"
+-	if x.snap.WalkingClosureLimit != nil && !roleCaps {
+-		// Preserve the original public nonbinding entrypoints on fixed-cap
+-		// indexes. Their certification needs the COMPLETE metric, never the
+-		// bounded transfer diameter. The immutable fallback is charged here.
+-		return x.searchTREXCompleteWalking(ctx, q, mode, capCertificate)
+-	}
+ 	if bounded || capCertificate {
+ 		err = x.checkTREXResources(ctx, q)
+ 	} else {
+@@ -130,22 +122,8 @@
+ 		return nil
+ 	}
+ 	bestArrival := q.LatestArrival + 1
+-	access := x.walks[source]
+-	var egressCache map[int]*paper.Path
+-	if x.snap.WalkingClosureLimit != nil {
+-		access, err = x.endpointWalks(ctx, source, -1, max(q.Walking.Access, q.Walking.Direct), target, charge, &out.Stats)
+-		if err != nil {
+-			return
+-		}
+-		// A shortest path ending at destination cannot pass through it and
+-		// leave again (positive edges). Prepared paths already suffice when
+-		// Egress fits the transfer radius; only a larger role needs lazy work.
+-		if q.Walking.Egress > *x.snap.WalkingClosureLimit {
+-			egressCache = map[int]*paper.Path{}
+-		}
+-	}
+-	for wi := range access {
+-		w := &access[wi]
++	for wi := range x.walks[source] {
++		w := &x.walks[source][wi]
+ 		if err = charge(); err != nil {
+ 			return
+ 		}
+@@ -238,23 +216,6 @@
+ 					break
+ 				}
+ 				p := x.walkMap[x.ids[c.To]][target]
+-				if egressCache != nil {
+-					from := x.ids[c.To]
+-					var exists bool
+-					p, exists = egressCache[from]
+-					if !exists {
+-						p = nil
+-						var paths []paper.Path
+-						paths, err = x.endpointWalks(ctx, from, target, q.Walking.Egress, target, charge, &out.Stats)
+-						if err != nil {
+-							return
+-						}
+-						if len(paths) > 0 {
+-							p = &paths[0]
+-						}
+-						egressCache[from] = p
+-					}
+-				}
+ 				if p != nil && (!roleCaps || p.Duration <= q.Walking.Egress) && c.Arrival+p.Duration < arrival {
+ 					arrival = c.Arrival + p.Duration
+ 					found = s.node
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_walking_scope.go
++++ /dev/null
+@@ -1,138 +0,0 @@
+-package tripbased
+-
+-import (
+-	"container/heap"
+-	"context"
+-	"fmt"
+-	"sort"
+-
+-	"github.com/ertyoii/transit-routing-go/model"
+-	"github.com/ertyoii/transit-routing-go/paper"
+-)
+-
+-// endpointWalks is query-local: only explicit fixed-transfer-cap adapters use it.
+-// target < 0 emits every reachable endpoint; otherwise it emits only target.
+-// Every raw walking vertex remains available as an intermediate. Positive edges
+-// make radius pruning exact and mean reaching stopAt is terminal, never a new
+-// walking-block origin. Output paths retain raw directed edge provenance.
+-func (x *TREXIndex) endpointWalks(ctx context.Context, source, target int, limit int64, stopAt int, charge func() error, stats *TREXQueryStats) (out []paper.Path, err error) {
+-	before := stats.Work
+-	defer func() { stats.EndpointWalkWork += stats.Work - before }()
+-	dist := map[int]int64{source: 0}
+-	prev := map[int]model.Footpath{}
+-	h := &flashHeap{{source, 0}}
+-	found := false
+-	for h.Len() > 0 {
+-		if err = charge(); err != nil {
+-			return nil, err
+-		}
+-		u := heap.Pop(h).(flashHeapItem)
+-		if dist[u.v] != u.distance {
+-			continue
+-		}
+-		if stats.EndpointWalkSettled >= x.cfg.Limits.MaxWalkSettled {
+-			return nil, fmt.Errorf("T-REX incomplete: query walking settlement budget exhausted")
+-		}
+-		stats.EndpointWalkSettled++
+-		if u.v == target {
+-			found = true
+-			break
+-		}
+-		if u.v == stopAt {
+-			continue
+-		}
+-		for _, edge := range x.base.p.Outgoing[x.names[u.v]] {
+-			if err = charge(); err != nil {
+-				return nil, err
+-			}
+-			value := u.distance + edge.Duration
+-			if value > limit {
+-				continue
+-			}
+-			v := x.ids[edge.To]
+-			old, ok := dist[v]
+-			if !ok || value < old {
+-				dist[v] = value
+-				prev[v] = edge
+-				heap.Push(h, flashHeapItem{v, value})
+-			}
+-		}
+-	}
+-	stops := []int{}
+-	if target >= 0 {
+-		if found {
+-			stops = append(stops, target)
+-		}
+-	} else {
+-		for v := range dist {
+-			stops = append(stops, v)
+-		}
+-		sort.Ints(stops)
+-	}
+-	for _, v := range stops {
+-		if err = charge(); err != nil {
+-			return nil, err
+-		}
+-		p := paper.Path{To: x.names[v], Duration: dist[v], Edges: []model.Footpath{}}
+-		for u := v; u != source; {
+-			if err = charge(); err != nil {
+-				return nil, err
+-			}
+-			edge := prev[u]
+-			p.Edges = append(p.Edges, edge)
+-			u = x.ids[edge.From]
+-		}
+-		for i, j := 0, len(p.Edges)-1; i < j; i, j = i+1, j-1 {
+-			p.Edges[i], p.Edges[j] = p.Edges[j], p.Edges[i]
+-		}
+-		out = append(out, p)
+-	}
+-	return out, ctx.Err()
+-}
+-
+-// A fixed-cap index still exposes the original nonbinding query entrypoints.
+-// Reconstruct their original complete walking metric locally instead of ever
+-// using a truncated diameter as a nonbinding certificate. This fallback is not
+-// used by the capped adapters and never changes the prepared index.
+-func (x *TREXIndex) searchTREXCompleteWalking(ctx context.Context, q model.Query, mode string, capCertificate bool) (out TREXResult, err error) {
+-	out.Journeys = []model.Journey{}
+-	out.Stats.Mode = mode
+-	defer func() {
+-		out.Complete = err == nil
+-		if err != nil {
+-			out.Error = err.Error()
+-		}
+-	}()
+-	if err = x.checkTREXResources(ctx, q); err != nil {
+-		return
+-	}
+-	l := x.cfg.Limits
+-	// Original closure construction began immediately after timetable work.
+-	startWork := x.snap.Phases["timetable"].Work
+-	maxWork := startWork + min(l.MaxWork-startWork, l.MaxQueryWork)
+-	carrier := &FlashIndex{names: x.names, ids: x.ids,
+-		cfg:  FlashConfig{Limits: FlashLimits{MaxWork: maxWork, MaxClosurePaths: l.MaxClosurePaths, MaxWalkSettled: l.MaxWalkSettled}},
+-		snap: FlashSnapshot{Stats: FlashStats{Work: startWork}}}
+-	err = carrier.closeWalks(x.base.p.Data, &flashWork{ctx, carrier})
+-	work := carrier.snap.Stats.Work - startWork
+-	out.Stats.Work, out.Stats.EndpointWalkWork = work, work
+-	out.Stats.EndpointWalkSettled = carrier.snap.Stats.WalkSettled
+-	if err != nil {
+-		return
+-	}
+-	if work >= l.MaxQueryWork {
+-		err = fmt.Errorf("T-REX incomplete: query work budget exhausted by complete walking fallback")
+-		return
+-	}
+-	view := *x
+-	view.snap = x.snap
+-	view.snap.WalkingClosureLimit = nil // terminates the fallback, not the fixed transfer policy
+-	view.snap.ClosureDiameter = carrier.snap.ClosureDiameter
+-	view.walks, view.walkMap = carrier.walks, carrier.walkMap
+-	view.cfg.Limits.MaxQueryWork -= work
+-	out, err = view.searchTREXForCertificate(ctx, q, mode, capCertificate)
+-	out.Stats.Work += work
+-	out.Stats.EndpointWalkWork += work
+-	out.Stats.EndpointWalkSettled += carrier.snap.Stats.WalkSettled
+-	return
+-}

@@ -1,0 +1,53 @@
+{
+  "contract": "hypothetical preference stress, not rider distribution; none generated from new validation/test outputs",
+  "files": {
+    "heldout393.json": "b50604881cbeb2d56a9201f4c7e2254b80dddbfc48659f386517fb905fa6bc56",
+    "outside_rectangle_stress257.json": "4be139f44f68439c93292a37f554c31442f02b282ba624284a786c826349a51d",
+    "scalar9.json": "c882f5e9b70c4c94b216b3bed72a63b506c43759bbad48ee6f8aa0cb310a74c3"
+  },
+  "generator_sha256": "f46e6d77201b7a57ebc9c64d2fcac7903f7fd7710cf01248c1f8683fb4dabe41",
+  "heldout393_counts": {
+    "Halton_base2_base3_indices1_to257": 257,
+    "corners": 4,
+    "midpoint_boundary_probes33_each_edge": 132
+  },
+  "normalization": "(observed_best-reference_best)/(1+reference_best_score_seconds)",
+  "scalar9_predeclared": [
+    {
+      "extra_walk_weight": 0,
+      "transfer_seconds": 0
+    },
+    {
+      "extra_walk_weight": 0,
+      "transfer_seconds": 900
+    },
+    {
+      "extra_walk_weight": 4,
+      "transfer_seconds": 0
+    },
+    {
+      "extra_walk_weight": 4,
+      "transfer_seconds": 900
+    },
+    {
+      "extra_walk_weight": 0.375,
+      "transfer_seconds": 73.125
+    },
+    {
+      "extra_walk_weight": 1.125,
+      "transfer_seconds": 241.75
+    },
+    {
+      "extra_walk_weight": 2.625,
+      "transfer_seconds": 463.375
+    },
+    {
+      "extra_walk_weight": 0.875,
+      "transfer_seconds": 691.625
+    },
+    {
+      "extra_walk_weight": 3.375,
+      "transfer_seconds": 827.875
+    }
+  ]
+}

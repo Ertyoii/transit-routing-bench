@@ -1,0 +1,184 @@
+--- a/raptor/local_walk_ties.go
++++ b/raptor/local_walk_ties.go
+@@ -38,6 +38,7 @@
+ 		out.Journeys = append(out.Journeys, paper.Journey(nil))
+ 		return
+ 	}
++	var nodes paper.NodeArena
+ 	walker := x.p.Walker(q)
+ 	walks := x.indexedWalks(walker, q, early)
+ 	defer func() { out.Stats.WalkClosures = walker.Count }()
+@@ -63,7 +64,7 @@
+ 		if at > q.LatestArrival {
+ 			continue
+ 		}
+-		n := w.Append(nil, q.Departure)
++		n := nodes.Append(w, nil, q.Departure)
+ 		if w.To == q.Destination {
+ 			if w.Duration <= q.Walking.Direct {
+ 				bestArrival = at
+@@ -137,7 +138,7 @@
+ 					current = -1
+ 					continue
+ 				}
+-				parent = paper.Ride(parent, c)
++				parent = nodes.Ride(parent, c)
+ 				if !c.Dropoff || !x.p.Accessible(q, c.To) {
+ 					continue
+ 				}
+@@ -169,7 +170,7 @@
+ 					if w.To == q.Destination {
+ 						if w.Duration <= q.Walking.Egress && (at < best.Time || at == best.Time && currentWalk+w.Duration < bestWalk) {
+ 							bestWalk = currentWalk + w.Duration
+-							best = paper.Label{Time: at, Parent: w.Append(parent, c.Arrival)}
++							best = paper.Label{Time: at, Parent: nodes.Append(w, parent, c.Arrival)}
+ 						}
+ 						continue
+ 					}
+@@ -191,7 +192,7 @@
+ 						}
+ 						nextSet[stop] = true
+ 						nextWalk[stop] = currentWalk + w.Duration
+-						next[stop] = paper.Label{Time: at, Parent: w.Append(parent, c.Arrival)}
++						next[stop] = paper.Label{Time: at, Parent: nodes.Append(w, parent, c.Arrival)}
+ 					}
+ 				}
+ 			}
+--- a/raptor/multicriteria.go
++++ b/raptor/multicriteria.go
+@@ -49,6 +49,7 @@
+ // It is a fixed-departure, three-objective Pareto query, never strict top-k.
+ func (x *Index) SearchMulti(ctx context.Context, q model.Query, cfg MultiConfig) (out MultiResult, err error) {
+ 	answers := []multiAnswer{}
++	var nodes paper.NodeArena
+ 	defer func() {
+ 		out.Journeys = []model.Journey{}
+ 		sort.Slice(answers, func(i, j int) bool {
+@@ -111,7 +112,7 @@
+ 		}
+ 		// Rejected labels need no walking witness; admitted labels retain the
+ 		// exact same path, clocks and insertion order.
+-		c.parent = walk.Append(c.parent, start)
++		c.parent = nodes.Append(walk, c.parent, start)
+ 		return append(kept, c), true, nil
+ 	}
+ 	addRoute := func(bag []routeLabel, c routeLabel) ([]routeLabel, error) {
+@@ -151,7 +152,7 @@
+ 				kept = append(kept, old)
+ 			}
+ 		}
+-		c.parent = walk.Append(c.parent, start)
++		c.parent = nodes.Append(walk, c.parent, start)
+ 		answers = append(kept, c)
+ 		return nil
+ 	}
+@@ -266,7 +267,7 @@
+ 					if c.Arrival > q.LatestArrival {
+ 						continue
+ 					}
+-					l.parent = paper.Ride(l.parent, c)
++					l.parent = nodes.Ride(l.parent, c)
+ 					if !c.Dropoff || !x.p.Accessible(q, c.To) {
+ 						continuing = append(continuing, l)
+ 						continue
+--- a/raptor/raptor.go
++++ b/raptor/raptor.go
+@@ -153,6 +153,7 @@
+ 		out.Journeys = append(out.Journeys, paper.Journey(nil))
+ 		return
+ 	}
++	var nodes paper.NodeArena
+ 	walker := x.p.Walker(q)
+ 	walks := x.indexedWalks(walker, q, early)
+ 	defer func() { out.Stats.WalkClosures = walker.Count }()
+@@ -177,7 +178,7 @@
+ 		if at > q.LatestArrival {
+ 			continue
+ 		}
+-		n := w.Append(nil, q.Departure)
++		n := nodes.Append(w, nil, q.Departure)
+ 		if w.To == q.Destination {
+ 			if w.Duration <= q.Walking.Direct {
+ 				bestArrival = at
+@@ -246,7 +247,7 @@
+ 					current = -1
+ 					continue
+ 				}
+-				parent = paper.Ride(parent, c)
++				parent = nodes.Ride(parent, c)
+ 				if !c.Dropoff || !x.p.Accessible(q, c.To) {
+ 					continue
+ 				}
+@@ -276,7 +277,7 @@
+ 					}
+ 					if w.To == q.Destination {
+ 						if w.Duration <= q.Walking.Egress && at < best.Time {
+-							best = paper.Label{Time: at, Parent: w.Append(parent, c.Arrival)}
++							best = paper.Label{Time: at, Parent: nodes.Append(w, parent, c.Arrival)}
+ 						}
+ 						continue
+ 					}
+@@ -297,7 +298,7 @@
+ 							nextStops = append(nextStops, stop)
+ 						}
+ 						nextSet[stop] = true
+-						next[stop] = paper.Label{Time: at, Parent: w.Append(parent, c.Arrival)}
++						next[stop] = paper.Label{Time: at, Parent: nodes.Append(w, parent, c.Arrival)}
+ 					}
+ 				}
+ 			}
+--- a/ultra/capped_search.go
++++ b/ultra/capped_search.go
+@@ -36,6 +36,7 @@
+ 	if err = ctx.Err(); err != nil {
+ 		return
+ 	}
++	var nodes paper.NodeArena
+ 	p := x.x.p
+ 	n := len(x.stopIDs)
+ 	destination := x.stopIDs[q.Destination]
+@@ -93,7 +94,7 @@
+ 					return out, e
+ 				}
+ 				bestArrival = at
+-				if err = emit((paper.Path{Edges: edges}).Append(nil, q.Departure)); err != nil {
++				if err = emit(nodes.Append(paper.Path{Edges: edges}, nil, q.Departure)); err != nil {
+ 					return
+ 				}
+ 			}
+@@ -105,7 +106,7 @@
+ 			id := x.stopIDs[stop]
+ 			previousStops = append(previousStops, id)
+ 			previousSet[id] = true
+-			previous[id] = paper.Label{Time: at, Parent: (paper.Path{Edges: edges}).Append(nil, q.Departure)}
++			previous[id] = paper.Label{Time: at, Parent: nodes.Append(paper.Path{Edges: edges}, nil, q.Departure)}
+ 		}
+ 	}
+ 	rows := make([][]cappedPath, n)
+@@ -246,7 +247,7 @@
+ 					current = -1
+ 					continue
+ 				}
+-				parent = paper.Ride(parent, c)
++				parent = nodes.Ride(parent, c)
+ 				toID := x.to[ri][pos]
+ 				if !c.Dropoff || q.AccessibleOnly && !x.accessible[toID] {
+ 					continue
+@@ -268,7 +269,7 @@
+ 						egress[toID] = edges
+ 						egressSet[toID] = true
+ 					}
+-					best = paper.Label{Time: c.Arrival + duration, Parent: (paper.Path{Edges: edges}).Append(parent, c.Arrival)}
++					best = paper.Label{Time: c.Arrival + duration, Parent: nodes.Append(paper.Path{Edges: edges}, parent, c.Arrival)}
+ 				}
+ 				if boards == q.MaxBoardings || c.Arrival >= best.Time {
+ 					continue
+@@ -299,7 +300,7 @@
+ 							nextStops = append(nextStops, path.to)
+ 							nextSet[path.to] = true
+ 						}
+-						next[path.to] = paper.Label{Time: ready, Parent: path.Path.Append(parent, c.Arrival)}
++						next[path.to] = paper.Label{Time: ready, Parent: nodes.Append(path.Path, parent, c.Arrival)}
+ 					}
+ 				}
+ 			}

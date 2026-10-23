@@ -1,0 +1,55 @@
+--- /dev/null
++++ b/cmd/offlinefeatureprobe/main.go
+@@ -0,0 +1,3 @@
++package main
++import("context";"encoding/json";"fmt";"io";"os";"github.com/ertyoii/transit-routing-go/recommend";"github.com/ertyoii/transit-routing-bench/experiment")
++func main(){dec:=json.NewDecoder(os.Stdin);dec.DisallowUnknownFields();enc:=json.NewEncoder(os.Stdout);seen:=map[string]bool{};for{var req struct{ID string `json:"request_id"`;Features []recommend.Feature `json:"features"`;Config recommend.ChoiceConfig `json:"config"`};err:=dec.Decode(&req);if err==io.EOF{return};if err!=nil{fmt.Fprintln(os.Stderr,err);os.Exit(2)};if req.ID==""||seen[req.ID]{fmt.Fprintln(os.Stderr,"duplicate/empty request ID");os.Exit(2)};seen[req.ID]=true;s,reduction,e:=recommend.ReplayFeatureControls(context.Background(),req.Features,req.Config);message:="";if e!=nil{message=e.Error()};enc.Encode(map[string]any{"request_id":req.ID,"complete":e==nil,"error":message,"selections":s,"reduction":reduction,"build_source_sha256":experiment.BuildSourceSHA256})}}
+--- a/routing.lock.json
++++ b/routing.lock.json
+@@ -59,6 +59,8 @@
+     "recommend/bounded.go": "b23345b9e8899b6275a833f64ca90f8e5bfb743960b7fc9e960a5d8d831d5e56",
+     "recommend/choices.go": "d1da5b3416d843dc9e9f3bd303c19529386251856eca728c07222365d71952ff",
+     "recommend/lean.go": "9db7855a5cea9469e039fe8bfa5c543df8d0183d9cd3c5bb57b453b75b6a5927",
++    "recommend/offline_wrapper.go": "4a4061e24c2199ee0dc505295a660071c7dde3cea1d2f82e069cb1d2175e4a36",
++    "recommend/offline_wrapper_test.go": "b393dd7390a03689337b1a374c0418a2cf3b9d31342908dbe69099b6faa87fe9",
+     "recommend/quality.go": "fcb35c8914345f9eebbbf78cb0bf18df19f0e5d1dc7054833d7f9ca90f9bd8fe",
+     "selection/reserved.go": "180080a439d9aadb56b5245cd614d850751352026f1ea3c4e1ce2c8f8de246ca",
+     "selection/select.go": "6d0531acccf41a7348f7f0e18ace5242459ec72f168da9c8248023c0b387edfb",
+@@ -137,7 +139,7 @@
+     "walking/transit/graph.go": "07ec2ac36311597ed657b686be7bc222ef3ac7ec022473d1f55729f5754b6fbe"
+   },
+   "module": "github.com/ertyoii/transit-routing-go",
+-  "origin": "V2 independent composed quality, exact full-file lock, optional no-default-control serving. Ancestry commit only, no remote push.",
+-  "source_sha256": "0f24109707295438ceec16ad4c49bdc3d668c1d8f2fab98332f0ce34bd7c7339",
++  "origin": "V2 independent composed quality, exact full-file lock, optional no-default-control serving. Ancestry commit only, no remote push. Offline-only wrapper exposes unchanged feature selectors; not a serving/timing candidate.",
++  "source_sha256": "7e165f777c589fde2d25f95069ba6e52e0557a8e917615e394651b8f25e036ef",
+   "version": "v0.1.0-pre.3"
+ }
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/recommend/offline_wrapper.go
+@@ -0,0 +1,17 @@
++package recommend
++import("context";"fmt";"sort";"strings")
++type OfflineSelection struct {Policy string `json:"policy"`;Limit int `json:"limit"`;Selected []string `json:"selected"`;Complete bool `json:"complete"`;Details any `json:"details"`}
++type OfflineReduction struct {Mode string `json:"mode"`;Complete bool `json:"complete"`;OriginalCandidates int `json:"original_candidates"`;OriginalPatterns int `json:"original_patterns"`;RetainedCandidates int `json:"retained_candidates"`;RetainedPatterns int `json:"retained_patterns"`;LostPatterns int `json:"lost_patterns"`;MultiPatternEqualVectorGroupsBefore int `json:"multi_pattern_equal_vector_groups_before"`;MultiPatternEqualVectorGroupsAfter int `json:"multi_pattern_equal_vector_groups_after"`;Retained []string `json:"retained_ids"`;Excluded map[string]string `json:"excluded"`}
++func offlineReduction(fs,pool []Feature,excluded map[string]string,mode string,complete bool)*OfflineReduction{
++ patterns:=map[string]bool{};retained:=map[string]bool{};before:=map[[3]int64]map[string]bool{};after:=map[[3]int64]map[string]bool{};out:=&OfflineReduction{Mode:mode,Complete:complete,OriginalCandidates:len(fs),RetainedCandidates:len(pool),Retained:[]string{},Excluded:excluded}
++ for _,f:=range fs{patterns[f.Pattern]=true;v:=vector(f);if before[v]==nil{before[v]=map[string]bool{}};before[v][f.Pattern]=true}
++ for _,f:=range pool{retained[f.Pattern]=true;out.Retained=append(out.Retained,f.Identity);v:=vector(f);if after[v]==nil{after[v]=map[string]bool{}};after[v][f.Pattern]=true};sort.Strings(out.Retained);out.OriginalPatterns=len(patterns);out.RetainedPatterns=len(retained);for p:=range patterns{if !retained[p]{out.LostPatterns++}};for _,ps:=range before{if len(ps)>1{out.MultiPatternEqualVectorGroupsBefore++}};for _,ps:=range after{if len(ps)>1{out.MultiPatternEqualVectorGroupsAfter++}};return out
++}
++// Independently reconstructed features only; no new routing/feasibility claim.
++func ReplayFeatureControls(ctx context.Context,fs []Feature,cfg ChoiceConfig)(out []OfflineSelection,reduction *OfflineReduction,err error){
++ if err=cfg.Validate();err!=nil{return};if len(fs)>cfg.MaxCandidates{return nil,nil,ErrSelectionBudget};seen:=map[string]bool{};for _,f:=range fs{if f.Identity==""||seen[f.Identity]{return nil,nil,fmt.Errorf("duplicate/empty replay identity")};seen[f.Identity]=true};fs=append([]Feature{},fs...);sort.Slice(fs,func(i,j int)bool{return fs[i].Identity<fs[j].Identity})
++ if cfg.Bounded!=nil{var c *ContinuousChoices;c,err=SelectBounded(ctx,fs,cfg);if c!=nil{pool:=[]Feature{};for _,f:=range fs{if _,excluded:=c.Exclusions[f.Identity];!excluded{pool=append(pool,f)}};mode:="bounded_score_only_representatives";if cfg.Bounded.DistinctPatterns{mode="bounded_full_pattern_aware_representatives"};reduction=offlineReduction(fs,pool,c.Exclusions,mode,c.RetainedCandidates==len(pool));for _,s:=range c.Selections{out=append(out,OfflineSelection{Policy:c.Policy,Limit:s.Limit,Selected:s.Selected,Complete:c.Complete&&s.Complete,Details:s})}};return}
++ limits:=cfg.DeliveryLimits;if len(limits)==0{limits=[]int{3}}
++ if cfg.DeliveryPolicy=="pattern_anchors_v1"{for _,k:=range limits{s:=selectFeatures(fs,k,300);if reduction==nil{pool:=[]Feature{};excluded:=map[string]string{};for _,f:=range fs{why:=s.Decisions[f.Identity];if why=="capacity"||strings.HasPrefix(why,"selected_"){pool=append(pool,f)}else{excluded[f.Identity]=why}};reduction=offlineReduction(fs,pool,excluded,"pattern_envelope_300_and_scalar_dominance_before_anchor_capacity",true)};out=append(out,OfflineSelection{Policy:"pattern_anchors_v1",Limit:k,Selected:s.Selected,Complete:true,Details:s})};return}
++ excluded:=map[string]string{};pool:=choiceRepresentatives(fs,excluded);reduction=offlineReduction(fs,pool,excluded,"finite20_score_only_equal_vector_and_monotone_dominance",true);for _,g:=range cfg.Groups{for _,k:=range limits{var ids []int;var states int;ids,states,err=minimax(ctx,pool,g.Preferences,k,cfg.MaxSubsets);if err!=nil{return};s:=describeChoice(pool,g.Preferences,ids,"preference_minimax",k);s.Complete=true;s.PoolOptimal=true;s.EvaluatedSubsets=states;out=append(out,OfflineSelection{Policy:"finite_preferences_v2",Limit:k,Selected:s.Selected,Complete:true,Details:s})}};return
++}
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/recommend/offline_wrapper_test.go
+@@ -0,0 +1,5 @@
++package recommend
++import("context";"errors";"testing";"github.com/ertyoii/transit-routing-go/model")
++func offlineFeature(id,pattern string,d int64,b int,w int64)Feature{return Feature{Identity:id,Pattern:pattern,Duration:d,Metrics:model.Metrics{Arrival:d,Boardings:b,Transfers:max(0,b-1),WalkingSeconds:w}}}
++func TestOfflineReductionPatternAvailability(t *testing.T){fs:=[]Feature{offlineFeature("a","pattern-a",100,1,0),offlineFeature("b","pattern-b",100,1,0),offlineFeature("c","pattern-c",200,2,20)};cfg:=ChoiceConfig{MaxCandidates:100,MaxSubsets:10000,Bounded:&BoundedConfig{MaxTransfer:900,MaxWalk:4,Objective:"absolute",Limits:[]int{3,5},DistinctPatterns:true,MaxCriticalPoints:1000,MaxWork:1000000}};_,r,e:=ReplayFeatureControls(context.Background(),fs,cfg);if e!=nil||r==nil||!r.Complete||r.OriginalPatterns!=3||r.RetainedPatterns!=3||r.RetainedCandidates!=3||r.MultiPatternEqualVectorGroupsBefore!=1||r.MultiPatternEqualVectorGroupsAfter!=1{t.Fatalf("distinct collapse: %+v %v",r,e)};cfg.Bounded=nil;cfg.LeanDelivery=true;cfg.DeliveryPolicy="finite_preferences_v2";cfg.DeliveryLimits=[]int{3,5};cfg.Groups=[]PreferenceGroup{{Name:"one",Preferences:[]Preference{{ID:"zero"}}}};_,r,e=ReplayFeatureControls(context.Background(),fs,cfg);if e!=nil||r==nil||r.RetainedPatterns!=1||r.RetainedCandidates!=1||r.LostPatterns!=2||r.MultiPatternEqualVectorGroupsAfter!=0{t.Fatalf("finite collapse hidden: %+v %v",r,e)};cfg.DeliveryPolicy="pattern_anchors_v1";cfg.Groups=nil;_,r,e=ReplayFeatureControls(context.Background(),fs,cfg);if e!=nil||r.RetainedPatterns!=2||r.RetainedCandidates!=2{t.Fatalf("pattern eligibility wrong: %+v %v",r,e)}}
++func TestOfflineReductionGuards(t *testing.T){fs:=[]Feature{offlineFeature("a","a",100,1,0),offlineFeature("b","b",90,2,0)};cfg:=ChoiceConfig{MaxCandidates:100,MaxSubsets:10000,Bounded:&BoundedConfig{MaxTransfer:900,MaxWalk:4,Objective:"absolute",Limits:[]int{3},MaxCriticalPoints:1000,MaxWork:1}};_,r,e:=ReplayFeatureControls(context.Background(),fs,cfg);if !errors.Is(e,ErrSelectionBudget)||r==nil||r.Complete{t.Fatalf("guard falsely qualified reduction: %+v %v",r,e)};cfg.Bounded=nil;cfg.LeanDelivery=true;cfg.DeliveryPolicy="pattern_anchors_v1";_,_,e=ReplayFeatureControls(context.Background(),[]Feature{fs[0],fs[0]},cfg);if e==nil{t.Fatal("duplicate replay identity accepted")}}

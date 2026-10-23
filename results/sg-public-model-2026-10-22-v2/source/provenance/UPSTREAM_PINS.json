@@ -1,0 +1,122 @@
+{
+  "accepted_v1_ancestry": {
+    "query-walk-opt": {
+      "bench": {
+        "base_commit": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+        "complete_patch": "patches/bench-query-walk-opt.patch",
+        "frozen_commit": "b6dd643577d1f547b240297e3de4501dce2873ed",
+        "patch_sha256": "5e9aa41b50483ad3aabb6d54d0d0a6572f666be3f8e27d3159a48e269837e11c",
+        "source_sha256": "4f3ebe57da0b1708e0931309673f09e35a6485186a45d65658d43640ec33847d",
+        "tree": "3fb57f37d39d6cba05e24b2e104ebca3fccd72fa"
+      },
+      "routing": {
+        "base_commit": "b102816018b1db87304c751f2cd601a2abe4057a",
+        "complete_patch": "patches/routing-query-walk-opt.patch",
+        "frozen_commit": "6bd99513f16f6c614ef7971ec379ff732196228c",
+        "patch_sha256": "58ca29d3f676d5d7ce4d27a6860aaf48d61c7dbb63fe99e24be6de5edf900b54",
+        "source_sha256": "6efac5044779235351e04253e23bcac2b290f63e0f6a5a0fe642c47b4deaba32",
+        "tree": "9f16de4a1be8ff699bd6b9129bfec8b51f03cdd3"
+      }
+    },
+    "raptor-dense-opt": {
+      "bench": {
+        "base_commit": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+        "complete_patch": "patches/bench-raptor-dense-opt.patch",
+        "frozen_commit": "083038abe0791a2835f6390248c7d3a4d1c7c5df",
+        "patch_sha256": "2313a1d34c6e26f1d5ae4236ee8ba5ce1cdfe4f74b4ec37288e4abd187641b35",
+        "source_sha256": "24fe8bb3ac7d40ca8eb11857b3b3ae9094983d8199eafe141c005f8e009571ab",
+        "tree": "611eb763fa2666017585a03d6430201fba69a72b"
+      },
+      "routing": {
+        "base_commit": "b102816018b1db87304c751f2cd601a2abe4057a",
+        "complete_patch": "patches/routing-raptor-dense-opt.patch",
+        "frozen_commit": "725520af0cff62792f70b941d4d69066eecb1010",
+        "patch_sha256": "292f765a3b6af8e4ed79ec45dbfcc680530bbe4843111b23d76a51acb23ec1c5",
+        "source_sha256": "adf983cd6ae31e25f8a87afd8316a2b6fe31d815a60758deedeefa97b75c432a",
+        "tree": "223ce6f7ff9b30d5cc4e2e3b027e3b98545877a5"
+      }
+    },
+    "ultra-capped-opt": {
+      "bench": {
+        "base_commit": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+        "complete_patch": "patches/bench-ultra-capped-opt.patch",
+        "frozen_commit": "886eea85bcd030c34f3f561aa8bde1f0125ad9f2",
+        "patch_sha256": "4569560f00fe2ff3a73a2c60279588aaa487a7f6433fcf8ecb87906d4f3a477b",
+        "source_sha256": "51e0a6878eb45c46224ff6260d20faff0c8dc4bf98f9b2615495ad71880aeeaa",
+        "tree": "ee34fbc2627027dd074ac85df25fc030edf3a148"
+      },
+      "routing": {
+        "base_commit": "b102816018b1db87304c751f2cd601a2abe4057a",
+        "complete_patch": "patches/routing-ultra-capped-opt.patch",
+        "frozen_commit": "cd88c9c161317e26274d745cac285722156aa453",
+        "patch_sha256": "3067c7df40641e3ec1a78a23866ffb39b4945e583266a6eaff0a6e4e623988d5",
+        "source_sha256": "ac101dd12c8675decb6c91180d110228084ddd67549c3e2adc0206634f59ff23",
+        "tree": "2195b6ee3b7a3d3502941b96234d53cec498edb4"
+      }
+    }
+  },
+  "base_reconstruction": {
+    "bench-base": {
+      "original_patch_sha256": "c3897a7c26b754c92b723208353be7793a6b6e0c6532e876c369b89e34616c1a",
+      "pin": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+      "pinned_git_projection_mismatches": [],
+      "pinned_git_projection_verified": true,
+      "reverse_forward_exact": true,
+      "scope": "allowlisted source/config/fixture projection, not entire repository Git tree"
+    },
+    "routing-base": {
+      "baseline_vendor_common_go_files": 92,
+      "baseline_vendor_mismatches": [],
+      "original_patch_sha256": "a4a5b28a045deb9463925614505770aefc365f8b1e2a783854df47151a0faf94",
+      "reverse_forward_exact": true,
+      "scope": "allowlisted source/config/fixture projection, not entire repository Git tree"
+    }
+  },
+  "baseline_scope": "Exact source/config/fixture byte projection only; not full Git objects, author metadata, executable modes or a reconstructed commit.",
+  "prior_publication": {
+    "commit": "67b7222a066b10182646f74d2d0ed2a1f7d59223",
+    "directory": "results/sg-public-model-2026-10-21",
+    "immutable_local_snapshot": "public-campaign-20261021/publication-final-v1",
+    "repository": "https://github.com/Ertyoii/transit-routing-bench"
+  },
+  "public_bases": {
+    "bench": {
+      "commit": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+      "public_reachability_evidence": {
+        "commit": "f5fb8ebf5fbbb030ab0c3ed4c7feee33dff7311c",
+        "method": "Release owner verified public GitHub commit metadata",
+        "private": false,
+        "public_access_not_private_authenticated_fetch": true,
+        "reported_utc": "2026-10-21T03:58:34Z",
+        "repository_license_spdx": "MIT",
+        "scope": "Public base only; not a claim that local candidate commit objects were published.",
+        "status": "public_commit_and_tree_verified",
+        "tree": "23f6411121c5d121db53dbbcc4febc09be2e2337",
+        "visibility": "public"
+      },
+      "repository_url": "https://github.com/Ertyoii/transit-routing-bench.git",
+      "tree": "23f6411121c5d121db53dbbcc4febc09be2e2337"
+    },
+    "routing": {
+      "commit": "b102816018b1db87304c751f2cd601a2abe4057a",
+      "public_reachability_evidence": {
+        "commit": "b102816018b1db87304c751f2cd601a2abe4057a",
+        "default_branch": "main",
+        "method": "Release owner verified public GitHub commit metadata",
+        "private": false,
+        "public_access_not_private_authenticated_fetch": true,
+        "reported_utc": "2026-10-21T03:58:34Z",
+        "repository_license_spdx": "MIT",
+        "scope": "Public base only; not a claim that local candidate commit objects were published.",
+        "status": "public_commit_and_tree_verified",
+        "tree": "c6f00e816557b6dda7bd59818ed64d081ed9c807",
+        "visibility": "public"
+      },
+      "repository_url": "https://github.com/Ertyoii/transit-routing-go.git",
+      "tree": "c6f00e816557b6dda7bd59818ed64d081ed9c807"
+    }
+  },
+  "remote_state": "No network, remote verification or push performed by this packager. Prior public-base verification is inherited historical evidence, not a fresh reachability claim.",
+  "routing_base_pin": "b102816018b1db87304c751f2cd601a2abe4057a",
+  "schema": "sg-v2-code-upstream-pins-v1"
+}

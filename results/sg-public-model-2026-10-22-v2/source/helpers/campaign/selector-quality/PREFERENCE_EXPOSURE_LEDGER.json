@@ -1,0 +1,70 @@
+{
+  "schema": "sg-preference-exposure-ledger-v1",
+  "as_of_utc_date": "2026-10-21",
+  "scope": "Completed initial192 tune evaluation and354-pool selector replay; prospective finite20-safe V1 staging only",
+  "immutable_preference_seal": "selector-quality/PREFERENCE_SEAL.json",
+  "do_not_rewrite_original_seal_or_weight_bytes": true,
+  "panels": [
+    {
+      "name": "historical20",
+      "role": "Preexisting finite selector scoring design and prospective pointwise nonregression constraints",
+      "exposure": "Historical selector-design profiles, not heldout rider preferences",
+      "authentic_rider_utility_claim": false
+    },
+    {
+      "name": "heldout393",
+      "weight_file": "selector-quality/configs/heldout393.json",
+      "sha256": "b50604881cbeb2d56a9201f4c7e2254b80dddbfc48659f386517fb905fa6bc56",
+      "design": "257 Halton2/3 interior probes,132 edge midpoints,4 corners, frozen before V2 tune outcomes",
+      "current_inference_role": "Exposed off-historical-grid TUNE diagnostic and policy/model-selection evidence",
+      "untouched_preference_generalization_panel": false,
+      "exposed_to": [
+        "24-variant initial192 native tune comparison",
+        "14-policy joint3/5 counterfactual comparison on354 native pools",
+        "Independent fixed-native-pool exact-profile coverage ceiling diagnostic"
+      ],
+      "optimizer_input_in_current_bounded_or_proposed_finite_safe_policy": false,
+      "note": "No393 profile weights or target scores enter the bounded or finite20-safe optimizer; selecting research candidates after observing results still makes this an exposed tune panel."
+    },
+    {
+      "name": "wider_domain_stress257",
+      "weight_file": "selector-quality/configs/outside_rectangle_stress257.json",
+      "sha256": "4be139f44f68439c93292a37f554c31442f02b282ba624284a786c826349a51d",
+      "current_inference_role": "Exposed wider-domain TUNE stress diagnostic",
+      "untouched_preference_generalization_panel": false,
+      "optimizer_input": false,
+      "note": "Spans[0,1800]x[0,8] and includes some in-domain points; no exclusively-outside257 or outside-domain selector guarantee."
+    },
+    {
+      "name": "scalar9",
+      "weight_file": "selector-quality/configs/scalar9.json",
+      "current_inference_role": "Frozen independent scalar reference weights, exposed on48 tune queries",
+      "optimizer_input_in_selector": false,
+      "offered_slots": 432,
+      "original_complete_slots": 414,
+      "original_unknown_slots": 18,
+      "note": "Original guards and unknowns remain immutable. Any later larger-tier or derived emptiness lane must be separately named and cannot relabel original direct executions."
+    }
+  ],
+  "prospective_candidate": {
+    "name": "finite20_safe_v1",
+    "status": "Static uncompiled source/proposal staging only",
+    "finite_preregistered_variants": [
+      "finite20_safe_absolute_exact_v1",
+      "finite20_safe_normalized_exact_v1"
+    ],
+    "optimization_inputs": [
+      "Independently validated native candidate features",
+      "Unchanged historical20 selected-score constraints",
+      "Declared continuous transfer0..900 and extra-walk0..4 rectangle"
+    ],
+    "not_optimization_inputs": ["heldout393", "wider_domain_stress257", "scalar9 outcomes", "common/LOFO reference witnesses"],
+    "393_or_stress_improvement_assumed": false,
+    "must_freeze_before_validation": true
+  },
+  "split_state_at_record_creation": {
+    "tune": "Exposed",
+    "validation": "Not executed by this selector worker",
+    "test": "Not executed or inspected by this selector worker; original seals remain unchanged"
+  }
+}

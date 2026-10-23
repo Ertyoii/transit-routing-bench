@@ -1,0 +1,117 @@
+{
+  "max_subsets": 200000,
+  "max_candidates": 1024,
+  "groups": [
+    {
+      "name": "explicit_twenty_hypotheses",
+      "description": "Fixed20 nonnegative score hypotheses from the preexisting evaluator; not learned rider preferences or population probabilities.",
+      "preferences": [
+        {
+          "id": "t0_w0",
+          "transfer_seconds": 0,
+          "extra_walk_weight": 0
+        },
+        {
+          "id": "t0_w1",
+          "transfer_seconds": 0,
+          "extra_walk_weight": 1
+        },
+        {
+          "id": "t0_w2",
+          "transfer_seconds": 0,
+          "extra_walk_weight": 2
+        },
+        {
+          "id": "t0_w4",
+          "transfer_seconds": 0,
+          "extra_walk_weight": 4
+        },
+        {
+          "id": "t150_w0",
+          "transfer_seconds": 150,
+          "extra_walk_weight": 0
+        },
+        {
+          "id": "t150_w1",
+          "transfer_seconds": 150,
+          "extra_walk_weight": 1
+        },
+        {
+          "id": "t150_w2",
+          "transfer_seconds": 150,
+          "extra_walk_weight": 2
+        },
+        {
+          "id": "t150_w4",
+          "transfer_seconds": 150,
+          "extra_walk_weight": 4
+        },
+        {
+          "id": "t300_w0",
+          "transfer_seconds": 300,
+          "extra_walk_weight": 0
+        },
+        {
+          "id": "t300_w1",
+          "transfer_seconds": 300,
+          "extra_walk_weight": 1
+        },
+        {
+          "id": "t300_w2",
+          "transfer_seconds": 300,
+          "extra_walk_weight": 2
+        },
+        {
+          "id": "t300_w4",
+          "transfer_seconds": 300,
+          "extra_walk_weight": 4
+        },
+        {
+          "id": "t600_w0",
+          "transfer_seconds": 600,
+          "extra_walk_weight": 0
+        },
+        {
+          "id": "t600_w1",
+          "transfer_seconds": 600,
+          "extra_walk_weight": 1
+        },
+        {
+          "id": "t600_w2",
+          "transfer_seconds": 600,
+          "extra_walk_weight": 2
+        },
+        {
+          "id": "t600_w4",
+          "transfer_seconds": 600,
+          "extra_walk_weight": 4
+        },
+        {
+          "id": "t900_w0",
+          "transfer_seconds": 900,
+          "extra_walk_weight": 0
+        },
+        {
+          "id": "t900_w1",
+          "transfer_seconds": 900,
+          "extra_walk_weight": 1
+        },
+        {
+          "id": "t900_w2",
+          "transfer_seconds": 900,
+          "extra_walk_weight": 2
+        },
+        {
+          "id": "t900_w4",
+          "transfer_seconds": 900,
+          "extra_walk_weight": 4
+        }
+      ]
+    }
+  ],
+  "lean_delivery": true,
+  "delivery_policy": "finite_preferences_v2",
+  "delivery_limits": [
+    3
+  ]
+}

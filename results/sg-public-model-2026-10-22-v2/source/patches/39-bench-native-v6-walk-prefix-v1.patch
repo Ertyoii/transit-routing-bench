@@ -1,0 +1,117 @@
+--- a/routing.lock.json
++++ b/routing.lock.json
+@@ -1,6 +1,6 @@
+ {
+-  "baseline_source_sha256": "f7cf70d1a970fb70077fa13299cdb8c991e8712c44fe1fb19ba10a5befccdd2d",
+-  "commit": "725520af0cff62792f70b941d4d69066eecb1010",
++  "baseline_source_sha256": "0f7cd0bbdda8c76f2102a3f223ffb649709fc74fececc8085a02d2eddc0f7c26",
++  "commit": "566b32dde84e10771d8d606acaa5f4de764799c5",
+   "files": {
+     ".gitignore": "9974b0356fd24da7a600b197652a8bad9922f7b41f3b61dd8281f5043fdb61c6",
+     "LICENSE": "3c524d60abb36a8a9d25782594ea2f8665f56b5811b38c53ff62754b96f49da7",
+@@ -76,7 +76,7 @@
+     "tripbased/flash.go": "fc6c1977c7952d31023106e2d651ed2dc9736fc2862ea412e795414f31cb2c28",
+     "tripbased/flash_breakpoints.go": "af8a66abc935a28445495a40a043b47d2f884a3b161779a254905f39e2af4bb3",
+     "tripbased/flash_capped.go": "4d0b3ae6b31ae1c0545e3db70339aefc1b8ae6fd4b0d9769004ab3bbb51d7cdb",
+-    "tripbased/flash_graph.go": "20c480930e61705b5f55d08397401bfecfd63c9b1358f11f543a0daaf354dea3",
++    "tripbased/flash_graph.go": "998e2ce1b757f9ec0d1ecfcee0d134e47950f5ca813993a469fdd236f73091be",
+     "tripbased/flash_profile.go": "69a2a37340fe46c29ea70645b7e68457000bc73a1e9a806f9173be10d0c7fd5b",
+     "tripbased/flash_retained.go": "217ab3ffdcc071e44e3499fae1049fd0149132211f4fda60e6bd57a7fd5a95a8",
+     "tripbased/flash_rules.go": "ee3eced244a67a3e9f5007c16272a395c06f4da4bf830e936fe1b94dd9d063bc",
+@@ -139,7 +139,7 @@
+     "walking/transit/graph.go": "07ec2ac36311597ed657b686be7bc222ef3ac7ec022473d1f55729f5754b6fbe"
+   },
+   "module": "github.com/ertyoii/transit-routing-go",
+-  "origin": "Native auxiliary trex-compact; targeted V1 66b bounded closure only when declared; current seed-fixed common driver/checker/selector retained. Local ancestry only, no remote push.",
+-  "source_sha256": "0f7cd0bbdda8c76f2102a3f223ffb649709fc74fececc8085a02d2eddc0f7c26",
++  "origin": "Isolated walking-prefix V1 composition from frozen bench-native-v5-trex-compact, with only flash_graph.go overlaid from routing-walk-prefix-v1 local commit. Inherited common selector/vendor differences are separately recorded. Unchanged logical native caps/contracts; no push.",
++  "source_sha256": "29089612f3b39a23959c1a5eb9f9f3b1eabf0a28e089063cf7241aae51c55e9c",
+   "version": "v0.1.0-pre.3"
+ }
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_graph.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_graph.go
+@@ -46,6 +46,10 @@
+ 	for source := 0; source < n; source++ {
+ 		dist := map[int]int64{source: 0}
+ 		prev := map[int]model.Footpath{}
++		// Strictly positive validated edges make every final predecessor point
++		// to a vertex settled earlier. Depth is final when a vertex settles.
++		depth := map[int]int{source: 0}
++		settled := []int{}
+ 		h := &flashHeap{{source, 0}}
+ 		for h.Len() > 0 {
+ 			if e := w.tick(); e != nil {
+@@ -59,6 +63,7 @@
+ 				return fmt.Errorf("FLASH-TB incomplete: walking settlement budget exhausted")
+ 			}
+ 			x.snap.Stats.WalkSettled++
++			settled = append(settled, u.v)
+ 			for _, e := range adj[u.v] {
+ 				if e2 := w.tick(); e2 != nil {
+ 					return e2
+@@ -72,6 +77,7 @@
+ 				if !ok || value < old {
+ 					dist[v] = value
+ 					prev[v] = e
++					depth[v] = depth[u.v] + 1
+ 					heap.Push(h, flashHeapItem{v, value})
+ 				}
+ 			}
+@@ -81,6 +87,22 @@
+ 			stops = append(stops, v)
+ 		}
+ 		sort.Ints(stops)
++		// Pick one descendant leaf for each vertex. Reverse settlement order
++		// visits children before their parents, without walking any raw word
++		// ahead of its existing charged reconstruction. All metadata is local
++		// to this source and never changes routing or logical work accounting.
++		leaf := make(map[int]int, len(stops))
++		for _, v := range stops {
++			leaf[v] = v
++		}
++		for i := len(settled) - 1; i >= 0; i-- {
++			v := settled[i]
++			if v != source {
++				leaf[x.ids[prev[v].From]] = leaf[v]
++			}
++		}
++		words := map[int][]model.Footpath{}
++		published := map[int]int{}
+ 		for _, v := range stops {
+ 			if e := w.tick(); e != nil {
+ 				return e
+@@ -90,16 +112,31 @@
+ 			}
+ 			x.snap.Stats.ClosurePaths++
+ 			p := paper.Path{To: x.names[v], Duration: dist[v], Edges: []model.Footpath{}}
++			owner := leaf[v]
++			word := words[owner]
+ 			for u := v; u != source; {
+ 				if e := w.tick(); e != nil {
+ 					return e
+ 				}
+ 				edge := prev[u]
+-				p.Edges = append(p.Edges, edge)
++				if word == nil {
++					// Allocate only after the original first successful hop tick.
++					// The unseen suffix may remain uninitialized until a later
++					// target, but no published prefix is ever written again.
++					word = make([]model.Footpath, depth[owner])
++					words[owner] = word
++				}
++				position := depth[u] - 1
++				if position >= published[owner] {
++					word[position] = edge
++				}
+ 				u = x.ids[edge.From]
+ 			}
+-			for i, j := 0, len(p.Edges)-1; i < j; i, j = i+1, j-1 {
+-				p.Edges[i], p.Edges[j] = p.Edges[j], p.Edges[i]
++			if length := depth[v]; length > 0 {
++				published[owner] = max(published[owner], length)
++				// Capacity limiting prevents append from touching another path's
++				// suffix. Consumers must also keep visible elements immutable.
++				p.Edges = word[:length:length]
+ 			}
+ 			x.walks[source] = append(x.walks[source], p)
+ 			x.snap.ClosureDiameter = max(x.snap.ClosureDiameter, p.Duration)

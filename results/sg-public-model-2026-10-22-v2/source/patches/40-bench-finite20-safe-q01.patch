@@ -1,0 +1,968 @@
+--- /dev/null
++++ b/FINITE_SAFE_MATRIX.json
+@@ -0,0 +1,579 @@
++{
++  "exposure": "393 and stress are exposed tune diagnostics, never optimizer inputs; no untouched preference-generalization claim",
++  "policies": [
++    {
++      "config": {
++        "delivery_limits": [
++          3
++        ],
++        "delivery_policy": "finite20_safe_v1",
++        "finite20_safe": {
++          "baseline": {
++            "delivery_limits": [
++              3
++            ],
++            "delivery_policy": "finite_preferences_v2",
++            "groups": [
++              {
++                "description": "Fixed20 nonnegative score hypotheses from the preexisting evaluator; not learned rider preferences or population probabilities.",
++                "name": "explicit_twenty_hypotheses",
++                "preferences": [
++                  {
++                    "extra_walk_weight": 0,
++                    "id": "t0_w0",
++                    "transfer_seconds": 0
++                  },
++                  {
++                    "extra_walk_weight": 1,
++                    "id": "t0_w1",
++                    "transfer_seconds": 0
++                  },
++                  {
++                    "extra_walk_weight": 2,
++                    "id": "t0_w2",
++                    "transfer_seconds": 0
++                  },
++                  {
++                    "extra_walk_weight": 4,
++                    "id": "t0_w4",
++                    "transfer_seconds": 0
++                  },
++                  {
++                    "extra_walk_weight": 0,
++                    "id": "t150_w0",
++                    "transfer_seconds": 150
++                  },
++                  {
++                    "extra_walk_weight": 1,
++                    "id": "t150_w1",
++                    "transfer_seconds": 150
++                  },
++                  {
++                    "extra_walk_weight": 2,
++                    "id": "t150_w2",
++                    "transfer_seconds": 150
++                  },
++                  {
++                    "extra_walk_weight": 4,
++                    "id": "t150_w4",
++                    "transfer_seconds": 150
++                  },
++                  {
++                    "extra_walk_weight": 0,
++                    "id": "t300_w0",
++                    "transfer_seconds": 300
++                  },
++                  {
++                    "extra_walk_weight": 1,
++                    "id": "t300_w1",
++                    "transfer_seconds": 300
++                  },
++                  {
++                    "extra_walk_weight": 2,
++                    "id": "t300_w2",
++                    "transfer_seconds": 300
++                  },
++                  {
++                    "extra_walk_weight": 4,
++                    "id": "t300_w4",
++                    "transfer_seconds": 300
++                  },
++                  {
++                    "extra_walk_weight": 0,
++                    "id": "t600_w0",
++                    "transfer_seconds": 600
++                  },
++                  {
++                    "extra_walk_weight": 1,
++                    "id": "t600_w1",
++                    "transfer_seconds": 600
++                  },
++                  {
++                    "extra_walk_weight": 2,
++                    "id": "t600_w2",
++                    "transfer_seconds": 600
++                  },
++                  {
++                    "extra_walk_weight": 4,
++                    "id": "t600_w4",
++                    "transfer_seconds": 600
++                  },
++                  {
++                    "extra_walk_weight": 0,
++                    "id": "t900_w0",
++                    "transfer_seconds": 900
++                  },
++                  {
++                    "extra_walk_weight": 1,
++                    "id": "t900_w1",
++                    "transfer_seconds": 900
++                  },
++                  {
++                    "extra_walk_weight": 2,
++                    "id": "t900_w2",
++                    "transfer_seconds": 900
++                  },
++                  {
++                    "extra_walk_weight": 4,
++                    "id": "t900_w4",
++                    "transfer_seconds": 900
++                  }
++                ]
++              }
++            ],
++            "lean_delivery": true,
++            "max_candidates": 1024,
++            "max_subsets": 200000
++          },
++          "domain": {
++            "distinct_patterns": false,
++            "exact_subset_search": true,
++            "limits": [
++              3
++            ],
++            "max_critical_points": 100000,
++            "max_extra_walk_weight": 4,
++            "max_matrix_bytes": 67108864,
++            "max_transfer_seconds": 900,
++            "max_work": 50000000,
++            "min_extra_walk_weight": 0,
++            "min_transfer_seconds": 0,
++            "nested": false,
++            "objective": "absolute"
++          },
++          "max_candidates": 64,
++          "max_total_subset_states": 200000
++        },
++        "lean_delivery": true,
++        "max_candidates": 64,
++        "max_subsets": 200000
++      },
++      "feature_config": {
++        "baseline": {
++          "delivery_limits": [
++            3
++          ],
++          "delivery_policy": "finite_preferences_v2",
++          "groups": [
++            {
++              "description": "Fixed20 nonnegative score hypotheses from the preexisting evaluator; not learned rider preferences or population probabilities.",
++              "name": "explicit_twenty_hypotheses",
++              "preferences": [
++                {
++                  "extra_walk_weight": 0,
++                  "id": "t0_w0",
++                  "transfer_seconds": 0
++                },
++                {
++                  "extra_walk_weight": 1,
++                  "id": "t0_w1",
++                  "transfer_seconds": 0
++                },
++                {
++                  "extra_walk_weight": 2,
++                  "id": "t0_w2",
++                  "transfer_seconds": 0
++                },
++                {
++                  "extra_walk_weight": 4,
++                  "id": "t0_w4",
++                  "transfer_seconds": 0
++                },
++                {
++                  "extra_walk_weight": 0,
++                  "id": "t150_w0",
++                  "transfer_seconds": 150
++                },
++                {
++                  "extra_walk_weight": 1,
++                  "id": "t150_w1",
++                  "transfer_seconds": 150
++                },
++                {
++                  "extra_walk_weight": 2,
++                  "id": "t150_w2",
++                  "transfer_seconds": 150
++                },
++                {
++                  "extra_walk_weight": 4,
++                  "id": "t150_w4",
++                  "transfer_seconds": 150
++                },
++                {
++                  "extra_walk_weight": 0,
++                  "id": "t300_w0",
++                  "transfer_seconds": 300
++                },
++                {
++                  "extra_walk_weight": 1,
++                  "id": "t300_w1",
++                  "transfer_seconds": 300
++                },
++                {
++                  "extra_walk_weight": 2,
++                  "id": "t300_w2",
++                  "transfer_seconds": 300
++                },
++                {
++                  "extra_walk_weight": 4,
++                  "id": "t300_w4",
++                  "transfer_seconds": 300
++                },
++                {
++                  "extra_walk_weight": 0,
++                  "id": "t600_w0",
++                  "transfer_seconds": 600
++                },
++                {
++                  "extra_walk_weight": 1,
++                  "id": "t600_w1",
++                  "transfer_seconds": 600
++                },
++                {
++                  "extra_walk_weight": 2,
++                  "id": "t600_w2",
++                  "transfer_seconds": 600
++                },
++                {
++                  "extra_walk_weight": 4,
++                  "id": "t600_w4",
++                  "transfer_seconds": 600
++                },
++                {
++                  "extra_walk_weight": 0,
++                  "id": "t900_w0",
++                  "transfer_seconds": 900
++                },
++                {
++                  "extra_walk_weight": 1,
++                  "id": "t900_w1",
++                  "transfer_seconds": 900
++                },
++                {
++                  "extra_walk_weight": 2,
++                  "id": "t900_w2",
++                  "transfer_seconds": 900
++                },
++                {
++                  "extra_walk_weight": 4,
++                  "id": "t900_w4",
++                  "transfer_seconds": 900
++                }
++              ]
++            }
++          ],
++          "lean_delivery": true,
++          "max_candidates": 1024,
++          "max_subsets": 200000
++        },
++        "domain": {
++          "distinct_patterns": false,
++          "exact_subset_search": true,
++          "limits": [
++            3
++          ],
++          "max_critical_points": 100000,
++          "max_extra_walk_weight": 4,
++          "max_matrix_bytes": 67108864,
++          "max_transfer_seconds": 900,
++          "max_work": 50000000,
++          "min_extra_walk_weight": 0,
++          "min_transfer_seconds": 0,
++          "nested": false,
++          "objective": "absolute"
++        },
++        "max_candidates": 64,
++        "max_total_subset_states": 200000
++      },
++      "id": "finite20_safe_absolute_exact_v1"
++    },
++    {
++      "config": {
++        "delivery_limits": [
++          3
++        ],
++        "delivery_policy": "finite20_safe_v1",
++        "finite20_safe": {
++          "baseline": {
++            "delivery_limits": [
++              3
++            ],
++            "delivery_policy": "finite_preferences_v2",
++            "groups": [
++              {
++                "description": "Fixed20 nonnegative score hypotheses from the preexisting evaluator; not learned rider preferences or population probabilities.",
++                "name": "explicit_twenty_hypotheses",
++                "preferences": [
++                  {
++                    "extra_walk_weight": 0,
++                    "id": "t0_w0",
++                    "transfer_seconds": 0
++                  },
++                  {
++                    "extra_walk_weight": 1,
++                    "id": "t0_w1",
++                    "transfer_seconds": 0
++                  },
++                  {
++                    "extra_walk_weight": 2,
++                    "id": "t0_w2",
++                    "transfer_seconds": 0
++                  },
++                  {
++                    "extra_walk_weight": 4,
++                    "id": "t0_w4",
++                    "transfer_seconds": 0
++                  },
++                  {
++                    "extra_walk_weight": 0,
++                    "id": "t150_w0",
++                    "transfer_seconds": 150
++                  },
++                  {
++                    "extra_walk_weight": 1,
++                    "id": "t150_w1",
++                    "transfer_seconds": 150
++                  },
++                  {
++                    "extra_walk_weight": 2,
++                    "id": "t150_w2",
++                    "transfer_seconds": 150
++                  },
++                  {
++                    "extra_walk_weight": 4,
++                    "id": "t150_w4",
++                    "transfer_seconds": 150
++                  },
++                  {
++                    "extra_walk_weight": 0,
++                    "id": "t300_w0",
++                    "transfer_seconds": 300
++                  },
++                  {
++                    "extra_walk_weight": 1,
++                    "id": "t300_w1",
++                    "transfer_seconds": 300
++                  },
++                  {
++                    "extra_walk_weight": 2,
++                    "id": "t300_w2",
++                    "transfer_seconds": 300
++                  },
++                  {
++                    "extra_walk_weight": 4,
++                    "id": "t300_w4",
++                    "transfer_seconds": 300
++                  },
++                  {
++                    "extra_walk_weight": 0,
++                    "id": "t600_w0",
++                    "transfer_seconds": 600
++                  },
++                  {
++                    "extra_walk_weight": 1,
++                    "id": "t600_w1",
++                    "transfer_seconds": 600
++                  },
++                  {
++                    "extra_walk_weight": 2,
++                    "id": "t600_w2",
++                    "transfer_seconds": 600
++                  },
++                  {
++                    "extra_walk_weight": 4,
++                    "id": "t600_w4",
++                    "transfer_seconds": 600
++                  },
++                  {
++                    "extra_walk_weight": 0,
++                    "id": "t900_w0",
++                    "transfer_seconds": 900
++                  },
++                  {
++                    "extra_walk_weight": 1,
++                    "id": "t900_w1",
++                    "transfer_seconds": 900
++                  },
++                  {
++                    "extra_walk_weight": 2,
++                    "id": "t900_w2",
++                    "transfer_seconds": 900
++                  },
++                  {
++                    "extra_walk_weight": 4,
++                    "id": "t900_w4",
++                    "transfer_seconds": 900
++                  }
++                ]
++              }
++            ],
++            "lean_delivery": true,
++            "max_candidates": 1024,
++            "max_subsets": 200000
++          },
++          "domain": {
++            "distinct_patterns": false,
++            "exact_subset_search": true,
++            "limits": [
++              3
++            ],
++            "max_critical_points": 100000,
++            "max_extra_walk_weight": 4,
++            "max_matrix_bytes": 67108864,
++            "max_transfer_seconds": 900,
++            "max_work": 50000000,
++            "min_extra_walk_weight": 0,
++            "min_transfer_seconds": 0,
++            "nested": false,
++            "objective": "normalized"
++          },
++          "max_candidates": 64,
++          "max_total_subset_states": 200000
++        },
++        "lean_delivery": true,
++        "max_candidates": 64,
++        "max_subsets": 200000
++      },
++      "feature_config": {
++        "baseline": {
++          "delivery_limits": [
++            3
++          ],
++          "delivery_policy": "finite_preferences_v2",
++          "groups": [
++            {
++              "description": "Fixed20 nonnegative score hypotheses from the preexisting evaluator; not learned rider preferences or population probabilities.",
++              "name": "explicit_twenty_hypotheses",
++              "preferences": [
++                {
++                  "extra_walk_weight": 0,
++                  "id": "t0_w0",
++                  "transfer_seconds": 0
++                },
++                {
++                  "extra_walk_weight": 1,
++                  "id": "t0_w1",
++                  "transfer_seconds": 0
++                },
++                {
++                  "extra_walk_weight": 2,
++                  "id": "t0_w2",
++                  "transfer_seconds": 0
++                },
++                {
++                  "extra_walk_weight": 4,
++                  "id": "t0_w4",
++                  "transfer_seconds": 0
++                },
++                {
++                  "extra_walk_weight": 0,
++                  "id": "t150_w0",
++                  "transfer_seconds": 150
++                },
++                {
++                  "extra_walk_weight": 1,
++                  "id": "t150_w1",
++                  "transfer_seconds": 150
++                },
++                {
++                  "extra_walk_weight": 2,
++                  "id": "t150_w2",
++                  "transfer_seconds": 150
++                },
++                {
++                  "extra_walk_weight": 4,
++                  "id": "t150_w4",
++                  "transfer_seconds": 150
++                },
++                {
++                  "extra_walk_weight": 0,
++                  "id": "t300_w0",
++                  "transfer_seconds": 300
++                },
++                {
++                  "extra_walk_weight": 1,
++                  "id": "t300_w1",
++                  "transfer_seconds": 300
++                },
++                {
++                  "extra_walk_weight": 2,
++                  "id": "t300_w2",
++                  "transfer_seconds": 300
++                },
++                {
++                  "extra_walk_weight": 4,
++                  "id": "t300_w4",
++                  "transfer_seconds": 300
++                },
++                {
++                  "extra_walk_weight": 0,
++                  "id": "t600_w0",
++                  "transfer_seconds": 600
++                },
++                {
++                  "extra_walk_weight": 1,
++                  "id": "t600_w1",
++                  "transfer_seconds": 600
++                },
++                {
++                  "extra_walk_weight": 2,
++                  "id": "t600_w2",
++                  "transfer_seconds": 600
++                },
++                {
++                  "extra_walk_weight": 4,
++                  "id": "t600_w4",
++                  "transfer_seconds": 600
++                },
++                {
++                  "extra_walk_weight": 0,
++                  "id": "t900_w0",
++                  "transfer_seconds": 900
++                },
++                {
++                  "extra_walk_weight": 1,
++                  "id": "t900_w1",
++                  "transfer_seconds": 900
++                },
++                {
++                  "extra_walk_weight": 2,
++                  "id": "t900_w2",
++                  "transfer_seconds": 900
++                },
++                {
++                  "extra_walk_weight": 4,
++                  "id": "t900_w4",
++                  "transfer_seconds": 900
++                }
++              ]
++            }
++          ],
++          "lean_delivery": true,
++          "max_candidates": 1024,
++          "max_subsets": 200000
++        },
++        "domain": {
++          "distinct_patterns": false,
++          "exact_subset_search": true,
++          "limits": [
++            3
++          ],
++          "max_critical_points": 100000,
++          "max_extra_walk_weight": 4,
++          "max_matrix_bytes": 67108864,
++          "max_transfer_seconds": 900,
++          "max_work": 50000000,
++          "min_extra_walk_weight": 0,
++          "min_transfer_seconds": 0,
++          "nested": false,
++          "objective": "normalized"
++        },
++        "max_candidates": 64,
++        "max_total_subset_states": 200000
++      },
++      "id": "finite20_safe_normalized_exact_v1"
++    }
++  ],
++  "schema": "sg-finite20-safe-preregistration-v1",
++  "serving_contract": "offline feature-only exact top3; not serving integration or timing"
++}
+--- /dev/null
++++ b/HYBRID_FILL_MATRIX.json
+@@ -0,0 +1,11 @@
++{
++  "algorithm_variants": 1,
++  "display_budgets": [
++    3,
++    5
++  ],
++  "no393_optimizer_inputs": true,
++  "policies": [],
++  "priority": "historical finite20,pattern envelope300,default Feature less order; never remove base IDs",
++  "schema": "sg-one-absolute-hybrid-fill-preregistration-v1"
++}
+--- a/cmd/familybench/main.go
++++ b/cmd/familybench/main.go
+@@ -362,7 +362,7 @@
+ 	qualityPrepStart := time.Now()
+ 	var qualityIndex *recommend.Index
+ 	if *quality {
+-		if choiceConfig != nil && (choiceConfig.Bounded != nil || choiceConfig.LeanDelivery) {
++		if choiceConfig != nil && (choiceConfig.Bounded != nil || choiceConfig.FiniteSafe != nil || choiceConfig.LeanDelivery) {
+ 			qualityIndex, e = recommend.NewBoundedFromChecker(checker)
+ 		} else {
+ 			qualityIndex, e = recommend.New(d)
+@@ -376,7 +376,7 @@
+ 	qualityMode := "disabled"
+ 	if *quality {
+ 		qualityMode = "legacy_full_recovery"
+-		if choiceConfig != nil && (choiceConfig.Bounded != nil || choiceConfig.LeanDelivery) {
++		if choiceConfig != nil && (choiceConfig.Bounded != nil || choiceConfig.FiniteSafe != nil || choiceConfig.LeanDelivery) {
+ 			qualityMode = "bounded_shared_checker_no_recovery"
+ 		}
+ 	}
+--- /dev/null
++++ b/cmd/finitesafeprobe/main.go
+@@ -0,0 +1,23 @@
++package main
++
++// Offline feature-only qualification CLI. Not a routing/serving endpoint.
++import (
++ "context"
++ "encoding/json"
++ "fmt"
++ "io"
++ "os"
++
++ "github.com/ertyoii/transit-routing-bench/experiment"
++ "github.com/ertyoii/transit-routing-go/recommend"
++)
++func main(){
++ dec:=json.NewDecoder(os.Stdin);dec.DisallowUnknownFields();enc:=json.NewEncoder(os.Stdout);seen:=map[string]bool{}
++ for {
++  var request struct{ID string `json:"request_id"`;Features []recommend.Feature `json:"features"`;Config recommend.FiniteSafeConfig `json:"config"`}
++  err:=dec.Decode(&request);if err==io.EOF{return};if err!=nil{fmt.Fprintln(os.Stderr,err);os.Exit(2)}
++  if request.ID==""||seen[request.ID]{fmt.Fprintln(os.Stderr,"duplicate/empty request ID");os.Exit(2)};seen[request.ID]=true
++  result,err:=recommend.SelectFiniteSafe(context.Background(),request.Features,request.Config);message:="";if err!=nil{message=err.Error()}
++  if err=enc.Encode(map[string]any{"request_id":request.ID,"result":result,"error":message,"build_source_sha256":experiment.BuildSourceSHA256});err!=nil{fmt.Fprintln(os.Stderr,err);os.Exit(2)}
++ }
++}
+--- /dev/null
++++ b/regression/finite_safe_lean_test.go
+@@ -0,0 +1,27 @@
++package regression
++
++// STATIC STAGING ONLY: lean serving adapter qualification on a tiny literal model.
++import (
++ "context"
++ "fmt"
++ "testing"
++
++ "github.com/ertyoii/transit-routing-go/model"
++ "github.com/ertyoii/transit-routing-go/recommend"
++ "github.com/ertyoii/transit-routing-go/validate"
++)
++func safeServingConfig(objective string)recommend.ChoiceConfig{
++ prefs:=[]recommend.Preference{};for _,t:=range []int64{0,150,300,600,900}{for _,w:=range []int64{0,1,2,4}{prefs=append(prefs,recommend.Preference{ID:fmt.Sprintf("t%d_w%d",t,w),TransferSeconds:t,ExtraWalkWeight:w})}}
++ baseline:=recommend.ChoiceConfig{MaxCandidates:1024,MaxSubsets:200000,LeanDelivery:true,DeliveryPolicy:"finite_preferences_v2",DeliveryLimits:[]int{3},Groups:[]recommend.PreferenceGroup{{Name:"explicit_twenty_hypotheses",Preferences:prefs}}}
++ safe:=&recommend.FiniteSafeConfig{Baseline:baseline,MaxCandidates:64,MaxStates:200000,Domain:recommend.BoundedConfig{MinTransfer:0,MaxTransfer:900,MinWalk:0,MaxWalk:4,Objective:objective,Limits:[]int{3},Exact:true,MaxCriticalPoints:100000,MaxWork:50000000,MaxMatrixBytes:67108864}}
++ return recommend.ChoiceConfig{MaxCandidates:64,MaxSubsets:200000,LeanDelivery:true,DeliveryPolicy:"finite20_safe_v1",DeliveryLimits:[]int{3},FiniteSafe:safe}
++}
++func TestFiniteSafeLeanServingUsesCheckerSnapshotAndRejectsLegacyIndex(t *testing.T){
++ d:=model.Dataset{SchemaVersion:"0.2",ID:"safe-lean-toy",TimeZone:"Asia/Singapore",ServiceDate:"2026-10-20",Stops:[]model.Stop{{ID:"a",Accessible:model.Yes},{ID:"b",Accessible:model.Yes}},Trips:[]model.Trip{{ID:"t",RouteID:"r",Accessible:model.Yes}},Connections:[]model.Connection{{ID:"c",TripID:"t",Sequence:0,From:"a",To:"b",Departure:10,Arrival:20,Pickup:true,Dropoff:true}},Footpaths:[]model.Footpath{}}
++ checker,err:=validate.New(d);if err!=nil{t.Fatal(err)};lean,err:=recommend.NewBoundedFromChecker(checker);if err!=nil{t.Fatal(err)}
++ q:=model.Query{ID:"q",Origin:"a",Destination:"b",Departure:0,LatestArrival:100,MaxBoardings:1,MaxLegs:3};j:=model.Journey{Legs:[]model.Leg{{Kind:"ride",Ref:"c",Departure:10,Arrival:20}}}
++ d.Connections[0].Arrival=50 // Must not mutate the checker's private model snapshot.
++ for _,objective:=range []string{"absolute","normalized"}{cfg:=safeServingConfig(objective);out,e:=lean.EvaluateChoices(context.Background(),q,[]model.Journey{j},cfg);if e!=nil||out.FiniteSafeChoices==nil||!out.FiniteSafeChoices.Complete||len(out.Features)!=1||out.Features[0].Duration!=20||out.ContinuousChoices!=nil||out.Choices!=nil||len(out.Selections)!=0{t.Fatalf("lean safe route changed or controls leaked: %+v %v",out,e)}}
++ legacy,err:=recommend.New(d);if err!=nil{t.Fatal(err)};if _,err=legacy.EvaluateChoices(context.Background(),q,[]model.Journey{j},safeServingConfig("absolute"));err==nil{t.Fatal("legacy recovery constructor silently accepted safe serving config")}
++ cfg:=safeServingConfig("absolute");cfg.DeliveryLimits=[]int{5};if _,err=lean.EvaluateChoices(context.Background(),q,[]model.Journey{j},cfg);err==nil{t.Fatal("wrong requested limit accepted")}
++}
+--- a/routing.lock.json
++++ b/routing.lock.json
+@@ -69,9 +69,12 @@
+     "raptor/v2_frozen_test.go": "6e4d8214d90c4ee52c1591d9d0b7128dd6b9fa4b571418d973b353dd9be29a9f",
+     "raptor/v2_storage_test.go": "f2df5310c9b1656963bbddf7e0eb9a87f88f872faad59f905c81e3ceeaf73c85",
+     "recommend/bounded.go": "b23345b9e8899b6275a833f64ca90f8e5bfb743960b7fc9e960a5d8d831d5e56",
+-    "recommend/choices.go": "d1da5b3416d843dc9e9f3bd303c19529386251856eca728c07222365d71952ff",
++    "recommend/choices.go": "b2223d075788edb645083682d4ecb5e12e34d66e747393673fcbda9549dd94d5",
++    "recommend/finite_safe.go": "22be30f8c399ab6b4e615995a8e1ed9dd966d3254ca53f333de1f6128de722a7",
++    "recommend/finite_safe_evaluate.go": "9078311f3529533abce60caa2e6f64f329458aaddd54e7e35d1ea8f13107c28a",
++    "recommend/finite_safe_test.go": "0b175f9d38d6396f3f62eac9154b68019d8a12c7f7a35e0c9f26185e23e81ce8",
+     "recommend/lean.go": "9db7855a5cea9469e039fe8bfa5c543df8d0183d9cd3c5bb57b453b75b6a5927",
+-    "recommend/quality.go": "fcb35c8914345f9eebbbf78cb0bf18df19f0e5d1dc7054833d7f9ca90f9bd8fe",
++    "recommend/quality.go": "86627124f80d29833aeca397328f51aae79346927ee13c5d9954b59888fd5157",
+     "selection/reserved.go": "180080a439d9aadb56b5245cd614d850751352026f1ea3c4e1ce2c8f8de246ca",
+     "selection/select.go": "6d0531acccf41a7348f7f0e18ace5242459ec72f168da9c8248023c0b387edfb",
+     "strictjson/decode.go": "9a47b1a00708ca467f650ecdf192d794d0e7bf4cf7ff0082ba1f2fc4a699a163",
+@@ -199,7 +202,7 @@
+     "walking/transit/graph.go": "07ec2ac36311597ed657b686be7bc222ef3ac7ec022473d1f55729f5754b6fbe"
+   },
+   "module": "github.com/ertyoii/transit-routing-go",
+-  "origin": "TB-answer-tie common source plus NEW Sparse scalar cost summary; previous native vendor bytes unchanged. Full same-index proof evidence retained after serving; diagnostics-only, not a query-kernel speedup.",
+-  "source_sha256": "01b92621fd413ccfa5f9659954b8c3f3a7d0c0b2951b3fb60a40a85b4c7861dd",
++  "origin": "TB-answer-tie common source plus NEW Sparse scalar cost summary; previous native vendor bytes unchanged. Full same-index proof evidence retained after serving; diagnostics-only, not a query-kernel speedup. Additive finite20-safe V1 offline feature probe only, not serving qualification.",
++  "source_sha256": "96b6db8bea03c0fadff1394dc54182ba7ef99eda6d28026f1c9490c11588c745",
+   "version": "v0.1.0-pre.3"
+ }
+--- a/vendor/github.com/ertyoii/transit-routing-go/recommend/choices.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/recommend/choices.go
+@@ -21,6 +21,7 @@
+ 	Preferences []Preference `json:"preferences"`
+ }
+ type ChoiceConfig struct {
++	FiniteSafe *FiniteSafeConfig `json:"finite20_safe,omitempty"`
+ 	LeanDelivery   bool              `json:"lean_delivery,omitempty"`
+ 	DeliveryPolicy string            `json:"delivery_policy,omitempty"`
+ 	DeliveryLimits []int             `json:"delivery_limits,omitempty"`
+@@ -30,7 +31,14 @@
+ 	Groups         []PreferenceGroup `json:"groups"`
+ }
+ 
++func nestedDeliveryConfig(c ChoiceConfig) bool { return c.FiniteSafe != nil }
++
+ func (c ChoiceConfig) Validate() error {
++ if c.FiniteSafe != nil {
++  if c.Bounded != nil || !c.LeanDelivery || c.DeliveryPolicy != "finite20_safe_v1" || len(c.DeliveryLimits) != 1 || c.DeliveryLimits[0] != 3 || len(c.Groups) != 0 || c.MaxCandidates != c.FiniteSafe.MaxCandidates || c.MaxSubsets != c.FiniteSafe.MaxStates { return fmt.Errorf("finite20-safe named config/limits/guards are inconsistent") }
++  return c.FiniteSafe.Validate()
++ }
++
+ 	if c.Bounded != nil && c.LeanDelivery {
+ 		return fmt.Errorf("bounded and legacy lean delivery configurations are mutually exclusive")
+ 	}
+@@ -123,6 +131,7 @@
+ 	if err = cfg.Validate(); err != nil {
+ 		return
+ 	}
++	if cfg.FiniteSafe != nil { return x.EvaluateFiniteSafe(ctx, q, js, cfg) }
+ 	if cfg.Bounded != nil {
+ 		return x.EvaluateBounded(ctx, q, js, cfg)
+ 	}
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/recommend/finite_safe.go
+@@ -0,0 +1,157 @@
++package recommend
++
++// STATIC STAGING ONLY: not compiled, qualified, wired into serving, or benchmarked.
++// The historical20 profiles are constraints, never an off-grid evaluation target.
++import (
++ "context"
++ "fmt"
++ "sort"
++
++ "github.com/ertyoii/transit-routing-go/model"
++)
++
++const finiteSafeMaxInt64 = int64(1<<63-1)
++
++type FiniteSafeConfig struct {
++ Baseline ChoiceConfig `json:"baseline"`
++ Domain BoundedConfig `json:"domain"`
++ MaxCandidates int `json:"max_candidates"`
++ MaxStates int `json:"max_total_subset_states"`
++}
++type FiniteSafePreflight struct {
++ CandidateCount int `json:"candidate_count"`
++ CriticalPointsUpperBound int64 `json:"critical_points_upper_bound"`
++ BaselineStatesUpperBound int64 `json:"baseline_states_upper_bound"`
++ RepairStatesUpperBound int64 `json:"repair_states_upper_bound"`
++ MatrixBytesUpperBound int64 `json:"matrix_bytes_upper_bound"`
++ WorkUpperBound int64 `json:"work_upper_bound"`
++ Feasible bool `json:"resource_feasible"`
++}
++type FiniteSafeConstraint struct {
++ PreferenceID string `json:"preference_id"`
++ BaselineScore int64 `json:"baseline_selected_score"`
++ RepairScore int64 `json:"repair_selected_score"`
++ PointwiseNonworse bool `json:"pointwise_nonworse"`
++}
++type FiniteSafeResult struct {
++ Policy string `json:"policy"`
++ Config FiniteSafeConfig `json:"config"`
++ Complete bool `json:"complete"`
++ Error string `json:"error,omitempty"`
++ FailureStage string `json:"failure_stage,omitempty"`
++ InputCandidates int `json:"input_candidates"`
++ InputPatterns int `json:"input_patterns"`
++ CandidateReduction string `json:"candidate_reduction"`
++ Preflight FiniteSafePreflight `json:"preflight"`
++ Baseline *Choice `json:"baseline,omitempty"`
++ BaselineComplete bool `json:"baseline_complete"`
++ BaselineExclusions map[string]string `json:"baseline_exclusions"`
++ BaselineStates int `json:"baseline_states"`
++ RepairStates int `json:"repair_states"`
++ FeasibleRepairStates int `json:"feasible_repair_states"`
++ ChargedWork int64 `json:"charged_work_including_conservative_baseline_and_branch_allowance"`
++ CriticalPoints int `json:"critical_points"`
++ Selection *ContinuousSelection `json:"selection,omitempty"`
++ Constraints []FiniteSafeConstraint `json:"pointwise_constraints,omitempty"`
++ GuaranteeScope string `json:"guarantee_scope"`
++}
++
++func (c FiniteSafeConfig) Validate() error {
++ if nestedDeliveryConfig(c.Baseline){return fmt.Errorf("nested finite20-safe baseline is forbidden")}
++ if err:=c.Baseline.Validate();err!=nil{return err}
++ if err:=c.Domain.Validate();err!=nil{return err}
++ if c.MaxCandidates<1||c.MaxCandidates>64||c.MaxStates<1||c.MaxStates>200000{return fmt.Errorf("finite-safe V1 candidate/state guard outside preregistered bounds")}
++ if c.Domain.MinTransfer!=0||c.Domain.MaxTransfer!=900||c.Domain.MinWalk!=0||c.Domain.MaxWalk!=4||c.Domain.MaxCriticalPoints>100000||c.Domain.MaxWork>50000000||c.Domain.MaxMatrixBytes!=67108864{return fmt.Errorf("finite-safe V1 domain/resource contract differs")}
++ if c.Domain.DistinctPatterns||c.Domain.Nested||c.Domain.ExactWhenFeasible||!c.Domain.Exact||len(c.Domain.Limits)!=1||c.Domain.Limits[0]!=3{return fmt.Errorf("finite-safe V1 supports exact unconstrained top3 only")}
++ if c.Baseline.Bounded!=nil||!c.Baseline.LeanDelivery||c.Baseline.DeliveryPolicy!="finite_preferences_v2"||len(c.Baseline.DeliveryLimits)!=1||c.Baseline.DeliveryLimits[0]!=3||len(c.Baseline.Groups)!=1||len(c.Baseline.Groups[0].Preferences)!=20{return fmt.Errorf("finite-safe V1 requires historical20 finite lean top3 baseline")}
++ // Require the exact preexisting order, identifiers, and integer coefficients.
++ // The group description does not participate in scoring.
++ pos:=0
++ for _,t:=range []int64{0,150,300,600,900}{for _,w:=range []int64{0,1,2,4}{p:=c.Baseline.Groups[0].Preferences[pos];if p.ID!=fmt.Sprintf("t%d_w%d",t,w)||p.TransferSeconds!=t||p.ExtraWalkWeight!=w{return fmt.Errorf("historical20 preference changed at index %d",pos)};pos++}}
++ return nil
++}
++func finiteSafeChoose(n,k int) int64 {
++ if k<0||k>n{return 0};if k>n-k{k=n-k};out:=int64(1)
++ // V1 n<=64,k<=3 makes intermediate arithmetic safely bounded in int64.
++ for i:=1;i<=k;i++{out=out*int64(n-k+i)/int64(i)}
++ return out
++}
++func finiteSafeResource(n int,c FiniteSafeConfig)(p FiniteSafePreflight,baselineWork,repairBranches int64){
++ p.CandidateCount=n;if n==0{p.Feasible=true;return}
++ k:=min(3,n);pairs:=finiteSafeChoose(n,2);triples:=finiteSafeChoose(n,3)
++ p.CriticalPointsUpperBound=4+4*pairs+triples
++ var states,weightedStates int64
++ for s:=1;s<=k;s++{count:=finiteSafeChoose(n,s);states+=count;weightedStates+=count*int64(s)}
++ p.BaselineStatesUpperBound=states;p.RepairStatesUpperBound=states
++ // Include both continuous float64 matrices plus the int64 historical20 matrix.
++ p.MatrixBytesUpperBound=16*int64(n)*p.CriticalPointsUpperBound+8*20*int64(n)
++ branch:=states*int64(n*(k+1)*(k+1));repairBranches=branch
++ // Conservative baseline reduction, matrix, recursion and score comparisons;
++ // it deliberately does not exploit representatives or early zero stopping.
++ baselineWork=3*int64(n*n)+20*int64(n)+branch+20*weightedStates
++ geometry:=4+4*pairs+triples+2*int64(n)*p.CriticalPointsUpperBound
++ repair:=branch+20*int64(n)+20*weightedStates+weightedStates*p.CriticalPointsUpperBound
++ p.WorkUpperBound=baselineWork+geometry+repair
++ p.Feasible=int64(n)<=int64(c.MaxCandidates)&&n<=c.Baseline.MaxCandidates&&2*states<=int64(c.MaxStates)&&states<=int64(c.Baseline.MaxSubsets)&&p.CriticalPointsUpperBound<=int64(c.Domain.MaxCriticalPoints)&&p.MatrixBytesUpperBound<=c.Domain.MaxMatrixBytes&&p.WorkUpperBound<=c.Domain.MaxWork
++ return
++}
++
++// SelectFiniteSafe consumes already-validated unique features. It does not route,
++// recover, authenticate utility, or establish complete journey discovery.
++// No caller should serve Baseline as an implicit fallback when Complete is false.
++func SelectFiniteSafe(ctx context.Context,features []Feature,cfg FiniteSafeConfig)(out *FiniteSafeResult,err error){
++ if err=cfg.Validate();err!=nil{return nil,err}
++ out=&FiniteSafeResult{Policy:"finite20_safe_"+cfg.Domain.Objective+"_exact_v1",Config:cfg,InputCandidates:len(features),CandidateReduction:"none: all original identities and patterns retained for repair; historical baseline reduction reported separately",BaselineExclusions:map[string]string{},Constraints:[]FiniteSafeConstraint{},GuaranteeScope:"pointwise nonworse than exact historical20 selected scores; exact <=3 subset search on supplied validated identities and declared rectangle under float64 1e-8 score-s/1e-12 normalized comparisons; not393/stress optimization, journey completeness, authentic utility, outside-domain guarantee, or serving latency qualification"}
++ e:=&boundedEngine{ctx:ctx,cfg:cfg.Domain,maxSubsets:cfg.MaxStates}
++ defer func(){out.ChargedWork=e.work;if err!=nil{out.Error=err.Error();out.Complete=false;out.Selection=nil;out.Constraints=nil}}()
++ out.FailureStage="input_validation"
++ if err=ctx.Err();err!=nil{return}
++ if len(features)>cfg.MaxCandidates{out.FailureStage="resource_preflight";out.Preflight.CandidateCount=len(features);err=fmt.Errorf("resource_preflight_infeasible: %w",ErrSelectionBudget);return}
++ seen:=map[string]bool{};patterns:=map[string]bool{}
++ for _,f:=range features{
++  if err=ctx.Err();err!=nil{return}
++  if f.Identity==""||seen[f.Identity]{err=fmt.Errorf("invalid duplicate/empty candidate identity");return};seen[f.Identity]=true;patterns[f.Pattern]=true
++  if f.Duration<0||f.Duration>model.MaxServiceSecond||f.Metrics.Transfers<0||f.Metrics.Transfers>1024||f.Metrics.WalkingSeconds<0||f.Metrics.WalkingSeconds>model.MaxServiceSecond{err=fmt.Errorf("out-of-contract score feature");return}
++ }
++ out.InputPatterns=len(patterns);out.FailureStage="resource_preflight"
++ var baselineWork,repairBranches int64
++ out.Preflight,baselineWork,repairBranches=finiteSafeResource(len(features),cfg)
++ if !out.Preflight.Feasible{err=fmt.Errorf("resource_preflight_infeasible: %w",ErrSelectionBudget);return}
++ fs:=append([]Feature{},features...);sort.Slice(fs,func(i,j int)bool{return fs[i].Identity<fs[j].Identity});e.fs=fs
++ if len(fs)==0{baseline:=describeChoice(fs,cfg.Baseline.Groups[0].Preferences,[]int{},"preference_minimax",3);baseline.Complete=true;baseline.PoolOptimal=true;out.Baseline=&baseline;out.BaselineComplete=true;out.Selection=&ContinuousSelection{Limit:3,Selected:[]string{},Method:"finite20_safe_empty_pool",Complete:true,SubsetOptimal:true};out.Complete=true;out.FailureStage="";return}
++ // Baseline/branch work is conservatively charged in advance, not guessed after
++ // a guard hit. Preflight bounds every possible baseline and repair subset.
++ if err=e.charge(baselineWork+repairBranches);err!=nil{return}
++ prefs:=cfg.Baseline.Groups[0].Preferences;out.FailureStage="historical_baseline"
++ reps:=choiceRepresentatives(fs,out.BaselineExclusions)
++ var baseIDs []int;baseIDs,out.BaselineStates,err=minimax(ctx,reps,prefs,3,cfg.Baseline.MaxSubsets);if err!=nil{return}
++ baseline:=describeChoice(reps,prefs,baseIDs,"preference_minimax",3);baseline.Complete=true;baseline.PoolOptimal=true;baseline.EvaluatedSubsets=out.BaselineStates;out.Baseline=&baseline;out.BaselineComplete=true
++ if err=e.charge(20*int64(len(fs)));err!=nil{return}
++ scores:=make([][]int64,len(fs));floor:=make([]int64,len(prefs));for p:=range floor{floor[p]=finiteSafeMaxInt64}
++ for _,i:=range baseIDs{for p,pref:=range prefs{floor[p]=min(floor[p],preferenceCost(reps[i],pref))}}
++ for i,f:=range fs{if err=ctx.Err();err!=nil{return};scores[i]=make([]int64,len(prefs));for p,pref:=range prefs{scores[i][p]=preferenceCost(f,pref)}}
++ out.FailureStage="critical_geometry"
++ if err=e.critical();err!=nil{return};out.CriticalPoints=len(e.points)
++ var best []int;var bestValue boundedValue;chosen:=[]int{};out.FailureStage="exact_repair"
++ for size:=1;size<=min(3,len(fs));size++{
++  var visit func(int)error
++  visit=func(start int)error{
++   if z:=ctx.Err();z!=nil{return z}
++   if len(chosen)==size{
++    if out.BaselineStates+out.RepairStates>=cfg.MaxStates{return ErrSelectionBudget};out.RepairStates++
++    if z:=e.charge(int64(size*len(prefs)));z!=nil{return z}
++    for p:=range prefs{got:=int64(finiteSafeMaxInt64);for _,i:=range chosen{got=min(got,scores[i][p])};if got>floor[p]{return nil}}
++    out.FeasibleRepairStates++;value,z:=e.evaluate(chosen);if z!=nil{return z}
++    if best==nil||e.better(value,bestValue){best=append([]int{},chosen...);bestValue=value};return nil
++   }
++   for i:=start;i<=len(fs)-(size-len(chosen));i++{chosen=append(chosen,i);if z:=visit(i+1);z!=nil{return z};chosen=chosen[:len(chosen)-1]};return nil
++  }
++  if err=visit(0);err!=nil{return}
++ }
++ if best==nil{err=fmt.Errorf("finite-safe invariant: historical baseline is feasible but no repair subset found");return}
++ s:=&ContinuousSelection{Limit:3,Selected:[]string{},Method:"finite20_safe_exhaustive_subset",Complete:true,SubsetOptimal:true,GlobalOptimalityClaim:false,WorstAbsolute:&bestValue.a,WorstNormalized:&bestValue.r,EvaluatedSubsets:out.RepairStates}
++ aw,rw:=e.points[bestValue.ai],e.points[bestValue.ri];s.AbsoluteWitness=&aw;s.NormalizedWitness=&rw;ps:=map[string]bool{}
++ for _,i:=range best{s.Selected=append(s.Selected,fs[i].Identity);ps[fs[i].Pattern]=true};s.DistinctPatternCount=len(ps)
++ for p,pref:=range prefs{got:=int64(finiteSafeMaxInt64);for _,i:=range best{got=min(got,scores[i][p])};if got>floor[p]{err=fmt.Errorf("finite-safe invariant: completed subset violates historical profile");return};out.Constraints=append(out.Constraints,FiniteSafeConstraint{PreferenceID:pref.ID,BaselineScore:floor[p],RepairScore:got,PointwiseNonworse:true})}
++ if err=ctx.Err();err!=nil{return};out.Selection=s;out.Complete=true;out.FailureStage="";return
++}
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/recommend/finite_safe_evaluate.go
+@@ -0,0 +1,29 @@
++package recommend
++
++// Additive serving adapter, STATIC STAGING ONLY: not compiled or qualified.
++import (
++ "context"
++ "fmt"
++ "sort"
++
++ "github.com/ertyoii/transit-routing-go/model"
++)
++func (x *Index) EvaluateFiniteSafe(ctx context.Context,q model.Query,js []model.Journey,cfg ChoiceConfig)(out Result,err error){
++ if err=cfg.Validate();err!=nil{return}
++ if cfg.FiniteSafe==nil{return out,fmt.Errorf("missing finite20-safe config")}
++ // Reject accidental legacy constructor use, rather than silently paying for a
++ // second checker/recovery indexes and calling it the qualified lean endpoint.
++ if !x.lean{return out,fmt.Errorf("finite20-safe requires shared-checker lean index")}
++ out=Result{Policy:"finite20_safe_"+cfg.FiniteSafe.Domain.Objective+"_exact_v1",FeatureMode:"validated_objective_pattern_slack_no_recovery",Features:[]Feature{},Selections:[]Selection{}}
++ if _,err=x.checker.Binding(q);err!=nil{return}
++ seen:=map[string]bool{}
++ for _,j:=range js{
++  if err=ctx.Err();err!=nil{return};var v model.Validated;v,err=x.checker.Check(q,j);if err!=nil{return};if seen[v.Identity]{continue};seen[v.Identity]=true
++  var f Feature;f,err=x.measure(q,v,false);if err!=nil{return};out.Features=append(out.Features,f)
++ }
++ sort.Slice(out.Features,func(i,j int)bool{return out.Features[i].Identity<out.Features[j].Identity})
++ // The historical finite20 exact baseline and all pointwise guard work execute
++ // here inside the actual request's measured quality/validation/response scope.
++ out.FiniteSafeChoices,err=SelectFiniteSafe(ctx,out.Features,*cfg.FiniteSafe)
++ return
++}
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/recommend/finite_safe_test.go
+@@ -0,0 +1,31 @@
++package recommend
++
++// STATIC STAGING ONLY. These tests have not run.
++import (
++ "context"
++ "errors"
++ "fmt"
++ "reflect"
++ "testing"
++
++ "github.com/ertyoii/transit-routing-go/model"
++)
++func finiteSafeTestConfig(objective string)FiniteSafeConfig{
++ prefs:=[]Preference{};for _,t:=range []int64{0,150,300,600,900}{for _,w:=range []int64{0,1,2,4}{prefs=append(prefs,Preference{ID:fmt.Sprintf("t%d_w%d",t,w),TransferSeconds:t,ExtraWalkWeight:w})}}
++ return FiniteSafeConfig{MaxCandidates:64,MaxStates:200000,Baseline:ChoiceConfig{MaxCandidates:1024,MaxSubsets:200000,LeanDelivery:true,DeliveryPolicy:"finite_preferences_v2",DeliveryLimits:[]int{3},Groups:[]PreferenceGroup{{Name:"explicit_twenty_hypotheses",Preferences:prefs}}},Domain:BoundedConfig{MinTransfer:0,MaxTransfer:900,MinWalk:0,MaxWalk:4,Objective:objective,Limits:[]int{3},Exact:true,MaxCriticalPoints:100000,MaxWork:50000000,MaxMatrixBytes:67108864}}
++}
++func finiteSafeFeature(id,pattern string,d int64,t int,w int64)Feature{return Feature{Identity:id,Pattern:pattern,Duration:d,Metrics:model.Metrics{Arrival:d,Transfers:t,Boardings:t+1,WalkingSeconds:w}}}
++func finiteSafeTrap()[]Feature{return []Feature{finiteSafeFeature("a","a",1900,0,300),finiteSafeFeature("b","b",1600,2,0),finiteSafeFeature("c","c",2500,0,0),finiteSafeFeature("r","r",1800,1,100)}}
++func TestFiniteSafePointwiseAndBaselineParity(t *testing.T){
++ for _,objective:=range []string{"absolute","normalized"}{cfg:=finiteSafeTestConfig(objective);fs:=finiteSafeTrap();got,err:=SelectFiniteSafe(context.Background(),fs,cfg);if err!=nil||got==nil||!got.Complete||got.Selection==nil||!got.Selection.SubsetOptimal{t.Fatalf("incomplete %v %+v",err,got)}
++  exclusions:=map[string]string{};pool:=choiceRepresentatives(fs,exclusions);ids,_,err:=minimax(context.Background(),pool,cfg.Baseline.Groups[0].Preferences,3,200000);if err!=nil{t.Fatal(err)};want:=describeChoice(pool,cfg.Baseline.Groups[0].Preferences,ids,"preference_minimax",3)
++  if !reflect.DeepEqual(want.Selected,got.Baseline.Selected){t.Fatalf("historical baseline changed: %+v %+v",want.Selected,got.Baseline.Selected)}
++  if len(got.Constraints)!=20{t.Fatal("missing original20")};for _,c:=range got.Constraints{if !c.PointwiseNonworse||c.RepairScore>c.BaselineScore{t.Fatalf("historical profile regression %+v",c)}}
++  if got.RepairStates!=14||got.Preflight.RepairStatesUpperBound!=14{t.Fatalf("not exhaustive over4 choose<=3: %+v",got)}
++ }
++}
++func TestFiniteSafeCanonicalPermutations(t *testing.T){cfg:=finiteSafeTestConfig("absolute");fs:=finiteSafeTrap();a,err:=SelectFiniteSafe(context.Background(),fs,cfg);if err!=nil{t.Fatal(err)};for i,j:=0,len(fs)-1;i<j;i,j=i+1,j-1{fs[i],fs[j]=fs[j],fs[i]};b,err:=SelectFiniteSafe(context.Background(),fs,cfg);if err!=nil||!reflect.DeepEqual(a.Selection.Selected,b.Selection.Selected)||!reflect.DeepEqual(a.Baseline.Selected,b.Baseline.Selected){t.Fatalf("permutation changes canonical choice %v",err)}}
++func TestFiniteSafeKeepsNativePatternAlternatives(t *testing.T){cfg:=finiteSafeTestConfig("absolute");fs:=[]Feature{finiteSafeFeature("a","a",100,0,0),finiteSafeFeature("b","b",100,0,0),finiteSafeFeature("c","c",200,1,20)};r,err:=SelectFiniteSafe(context.Background(),fs,cfg);if err!=nil||r.InputCandidates!=3||r.InputPatterns!=3||r.Preflight.CandidateCount!=3||r.RepairStates!=7||len(r.BaselineExclusions)!=2{t.Fatalf("native alternatives hidden: %+v %v",r,err)}}
++func TestFiniteSafeNoFallbackOnGuardsOrCancel(t *testing.T){cfg:=finiteSafeTestConfig("absolute");cfg.Domain.MaxWork=1;r,err:=SelectFiniteSafe(context.Background(),finiteSafeTrap(),cfg);if !errors.Is(err,ErrSelectionBudget)||r==nil||r.Complete||r.Selection!=nil||r.Baseline!=nil||r.FailureStage!="resource_preflight"{t.Fatalf("hidden guard fallback: %+v %v",r,err)};ctx,cancel:=context.WithCancel(context.Background());cancel();r,err=SelectFiniteSafe(ctx,finiteSafeTrap(),finiteSafeTestConfig("absolute"));if !errors.Is(err,context.Canceled)||r==nil||r.Complete||r.Selection!=nil{t.Fatalf("cancel falsely complete: %+v %v",r,err)}}
++func TestFiniteSafeEmptyAndRejectedContracts(t *testing.T){cfg:=finiteSafeTestConfig("absolute");r,err:=SelectFiniteSafe(context.Background(),nil,cfg);if err!=nil||!r.Complete||r.Selection==nil||len(r.Selection.Selected)!=0||!r.BaselineComplete{t.Fatalf("empty contract: %+v %v",r,err)};f:=finiteSafeFeature("a","a",0,0,0);r,err=SelectFiniteSafe(context.Background(),[]Feature{f,f},cfg);if err==nil||r==nil||r.Complete||r.Selection!=nil{t.Fatalf("duplicate accepted: %+v %v",r,err)};cfg.Domain.DistinctPatterns=true;if _,err=SelectFiniteSafe(context.Background(),[]Feature{f},cfg);err==nil{t.Fatal("unpreregistered distinct policy accepted")};cfg=finiteSafeTestConfig("absolute");cfg.Baseline.Groups[0].Preferences[0].TransferSeconds=1;if _,err=SelectFiniteSafe(context.Background(),[]Feature{f},cfg);err==nil{t.Fatal("changed historical20 accepted")}}
++func TestFiniteSafeRejectsRecursiveBaseline(t *testing.T){cfg:=finiteSafeTestConfig("absolute");cfg.Baseline.FiniteSafe=&cfg;if _,err:=SelectFiniteSafe(context.Background(),nil,cfg);err==nil{t.Fatal("recursive safe baseline accepted")}}
+--- a/vendor/github.com/ertyoii/transit-routing-go/recommend/quality.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/recommend/quality.go
+@@ -45,6 +45,7 @@
+ 	GlobalOptimalityClaim bool              `json:"global_optimality_claim"`
+ }
+ type Result struct {
++	FiniteSafeChoices *FiniteSafeResult `json:"finite20_safe_choices,omitempty"`
+ 	ContinuousChoices *ContinuousChoices `json:"continuous_choices,omitempty"`
+ 	FeatureMode       string             `json:"feature_mode,omitempty"`
+ 	Choices           *Choices           `json:"choices,omitempty"`

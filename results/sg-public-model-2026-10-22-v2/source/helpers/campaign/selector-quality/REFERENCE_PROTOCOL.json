@@ -1,0 +1,13 @@
+{
+ "version":"v2-scalar-independent-reference-1",
+ "predeclared_before_new_validation_and_test":true,
+ "primary_contract":"Full frozen one-hour primary phase-A query contract, unchanged query walking/boarding/leg constraints. Independent resource-label-setting scalar minimum over raw events and footpaths.",
+ "reference_workloads":"Nested tune12/validation18/test36 per window as supplied by data-workload phase_hash_a_conservative600 reference.primary_1h_walk600 files; no final test execution before campaign seal.",
+ "weights":"configs/scalar9.json, four corners and five immutable fractional interior score hypotheses, neither empirical rider preferences nor probabilities.",
+ "per_slot_limits":{"max_labels":2000000,"max_transitions":100000000,"cooperative_timeout_seconds":60},
+ "outcomes":"Complete/found yields independent finite-input scalar optimum plus separately validated witness. Complete/not-found only after exhaustive queue empty is model-empty. Any guard/deadline/error is inconclusive, never empty and never a candidate failure. Show every offered slot and completion denominator.",
+ "secondary_contract":"Predeclared qualification-only nested first12/window/split, original OD/departure retained, LatestArrival limited to departure+900 and MaxBoardings limited to2. Use only if full one-hour lane has inconclusive outputs; never substitute for primary full-horizon contract. Separate hashes and results.",
+ "secondary_per_slot_limits":{"max_labels":2000000,"max_transitions":100000000,"cooperative_timeout_seconds":60},
+ "independence":"No production router/index/dominance or production transfer resolver imports. Uses independent raw-event label state and independent GTFS rule scan. Shares model schemas and independent witness validator only.",
+ "quality_not_timing":"Oracle resource/time costs do not qualify headline latency. Do not overlap these runs with headline timing measurements."
+}

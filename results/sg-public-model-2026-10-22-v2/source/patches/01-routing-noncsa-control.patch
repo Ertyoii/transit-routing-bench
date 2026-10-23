@@ -1,0 +1,3248 @@
+--- a/paper/profile.go
++++ b/paper/profile.go
+@@ -223,16 +223,18 @@
+ }
+ 
+ type Walker struct {
+-	p     *Profile
+-	q     model.Query
+-	cache map[string][]Path
+-	Count int
++	p        *Profile
++	q        model.Query
++	cache    map[string][]Path
++	reach    *graph.ReachSession
++	snapshot string
++	Count    int
+ }
+ 
+ func (p *Profile) Walker(q model.Query) *Walker {
+ 	w := *q.Walking
+ 	q.Walking = &w
+-	return &Walker{p: p, q: q, cache: map[string][]Path{}}
++	return &Walker{p: p, q: q, cache: map[string][]Path{}, reach: p.walkingGraph.NewReachSession(), snapshot: p.walkingGraph.Descriptor().SnapshotID}
+ }
+ 
+ type entry struct {
+@@ -267,8 +269,8 @@
+ 	if w.q.Destination != "" {
+ 		targets = append(targets, walking.Endpoint{NodeID: w.q.Destination})
+ 	}
+-	closure, err := w.p.walkingGraph.ReachWithTargets(ctx, walking.ReachRequest{Targets: targets,
+-		SnapshotID: w.p.walkingGraph.Descriptor().SnapshotID, From: walking.Endpoint{NodeID: from},
++	closure, err := w.reach.ReachWithTargets(ctx, walking.ReachRequest{Targets: targets,
++		SnapshotID: w.snapshot, From: walking.Endpoint{NodeID: from},
+ 		Options: walking.Options{Role: walking.Closure, MaxSeconds: limit, AccessibleOnly: w.q.AccessibleOnly, StopAt: w.q.Destination},
+ 	}, w.p.walkingTargets)
+ 	if err != nil {
+--- /dev/null
++++ b/raptor/indexed_baseline_test.go
+@@ -0,0 +1,458 @@
++// Frozen search bodies from routing commit 6bd99513f16f6c614ef7971ec379ff732196228c.
++// These compare exact emitted behavior, not independent routing optimality.
++package raptor
++
++import (
++	"context"
++	"fmt"
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/paper"
++	"sort"
++)
++
++func (x *Index) frozenIndexedBaselineSearch(ctx context.Context, q model.Query, early bool) (out paper.Result, pruning EarlyPruningStats, err error) {
++	out.Journeys = []model.Journey{}
++	defer func() {
++		out.Complete = err == nil
++		if err != nil {
++			out.Error = err.Error()
++		}
++	}()
++	if err = x.p.CheckContext(ctx, q); err != nil {
++		return
++	}
++	if err = ctx.Err(); err != nil {
++		return
++	}
++	if !x.p.Accessible(q, q.Origin) || !x.p.Accessible(q, q.Destination) {
++		return
++	}
++	if q.Origin == q.Destination {
++		out.Journeys = append(out.Journeys, paper.Journey(nil))
++		return
++	}
++	walker := x.p.Walker(q)
++	walks := orderedWalks{walker: walker, enabled: early, cache: map[string][]paper.Path{}}
++	defer func() { out.Stats.WalkClosures = walker.Count }()
++	previous := make([]paper.Label, len(x.atStop))
++	previousSet := make([]bool, len(x.atStop))
++	previousStops := []int{}
++	bestArrival := paper.Infinity
++	paths, e := walks.paths(ctx, q.Origin)
++	if e != nil {
++		err = e
++		return
++	}
++	for i, w := range paths {
++		at := q.Departure + w.Duration
++		if early {
++			pruning.Checks++
++			if at >= bestArrival {
++				pruning.skip(len(paths) - i)
++				break
++			}
++		}
++		if at > q.LatestArrival {
++			continue
++		}
++		n := w.Append(nil, q.Departure)
++		if w.To == q.Destination {
++			if w.Duration <= q.Walking.Direct {
++				bestArrival = at
++				out.Journeys = append(out.Journeys, paper.Journey(n))
++			}
++			continue
++		}
++		if w.Duration <= q.Walking.Access {
++			stop := x.stopIDs[w.To]
++			if !previousSet[stop] {
++				previousStops = append(previousStops, stop)
++			}
++			previousSet[stop] = true
++			previous[stop] = paper.Label{Time: at, Parent: n}
++		}
++	}
++	// Exact-round readiness is kept separate from raw alighting and access
++	// labels: role caps and stop-pair rules make ordinary stop-local pruning unsafe.
++	for b := 1; b <= q.MaxBoardings && len(previousStops) > 0; b++ {
++		if err = ctx.Err(); err != nil {
++			return
++		}
++		out.Stats.Rounds++
++		queue, routes := x.collectRoutes(previousStops)
++		next := make([]paper.Label, len(x.atStop))
++		nextSet := make([]bool, len(x.atStop))
++		nextStops := []int{}
++		best := paper.Label{Time: paper.Infinity}
++		for _, r := range routes {
++			if err = ctx.Err(); err != nil {
++				return
++			}
++			out.Stats.Routes++
++			route := x.routes[r]
++			current := -1
++			var parent *paper.Node
++			for i := queue[r] - 1; i < len(route.trips[0].cs); i++ {
++				if err = ctx.Err(); err != nil {
++					return
++				}
++				prototype := route.trips[0].cs[i]
++				if label := previous[route.from[i]]; previousSet[route.from[i]] && prototype.Pickup && x.p.Accessible(q, prototype.From) {
++					t := sort.Search(len(route.trips), func(j int) bool { return route.trips[j].cs[i].Departure >= label.Time })
++					if t < len(route.trips) && (current < 0 || t < current) && x.p.TripAllowed(q, route.trips[t].id) {
++						current = t
++						parent = label.Parent
++					}
++				}
++				if current < 0 {
++					continue
++				}
++				c := route.trips[current].cs[i]
++				out.Stats.Connections++
++				if c.Arrival > q.LatestArrival {
++					current = -1
++					continue
++				}
++				parent = paper.Ride(parent, c)
++				if !c.Dropoff || !x.p.Accessible(q, c.To) {
++					continue
++				}
++				if c.To == q.Destination {
++					if c.Arrival < best.Time {
++						best = paper.Label{Time: c.Arrival, Parent: parent}
++					}
++					current = -1
++					continue
++				}
++				paths, e := walks.paths(ctx, c.To)
++				if e != nil {
++					err = e
++					return
++				}
++				for i, w := range paths {
++					at := c.Arrival + w.Duration
++					if early {
++						pruning.Checks++
++						if at >= min(bestArrival, best.Time) {
++							pruning.skip(len(paths) - i)
++							break
++						}
++					}
++					if at > q.LatestArrival {
++						continue
++					}
++					if w.To == q.Destination {
++						if w.Duration <= q.Walking.Egress && at < best.Time {
++							best = paper.Label{Time: at, Parent: w.Append(parent, c.Arrival)}
++						}
++						continue
++					}
++					if b == q.MaxBoardings || w.Duration > q.Walking.Transfer {
++						continue
++					}
++					at, allowed, e := x.p.ReadyTime(q, c.To, w.To, c.Arrival, w.Duration)
++					if e != nil {
++						err = e
++						return
++					}
++					if !allowed || at > q.LatestArrival {
++						continue
++					}
++					stop := x.stopIDs[w.To]
++					if !nextSet[stop] || at < next[stop].Time {
++						if !nextSet[stop] {
++							nextStops = append(nextStops, stop)
++						}
++						nextSet[stop] = true
++						next[stop] = paper.Label{Time: at, Parent: w.Append(parent, c.Arrival)}
++					}
++				}
++			}
++		}
++		if best.Time < bestArrival {
++			bestArrival = best.Time
++			out.Journeys = append(out.Journeys, paper.Journey(best.Parent))
++		}
++		previous, previousSet, previousStops = next, nextSet, nextStops
++	}
++	return
++}
++
++func (x *Index) frozenIndexedBaselineMulti(ctx context.Context, q model.Query, cfg MultiConfig) (out MultiResult, err error) {
++	answers := []multiAnswer{}
++	defer func() {
++		out.Journeys = []model.Journey{}
++		sort.Slice(answers, func(i, j int) bool {
++			a, b := answers[i], answers[j]
++			if a.boards != b.boards {
++				return a.boards < b.boards
++			}
++			if a.time != b.time {
++				return a.time < b.time
++			}
++			return a.walk < b.walk
++		})
++		for _, a := range answers {
++			out.Journeys = append(out.Journeys, paper.Journey(a.parent))
++		}
++		out.Complete = err == nil
++		if err != nil {
++			out.Error = err.Error()
++		}
++	}()
++	if cfg.Criterion != "walking_seconds" || cfg.MaxLabels <= 0 || cfg.MaxConnectionVisits <= 0 {
++		err = fmt.Errorf("McRAPTOR capability: walking_seconds criterion and positive budgets required")
++		return
++	}
++	if err = x.p.CheckContext(ctx, q); err != nil {
++		return
++	}
++	if err = ctx.Err(); err != nil {
++		return
++	}
++	if !x.p.Accessible(q, q.Origin) || !x.p.Accessible(q, q.Destination) {
++		return
++	}
++	if q.Origin == q.Destination {
++		answers = append(answers, multiAnswer{time: q.Departure})
++		return
++	}
++	spend := func() error {
++		if out.Stats.Labels == cfg.MaxLabels {
++			return fmt.Errorf("McRAPTOR incomplete: label budget exhausted")
++		}
++		out.Stats.Labels++
++		return nil
++	}
++	addStop := func(bag []multiLabel, c multiLabel, walk paper.Path, start int64) ([]multiLabel, bool, error) {
++		for _, old := range bag {
++			out.Stats.DominanceChecks++
++			if old.time <= c.time && old.walk <= c.walk {
++				return bag, false, nil
++			}
++		}
++		if e := spend(); e != nil {
++			return bag, false, e
++		}
++		kept := bag[:0]
++		for _, old := range bag {
++			if !(c.time <= old.time && c.walk <= old.walk) {
++				kept = append(kept, old)
++			}
++		}
++		// Rejected labels need no walking witness; admitted labels retain the
++		// exact same path, clocks and insertion order.
++		c.parent = walk.Append(c.parent, start)
++		return append(kept, c), true, nil
++	}
++	addRoute := func(bag []routeLabel, c routeLabel) ([]routeLabel, error) {
++		for _, old := range bag {
++			out.Stats.DominanceChecks++
++			if old.trip <= c.trip && old.walk <= c.walk {
++				return bag, nil
++			}
++		}
++		if e := spend(); e != nil {
++			return bag, e
++		}
++		kept := bag[:0]
++		for _, old := range bag {
++			if !(c.trip <= old.trip && c.walk <= old.walk) {
++				kept = append(kept, old)
++			}
++		}
++		return append(kept, c), nil
++	}
++	addAnswer := func(c multiAnswer, walk paper.Path, start int64) error {
++		if c.time > q.LatestArrival {
++			return nil
++		}
++		for _, old := range answers {
++			out.Stats.DominanceChecks++
++			if old.time <= c.time && old.boards <= c.boards && old.walk <= c.walk {
++				return nil
++			}
++		}
++		if e := spend(); e != nil {
++			return e
++		}
++		kept := answers[:0]
++		for _, old := range answers {
++			if !(c.time <= old.time && c.boards <= old.boards && c.walk <= old.walk) {
++				kept = append(kept, old)
++			}
++		}
++		c.parent = walk.Append(c.parent, start)
++		answers = append(kept, c)
++		return nil
++	}
++	walker := x.p.Walker(q)
++	walks := orderedWalks{walker: walker, enabled: cfg.EarlyPruning, cache: map[string][]paper.Path{}}
++	dominated := func(at, walk int64, boards int) bool {
++		for _, a := range answers {
++			out.Stats.EarlyPruning.DominanceChecks++
++			if a.time <= at && a.walk <= walk && a.boards <= boards {
++				return true
++			}
++		}
++		return false
++	}
++	defer func() { out.Stats.WalkClosures = walker.Count }()
++	paths, e := walks.paths(ctx, q.Origin)
++	if e != nil {
++		err = e
++		return
++	}
++	previous := make([][]multiLabel, len(x.atStop))
++	previousStops := []int{}
++	for i, w := range paths {
++		at := q.Departure + w.Duration
++		if cfg.EarlyPruning {
++			out.Stats.EarlyPruning.Checks++
++			if dominated(at, w.Duration, 0) {
++				out.Stats.EarlyPruning.skip(len(paths) - i)
++				break
++			}
++		}
++		if at > q.LatestArrival {
++			continue
++		}
++		if w.To == q.Destination {
++			if w.Duration <= q.Walking.Direct {
++				if err = addAnswer(multiAnswer{at, w.Duration, 0, nil}, w, q.Departure); err != nil {
++					return
++				}
++			}
++			continue
++		}
++		if w.Duration <= q.Walking.Access {
++			var e error
++			stop := x.stopIDs[w.To]
++			wasEmpty := len(previous[stop]) == 0
++			previous[stop], _, e = addStop(previous[stop], multiLabel{at, w.Duration, nil}, w, q.Departure)
++			if wasEmpty && len(previous[stop]) > 0 {
++				previousStops = append(previousStops, stop)
++			}
++			if e != nil {
++				err = e
++				return
++			}
++		}
++	}
++	for boards := 1; boards <= q.MaxBoardings && len(previousStops) > 0; boards++ {
++		if err = ctx.Err(); err != nil {
++			return
++		}
++		out.Stats.Rounds++
++		queue, routes := x.collectRoutes(previousStops)
++		next := make([][]multiLabel, len(x.atStop))
++		nextStops := []int{}
++		for _, r := range routes {
++			out.Stats.Routes++
++			route := x.routes[r]
++			bag := []routeLabel{}
++			for i := queue[r] - 1; i < len(route.trips[0].cs); i++ {
++				if err = ctx.Err(); err != nil {
++					return
++				}
++				prototype := route.trips[0].cs[i]
++				if prototype.Pickup && x.p.Accessible(q, prototype.From) {
++					for _, label := range previous[route.from[i]] {
++						t := sort.Search(len(route.trips), func(j int) bool { return route.trips[j].cs[i].Departure >= label.time })
++						if t == len(route.trips) || !x.p.TripAllowed(q, route.trips[t].id) {
++							continue
++						}
++						if i > 0 && label.parent != nil && label.parent.Leg.Kind == "ride" && label.parent.Leg.Ref == route.trips[t].cs[i-1].ID {
++							continue
++						}
++						bag, e = addRoute(bag, routeLabel{t, label.walk, label.parent})
++						if e != nil {
++							err = e
++							return
++						}
++					}
++				}
++				// Compact in place: the write position never exceeds the read
++				// position, and labels are copied by value before appending.
++				continuing := bag[:0]
++				for _, l := range bag {
++					if err = ctx.Err(); err != nil {
++						return
++					}
++					if out.Stats.Connections == cfg.MaxConnectionVisits {
++						err = fmt.Errorf("McRAPTOR incomplete: connection budget exhausted")
++						return
++					}
++					out.Stats.Connections++
++					c := route.trips[l.trip].cs[i]
++					if c.Arrival > q.LatestArrival {
++						continue
++					}
++					l.parent = paper.Ride(l.parent, c)
++					if !c.Dropoff || !x.p.Accessible(q, c.To) {
++						continuing = append(continuing, l)
++						continue
++					}
++					if c.To == q.Destination {
++						if err = addAnswer(multiAnswer{c.Arrival, l.walk, boards, l.parent}, paper.Path{}, 0); err != nil {
++							return
++						}
++						continue
++					}
++					continuing = append(continuing, l)
++					paths, e := walks.paths(ctx, c.To)
++					if e != nil {
++						err = e
++						return
++					}
++					for i, w := range paths {
++						at := c.Arrival + w.Duration
++						if cfg.EarlyPruning {
++							out.Stats.EarlyPruning.Checks++
++							if dominated(at, l.walk+w.Duration, boards) {
++								out.Stats.EarlyPruning.skip(len(paths) - i)
++								break
++							}
++						}
++						if at > q.LatestArrival {
++							continue
++						}
++						if w.To == q.Destination {
++							if w.Duration <= q.Walking.Egress {
++								if err = addAnswer(multiAnswer{at, l.walk + w.Duration, boards, l.parent}, w, c.Arrival); err != nil {
++									return
++								}
++							}
++							continue
++						}
++						if boards == q.MaxBoardings || w.Duration > q.Walking.Transfer {
++							continue
++						}
++						at, allowed, e := x.p.ReadyTime(q, c.To, w.To, c.Arrival, w.Duration)
++						if e != nil {
++							err = e
++							return
++						}
++						if !allowed || at > q.LatestArrival {
++							continue
++						}
++						stop := x.stopIDs[w.To]
++						newBag, _, e := addStop(next[stop], multiLabel{at, l.walk + w.Duration, l.parent}, w, c.Arrival)
++						if e != nil {
++							err = e
++							return
++						}
++						if len(next[stop]) == 0 && len(newBag) > 0 {
++							nextStops = append(nextStops, stop)
++						}
++						next[stop] = newBag
++					}
++				}
++				clear(bag[len(continuing):])
++				bag = continuing
++			}
++		}
++		previous, previousStops = next, nextStops
++	}
++	return
++}
+--- /dev/null
++++ b/raptor/indexed_walks.go
+@@ -0,0 +1,64 @@
++package raptor
++
++import (
++	"context"
++
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/paper"
++)
++
++// pathState is query-local metadata parallel to one immutable walking closure.
++// A transfer's ready delay depends on its stop pair, walking duration and the
++// query's fixed buffer, not on the arrival time or the route that reached it.
++// Resolve lazily at the original call site, preserving rule-error ordering.
++type pathState struct {
++	stop    int
++	delay   int64
++	ready   bool
++	allowed bool
++}
++
++type indexedWalks struct {
++	index  *Index
++	query  model.Query
++	walks  orderedWalks
++	states [][]pathState
++}
++
++func (x *Index) indexedWalks(walker *paper.Walker, q model.Query, early bool) indexedWalks {
++	return indexedWalks{
++		index:  x,
++		query:  q,
++		walks:  orderedWalks{walker: walker, enabled: early, cache: map[string][]paper.Path{}},
++		states: make([][]pathState, len(x.atStop)),
++	}
++}
++
++func (w *indexedWalks) paths(ctx context.Context, from string, source int) ([]paper.Path, []pathState, error) {
++	// Do not bypass the original lookup: its Context.Err poll (also on a cached
++	// closure) is observable in cancellation and partial-result boundaries.
++	paths, err := w.walks.paths(ctx, from)
++	if err != nil {
++		return nil, nil, err
++	}
++	states := w.states[source]
++	if states == nil {
++		states = make([]pathState, len(paths))
++		for i, p := range paths {
++			states[i].stop = w.index.stopIDs[p.To]
++		}
++		w.states[source] = states
++	}
++	return paths, states, nil
++}
++
++func (w *indexedWalks) readyTime(state *pathState, from string, path paper.Path, arrival int64) (int64, bool, error) {
++	if !state.ready {
++		delay, allowed, err := w.index.p.ReadyTime(w.query, from, path.To, 0, path.Duration)
++		if err != nil {
++			return 0, false, err
++		}
++		state.delay, state.allowed, state.ready = delay, allowed, true
++	}
++	return arrival + state.delay, state.allowed, nil
++}
+--- /dev/null
++++ b/raptor/indexed_walks_test.go
+@@ -0,0 +1,177 @@
++package raptor
++
++import (
++	"context"
++	"fmt"
++	"reflect"
++	"sync"
++	"testing"
++
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/transfer"
++)
++
++func indexedEqual(t testing.TB, x *Index, q model.Query, polls int, early bool, labels, connections int) {
++	t.Helper()
++	a, ap, ae := x.frozenIndexedBaselineSearch(denseContext(polls), q, early)
++	b, bp, be := x.search(denseContext(polls), q, early)
++	if !reflect.DeepEqual(a, b) || !reflect.DeepEqual(ap, bp) || fmt.Sprint(ae) != fmt.Sprint(be) {
++		t.Fatalf("point mismatch q=%+v polls=%d early=%v\nold=%+v %v %v\nnew=%+v %v %v", q, polls, early, a, ap, ae, b, bp, be)
++	}
++	cfg := MultiConfig{EarlyPruning: early, Criterion: "walking_seconds", MaxLabels: labels, MaxConnectionVisits: connections}
++	am, ae := x.frozenIndexedBaselineMulti(denseContext(polls), q, cfg)
++	bm, be := x.SearchMulti(denseContext(polls), q, cfg)
++	if !reflect.DeepEqual(am, bm) || fmt.Sprint(ae) != fmt.Sprint(be) {
++		t.Fatalf("multi mismatch q=%+v polls=%d cfg=%+v\nold=%+v %v\nnew=%+v %v", q, polls, cfg, am, ae, bm, be)
++	}
++}
++
++func indexedFixture(seed uint64, rule int) (model.Dataset, model.Query) {
++	d, q := denseFixture(seed)
++	d.Stops = append(d.Stops, model.Stop{ID: "P", LocationType: 1, Accessible: model.Yes})
++	for i := range d.Stops {
++		if d.Stops[i].ID == "B" || d.Stops[i].ID == "C" {
++			d.Stops[i].ParentStation = "P"
++		}
++		if seed%3 == 0 && d.Stops[i].ID == "E" {
++			d.Stops[i].Accessible = model.No
++		}
++	}
++	for i := range d.Trips {
++		if seed%4 == 0 && i == 2 {
++			d.Trips[i].Accessible = model.No
++		}
++	}
++	rules := [][]model.TransferRule{
++		nil,
++		{{ID: "minimum", FromStop: "B", ToStop: "C", Type: 2, MinSeconds: 9}},
++		{{ID: "station-default", FromStop: "P", ToStop: "E", Type: 0}},
++		{{ID: "station-forbid", FromStop: "P", ToStop: "E", Type: 3}},
++		{{ID: "child-station-minimum", FromStop: "B", ToStop: "P", Type: 2, MinSeconds: 7}},
++		{{ID: "station-station-minimum", FromStop: "P", ToStop: "P", Type: 2, MinSeconds: 8}},
++		{{ID: "station-station-forbid", FromStop: "P", ToStop: "P", Type: 3}},
++		{{ID: "stay-forbid", FromStop: "B", ToStop: "B", Type: 3}},
++		{{ID: "explicit-zero", FromStop: "B", ToStop: "C", Type: 0}},
++	}
++	d.Transfers = rules[rule%len(rules)]
++	return d, q
++}
++
++func TestIndexedWalksExactBaselineAdversarial(t *testing.T) {
++	for seed := uint64(0); seed < 18; seed++ {
++		for rule := 0; rule < 9; rule++ {
++			d, q := indexedFixture(seed, rule)
++			x, err := New(d)
++			if err != nil {
++				t.Fatal(err)
++			}
++			for _, early := range []bool{false, true} {
++				for _, cap := range []int64{0, 1, 3, 5} {
++					for _, buffer := range []int64{0, 2, 10} {
++						v := q
++						v.AccessibleOnly = seed%2 == 0
++						v.TransferBuffer = buffer
++						v.Walking = &model.WalkingLimits{Access: cap, Transfer: 5 - cap, Egress: cap, Direct: 5}
++						indexedEqual(t, x, v, -1, early, 10000, 10000)
++					}
++				}
++				for _, budget := range [][2]int{{1, 10000}, {7, 10000}, {10000, 1}, {10000, 5}, {0, 1}} {
++					indexedEqual(t, x, q, -1, early, budget[0], budget[1])
++				}
++				for _, boards := range []int{0, 1, 2} {
++					v := q
++					v.MaxBoardings = boards
++					indexedEqual(t, x, v, -1, early, 10000, 10000)
++				}
++				for _, pair := range [][2]string{{"Z", "D"}, {"A", "Z"}, {"A", "A"}, {"missing", "D"}} {
++					v := q
++					v.Origin, v.Destination = pair[0], pair[1]
++					indexedEqual(t, x, v, -1, early, 10000, 10000)
++				}
++			}
++		}
++	}
++}
++
++func TestIndexedWalksExactCancellationBoundaries(t *testing.T) {
++	for _, seed := range []uint64{13, 82, 193} {
++		d, q := indexedFixture(seed, 5)
++		x, err := New(d)
++		if err != nil {
++			t.Fatal(err)
++		}
++		for _, early := range []bool{false, true} {
++			for polls := 1; polls <= 300; polls++ {
++				indexedEqual(t, x, q, polls, early, 10000, 10000)
++			}
++		}
++	}
++}
++
++func TestIndexedWalksOwnedConcurrentQueries(t *testing.T) {
++	d, q := indexedFixture(82, 5)
++	x, err := New(d)
++	if err != nil {
++		t.Fatal(err)
++	}
++	// Index construction owns both stop ordinals and the transfer resolver.
++	d.Stops[0].ID = "mutated"
++	d.Connections[0].To = "mutated"
++	d.Transfers[0].MinSeconds = 999
++	var wg sync.WaitGroup
++	for i := 0; i < 16; i++ {
++		wg.Add(1)
++		go func(i int) {
++			defer wg.Done()
++			v := q
++			v.TransferBuffer = int64(i)
++			v.Walking = &model.WalkingLimits{Access: 5, Transfer: int64(i % 6), Egress: 5, Direct: 5}
++			indexedEqual(t, x, v, -1, i%2 == 0, 10000, 10000)
++		}(i)
++	}
++	wg.Wait()
++}
++
++func TestIndexedWalksLazyReadinessAndCachedPolls(t *testing.T) {
++	d, q := indexedFixture(82, 5)
++	x, err := New(d)
++	if err != nil {
++		t.Fatal(err)
++	}
++	for _, early := range []bool{false, true} {
++		walker := x.p.Walker(q)
++		walks := x.indexedWalks(walker, q, early)
++		paths, states, err := walks.paths(context.Background(), "B", x.stopIDs["B"])
++		if err != nil || len(paths) == 0 {
++			t.Fatal(err, paths)
++		}
++		for i, p := range paths {
++			if states[i].ready || states[i].stop != x.stopIDs[p.To] {
++				t.Fatal("metadata resolved early or wrong ordinal")
++			}
++			for _, arrival := range []int64{0, 3, 17, 100} {
++				a, aa, ae := x.p.ReadyTime(q, "B", p.To, arrival, p.Duration)
++				b, ba, be := walks.readyTime(&states[i], "B", p, arrival)
++				if a != b || aa != ba || fmt.Sprint(ae) != fmt.Sprint(be) {
++					t.Fatalf("ready mismatch %q: %v %v %v vs %v %v %v", p.To, a, aa, ae, b, ba, be)
++				}
++			}
++		}
++		if _, _, err := walks.paths(denseContext(1), "B", x.stopIDs["B"]); err != context.Canceled {
++			t.Fatal("cached path lost cancellation poll", err)
++		}
++		if walker.Count != 1 {
++			t.Fatal("closure count changed", walker.Count)
++		}
++	}
++	// Normally New rejects ambiguous rules. Inject them only to verify that the
++	// lazy view still reports the baseline's exact first error and partial stats.
++	d.Transfers = []model.TransferRule{
++		{ID: "conflict-a", FromStop: "B", ToStop: "C", Type: 0},
++		{ID: "conflict-b", FromStop: "B", ToStop: "C", Type: 3},
++	}
++	x.p.Rules = transfer.New(d)
++	for _, early := range []bool{false, true} {
++		indexedEqual(t, x, q, -1, early, 10000, 10000)
++	}
++}
+--- a/raptor/multicriteria.go
++++ b/raptor/multicriteria.go
+@@ -156,7 +156,7 @@
+ 		return nil
+ 	}
+ 	walker := x.p.Walker(q)
+-	walks := orderedWalks{walker: walker, enabled: cfg.EarlyPruning, cache: map[string][]paper.Path{}}
++	walks := x.indexedWalks(walker, q, cfg.EarlyPruning)
+ 	dominated := func(at, walk int64, boards int) bool {
+ 		for _, a := range answers {
+ 			out.Stats.EarlyPruning.DominanceChecks++
+@@ -167,7 +167,7 @@
+ 		return false
+ 	}
+ 	defer func() { out.Stats.WalkClosures = walker.Count }()
+-	paths, e := walks.paths(ctx, q.Origin)
++	paths, states, e := walks.paths(ctx, q.Origin, x.stopIDs[q.Origin])
+ 	if e != nil {
+ 		err = e
+ 		return
+@@ -196,7 +196,7 @@
+ 		}
+ 		if w.Duration <= q.Walking.Access {
+ 			var e error
+-			stop := x.stopIDs[w.To]
++			stop := states[i].stop
+ 			wasEmpty := len(previous[stop]) == 0
+ 			previous[stop], _, e = addStop(previous[stop], multiLabel{at, w.Duration, nil}, w, q.Departure)
+ 			if wasEmpty && len(previous[stop]) > 0 {
+@@ -269,7 +269,7 @@
+ 						continue
+ 					}
+ 					continuing = append(continuing, l)
+-					paths, e := walks.paths(ctx, c.To)
++					paths, states, e := walks.paths(ctx, c.To, route.to[i])
+ 					if e != nil {
+ 						err = e
+ 						return
+@@ -297,7 +297,7 @@
+ 						if boards == q.MaxBoardings || w.Duration > q.Walking.Transfer {
+ 							continue
+ 						}
+-						at, allowed, e := x.p.ReadyTime(q, c.To, w.To, c.Arrival, w.Duration)
++						at, allowed, e := walks.readyTime(&states[i], c.To, w, c.Arrival)
+ 						if e != nil {
+ 							err = e
+ 							return
+@@ -305,7 +305,7 @@
+ 						if !allowed || at > q.LatestArrival {
+ 							continue
+ 						}
+-						stop := x.stopIDs[w.To]
++						stop := states[i].stop
+ 						newBag, _, e := addStop(next[stop], multiLabel{at, l.walk + w.Duration, l.parent}, w, c.Arrival)
+ 						if e != nil {
+ 							err = e
+--- a/raptor/raptor.go
++++ b/raptor/raptor.go
+@@ -17,6 +17,7 @@
+ type route struct {
+ 	trips []trip
+ 	from  []int
++	to    []int
+ }
+ type occurrence struct{ route, position int }
+ type Index struct {
+@@ -108,8 +109,10 @@
+ 	for r := range x.routes {
+ 		route := &x.routes[r]
+ 		route.from = make([]int, len(route.trips[0].cs))
++		route.to = make([]int, len(route.trips[0].cs))
+ 		for i, c := range route.trips[0].cs {
+ 			route.from[i] = x.stopIDs[c.From]
++			route.to[i] = x.stopIDs[c.To]
+ 			x.at[c.From] = append(x.at[c.From], occurrence{r, i})
+ 		}
+ 	}
+@@ -151,13 +154,13 @@
+ 		return
+ 	}
+ 	walker := x.p.Walker(q)
+-	walks := orderedWalks{walker: walker, enabled: early, cache: map[string][]paper.Path{}}
++	walks := x.indexedWalks(walker, q, early)
+ 	defer func() { out.Stats.WalkClosures = walker.Count }()
+ 	previous := make([]paper.Label, len(x.atStop))
+ 	previousSet := make([]bool, len(x.atStop))
+ 	previousStops := []int{}
+ 	bestArrival := paper.Infinity
+-	paths, e := walks.paths(ctx, q.Origin)
++	paths, states, e := walks.paths(ctx, q.Origin, x.stopIDs[q.Origin])
+ 	if e != nil {
+ 		err = e
+ 		return
+@@ -183,7 +186,7 @@
+ 			continue
+ 		}
+ 		if w.Duration <= q.Walking.Access {
+-			stop := x.stopIDs[w.To]
++			stop := states[i].stop
+ 			if !previousSet[stop] {
+ 				previousStops = append(previousStops, stop)
+ 			}
+@@ -243,7 +246,7 @@
+ 					current = -1
+ 					continue
+ 				}
+-				paths, e := walks.paths(ctx, c.To)
++				paths, states, e := walks.paths(ctx, c.To, route.to[i])
+ 				if e != nil {
+ 					err = e
+ 					return
+@@ -269,7 +272,7 @@
+ 					if b == q.MaxBoardings || w.Duration > q.Walking.Transfer {
+ 						continue
+ 					}
+-					at, allowed, e := x.p.ReadyTime(q, c.To, w.To, c.Arrival, w.Duration)
++					at, allowed, e := walks.readyTime(&states[i], c.To, w, c.Arrival)
+ 					if e != nil {
+ 						err = e
+ 						return
+@@ -277,7 +280,7 @@
+ 					if !allowed || at > q.LatestArrival {
+ 						continue
+ 					}
+-					stop := x.stopIDs[w.To]
++					stop := states[i].stop
+ 					if !nextSet[stop] || at < next[stop].Time {
+ 						if !nextSet[stop] {
+ 							nextStops = append(nextStops, stop)
+--- a/ultra/capped.go
++++ b/ultra/capped.go
+@@ -54,10 +54,26 @@
+ // Static stop-pair rules and pickup/dropoff are supported. All paper.Profile
+ // aggregate-resource and trip/route-rule guards remain in force.
+ type CappedIndex struct {
+-	x    *Index
+-	prep CappedPreparation
+-	rows map[string][]paper.Path
+-	at   map[string][]occurrence
++	x           *Index
++	prep        CappedPreparation
++	stopIDs     map[string]int
++	rows        [][]cappedPath
++	at          [][]occurrence
++	from, to    [][]int
++	accessible  []bool
++	tripAllowed []bool
++	transit     []bool
++}
++
++// cappedPath retains the original raw witness, with immutable endpoint and
++// static rule metadata. A negative minimum means use the query's default buffer;
++// an explicit type-0 rule instead has minimum zero, even with a nonzero buffer.
++type cappedPath struct {
++	paper.Path
++	to        int
++	minimum   int64
++	allowed   bool
++	ruleError error
+ }
+ 
+ func (x *CappedIndex) Preparation() CappedPreparation { return x.prep }
+@@ -70,7 +86,7 @@
+ // ordinary ULTRA work meanings. No Core-CH or timetable shortcut sparsity is
+ // claimed in this mode.
+ func BuildCapped(ctx context.Context, d model.Dataset, cfg CappedConfig) (out *CappedIndex, err error) {
+-	out = &CappedIndex{prep: CappedPreparation{Profile: "ultra_raptor_transfer_complete_capped_v1", Config: cfg}, rows: map[string][]paper.Path{}, at: map[string][]occurrence{}}
++	out = &CappedIndex{prep: CappedPreparation{Profile: "ultra_raptor_transfer_complete_capped_v1", Config: cfg}, stopIDs: map[string]int{}}
+ 	defer func() {
+ 		out.prep.Complete = err == nil
+ 		if err != nil {
+@@ -89,11 +105,22 @@
+ 	}
+ 	x := &Index{p: p, transit: map[string]bool{}, rawOut: map[string][]model.Footpath{}, rawIn: map[string][]model.Footpath{}}
+ 	out.x = x
++	// Ordinals are immutable and private to this index. Queries allocate all
++	// mutable labels and caches locally, preserving concurrent-query ownership.
++	for _, stop := range p.Data.Stops {
++		out.stopIDs[stop.ID] = len(out.stopIDs)
++		out.accessible = append(out.accessible, stop.Accessible == model.Yes)
++	}
++	out.rows = make([][]cappedPath, len(out.stopIDs))
++	out.at = make([][]occurrence, len(out.stopIDs))
++	out.transit = make([]bool, len(out.stopIDs))
+ 	byTrip := map[string][]model.Connection{}
+ 	for _, c := range p.Data.Connections {
+ 		byTrip[c.TripID] = append(byTrip[c.TripID], c)
+ 		x.transit[c.From] = true
+ 		x.transit[c.To] = true
++		out.transit[out.stopIDs[c.From]] = true
++		out.transit[out.stopIDs[c.To]] = true
+ 	}
+ 	for _, edge := range p.Data.Footpaths {
+ 		if cfg.AccessibleOnly && (edge.Accessible != model.Yes || p.Stops[edge.From].Accessible != model.Yes || p.Stops[edge.To].Accessible != model.Yes) {
+@@ -132,7 +159,7 @@
+ 		if err != nil {
+ 			return
+ 		}
+-		paths := []paper.Path{}
++		paths := []cappedPath{}
+ 		targets := []string{}
+ 		for target := range r.distance {
+ 			if x.transit[target] {
+@@ -154,9 +181,14 @@
+ 			if err != nil {
+ 				return
+ 			}
+-			paths = append(paths, path)
+-		}
+-		out.rows[source] = paths
++			decision, ruleError := p.Rules.Resolve(model.Connection{To: source}, model.Connection{From: target}, 0)
++			minimum := decision.Minimum
++			if decision.RuleID == "" {
++				minimum = -1
++			}
++			paths = append(paths, cappedPath{path, out.stopIDs[target], minimum, decision.Allowed, ruleError})
++		}
++		out.rows[out.stopIDs[source]] = paths
+ 		out.prep.TransferRows++
+ 	}
+ 	return
+@@ -234,11 +266,17 @@
+ 		x.x.routes = append(x.x.routes, groups...)
+ 	}
+ 	for ri, r := range x.x.routes {
++		from := make([]int, len(r.trips[0].cs))
++		to := make([]int, len(r.trips[0].cs))
++		x.tripAllowed = append(x.tripAllowed, x.x.p.Trips[r.trips[0].id].Accessible == model.Yes)
+ 		for pos, c := range r.trips[0].cs {
++			from[pos], to[pos] = x.stopIDs[c.From], x.stopIDs[c.To]
+ 			if c.Pickup {
+-				x.at[c.From] = append(x.at[c.From], occurrence{ri, pos})
+-			}
+-		}
++				x.at[from[pos]] = append(x.at[from[pos]], occurrence{ri, pos})
++			}
++		}
++		x.from = append(x.from, from)
++		x.to = append(x.to, to)
+ 	}
+ 	return w.check()
+ }
+--- /dev/null
++++ b/ultra/capped_dense_test.go
+@@ -0,0 +1,380 @@
++package ultra
++
++import (
++	"context"
++	"fmt"
++	"math/rand/v2"
++	"reflect"
++	"sync"
++	"testing"
++	"time"
++
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/validate"
++)
++
++func denseLimits() Limits {
++	return Limits{MaxRuns: 10000, MaxConnectionVisits: 1000000, MaxWalkSettled: 1000000, MaxWalkEdges: 1000000, MaxShortcuts: 100000, MaxOutputLegs: 1000000}
++}
++
++// Tiny directed networks include parallel shortest witnesses, cycles, repeated
++// stops, overtaking/equal-time trips, restricted pickup/dropoff, nontransit
++// endpoints, accessibility, and station-parent static transfer rules.
++func denseDataset(seed uint64) model.Dataset {
++	r := rand.New(rand.NewPCG(seed, seed+91))
++	d := model.Dataset{SchemaVersion: model.SchemaVersion, ID: fmt.Sprintf("dense-%d", seed), TimeZone: "Etc/UTC", ServiceDate: "2026-10-19"}
++	d.Stops = append(d.Stops, model.Stop{ID: "P", LocationType: 1, Accessible: model.Yes})
++	for i := 0; i < 6; i++ {
++		s := model.Stop{ID: fmt.Sprintf("s%d", i), Accessible: model.Yes}
++		if i < 2 {
++			s.ParentStation = "P"
++		}
++		if seed%3 == 0 && i == 3 {
++			s.Accessible = model.No
++		}
++		if seed%5 == 0 && i == 4 {
++			s.Accessible = model.Unknown
++		}
++		d.Stops = append(d.Stops, s)
++	}
++	add := func(id string, cs []model.Connection, access model.Access) {
++		d.Trips = append(d.Trips, model.Trip{ID: id, Accessible: access})
++		for j, c := range cs {
++			c.ID = fmt.Sprintf("%s:%d", id, j)
++			c.TripID = id
++			c.Sequence = j
++			d.Connections = append(d.Connections, c)
++		}
++	}
++	for i := 0; i < 7; i++ {
++		from := r.IntN(5)
++		at := int64(r.IntN(10))
++		cs := []model.Connection{}
++		for j := 0; j < 1+r.IntN(3); j++ {
++			to := (from + 1 + r.IntN(4)) % 5
++			c := model.Connection{From: fmt.Sprintf("s%d", from), To: fmt.Sprintf("s%d", to), Departure: at, Arrival: at + 1 + int64(r.IntN(3)), Pickup: r.IntN(5) != 0, Dropoff: r.IntN(5) != 0}
++			cs = append(cs, c)
++			from = to
++			at = c.Arrival + int64(r.IntN(3))
++		}
++		access := model.Yes
++		if i == 6 && seed%2 == 0 {
++			access = model.No
++		}
++		add(fmt.Sprintf("t%d", i), cs, access)
++		if i == 0 {
++			add("equal", cs, access)
++		}
++	}
++	for i := 0; i < 6; i++ {
++		for j := 0; j < 6; j++ {
++			if i != j && r.IntN(3) == 0 {
++				edge := model.Footpath{ID: fmt.Sprintf("w%d-%d", i, j), From: fmt.Sprintf("s%d", i), To: fmt.Sprintf("s%d", j), Duration: 1 + int64(r.IntN(5)), Accessible: model.Yes}
++				if (i+j)%5 == 0 && seed%2 == 0 {
++					edge.Accessible = model.No
++				}
++				d.Footpaths = append(d.Footpaths, edge)
++				if (i+j)%4 == 0 {
++					edge.ID += "-parallel"
++					d.Footpaths = append(d.Footpaths, edge)
++				}
++			}
++		}
++	}
++	switch seed % 4 {
++	case 0:
++		d.Transfers = []model.TransferRule{{ID: "station-zero", FromStop: "P", ToStop: "P", Type: 0}}
++	case 1:
++		d.Transfers = []model.TransferRule{{ID: "minimum", FromStop: "s1", ToStop: "s2", Type: 2, MinSeconds: 7}}
++	case 2:
++		d.Transfers = []model.TransferRule{{ID: "forbidden", FromStop: "s2", ToStop: "s3", Type: 3}}
++	}
++	return d
++}
++
++func denseQuery(from, to string, departure int64, variant int, accessible bool) model.Query {
++	cap := []int64{0, 3, 12}[variant%3]
++	return model.Query{ID: "dense-query", Origin: from, Destination: to, Departure: departure, LatestArrival: 30, TransferBuffer: int64(variant % 6), MaxWalkSeconds: 1000, MaxBoardings: variant % 4, MaxLegs: 128, AccessibleOnly: accessible, Walking: &model.WalkingLimits{Access: cap, Egress: cap, Direct: cap, Transfer: cap}}
++}
++func denseError(e error) string {
++	if e == nil {
++		return ""
++	}
++	return e.Error()
++}
++func checkDenseResult(t *testing.T, d model.Dataset, q model.Query, got CappedResult, e error, want CappedResult, we error) {
++	t.Helper()
++	if denseError(e) != denseError(we) || !reflect.DeepEqual(got, want) {
++		t.Fatalf("q=%+v got=%+v (%v) want=%+v (%v)", q, got, e, want, we)
++	}
++	if e == nil {
++		checker, err := validate.New(d)
++		if err != nil {
++			t.Fatal(err)
++		}
++		for _, j := range got.Journeys {
++			if _, err = checker.Check(q, j); err != nil {
++				t.Fatalf("invalid full raw witness: %v; %+v", err, j)
++			}
++		}
++	}
++}
++func TestCappedDenseFrozenTinyNetworks(t *testing.T) {
++	checks := 0
++	for seed := uint64(0); seed < 48; seed++ {
++		d := denseDataset(seed)
++		for _, accessible := range []bool{false, true} {
++			cfg := CappedConfig{TransferWalkingLimit: 12, AccessibleOnly: accessible, Limits: denseLimits()}
++			x, e := BuildCapped(context.Background(), d, cfg)
++			f, fe := frozenBuildCapped(context.Background(), d, cfg)
++			if denseError(e) != denseError(fe) || !reflect.DeepEqual(x.Preparation(), f.Preparation()) {
++				t.Fatalf("preparation seed=%d got=%+v (%v) want=%+v (%v)", seed, x.Preparation(), e, f.Preparation(), fe)
++			}
++			if e != nil {
++				t.Fatal(e)
++			}
++			for _, from := range d.Stops {
++				for _, to := range d.Stops {
++					for variant := 0; variant < 6; variant++ {
++						q := denseQuery(from.ID, to.ID, int64(variant%2)*4, variant, accessible)
++						got, e := x.Search(context.Background(), q, denseLimits())
++						want, we := f.Search(context.Background(), q, denseLimits())
++						checkDenseResult(t, d, q, got, e, want, we)
++						checks++
++					}
++				}
++			}
++		}
++	}
++	t.Logf("%d exact original-result/Stats/error and independent full-witness checks", checks)
++}
++
++// Counted cancellation checks poll placement, not wall-clock race behavior.
++type denseCancelContext struct{ after, calls int }
++
++func (c *denseCancelContext) Deadline() (time.Time, bool) { return time.Time{}, false }
++func (c *denseCancelContext) Done() <-chan struct{}       { return nil }
++func (c *denseCancelContext) Value(any) any               { return nil }
++func (c *denseCancelContext) Err() error {
++	c.calls++
++	if c.calls >= c.after {
++		return context.Canceled
++	}
++	return nil
++}
++func TestCappedDenseFrozenBudgetsAndCancellation(t *testing.T) {
++	d := denseDataset(1)
++	cfg := CappedConfig{TransferWalkingLimit: 12, Limits: denseLimits()}
++	x, e := BuildCapped(context.Background(), d, cfg)
++	if e != nil {
++		t.Fatal(e)
++	}
++	f, e := frozenBuildCapped(context.Background(), d, cfg)
++	if e != nil {
++		t.Fatal(e)
++	}
++	q := denseQuery("s0", "s4", 0, 3, false)
++	q.Walking = &model.WalkingLimits{Access: 3, Egress: 3, Direct: 3, Transfer: 12}
++	limits := []func(*Limits, int){func(l *Limits, n int) { l.MaxRuns = n }, func(l *Limits, n int) { l.MaxConnectionVisits = n }, func(l *Limits, n int) { l.MaxWalkSettled = n }, func(l *Limits, n int) { l.MaxWalkEdges = n }, func(l *Limits, n int) { l.MaxShortcuts = n }, func(l *Limits, n int) { l.MaxOutputLegs = n }}
++	for _, set := range limits {
++		for _, n := range []int{1, 2, 4, 7, 16, 64, 256} {
++			l := denseLimits()
++			set(&l, n)
++			got, e := x.Search(context.Background(), q, l)
++			want, we := f.Search(context.Background(), q, l)
++			checkDenseResult(t, d, q, got, e, want, we)
++			c := cfg
++			c.Limits = l
++			gx, e := BuildCapped(context.Background(), d, c)
++			fx, we := frozenBuildCapped(context.Background(), d, c)
++			if denseError(e) != denseError(we) || !reflect.DeepEqual(gx.Preparation(), fx.Preparation()) {
++				t.Fatalf("budget=%+v preparation differs: %+v (%v), %+v (%v)", l, gx.Preparation(), e, fx.Preparation(), we)
++			}
++		}
++	}
++	for after := 1; after <= 350; after++ {
++		gc, wc := &denseCancelContext{after: after}, &denseCancelContext{after: after}
++		got, e := x.Search(gc, q, denseLimits())
++		want, we := f.Search(wc, q, denseLimits())
++		checkDenseResult(t, d, q, got, e, want, we)
++		if gc.calls != wc.calls {
++			t.Fatalf("search cancellation poll count %d != %d at %d", gc.calls, wc.calls, after)
++		}
++		gc, wc = &denseCancelContext{after: after}, &denseCancelContext{after: after}
++		gx, e := BuildCapped(gc, d, cfg)
++		fx, we := frozenBuildCapped(wc, d, cfg)
++		if denseError(e) != denseError(we) || !reflect.DeepEqual(gx.Preparation(), fx.Preparation()) || gc.calls != wc.calls {
++			t.Fatalf("preparation cancellation differs at %d: %+v (%v)/%d, %+v (%v)/%d", after, gx.Preparation(), e, gc.calls, fx.Preparation(), we, wc.calls)
++		}
++	}
++}
++func TestCappedDenseFrozenSparseCertificates(t *testing.T) {
++	for seed := uint64(0); seed < 24; seed++ {
++		d := denseDataset(seed)
++		for _, accessible := range []bool{false, true} {
++			cfg := SparseConfig{Capped: CappedConfig{TransferWalkingLimit: 12, AccessibleOnly: accessible, Limits: denseLimits()}, TransferBuffer: 4, MaxProofChecks: 1000000}
++			x, e := BuildSparse(context.Background(), d, cfg)
++			f, fe := frozenBuildSparse(context.Background(), d, cfg)
++			if denseError(e) != denseError(fe) || !reflect.DeepEqual(x.Preparation(), f.Preparation()) {
++				t.Fatalf("sparse certificates seed=%d differ: %+v (%v), %+v (%v)", seed, x.Preparation(), e, f.Preparation(), fe)
++			}
++			if e != nil {
++				t.Fatal(e)
++			}
++			for _, from := range d.Stops {
++				for _, to := range d.Stops {
++					q := denseQuery(from.ID, to.ID, 0, 5, accessible)
++					q.MaxBoardings = 3
++					q.TransferBuffer = 4
++					got, e := x.Search(context.Background(), q, denseLimits())
++					want, we := f.Search(context.Background(), q, denseLimits())
++					checkDenseResult(t, d, q, got, e, want, we)
++				}
++			}
++		}
++	}
++}
++func TestCappedDenseImmutableConcurrentQueries(t *testing.T) {
++	d := denseDataset(1)
++	cfg := CappedConfig{TransferWalkingLimit: 12, Limits: denseLimits()}
++	x, e := BuildCapped(context.Background(), d, cfg)
++	if e != nil {
++		t.Fatal(e)
++	}
++	q := denseQuery("s0", "s4", 0, 5, false)
++	q.MaxBoardings = 3
++	want, e := x.Search(context.Background(), q, denseLimits())
++	if e != nil {
++		t.Fatal(e)
++	}
++	// All retained timetable/witness metadata must belong to the prepared clone.
++	for i := range d.Connections {
++		d.Connections[i].Departure = 500
++		d.Connections[i].Arrival = 501
++	}
++	for i := range d.Footpaths {
++		d.Footpaths[i].Duration = 500
++	}
++	for i := range d.Stops {
++		d.Stops[i].Accessible = model.No
++	}
++	var wg sync.WaitGroup
++	for i := 0; i < 16; i++ {
++		wg.Add(1)
++		go func() {
++			defer wg.Done()
++			for j := 0; j < 20; j++ {
++				got, e := x.Search(context.Background(), q, denseLimits())
++				if e != nil || !reflect.DeepEqual(got, want) {
++					t.Errorf("concurrent immutable query differs: %+v %v", got, e)
++					return
++				}
++			}
++		}()
++	}
++	wg.Wait()
++}
++
++func TestCappedDenseExplicitZeroAndDestinationRepair(t *testing.T) {
++	for _, kind := range []string{"default", "zero", "minimum", "forbidden"} {
++		d := model.Dataset{SchemaVersion: model.SchemaVersion, ID: "destination-repair", TimeZone: "Etc/UTC", ServiceDate: "2026-10-19"}
++		for _, id := range []string{"A", "B", "C", "D", "X", "Y", "P"} {
++			s := model.Stop{ID: id, Accessible: model.Yes}
++			if id == "P" {
++				s.LocationType = 1
++			}
++			if id == "B" || id == "C" {
++				s.ParentStation = "P"
++			}
++			d.Stops = append(d.Stops, s)
++		}
++		for _, v := range []struct {
++			id, from, to string
++			dep, arr     int64
++		}{{"feeder", "A", "B", 1, 2}, {"aa-service", "C", "D", 6, 7}, {"zz-service", "C", "D", 6, 7}, {"later", "C", "D", 9, 10}} {
++			d.Trips = append(d.Trips, model.Trip{ID: v.id, Accessible: model.Yes})
++			d.Connections = append(d.Connections, model.Connection{ID: v.id + ":0", TripID: v.id, From: v.from, To: v.to, Departure: v.dep, Arrival: v.arr, Pickup: true, Dropoff: true})
++		}
++		for _, v := range []struct {
++			id, from, to string
++			n            int64
++		}{{"bd", "B", "D", 1}, {"dc", "D", "C", 1}, {"bx", "B", "X", 2}, {"xc", "X", "C", 2}, {"by", "B", "Y", 2}, {"yc", "Y", "C", 2}} {
++			d.Footpaths = append(d.Footpaths, model.Footpath{ID: v.id, From: v.from, To: v.to, Duration: v.n, Accessible: model.Yes})
++		}
++		if kind != "default" {
++			r := model.TransferRule{ID: "pair", FromStop: "P", ToStop: "P"}
++			if kind == "minimum" {
++				r.Type = 2
++				r.MinSeconds = 6
++			}
++			if kind == "forbidden" {
++				r.Type = 3
++			}
++			d.Transfers = append(d.Transfers, r)
++		}
++		cfg := CappedConfig{TransferWalkingLimit: 4, Limits: denseLimits()}
++		x, e := BuildCapped(context.Background(), d, cfg)
++		if e != nil {
++			t.Fatal(e)
++		}
++		f, e := frozenBuildCapped(context.Background(), d, cfg)
++		if e != nil {
++			t.Fatal(e)
++		}
++		q := model.Query{ID: kind, Origin: "A", Destination: "D", LatestArrival: 20, TransferBuffer: 9, MaxWalkSeconds: 100, MaxBoardings: 2, MaxLegs: 128, Walking: &model.WalkingLimits{Transfer: 4}}
++		got, e := x.Search(context.Background(), q, denseLimits())
++		want, we := f.Search(context.Background(), q, denseLimits())
++		checkDenseResult(t, d, q, got, e, want, we)
++		if got.Stats.DestinationRepairs == 0 {
++			t.Fatal("destination-crossing shortest witness was not repaired")
++		}
++		refs := []string{}
++		if len(got.Journeys) > 0 {
++			for _, l := range got.Journeys[0].Legs {
++				refs = append(refs, l.Ref)
++			}
++		}
++		expected := []string{}
++		if kind == "zero" {
++			expected = []string{"feeder:0", "bx", "xc", "aa-service:0"}
++		}
++		if kind == "minimum" {
++			expected = []string{"feeder:0", "bx", "xc", "later:0"}
++		}
++		if !reflect.DeepEqual(refs, expected) {
++			t.Fatalf("%s witness %v != independently expected %v", kind, refs, expected)
++		}
++	}
++}
++
++func TestCappedDenseFrozenCapabilityGuards(t *testing.T) {
++	d := denseDataset(1)
++	cfg := CappedConfig{TransferWalkingLimit: 12, Limits: denseLimits()}
++	x, e := BuildCapped(context.Background(), d, cfg)
++	if e != nil {
++		t.Fatal(e)
++	}
++	f, e := frozenBuildCapped(context.Background(), d, cfg)
++	if e != nil {
++		t.Fatal(e)
++	}
++	base := denseQuery("s0", "s4", 0, 5, false)
++	changes := []func(*model.Query){func(q *model.Query) { q.Walking = nil }, func(q *model.Query) { q.Origin = "missing" }, func(q *model.Query) { q.AccessibleOnly = true }, func(q *model.Query) { q.Walking.Transfer = 13 }, func(q *model.Query) { q.MaxWalkSeconds = 0 }, func(q *model.Query) { q.MaxLegs = 0 }, func(q *model.Query) { q.Origin = q.Destination }}
++	for _, change := range changes {
++		q := base
++		w := *q.Walking
++		q.Walking = &w
++		change(&q)
++		got, e := x.Search(context.Background(), q, denseLimits())
++		want, we := f.Search(context.Background(), q, denseLimits())
++		checkDenseResult(t, d, q, got, e, want, we)
++	}
++	got, e := x.Search(context.Background(), base, Limits{})
++	want, we := f.Search(context.Background(), base, Limits{})
++	checkDenseResult(t, d, base, got, e, want, we)
++	var nilDense *CappedIndex
++	var nilFrozen *frozenCappedIndex
++	got, e = nilDense.Search(context.Background(), base, denseLimits())
++	want, we = nilFrozen.Search(context.Background(), base, denseLimits())
++	checkDenseResult(t, d, base, got, e, want, we)
++}
+--- /dev/null
++++ b/ultra/capped_frozen_baseline_test.go
+@@ -0,0 +1,276 @@
++// Frozen verbatim algorithm from routing b102816; only receiver/type names change.
++package ultra
++
++import (
++	"container/heap"
++	"context"
++	"encoding/json"
++	"fmt"
++	"sort"
++
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/paper"
++)
++
++// frozenCappedIndex owns immutable timetable and walking data. Queries may vary every
++// role cap (transfer <= prepared ceiling), buffer, source and destination. The
++// supported objective is arrival/boarding representatives, not walking Pareto.
++// Static stop-pair rules and pickup/dropoff are supported. All paper.Profile
++// aggregate-resource and trip/route-rule guards remain in force.
++type frozenCappedIndex struct {
++	x    *Index
++	prep CappedPreparation
++	rows map[string][]paper.Path
++	at   map[string][]occurrence
++}
++
++func (x *frozenCappedIndex) Preparation() CappedPreparation { return x.prep }
++func (x *frozenCappedIndex) Complete() bool                 { return x.prep.Complete }
++
++// frozenBuildCapped performs finite, budgeted shortest walking searches, independent
++// of timetable event count and query destination. No query can use an incomplete
++// index. MaxRuns bounds rows, MaxShortcuts bounds nonempty transfer pairs, and
++// MaxOutputLegs bounds retained raw edge witnesses. Other limits retain their
++// ordinary ULTRA work meanings. No Core-CH or timetable shortcut sparsity is
++// claimed in this mode.
++func frozenBuildCapped(ctx context.Context, d model.Dataset, cfg CappedConfig) (out *frozenCappedIndex, err error) {
++	out = &frozenCappedIndex{prep: CappedPreparation{Profile: "ultra_raptor_transfer_complete_capped_v1", Config: cfg}, rows: map[string][]paper.Path{}, at: map[string][]occurrence{}}
++	defer func() {
++		out.prep.Complete = err == nil
++		if err != nil {
++			out.prep.Error = err.Error()
++		}
++	}()
++	if !validLimits(cfg.Limits) || cfg.TransferWalkingLimit < 0 || cfg.TransferWalkingLimit > model.MaxServiceSecond {
++		return out, fmt.Errorf("ULTRA capped: invalid preparation configuration")
++	}
++	if err = ctx.Err(); err != nil {
++		return
++	}
++	p, e := paper.New(d)
++	if e != nil {
++		return out, e
++	}
++	x := &Index{p: p, transit: map[string]bool{}, rawOut: map[string][]model.Footpath{}, rawIn: map[string][]model.Footpath{}}
++	out.x = x
++	byTrip := map[string][]model.Connection{}
++	for _, c := range p.Data.Connections {
++		byTrip[c.TripID] = append(byTrip[c.TripID], c)
++		x.transit[c.From] = true
++		x.transit[c.To] = true
++	}
++	for _, edge := range p.Data.Footpaths {
++		if cfg.AccessibleOnly && (edge.Accessible != model.Yes || p.Stops[edge.From].Accessible != model.Yes || p.Stops[edge.To].Accessible != model.Yes) {
++			continue
++		}
++		x.rawOut[edge.From] = append(x.rawOut[edge.From], edge)
++		x.rawIn[edge.To] = append(x.rawIn[edge.To], edge)
++	}
++	for _, m := range []map[string][]model.Footpath{x.rawOut, x.rawIn} {
++		for id := range m {
++			sort.Slice(m[id], func(i, j int) bool { return m[id][i].ID < m[id][j].ID })
++		}
++	}
++	w := work{ctx, cfg.Limits, &out.prep.Stats}
++	if err = out.buildCappedRoutes(byTrip, &w); err != nil {
++		return
++	}
++	out.prep.Routes = len(x.routes)
++	sources := []string{}
++	for id := range x.transit {
++		if !cfg.AccessibleOnly || p.Stops[id].Accessible == model.Yes {
++			sources = append(sources, id)
++		}
++	}
++	sort.Strings(sources)
++	for _, source := range sources {
++		if err = w.check(); err != nil {
++			return
++		}
++		if out.prep.Stats.Runs == cfg.Limits.MaxRuns {
++			return out, fmt.Errorf("ULTRA capped incomplete: transfer-row budget exhausted")
++		}
++		out.prep.Stats.Runs++
++		var r rawSearch
++		r, err = out.walk(source, cfg.TransferWalkingLimit, false, "", &w)
++		if err != nil {
++			return
++		}
++		paths := []paper.Path{}
++		targets := []string{}
++		for target := range r.distance {
++			if x.transit[target] {
++				targets = append(targets, target)
++			}
++		}
++		sort.Strings(targets)
++		for _, target := range targets {
++			duration := r.distance[target]
++			if target != source {
++				if out.prep.TransferPairs == cfg.Limits.MaxShortcuts {
++					return out, fmt.Errorf("ULTRA capped incomplete: transfer-pair budget exhausted")
++				}
++				out.prep.TransferPairs++
++			}
++			path := paper.Path{To: target, Duration: duration}
++			// Charge before allocating potentially long retained raw witnesses.
++			path.Edges, err = out.path(r, target, &w)
++			if err != nil {
++				return
++			}
++			paths = append(paths, path)
++		}
++		out.rows[source] = paths
++		out.prep.TransferRows++
++	}
++	return
++}
++
++// Capped groups include boarding restrictions and trip accessibility. Earlier
++// FIFO trips dominate later trips only when these signatures match. Equal-time
++// and repeated-stop trips are safe: each position is separately indexed.
++func (x *frozenCappedIndex) buildCappedRoutes(byTrip map[string][]model.Connection, w *work) error {
++	patterns := map[string][]trip{}
++	ids := []string{}
++	for id := range byTrip {
++		ids = append(ids, id)
++	}
++	sort.Strings(ids)
++	for _, id := range ids {
++		cs := byTrip[id]
++		sort.Slice(cs, func(i, j int) bool { return cs[i].Sequence < cs[j].Sequence })
++		type signature struct {
++			From, To        string
++			Pickup, Dropoff bool
++		}
++		ss := []signature{}
++		for _, c := range cs {
++			if e := w.connection(); e != nil {
++				return e
++			}
++			ss = append(ss, signature{c.From, c.To, c.Pickup, c.Dropoff})
++		}
++		key, _ := json.Marshal(struct {
++			Segments   []signature
++			Accessible model.Access
++		}{ss, x.x.p.Trips[id].Accessible})
++		patterns[string(key)] = append(patterns[string(key)], trip{id, cs})
++	}
++	keys := []string{}
++	for key := range patterns {
++		keys = append(keys, key)
++	}
++	sort.Strings(keys)
++	for _, key := range keys {
++		ts := patterns[key]
++		sort.Slice(ts, func(i, j int) bool {
++			if ts[i].cs[0].Departure == ts[j].cs[0].Departure {
++				return ts[i].id < ts[j].id
++			}
++			return ts[i].cs[0].Departure < ts[j].cs[0].Departure
++		})
++		groups := []route{}
++		for _, t := range ts {
++			placed := false
++			for g := range groups {
++				prior := groups[g].trips[len(groups[g].trips)-1]
++				ok := true
++				for i, c := range t.cs {
++					if e := w.connection(); e != nil {
++						return e
++					}
++					w.s.GroupingComparisons++
++					if c.Departure < prior.cs[i].Departure || c.Arrival < prior.cs[i].Arrival {
++						ok = false
++						break
++					}
++				}
++				if ok {
++					groups[g].trips = append(groups[g].trips, t)
++					placed = true
++					break
++				}
++			}
++			if !placed {
++				groups = append(groups, route{[]trip{t}})
++			}
++		}
++		x.x.routes = append(x.x.routes, groups...)
++	}
++	for ri, r := range x.x.routes {
++		for pos, c := range r.trips[0].cs {
++			if c.Pickup {
++				x.at[c.From] = append(x.at[c.From], occurrence{ri, pos})
++			}
++		}
++	}
++	return w.check()
++}
++
++// walk uses the same raw directed Dijkstra/tie policy as legacy ULTRA, with an
++// absorbing destination and the accessibility-filtered prepared graph.
++func (x *frozenCappedIndex) walk(source string, maximum int64, reverse bool, absorbing string, w *work) (rawSearch, error) {
++	r := rawSearch{map[string]int64{source: 0}, map[string]model.Footpath{}, source, reverse}
++	q := &rawQueue{{source, 0}}
++	for q.Len() > 0 {
++		u := heap.Pop(q).(rawEntry)
++		if r.distance[u.v] != u.t {
++			continue
++		}
++		if e := w.settle(); e != nil {
++			return r, e
++		}
++		if !reverse && u.v == absorbing {
++			continue
++		}
++		edges := x.x.rawOut[u.v]
++		if reverse {
++			edges = x.x.rawIn[u.v]
++		}
++		for _, edge := range edges {
++			if e := w.edge(); e != nil {
++				return r, e
++			}
++			to := edge.To
++			if reverse {
++				to = edge.From
++			}
++			nt := u.t + edge.Duration
++			if nt > maximum {
++				continue
++			}
++			if old, ok := r.distance[to]; ok && old <= nt {
++				continue
++			}
++			r.distance[to] = nt
++			r.parent[to] = edge
++			heap.Push(q, rawEntry{to, nt})
++		}
++	}
++	return r, nil
++}
++
++func (x *frozenCappedIndex) path(r rawSearch, target string, w *work) ([]model.Footpath, error) {
++	edges := []model.Footpath{}
++	for at := target; at != r.source; {
++		if e := w.leg(); e != nil {
++			return nil, e
++		}
++		edge, ok := r.parent[at]
++		if !ok {
++			return nil, fmt.Errorf("ULTRA capped: missing raw path parent")
++		}
++		edges = append(edges, edge)
++		if r.reverse {
++			at = edge.To
++		} else {
++			at = edge.From
++		}
++	}
++	if !r.reverse {
++		for i, j := 0, len(edges)-1; i < j; i, j = i+1, j-1 {
++			edges[i], edges[j] = edges[j], edges[i]
++		}
++	}
++	return edges, nil
++}
+--- /dev/null
++++ b/ultra/capped_frozen_search_test.go
+@@ -0,0 +1,280 @@
++// Frozen verbatim search from routing b102816; only receiver name changes.
++package ultra
++
++import (
++	"context"
++	"fmt"
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/paper"
++	"sort"
++)
++
++// Search implements exact-round ULTRA-RAPTOR using one-hop completed transfers.
++// Apply pair-specific readiness before merging labels; never chain shortcuts.
++func (x *frozenCappedIndex) Search(ctx context.Context, q model.Query, limits Limits) (out CappedResult, err error) {
++	out.Journeys = []model.Journey{}
++	defer func() {
++		out.Complete = err == nil
++		if err != nil {
++			out.Error = err.Error()
++		}
++	}()
++	if x == nil || !x.Complete() {
++		return out, fmt.Errorf("ULTRA capped: incomplete index")
++	}
++	if !validLimits(limits) {
++		return out, fmt.Errorf("ULTRA capped: explicit positive query limits required")
++	}
++	if err = x.x.p.CheckContext(ctx, q); err != nil {
++		return
++	}
++	if q.AccessibleOnly != x.prep.Config.AccessibleOnly {
++		return out, fmt.Errorf("ULTRA capped capability: accessibility differs from prepared graph")
++	}
++	if q.Walking.Transfer > x.prep.Config.TransferWalkingLimit {
++		return out, fmt.Errorf("ULTRA capped capability: transfer cap exceeds prepared ceiling")
++	}
++	if err = ctx.Err(); err != nil {
++		return
++	}
++	p := x.x.p
++	if !p.Accessible(q, q.Origin) || !p.Accessible(q, q.Destination) {
++		return
++	}
++	if q.Origin == q.Destination {
++		out.Journeys = append(out.Journeys, paper.Journey(nil))
++		return
++	}
++	w := work{ctx, limits, &out.Stats.Stats}
++	forward, e := x.walk(q.Origin, min(max(q.Walking.Access, q.Walking.Direct), q.LatestArrival-q.Departure), false, q.Destination, &w)
++	out.Stats.WalkSearches++
++	if e != nil {
++		return out, e
++	}
++	var backward rawSearch
++	if q.MaxBoardings > 0 {
++		backward, err = x.walk(q.Destination, min(q.Walking.Egress, q.LatestArrival-q.Departure), true, "", &w)
++		out.Stats.WalkSearches++
++		if err != nil {
++			return
++		}
++	}
++	emit := func(parent *paper.Node) error {
++		for n := parent; n != nil; n = n.Previous {
++			if e := w.leg(); e != nil {
++				return e
++			}
++		}
++		out.Journeys = append(out.Journeys, paper.Journey(parent))
++		return nil
++	}
++	previous := map[string]paper.Label{}
++	endpoints := []string{}
++	for stop := range forward.distance {
++		endpoints = append(endpoints, stop)
++	}
++	sort.Strings(endpoints)
++	bestArrival := paper.Infinity
++	for _, stop := range endpoints {
++		at := q.Departure + forward.distance[stop]
++		if at > q.LatestArrival {
++			continue
++		}
++		if stop == q.Destination {
++			if forward.distance[stop] <= q.Walking.Direct {
++				edges, e := x.path(forward, stop, &w)
++				if e != nil {
++					return out, e
++				}
++				bestArrival = at
++				if err = emit((paper.Path{Edges: edges}).Append(nil, q.Departure)); err != nil {
++					return
++				}
++			}
++		} else if q.MaxBoardings > 0 && x.x.transit[stop] && forward.distance[stop] <= q.Walking.Access {
++			edges, e := x.path(forward, stop, &w)
++			if e != nil {
++				return out, e
++			}
++			previous[stop] = paper.Label{Time: at, Parent: (paper.Path{Edges: edges}).Append(nil, q.Departure)}
++		}
++	}
++	rows := map[string][]paper.Path{}
++	getRow := func(from string) ([]paper.Path, error) {
++		if r, ok := rows[from]; ok {
++			return r, nil
++		}
++		out.Stats.RowUses++
++		r := []paper.Path{}
++		var detour *rawSearch
++		for _, path := range x.rows[from] {
++			if e := w.check(); e != nil {
++				return nil, e
++			}
++			if path.To == q.Destination || path.Duration > q.Walking.Transfer {
++				continue
++			}
++			crosses := false
++			for _, edge := range path.Edges {
++				if e := w.edge(); e != nil {
++					return nil, e
++				}
++				if edge.To == q.Destination {
++					crosses = true
++					break
++				}
++			}
++			if crosses {
++				if detour == nil {
++					d, e := x.walk(from, q.Walking.Transfer, false, q.Destination, &w)
++					out.Stats.WalkSearches++
++					out.Stats.DestinationRepairs++
++					if e != nil {
++						return nil, e
++					}
++					detour = &d
++				}
++				duration, ok := detour.distance[path.To]
++				if !ok {
++					continue
++				}
++				edges, e := x.path(*detour, path.To, &w)
++				if e != nil {
++					return nil, e
++				}
++				path = paper.Path{To: path.To, Duration: duration, Edges: edges}
++			}
++			r = append(r, path)
++		}
++		rows[from] = r
++		return r, nil
++	}
++	egress := map[string][]model.Footpath{}
++	for boards := 1; boards <= q.MaxBoardings && len(previous) > 0; boards++ {
++		if err = w.check(); err != nil {
++			return
++		}
++		out.Stats.Rounds++
++		selected := map[int]int{}
++		for stop := range previous {
++			for _, o := range x.at[stop] {
++				if err = w.connection(); err != nil {
++					return
++				}
++				out.Stats.RouteOccurrenceChecks++
++				if old, ok := selected[o.route]; !ok || o.position < old {
++					selected[o.route] = o.position
++				}
++			}
++		}
++		routeIDs := []int{}
++		for id := range selected {
++			routeIDs = append(routeIDs, id)
++		}
++		sort.Ints(routeIDs)
++		next := map[string]paper.Label{}
++		best := paper.Label{Time: bestArrival}
++		for _, ri := range routeIDs {
++			if err = w.check(); err != nil {
++				return
++			}
++			out.Stats.RouteScans++
++			r := x.x.routes[ri]
++			if !p.TripAllowed(q, r.trips[0].id) {
++				continue
++			}
++			current := -1
++			var parent *paper.Node
++			for pos := selected[ri]; pos < len(r.trips[0].cs); pos++ {
++				if err = w.connection(); err != nil {
++					return
++				}
++				proto := r.trips[0].cs[pos]
++				if l, ok := previous[proto.From]; ok && proto.Pickup && p.Accessible(q, proto.From) {
++					lo, hi := 0, len(r.trips)
++					if current >= 0 {
++						hi = current
++					}
++					for lo < hi {
++						if err = w.connection(); err != nil {
++							return
++						}
++						out.Stats.TripProbes++
++						mid := lo + (hi-lo)/2
++						if r.trips[mid].cs[pos].Departure < l.Time {
++							lo = mid + 1
++						} else {
++							hi = mid
++						}
++					}
++					if lo < len(r.trips) && (current < 0 || lo < current) {
++						current = lo
++						parent = l.Parent
++					}
++				}
++				if current < 0 {
++					continue
++				}
++				c := r.trips[current].cs[pos]
++				if c.Arrival > q.LatestArrival {
++					current = -1
++					continue
++				}
++				parent = paper.Ride(parent, c)
++				if !c.Dropoff || !p.Accessible(q, c.To) {
++					continue
++				}
++				if c.To == q.Destination {
++					if c.Arrival < best.Time {
++						best = paper.Label{Time: c.Arrival, Parent: parent}
++					}
++					current = -1
++					continue
++				}
++				if duration, ok := backward.distance[c.To]; ok && c.Arrival+duration < best.Time && c.Arrival+duration <= q.LatestArrival {
++					edges, exists := egress[c.To]
++					if !exists {
++						edges, err = x.path(backward, c.To, &w)
++						if err != nil {
++							return
++						}
++						egress[c.To] = edges
++					}
++					best = paper.Label{Time: c.Arrival + duration, Parent: (paper.Path{Edges: edges}).Append(parent, c.Arrival)}
++				}
++				if boards == q.MaxBoardings || c.Arrival >= best.Time {
++					continue
++				}
++				paths, e := getRow(c.To)
++				if e != nil {
++					return out, e
++				}
++				for _, path := range paths {
++					if err = w.edge(); err != nil {
++						return
++					}
++					out.Stats.TransferPairVisits++
++					ready, allowed, e := p.ReadyTime(q, c.To, path.To, c.Arrival, path.Duration)
++					if e != nil {
++						return out, e
++					}
++					if !allowed || ready > q.LatestArrival || ready >= best.Time {
++						continue
++					}
++					old, ok := next[path.To]
++					if !ok || ready < old.Time {
++						next[path.To] = paper.Label{Time: ready, Parent: path.Append(parent, c.Arrival)}
++					}
++				}
++			}
++		}
++		if best.Time < bestArrival {
++			if err = emit(best.Parent); err != nil {
++				return
++			}
++			bestArrival = best.Time
++		}
++		previous = next
++	}
++	return
++}
+--- /dev/null
++++ b/ultra/capped_frozen_sparse_test.go
+@@ -0,0 +1,224 @@
++// Frozen verbatim sparse algorithm from routing b102816; only names change.
++package ultra
++
++import (
++	"context"
++	"fmt"
++	"sort"
++
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/paper"
++)
++
++type frozenSparseIndex struct {
++	index *frozenCappedIndex
++	prep  SparsePreparation
++}
++
++func (x *frozenSparseIndex) Complete() bool { return x != nil && x.prep.Complete }
++func (x *frozenSparseIndex) Preparation() SparsePreparation {
++	s := x.prep
++	s.Certificates = append([]PrunedTransfer{}, s.Certificates...)
++	for i := range s.Certificates {
++		s.Certificates[i].Proofs = append([]StayProof{}, s.Certificates[i].Proofs...)
++	}
++	return s
++}
++
++// frozenBuildSparse first prepares the complete control, then removes only forbidden,
++// structurally/time-infeasible pairs and pairs with a stay-on-incoming-trip
++// witness for EVERY possible alighting event. Empty self transfers are NEVER
++// removed: all stay witnesses use only these, so pruning has no dependency cycle.
++// Preparation still pays the complete-control cost. Certificates add audit memory;
++// no peak-memory or paper-level shortcut-sparsity guarantee is made.
++func frozenBuildSparse(ctx context.Context, d model.Dataset, cfg SparseConfig) (out *frozenSparseIndex, err error) {
++	out = &frozenSparseIndex{prep: SparsePreparation{Profile: "ultra_cap_safe_stay_witness_subset_v1", Config: cfg, Certificates: []PrunedTransfer{}}}
++	defer func() {
++		out.prep.Complete = err == nil
++		if err != nil {
++			out.prep.Error = err.Error()
++		}
++	}()
++	if cfg.MaxProofChecks <= 0 || cfg.TransferBuffer < 0 || cfg.TransferBuffer > model.MaxServiceSecond {
++		return out, fmt.Errorf("ULTRA sparse: invalid proof/buffer configuration")
++	}
++	out.index, err = frozenBuildCapped(ctx, d, cfg.Capped)
++	out.prep.Control = out.index.Preparation()
++	if err != nil {
++		return
++	}
++	check := func() error {
++		if e := ctx.Err(); e != nil {
++			return e
++		}
++		if out.prep.ProofChecks == cfg.MaxProofChecks {
++			return fmt.Errorf("ULTRA sparse incomplete: proof budget exhausted")
++		}
++		out.prep.ProofChecks++
++		return nil
++	}
++	p := out.index.x.p
++	incoming := map[string][]model.Connection{}
++	future := map[string]map[string][]model.Connection{}
++	lastDeparture := map[string]int64{}
++	for _, c := range p.Data.Connections {
++		if err = check(); err != nil {
++			return
++		}
++		if cfg.Capped.AccessibleOnly && p.Trips[c.TripID].Accessible != model.Yes {
++			continue
++		}
++		if c.Pickup && (!cfg.Capped.AccessibleOnly || p.Stops[c.From].Accessible == model.Yes) {
++			old, ok := lastDeparture[c.From]
++			if !ok || c.Departure > old {
++				lastDeparture[c.From] = c.Departure
++			}
++		}
++		if !c.Dropoff || cfg.Capped.AccessibleOnly && p.Stops[c.To].Accessible != model.Yes {
++			continue
++		}
++		incoming[c.To] = append(incoming[c.To], c)
++		if future[c.TripID] == nil {
++			future[c.TripID] = map[string][]model.Connection{}
++		}
++		future[c.TripID][c.To] = append(future[c.TripID][c.To], c)
++	}
++	// Sorting is input-sized indexing, outside certificate checks. Check context
++	// between lists; comparison queries below are individually budgeted.
++	for _, byStop := range future {
++		for stop, cs := range byStop {
++			if err = ctx.Err(); err != nil {
++				return
++			}
++			sort.Slice(cs, func(i, j int) bool { return cs[i].Sequence < cs[j].Sequence })
++			byStop[stop] = cs
++		}
++	}
++	for stop, cs := range incoming {
++		if err = ctx.Err(); err != nil {
++			return
++		}
++		sort.Slice(cs, func(i, j int) bool { return cs[i].ID < cs[j].ID })
++		incoming[stop] = cs
++	}
++	sources := []string{}
++	for from := range out.index.rows {
++		sources = append(sources, from)
++	}
++	sort.Strings(sources)
++	for _, from := range sources {
++		kept := []paper.Path{}
++		for _, path := range out.index.rows[from] {
++			if err = check(); err != nil {
++				return
++			}
++			if path.To == from {
++				kept = append(kept, path)
++				continue
++			}
++			cert := PrunedTransfer{From: from, To: path.To, Duration: path.Duration}
++			canPrune := false
++			arrivals := incoming[from]
++			last, hasDeparture := lastDeparture[path.To]
++			switch {
++			case len(arrivals) == 0:
++				cert.Reason = "no_alighting"
++				canPrune = true
++			case !hasDeparture:
++				cert.Reason = "no_boarding"
++				canPrune = true
++			default:
++				// Common profile rejects trip/route selectors, so this decision is static
++				// for the stop pair. Fixing Buffer keeps its default-minimum semantics.
++				decision, e := p.Rules.Resolve(model.Connection{To: from}, model.Connection{From: path.To}, cfg.TransferBuffer)
++				if e != nil {
++					return out, e
++				}
++				cert.Minimum = decision.Minimum
++				cert.LastDeparture = last
++				if !decision.Allowed {
++					cert.Reason = "prohibited"
++					canPrune = true
++					break
++				}
++				earliest := paper.Infinity
++				for _, c := range arrivals {
++					if err = check(); err != nil {
++						return
++					}
++					earliest = min(earliest, c.Arrival)
++				}
++				cert.EarliestArrival = earliest
++				if earliest+max(path.Duration, decision.Minimum) > last {
++					cert.Reason = "schedule"
++					canPrune = true
++					break
++				}
++				self, e := p.Rules.Resolve(model.Connection{To: path.To}, model.Connection{From: path.To}, cfg.TransferBuffer)
++				if e != nil {
++					return out, e
++				}
++				if !self.Allowed {
++					break
++				}
++				cert.SelfMinimum = self.Minimum
++				cert.Reason = "stay_on_trip"
++				canPrune = true
++				for _, c := range arrivals {
++					if err = check(); err != nil {
++						return
++					}
++					ready := c.Arrival + max(path.Duration, decision.Minimum)
++					proof := StayProof{Incoming: c.ID, Ready: ready}
++					if ready > last {
++						proof.TooLate = true
++						cert.Proofs = append(cert.Proofs, proof)
++						continue
++					}
++					cs := future[c.TripID][path.To]
++					lo, hi := 0, len(cs)
++					for lo < hi {
++						if err = check(); err != nil {
++							return
++						}
++						mid := lo + (hi-lo)/2
++						if cs[mid].Sequence <= c.Sequence {
++							lo = mid + 1
++						} else {
++							hi = mid
++						}
++					}
++					if lo == len(cs) || cs[lo].Arrival+self.Minimum > ready {
++						canPrune = false
++						break
++					}
++					proof.Witness = cs[lo].ID
++					proof.WitnessReady = cs[lo].Arrival + self.Minimum
++					cert.Proofs = append(cert.Proofs, proof)
++				}
++			}
++			if canPrune {
++				out.prep.Certificates = append(out.prep.Certificates, cert)
++				out.prep.PrunedPairs++
++			} else {
++				kept = append(kept, path)
++				out.prep.RetainedPairs++
++			}
++		}
++		out.index.rows[from] = kept
++	}
++	return
++}
++
++func (x *frozenSparseIndex) Search(ctx context.Context, q model.Query, l Limits) (CappedResult, error) {
++	fail := func(e error) (CappedResult, error) {
++		return CappedResult{Journeys: []model.Journey{}, Error: e.Error()}, e
++	}
++	if !x.Complete() {
++		return fail(fmt.Errorf("ULTRA sparse: incomplete index"))
++	}
++	if q.TransferBuffer != x.prep.Config.TransferBuffer {
++		return fail(fmt.Errorf("ULTRA sparse capability: transfer buffer differs from proof"))
++	}
++	return x.index.Search(ctx, q, l)
++}
+--- a/ultra/capped_search.go
++++ b/ultra/capped_search.go
+@@ -37,6 +37,8 @@
+ 		return
+ 	}
+ 	p := x.x.p
++	n := len(x.stopIDs)
++	destination := x.stopIDs[q.Destination]
+ 	if !p.Accessible(q, q.Origin) || !p.Accessible(q, q.Destination) {
+ 		return
+ 	}
+@@ -67,7 +69,12 @@
+ 		out.Journeys = append(out.Journeys, paper.Journey(parent))
+ 		return nil
+ 	}
+-	previous := map[string]paper.Label{}
++	previous := make([]paper.Label, n)
++	previousSet := make([]bool, n)
++	previousStops := []int{}
++	next := make([]paper.Label, n)
++	nextSet := make([]bool, n)
++	nextStops := []int{}
+ 	endpoints := []string{}
+ 	for stop := range forward.distance {
+ 		endpoints = append(endpoints, stop)
+@@ -90,21 +97,25 @@
+ 					return
+ 				}
+ 			}
+-		} else if q.MaxBoardings > 0 && x.x.transit[stop] && forward.distance[stop] <= q.Walking.Access {
++		} else if q.MaxBoardings > 0 && x.transit[x.stopIDs[stop]] && forward.distance[stop] <= q.Walking.Access {
+ 			edges, e := x.path(forward, stop, &w)
+ 			if e != nil {
+ 				return out, e
+ 			}
+-			previous[stop] = paper.Label{Time: at, Parent: (paper.Path{Edges: edges}).Append(nil, q.Departure)}
+-		}
+-	}
+-	rows := map[string][]paper.Path{}
+-	getRow := func(from string) ([]paper.Path, error) {
+-		if r, ok := rows[from]; ok {
+-			return r, nil
++			id := x.stopIDs[stop]
++			previousStops = append(previousStops, id)
++			previousSet[id] = true
++			previous[id] = paper.Label{Time: at, Parent: (paper.Path{Edges: edges}).Append(nil, q.Departure)}
++		}
++	}
++	rows := make([][]cappedPath, n)
++	rowSet := make([]bool, n)
++	getRow := func(from int, fromName string) ([]cappedPath, error) {
++		if rowSet[from] {
++			return rows[from], nil
+ 		}
+ 		out.Stats.RowUses++
+-		r := []paper.Path{}
++		r := []cappedPath{}
+ 		var detour *rawSearch
+ 		for _, path := range x.rows[from] {
+ 			if e := w.check(); e != nil {
+@@ -125,7 +136,7 @@
+ 			}
+ 			if crosses {
+ 				if detour == nil {
+-					d, e := x.walk(from, q.Walking.Transfer, false, q.Destination, &w)
++					d, e := x.walk(fromName, q.Walking.Transfer, false, q.Destination, &w)
+ 					out.Stats.WalkSearches++
+ 					out.Stats.DestinationRepairs++
+ 					if e != nil {
+@@ -141,37 +152,52 @@
+ 				if e != nil {
+ 					return nil, e
+ 				}
+-				path = paper.Path{To: path.To, Duration: duration, Edges: edges}
++				path.Path = paper.Path{To: path.To, Duration: duration, Edges: edges}
+ 			}
+ 			r = append(r, path)
+ 		}
+ 		rows[from] = r
++		rowSet[from] = true
+ 		return r, nil
+ 	}
+-	egress := map[string][]model.Footpath{}
+-	for boards := 1; boards <= q.MaxBoardings && len(previous) > 0; boards++ {
++	egress := make([][]model.Footpath, n)
++	egressSet := make([]bool, n)
++	backwardDistance := make([]int64, n)
++	backwardSet := make([]bool, n)
++	for name, duration := range backward.distance {
++		id := x.stopIDs[name]
++		backwardDistance[id], backwardSet[id] = duration, true
++	}
++	selected := make([]int, len(x.x.routes))
++	routeIDs := []int{}
++	for boards := 1; boards <= q.MaxBoardings && len(previousStops) > 0; boards++ {
+ 		if err = w.check(); err != nil {
+ 			return
+ 		}
+ 		out.Stats.Rounds++
+-		selected := map[int]int{}
+-		for stop := range previous {
++		for _, ri := range routeIDs {
++			selected[ri] = 0
++		}
++		routeIDs = routeIDs[:0]
++		for _, stop := range previousStops {
+ 			for _, o := range x.at[stop] {
+ 				if err = w.connection(); err != nil {
+ 					return
+ 				}
+ 				out.Stats.RouteOccurrenceChecks++
+-				if old, ok := selected[o.route]; !ok || o.position < old {
+-					selected[o.route] = o.position
+-				}
+-			}
+-		}
+-		routeIDs := []int{}
+-		for id := range selected {
+-			routeIDs = append(routeIDs, id)
++				if old := selected[o.route]; old == 0 || o.position+1 < old {
++					if old == 0 {
++						routeIDs = append(routeIDs, o.route)
++					}
++					selected[o.route] = o.position + 1
++				}
++			}
+ 		}
+ 		sort.Ints(routeIDs)
+-		next := map[string]paper.Label{}
++		for _, stop := range nextStops {
++			nextSet[stop] = false
++		}
++		nextStops = nextStops[:0]
+ 		best := paper.Label{Time: bestArrival}
+ 		for _, ri := range routeIDs {
+ 			if err = w.check(); err != nil {
+@@ -179,17 +205,18 @@
+ 			}
+ 			out.Stats.RouteScans++
+ 			r := x.x.routes[ri]
+-			if !p.TripAllowed(q, r.trips[0].id) {
++			if q.AccessibleOnly && !x.tripAllowed[ri] {
+ 				continue
+ 			}
+ 			current := -1
+ 			var parent *paper.Node
+-			for pos := selected[ri]; pos < len(r.trips[0].cs); pos++ {
++			for pos := selected[ri] - 1; pos < len(r.trips[0].cs); pos++ {
+ 				if err = w.connection(); err != nil {
+ 					return
+ 				}
+ 				proto := r.trips[0].cs[pos]
+-				if l, ok := previous[proto.From]; ok && proto.Pickup && p.Accessible(q, proto.From) {
++				fromID := x.from[ri][pos]
++				if l := previous[fromID]; previousSet[fromID] && proto.Pickup && (!q.AccessibleOnly || x.accessible[fromID]) {
+ 					lo, hi := 0, len(r.trips)
+ 					if current >= 0 {
+ 						hi = current
+@@ -220,31 +247,33 @@
+ 					continue
+ 				}
+ 				parent = paper.Ride(parent, c)
+-				if !c.Dropoff || !p.Accessible(q, c.To) {
+-					continue
+-				}
+-				if c.To == q.Destination {
++				toID := x.to[ri][pos]
++				if !c.Dropoff || q.AccessibleOnly && !x.accessible[toID] {
++					continue
++				}
++				if toID == destination {
+ 					if c.Arrival < best.Time {
+ 						best = paper.Label{Time: c.Arrival, Parent: parent}
+ 					}
+ 					current = -1
+ 					continue
+ 				}
+-				if duration, ok := backward.distance[c.To]; ok && c.Arrival+duration < best.Time && c.Arrival+duration <= q.LatestArrival {
+-					edges, exists := egress[c.To]
+-					if !exists {
++				if duration := backwardDistance[toID]; backwardSet[toID] && c.Arrival+duration < best.Time && c.Arrival+duration <= q.LatestArrival {
++					edges := egress[toID]
++					if !egressSet[toID] {
+ 						edges, err = x.path(backward, c.To, &w)
+ 						if err != nil {
+ 							return
+ 						}
+-						egress[c.To] = edges
++						egress[toID] = edges
++						egressSet[toID] = true
+ 					}
+ 					best = paper.Label{Time: c.Arrival + duration, Parent: (paper.Path{Edges: edges}).Append(parent, c.Arrival)}
+ 				}
+ 				if boards == q.MaxBoardings || c.Arrival >= best.Time {
+ 					continue
+ 				}
+-				paths, e := getRow(c.To)
++				paths, e := getRow(toID, c.To)
+ 				if e != nil {
+ 					return out, e
+ 				}
+@@ -253,16 +282,24 @@
+ 						return
+ 					}
+ 					out.Stats.TransferPairVisits++
+-					ready, allowed, e := p.ReadyTime(q, c.To, path.To, c.Arrival, path.Duration)
+-					if e != nil {
+-						return out, e
+-					}
++					if path.ruleError != nil {
++						return out, path.ruleError
++					}
++					minimum := path.minimum
++					if minimum < 0 {
++						minimum = q.TransferBuffer
++					}
++					ready, allowed := c.Arrival+max(path.Duration, minimum), path.allowed
+ 					if !allowed || ready > q.LatestArrival || ready >= best.Time {
+ 						continue
+ 					}
+-					old, ok := next[path.To]
+-					if !ok || ready < old.Time {
+-						next[path.To] = paper.Label{Time: ready, Parent: path.Append(parent, c.Arrival)}
++					old := next[path.to]
++					if !nextSet[path.to] || ready < old.Time {
++						if !nextSet[path.to] {
++							nextStops = append(nextStops, path.to)
++							nextSet[path.to] = true
++						}
++						next[path.to] = paper.Label{Time: ready, Parent: path.Append(parent, c.Arrival)}
+ 					}
+ 				}
+ 			}
+@@ -273,7 +310,9 @@
+ 			}
+ 			bestArrival = best.Time
+ 		}
+-		previous = next
++		previous, next = next, previous
++		previousSet, nextSet = nextSet, previousSet
++		previousStops, nextStops = nextStops, previousStops
+ 	}
+ 	return
+ }
+--- a/ultra/sparse.go
++++ b/ultra/sparse.go
+@@ -142,13 +142,15 @@
+ 		incoming[stop] = cs
+ 	}
+ 	sources := []string{}
+-	for from := range out.index.rows {
+-		sources = append(sources, from)
++	for from := range out.index.x.transit {
++		if out.index.rows[out.index.stopIDs[from]] != nil {
++			sources = append(sources, from)
++		}
+ 	}
+ 	sort.Strings(sources)
+ 	for _, from := range sources {
+-		kept := []paper.Path{}
+-		for _, path := range out.index.rows[from] {
++		kept := []cappedPath{}
++		for _, path := range out.index.rows[out.index.stopIDs[from]] {
+ 			if err = check(); err != nil {
+ 				return
+ 			}
+@@ -245,7 +247,7 @@
+ 				out.prep.RetainedPairs++
+ 			}
+ 		}
+-		out.index.rows[from] = kept
++		out.index.rows[out.index.stopIDs[from]] = kept
+ 	}
+ 	return
+ }
+--- a/walking/graph/graph.go
++++ b/walking/graph/graph.go
+@@ -38,6 +38,12 @@
+ 	edges      map[string]walking.Segment
+ 	out        map[string][]walking.Segment
+ 	limits     Limits
++	// Canonical node ordinals preserve the existing lexical queue tie order.
++	nodeIndex    map[string]int
++	nodeIDs      []string
++	accessible   []bool
++	indexedEdges []walking.Segment
++	indexedOut   [][]indexedEdge
+ }
+ 
+ func New(d Data, limits Limits) (*Graph, error) {
+@@ -101,6 +107,20 @@
+ 		return nil, walking.ErrStale
+ 	}
+ 	g.descriptor = d.Descriptor
++	g.nodeIndex = make(map[string]int, len(d.Nodes))
++	g.nodeIDs = make([]string, len(d.Nodes))
++	g.accessible = make([]bool, len(d.Nodes))
++	g.indexedOut = make([][]indexedEdge, len(d.Nodes))
++	for i, n := range d.Nodes {
++		g.nodeIndex[n.ID] = i
++		g.nodeIDs[i] = n.ID
++		g.accessible[i] = n.Accessible == walking.Yes
++	}
++	g.indexedEdges = d.Edges
++	for i, e := range d.Edges {
++		from, to := g.nodeIndex[e.From], g.nodeIndex[e.To]
++		g.indexedOut[from] = append(g.indexedOut[from], indexedEdge{to: to, edge: i})
++	}
+ 	return g, nil
+ }
+ func (g *Graph) Descriptor() walking.Descriptor {
+@@ -165,12 +185,14 @@
+ func (q *queue) Pop() any     { a := *q; v := a[len(a)-1]; *q = a[:len(a)-1]; return v }
+ 
+ type search struct {
+-	dist map[string]int64
+-	prev map[string]walking.Segment
++	dist  map[string]int64
++	prev  map[string]walking.Segment
++	dense *reachScratch
++	graph *Graph
+ }
+ 
+ func (g *Graph) search(ctx context.Context, from string, o walking.Options) (search, error) {
+-	s := search{map[string]int64{from: 0}, map[string]walking.Segment{}}
++	s := search{dist: map[string]int64{from: 0}, prev: map[string]walking.Segment{}}
+ 	h := &queue{{from, 0}}
+ 	settled, visits := 0, 0
+ 	for h.Len() > 0 {
+@@ -216,13 +238,29 @@
+ 	}
+ 	return s, nil
+ }
++func (s search) distance(to string) (int64, bool) {
++	if s.dense != nil {
++		i := s.graph.nodeIndex[to]
++		return s.dense.dist[i], s.dense.seen[i] == s.dense.generation
++	}
++	v, ok := s.dist[to]
++	return v, ok
++}
++func (s search) previous(to string) walking.Segment {
++	if s.dense != nil {
++		return s.graph.indexedEdges[s.dense.prev[s.graph.nodeIndex[to]]]
++	}
++	return s.prev[to]
++}
+ func (g *Graph) result(ctx context.Context, from, to string, s search, remaining *int) (walking.Result, error) {
+ 	r := walking.Result{SnapshotID: g.descriptor.SnapshotID, From: from, To: to, Status: walking.Unreachable}
+-	seconds, ok := s.dist[to]
++	seconds, ok := s.distance(to)
+ 	if !ok {
+ 		return r, nil
+ 	}
+-	p := walking.Path{SnapshotID: r.SnapshotID, From: from, To: to, Seconds: seconds, Segments: []walking.Segment{}}
++	// Count first so the returned witness needs one exact-sized segment buffer.
++	// The old append-then-CloneResult path copied every segment buffer twice.
++	count := 0
+ 	for at := to; at != from; {
+ 		if e := ctx.Err(); e != nil {
+ 			return walking.Result{}, e
+@@ -231,16 +269,25 @@
+ 			return walking.Result{}, walking.ErrBudget
+ 		}
+ 		*remaining--
+-		edge := s.prev[at]
+-		p.Segments = append(p.Segments, edge)
++		count++
++		at = s.previous(at).From
++	}
++	p := walking.Path{SnapshotID: r.SnapshotID, From: from, To: to, Seconds: seconds, Segments: make([]walking.Segment, count)}
++	at := to
++	for i := count - 1; i >= 0; i-- {
++		if e := ctx.Err(); e != nil {
++			return walking.Result{}, e
++		}
++		edge := s.previous(at)
++		// Segment values only contain one mutable child. Copy it exactly once so
++		// callers cannot mutate the immutable graph or another response's witness.
++		edge.Witness.EdgeIDs = append([]string{}, edge.Witness.EdgeIDs...)
++		p.Segments[i] = edge
+ 		at = edge.From
+-	}
+-	for i, j := 0, len(p.Segments)-1; i < j; i, j = i+1, j-1 {
+-		p.Segments[i], p.Segments[j] = p.Segments[j], p.Segments[i]
+ 	}
+ 	r.Status = walking.Reachable
+ 	r.Path = &p
+-	return walking.CloneResult(r), nil
++	return r, nil
+ }
+ func (g *Graph) Route(ctx context.Context, r walking.Request) (walking.Result, error) {
+ 	if e := g.check(ctx, r.SnapshotID, r.From, r.Options); e != nil {
+@@ -310,6 +357,9 @@
+ // targets. A nil set follows ordinary Reach semantics. A nonnil empty set selects
+ // no nodes except explicit request targets; no hidden endpoint is added.
+ func (g *Graph) ReachWithTargets(ctx context.Context, r walking.ReachRequest, selected *TargetSet) (walking.ReachResult, error) {
++	return g.reachWithTargets(ctx, r, selected, nil)
++}
++func (g *Graph) reachWithTargets(ctx context.Context, r walking.ReachRequest, selected *TargetSet, scratch *reachScratch) (walking.ReachResult, error) {
+ 	if e := ctx.Err(); e != nil {
+ 		return walking.ReachResult{}, e
+ 	}
+@@ -334,19 +384,44 @@
+ 	if e := g.check(ctx, r.SnapshotID, r.From, r.Options); e != nil {
+ 		return walking.ReachResult{}, e
+ 	}
+-	s, e := g.search(ctx, r.From.NodeID, r.Options)
++	var s search
++	var e error
++	if scratch == nil {
++		s, e = g.search(ctx, r.From.NodeID, r.Options)
++	} else {
++		s, e = g.searchDense(ctx, r.From.NodeID, r.Options, scratch)
++	}
+ 	if e != nil {
+ 		return walking.ReachResult{}, e
+ 	}
+-	keys := make([]string, 0, len(s.dist))
+-	for k := range s.dist {
++	reached := len(s.dist)
++	if scratch != nil {
++		reached = len(scratch.touched)
++	}
++	capacity := reached
++	if selected != nil {
++		capacity = min(capacity, len(selected.ids)+len(targets))
++	} else if len(targets) > 0 {
++		capacity = min(capacity, len(targets))
++	}
++	keys := make([]string, 0, capacity)
++	include := func(k string) {
+ 		if (selected != nil || len(targets) > 0) && !targets[k] && (selected == nil || !selected.ids[k]) {
+-			continue
++			return
+ 		}
+ 		keys = append(keys, k)
+ 	}
++	if scratch != nil {
++		for _, i := range scratch.touched {
++			include(g.nodeIDs[i])
++		}
++	} else {
++		for k := range s.dist {
++			include(k)
++		}
++	}
+ 	sort.Strings(keys)
+-	out := walking.ReachResult{SnapshotID: g.descriptor.SnapshotID, Paths: []walking.Path{}}
++	out := walking.ReachResult{SnapshotID: g.descriptor.SnapshotID, Paths: make([]walking.Path, 0, len(keys))}
+ 	remaining := g.limits.MaxResultSegments
+ 	for _, k := range keys {
+ 		if e := ctx.Err(); e != nil {
+--- /dev/null
++++ b/walking/graph/reach_session.go
+@@ -0,0 +1,174 @@
++package graph
++
++import (
++	"context"
++
++	"github.com/ertyoii/transit-routing-go/walking"
++)
++
++type indexedEdge struct {
++	to   int
++	edge int
++}
++
++// ReachSession reuses search storage across closure requests on one immutable
++// graph. It retains no paths, changes no graph state, and returns independently
++// owned witnesses. Concurrent calls are serialized; different sessions never
++// share mutable search storage. Copies of a session share its gate and scratch.
++type ReachSession struct {
++	graph   *Graph
++	gate    chan struct{}
++	scratch *reachScratch
++}
++
++// NewReachSession creates an initially empty closure session. Dense search
++// storage is allocated lazily on its first valid request, not at graph creation.
++func (g *Graph) NewReachSession() *ReachSession {
++	return &ReachSession{graph: g, gate: make(chan struct{}, 1), scratch: &reachScratch{}}
++}
++
++// ReachWithTargets has the same reconstruction, work-budget, accessibility,
++// absorbing-node, and cancellation contract as Graph.ReachWithTargets.
++func (s *ReachSession) ReachWithTargets(ctx context.Context, r walking.ReachRequest, selected *TargetSet) (walking.ReachResult, error) {
++	if e := ctx.Err(); e != nil {
++		return walking.ReachResult{}, e
++	}
++	select {
++	case s.gate <- struct{}{}:
++		defer func() { <-s.gate }()
++	case <-ctx.Done():
++		return walking.ReachResult{}, ctx.Err()
++	}
++	return s.graph.reachWithTargets(ctx, r, selected, s.scratch)
++}
++
++type denseEntry struct {
++	node    int
++	seconds int64
++}
++
++type reachScratch struct {
++	dist       []int64
++	prev       []int
++	seen       []uint32
++	generation uint32
++	touched    []int
++	queue      []denseEntry
++}
++
++func (s *reachScratch) reset(nodes int) {
++	if len(s.dist) != nodes {
++		s.dist = make([]int64, nodes)
++		s.prev = make([]int, nodes)
++		s.seen = make([]uint32, nodes)
++	}
++	s.generation++
++	if s.generation == 0 {
++		// Generation wrap must never make an ancient distance look reachable.
++		clear(s.seen)
++		s.generation = 1
++	}
++	s.touched = s.touched[:0]
++	s.queue = s.queue[:0]
++}
++
++func denseLess(a, b denseEntry) bool {
++	if a.seconds == b.seconds {
++		// Node ordinals are canonical lexical IDs, exactly matching queue.Less.
++		return a.node < b.node
++	}
++	return a.seconds < b.seconds
++}
++func (s *reachScratch) push(v denseEntry) {
++	s.queue = append(s.queue, v)
++	for i := len(s.queue) - 1; i > 0; {
++		parent := (i - 1) / 2
++		if !denseLess(s.queue[i], s.queue[parent]) {
++			break
++		}
++		s.queue[i], s.queue[parent] = s.queue[parent], s.queue[i]
++		i = parent
++	}
++}
++func (s *reachScratch) pop() denseEntry {
++	out := s.queue[0]
++	last := len(s.queue) - 1
++	s.queue[0] = s.queue[last]
++	s.queue = s.queue[:last]
++	for i := 0; ; {
++		left := 2*i + 1
++		if left >= len(s.queue) {
++			break
++		}
++		child := left
++		if right := left + 1; right < len(s.queue) && denseLess(s.queue[right], s.queue[left]) {
++			child = right
++		}
++		if !denseLess(s.queue[child], s.queue[i]) {
++			break
++		}
++		s.queue[i], s.queue[child] = s.queue[child], s.queue[i]
++		i = child
++	}
++	return out
++}
++
++func (g *Graph) searchDense(ctx context.Context, from string, o walking.Options, s *reachScratch) (search, error) {
++	s.reset(len(g.nodeIDs))
++	origin := g.nodeIndex[from]
++	s.dist[origin] = 0
++	s.seen[origin] = s.generation
++	s.touched = append(s.touched, origin)
++	s.push(denseEntry{node: origin})
++	stopAt := -1
++	if o.StopAt != "" {
++		stopAt = g.nodeIndex[o.StopAt]
++	}
++	settled, visits := 0, 0
++	for len(s.queue) > 0 {
++		if e := ctx.Err(); e != nil {
++			return search{}, e
++		}
++		u := s.pop()
++		if u.seconds != s.dist[u.node] {
++			continue
++		}
++		settled++
++		if settled > g.limits.MaxSettled {
++			return search{}, walking.ErrBudget
++		}
++		if u.node == stopAt || o.AccessibleOnly && !g.accessible[u.node] {
++			continue
++		}
++		for _, next := range g.indexedOut[u.node] {
++			if e := ctx.Err(); e != nil {
++				return search{}, e
++			}
++			visits++
++			if visits > g.limits.MaxEdgeVisits {
++				return search{}, walking.ErrBudget
++			}
++			edge := g.indexedEdges[next.edge]
++			if o.AccessibleOnly && (edge.Accessible != walking.Yes || !g.accessible[next.to]) {
++				continue
++			}
++			n := u.seconds + edge.Seconds
++			if n > o.MaxSeconds {
++				continue
++			}
++			if s.seen[next.to] != s.generation || n < s.dist[next.to] {
++				if s.seen[next.to] != s.generation {
++					s.touched = append(s.touched, next.to)
++				}
++				s.dist[next.to] = n
++				s.prev[next.to] = next.edge
++				s.seen[next.to] = s.generation
++				s.push(denseEntry{node: next.to, seconds: n})
++			}
++		}
++	}
++	if e := ctx.Err(); e != nil {
++		return search{}, e
++	}
++	return search{dense: s, graph: g}, nil
++}
+--- /dev/null
++++ b/walking/graph/reach_session_test.go
+@@ -0,0 +1,456 @@
++package graph
++
++import (
++	"context"
++	"errors"
++	"fmt"
++	"math/rand"
++	"reflect"
++	"sync"
++	"testing"
++	"time"
++
++	"github.com/ertyoii/transit-routing-go/walking"
++)
++
++func sessionFixture(seed int64) Data {
++	rng := rand.New(rand.NewSource(seed))
++	d := Data{Descriptor: walking.Descriptor{ProviderID: "session-test", GraphID: fmt.Sprint(seed), Version: "1", CostModel: "seconds", RoleIndependent: true}}
++	for i := 0; i < 15; i++ {
++		access := walking.Yes
++		if i%5 == 0 {
++			access = walking.Unknown
++		}
++		d.Nodes = append(d.Nodes, Node{ID: fmt.Sprintf("n%02d", i), Accessible: access})
++	}
++	for i := 0; i < 85; i++ {
++		from, to := rng.Intn(len(d.Nodes)), rng.Intn(len(d.Nodes))
++		access := walking.Yes
++		if i%7 == 0 {
++			access = walking.No
++		}
++		id := fmt.Sprintf("e%03d", i)
++		d.Edges = append(d.Edges, walking.Segment{ID: id, From: d.Nodes[from].ID, To: d.Nodes[to].ID, Seconds: int64(1 + rng.Intn(4)), Accessible: access, Witness: walking.Witness{Source: "fixture", Revision: "1", EdgeIDs: []string{id, "original"}}})
++	}
++	// Deliberately scramble caller order. Both queues must still break ties by
++	// lexical node ID and outgoing edge ID after canonical graph preparation.
++	rng.Shuffle(len(d.Nodes), func(i, j int) { d.Nodes[i], d.Nodes[j] = d.Nodes[j], d.Nodes[i] })
++	rng.Shuffle(len(d.Edges), func(i, j int) { d.Edges[i], d.Edges[j] = d.Edges[j], d.Edges[i] })
++	return d
++}
++
++func compareSession(t *testing.T, g *Graph, s *ReachSession, req walking.ReachRequest, selected *TargetSet) {
++	t.Helper()
++	want, wantErr := g.ReachWithTargets(context.Background(), req, selected)
++	got, gotErr := s.ReachWithTargets(context.Background(), req, selected)
++	if !reflect.DeepEqual(want, got) || (wantErr == nil) != (gotErr == nil) || wantErr != nil && wantErr.Error() != gotErr.Error() {
++		t.Fatalf("session differs: req=%+v selected=%+v\nwant=%+v %v\ngot=%+v %v", req, selected, want, wantErr, got, gotErr)
++	}
++	for _, p := range got.Paths {
++		r := walking.Request{SnapshotID: req.SnapshotID, From: req.From, To: walking.Endpoint{NodeID: p.To}, Options: req.Options}
++		if err := g.ValidatePath(r, walking.Result{SnapshotID: req.SnapshotID, From: p.From, To: p.To, Status: walking.Reachable, Path: &p}); err != nil {
++			t.Fatal("invalid returned witness", err)
++		}
++	}
++}
++
++func TestReachSessionMatchesMapSearchExactly(t *testing.T) {
++	for seed := int64(1); seed <= 8; seed++ {
++		g, err := New(sessionFixture(seed), DefaultLimits())
++		if err != nil {
++			t.Fatal(err)
++		}
++		s := g.NewReachSession()
++		empty, err := g.PrepareTargets(context.Background(), nil)
++		if err != nil {
++			t.Fatal(err)
++		}
++		selected, err := g.PrepareTargets(context.Background(), []walking.Endpoint{{NodeID: "n04"}, {NodeID: "n10"}, {NodeID: "n04"}})
++		if err != nil {
++			t.Fatal(err)
++		}
++		for origin := 0; origin < 15; origin++ {
++			for _, cap := range []int64{0, 1, 3, 8, walking.MaxSeconds} {
++				for _, accessible := range []bool{false, true} {
++					for _, stopAt := range []string{"", "n04", fmt.Sprintf("n%02d", origin)} {
++						for i, selection := range []*TargetSet{nil, empty, selected} {
++							req := walking.ReachRequest{SnapshotID: g.descriptor.SnapshotID, From: walking.Endpoint{NodeID: fmt.Sprintf("n%02d", origin)}, Options: walking.Options{Role: walking.Closure, MaxSeconds: cap, AccessibleOnly: accessible, StopAt: stopAt}}
++							if i%2 == 0 {
++								req.Targets = []walking.Endpoint{{NodeID: "n12"}, {NodeID: "n01"}, {NodeID: "n12"}}
++							}
++							compareSession(t, g, s, req, selection)
++						}
++					}
++				}
++			}
++		}
++	}
++}
++
++func TestReachSessionBudgetsAndInvalidRequests(t *testing.T) {
++	for _, modify := range []func(*Limits){
++		func(l *Limits) { l.MaxSettled = 1 },
++		func(l *Limits) { l.MaxSettled = 4 },
++		func(l *Limits) { l.MaxEdgeVisits = 1 },
++		func(l *Limits) { l.MaxEdgeVisits = 13 },
++		func(l *Limits) { l.MaxResultSegments = 1 },
++		func(l *Limits) { l.MaxResultSegments = 7 },
++	} {
++		limits := DefaultLimits()
++		modify(&limits)
++		g, err := New(sessionFixture(27), limits)
++		if err != nil {
++			t.Fatal(err)
++		}
++		s := g.NewReachSession()
++		for _, origin := range []string{"n00", "n03", "n14"} {
++			req := walking.ReachRequest{SnapshotID: g.descriptor.SnapshotID, From: walking.Endpoint{NodeID: origin}, Options: walking.Options{Role: walking.Closure, MaxSeconds: 100}}
++			compareSession(t, g, s, req, nil)
++			req.Options.MaxSeconds = 0
++			compareSession(t, g, s, req, nil)
++		}
++	}
++	g, err := New(sessionFixture(5), DefaultLimits())
++	if err != nil {
++		t.Fatal(err)
++	}
++	s := g.NewReachSession()
++	base := walking.ReachRequest{SnapshotID: g.descriptor.SnapshotID, From: walking.Endpoint{NodeID: "n03"}, Options: walking.Options{Role: walking.Closure, MaxSeconds: 8}}
++	for _, change := range []func(*walking.ReachRequest){
++		func(r *walking.ReachRequest) { r.SnapshotID = "stale" },
++		func(r *walking.ReachRequest) { r.From.NodeID = "missing" },
++		func(r *walking.ReachRequest) { r.Options.Role = "invalid" },
++		func(r *walking.ReachRequest) { r.Options.MaxSeconds = -1 },
++		func(r *walking.ReachRequest) { r.Options.StopAt = "missing" },
++		func(r *walking.ReachRequest) { r.Targets = []walking.Endpoint{{NodeID: "missing"}} },
++	} {
++		req := base
++		change(&req)
++		compareSession(t, g, s, req, nil)
++		compareSession(t, g, s, base, nil)
++	}
++	stale := &TargetSet{snapshot: "stale"}
++	compareSession(t, g, s, base, stale)
++}
++
++type cancelAfterChecks struct {
++	context.Context
++	remaining int
++}
++
++func (c *cancelAfterChecks) Err() error {
++	c.remaining--
++	if c.remaining <= 0 {
++		return context.Canceled
++	}
++	return nil
++}
++
++func TestReachSessionCancellationOwnershipConcurrencyAndWrap(t *testing.T) {
++	g, err := New(sessionFixture(9), DefaultLimits())
++	if err != nil {
++		t.Fatal(err)
++	}
++	s := g.NewReachSession()
++	req := walking.ReachRequest{SnapshotID: g.descriptor.SnapshotID, From: walking.Endpoint{NodeID: "n03"}, Options: walking.Options{Role: walking.Closure, MaxSeconds: 100}}
++	want, err := g.ReachWithTargets(context.Background(), req, nil)
++	if err != nil {
++		t.Fatal(err)
++	}
++	for _, checks := range []int{1, 3, 11, 30, 75, 140} {
++		got, err := s.ReachWithTargets(&cancelAfterChecks{Context: context.Background(), remaining: checks}, req, nil)
++		if !errors.Is(err, context.Canceled) || got.Paths != nil {
++			t.Fatalf("partial cancellation response after %d checks: %+v %v", checks, got, err)
++		}
++		compareSession(t, g, s, req, nil)
++	}
++	// Scratch reuse and generation rollover must not leak previously seen nodes.
++	s.scratch.generation = ^uint32(0)
++	for i := range s.scratch.seen {
++		s.scratch.seen[i] = 1
++	}
++	short := req
++	short.Options.MaxSeconds = 0
++	compareSession(t, g, s, short, nil)
++	got, err := s.ReachWithTargets(context.Background(), req, nil)
++	if err != nil {
++		t.Fatal(err)
++	}
++	for i := range got.Paths {
++		for j := range got.Paths[i].Segments {
++			got.Paths[i].Segments[j].ID = "changed"
++			got.Paths[i].Segments[j].Witness.EdgeIDs[0] = "changed"
++		}
++	}
++	compareSession(t, g, s, req, nil)
++	var wg sync.WaitGroup
++	for i := 0; i < 12; i++ {
++		wg.Add(1)
++		go func() {
++			defer wg.Done()
++			got, err := s.ReachWithTargets(context.Background(), req, nil)
++			if err != nil || !reflect.DeepEqual(got, want) {
++				t.Errorf("shared session differs: %v", err)
++			}
++			other := g.NewReachSession()
++			got, err = other.ReachWithTargets(context.Background(), req, nil)
++			if err != nil || !reflect.DeepEqual(got, want) {
++				t.Errorf("independent session differs: %v", err)
++			}
++		}()
++	}
++	wg.Wait()
++}
++
++func TestReachSessionLexicalNodeAndParallelEdgeTies(t *testing.T) {
++	d := Data{Descriptor: walking.Descriptor{ProviderID: "tie-test", GraphID: "ties", Version: "1", CostModel: "seconds", RoleIndependent: true}}
++	for _, id := range []string{"source", "n2", "target", "n10"} {
++		d.Nodes = append(d.Nodes, Node{ID: id, Accessible: walking.Yes})
++	}
++	for _, e := range []struct{ id, from, to string }{
++		{"a-source-n2", "source", "n2"},
++		{"c-source-n10", "source", "n10"},
++		{"b-source-n10", "source", "n10"},
++		{"d-n2-target", "n2", "target"},
++		{"e-n10-target", "n10", "target"},
++	} {
++		d.Edges = append(d.Edges, walking.Segment{ID: e.id, From: e.from, To: e.to, Seconds: 1, Accessible: walking.Yes, Witness: walking.Witness{Source: "fixture", Revision: "1", EdgeIDs: []string{e.id}}})
++	}
++	g, err := New(d, DefaultLimits())
++	if err != nil {
++		t.Fatal(err)
++	}
++	req := walking.ReachRequest{SnapshotID: g.descriptor.SnapshotID, From: walking.Endpoint{NodeID: "source"}, Targets: []walking.Endpoint{{NodeID: "target"}}, Options: walking.Options{Role: walking.Closure, MaxSeconds: 2}}
++	for _, role := range []walking.Role{walking.Access, walking.Egress, walking.Transfer, walking.Direct, walking.Closure} {
++		req.Options.Role = role
++		got, err := g.NewReachSession().ReachWithTargets(context.Background(), req, nil)
++		if err != nil || len(got.Paths) != 1 || len(got.Paths[0].Segments) != 2 || got.Paths[0].Segments[0].ID != "b-source-n10" || got.Paths[0].Segments[1].ID != "e-n10-target" {
++			t.Fatalf("tie witness changed for %s: %+v %v", role, got, err)
++		}
++	}
++}
++
++func BenchmarkReachStorage(b *testing.B) {
++	g, err := New(sessionFixture(17), DefaultLimits())
++	if err != nil {
++		b.Fatal(err)
++	}
++	req := walking.ReachRequest{SnapshotID: g.descriptor.SnapshotID, From: walking.Endpoint{NodeID: "n03"}, Options: walking.Options{Role: walking.Closure, MaxSeconds: 8}}
++	b.Run("map-per-closure", func(b *testing.B) {
++		b.ReportAllocs()
++		for i := 0; i < b.N; i++ {
++			if _, err := g.ReachWithTargets(context.Background(), req, nil); err != nil {
++				b.Fatal(err)
++			}
++		}
++	})
++	b.Run("dense-query-session", func(b *testing.B) {
++		s := g.NewReachSession()
++		// As in a real Walker, one session is reused across its source closures.
++		if _, err := s.ReachWithTargets(context.Background(), req, nil); err != nil {
++			b.Fatal(err)
++		}
++		b.ReportAllocs()
++		b.ResetTimer()
++		for i := 0; i < b.N; i++ {
++			if _, err := s.ReachWithTargets(context.Background(), req, nil); err != nil {
++				b.Fatal(err)
++			}
++		}
++	})
++}
++
++type observedContext struct {
++	context.Context
++	checked chan struct{}
++	once    sync.Once
++}
++
++func (c *observedContext) Err() error {
++	err := c.Context.Err()
++	c.once.Do(func() { close(c.checked) })
++	return err
++}
++
++func TestReachSessionCanceledWaiterReturnsWithoutAcquiringGate(t *testing.T) {
++	g, err := New(sessionFixture(21), DefaultLimits())
++	if err != nil {
++		t.Fatal(err)
++	}
++	s := g.NewReachSession()
++	s.gate <- struct{}{}
++	inner, cancel := context.WithCancel(context.Background())
++	ctx := &observedContext{Context: inner, checked: make(chan struct{})}
++	done := make(chan error, 1)
++	go func() {
++		got, err := s.ReachWithTargets(ctx, walking.ReachRequest{}, nil)
++		if got.Paths != nil {
++			done <- fmt.Errorf("partial canceled response")
++			return
++		}
++		done <- err
++	}()
++	<-ctx.checked
++	cancel()
++	select {
++	case err := <-done:
++		if !errors.Is(err, context.Canceled) {
++			t.Fatal(err)
++		}
++	case <-time.After(time.Second):
++		<-s.gate
++		t.Fatal("canceled request waited for active session")
++	}
++	<-s.gate
++}
++
++// Frozen b102816 append-then-CloneResult reconstruction, retained only as exact
++// output evidence for the new exact-sized owned-witness implementation.
++func frozenResultV1(ctx context.Context, g *Graph, from, to string, s search, remaining *int) (walking.Result, error) {
++	r := walking.Result{SnapshotID: g.descriptor.SnapshotID, From: from, To: to, Status: walking.Unreachable}
++	seconds, ok := s.dist[to]
++	if !ok {
++		return r, nil
++	}
++	p := walking.Path{SnapshotID: r.SnapshotID, From: from, To: to, Seconds: seconds, Segments: []walking.Segment{}}
++	for at := to; at != from; {
++		if e := ctx.Err(); e != nil {
++			return walking.Result{}, e
++		}
++		if *remaining <= 0 {
++			return walking.Result{}, walking.ErrBudget
++		}
++		*remaining--
++		edge := s.prev[at]
++		p.Segments = append(p.Segments, edge)
++		at = edge.From
++	}
++	for i, j := 0, len(p.Segments)-1; i < j; i, j = i+1, j-1 {
++		p.Segments[i], p.Segments[j] = p.Segments[j], p.Segments[i]
++	}
++	r.Status = walking.Reachable
++	r.Path = &p
++	return walking.CloneResult(r), nil
++}
++
++func TestOwnedReconstructionMatchesFrozenResult(t *testing.T) {
++	ctx := context.Background()
++	for seed := int64(1); seed <= 4; seed++ {
++		g, err := New(sessionFixture(seed), DefaultLimits())
++		if err != nil {
++			t.Fatal(err)
++		}
++		for _, from := range g.nodeIDs {
++			s, err := g.search(ctx, from, walking.Options{Role: walking.Closure, MaxSeconds: 8})
++			if err != nil {
++				t.Fatal(err)
++			}
++			for _, to := range g.nodeIDs {
++				for _, budget := range []int{0, 1, 2, 3, 1000} {
++					a, b := budget, budget
++					want, wantErr := frozenResultV1(ctx, g, from, to, s, &a)
++					got, gotErr := g.result(ctx, from, to, s, &b)
++					if !reflect.DeepEqual(want, got) || a != b || fmt.Sprint(wantErr) != fmt.Sprint(gotErr) {
++						t.Fatalf("owned reconstruction differs: %s->%s budget %d: %+v %v / %+v %v, remaining %d/%d", from, to, budget, want, wantErr, got, gotErr, a, b)
++					}
++				}
++			}
++		}
++	}
++}
++
++func TestOwnedResponsesRemainIndependentAcrossReuseAndCells(t *testing.T) {
++	ctx := context.Background()
++	g, err := New(sessionFixture(33), DefaultLimits())
++	if err != nil {
++		t.Fatal(err)
++	}
++	s := g.NewReachSession()
++	req := walking.ReachRequest{SnapshotID: g.descriptor.SnapshotID, From: walking.Endpoint{NodeID: "n03"}, Options: walking.Options{Role: walking.Closure, MaxSeconds: 8}}
++	first, err := s.ReachWithTargets(ctx, req, nil)
++	if err != nil {
++		t.Fatal(err)
++	}
++	want, err := g.ReachWithTargets(ctx, req, nil)
++	if err != nil {
++		t.Fatal(err)
++	}
++	next := req
++	next.From.NodeID = "n10"
++	next.Options.MaxSeconds = 1
++	if _, err := s.ReachWithTargets(ctx, next, nil); err != nil {
++		t.Fatal(err)
++	}
++	if !reflect.DeepEqual(first, want) {
++		t.Fatal("scratch reuse changed an existing response")
++	}
++	// Locate a repeated edge across paths, and mutate just one occurrence.
++	type position struct{ path, segment int }
++	seen := map[string]position{}
++	checked := false
++	for i := range first.Paths {
++		for j, edge := range first.Paths[i].Segments {
++			if old, ok := seen[edge.ID]; ok {
++				first.Paths[old.path].Segments[old.segment].Witness.EdgeIDs[0] = "changed"
++				if first.Paths[i].Segments[j].Witness.EdgeIDs[0] != edge.ID {
++					t.Fatal("paths share witness ownership")
++				}
++				checked = true
++				break
++			}
++			seen[edge.ID] = position{i, j}
++		}
++		if checked {
++			break
++		}
++	}
++	if !checked {
++		t.Fatal("fixture needs a repeated edge")
++	}
++	var target string
++	for _, p := range want.Paths {
++		if len(p.Segments) > 0 {
++			target = p.To
++			break
++		}
++	}
++	r := walking.Request{SnapshotID: req.SnapshotID, From: req.From, To: walking.Endpoint{NodeID: target}, Options: req.Options}
++	batch, err := g.Batch(ctx, []walking.Request{r, r})
++	if err != nil {
++		t.Fatal(err)
++	}
++	batch[0].Path.Segments[0].Witness.EdgeIDs[0] = "batch-change"
++	if batch[1].Path.Segments[0].Witness.EdgeIDs[0] == "batch-change" {
++		t.Fatal("duplicate batch results alias")
++	}
++	matrix, err := g.Matrix(ctx, walking.MatrixRequest{SnapshotID: req.SnapshotID, Sources: []walking.Endpoint{req.From, req.From}, Targets: []walking.Endpoint{r.To, r.To}, Options: req.Options})
++	if err != nil {
++		t.Fatal(err)
++	}
++	matrix.Rows[0][0].Path.Segments[0].Witness.EdgeIDs[0] = "matrix-change"
++	for _, cell := range []walking.Result{matrix.Rows[0][1], matrix.Rows[1][0], matrix.Rows[1][1]} {
++		if cell.Path.Segments[0].Witness.EdgeIDs[0] == "matrix-change" {
++			t.Fatal("duplicate matrix cells alias")
++		}
++	}
++	compareSession(t, g, s, req, nil)
++}
++
++func TestReachSessionValueCopySharesGenerationAndGate(t *testing.T) {
++	g, err := New(sessionFixture(72), DefaultLimits())
++	if err != nil {
++		t.Fatal(err)
++	}
++	s := g.NewReachSession()
++	req := walking.ReachRequest{SnapshotID: g.descriptor.SnapshotID, From: walking.Endpoint{NodeID: "n03"}, Options: walking.Options{Role: walking.Closure, MaxSeconds: 8}}
++	compareSession(t, g, s, req, nil)
++	copy := *s
++	for _, origin := range []string{"n10", "n03", "n14", "n01"} {
++		req.From.NodeID = origin
++		for _, cap := range []int64{0, 8} {
++			req.Options.MaxSeconds = cap
++			compareSession(t, g, &copy, req, nil)
++			compareSession(t, g, s, req, nil)
++		}
++	}
++}

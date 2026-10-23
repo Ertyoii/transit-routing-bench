@@ -1,0 +1,26 @@
+{
+  "trex": {
+    "exact_storage": true,
+    "levels": 3,
+    "limits": {
+      "max_closure_paths": 5000000,
+      "max_input_edges": 1000000,
+      "max_overlay_entries": 20000000,
+      "max_query_work": 2000000,
+      "max_queued_segments": 1000000,
+      "max_runs": 200000,
+      "max_stops": 10000,
+      "max_transfers": 100000000,
+      "max_trips": 100000,
+      "max_walk_settled": 10000000,
+      "max_witnesses": 2000000,
+      "max_work": 2000000000
+    },
+    "max_boardings": 4
+  },
+  "verification": {
+    "max_journeys": 1000000,
+    "max_scans": 200000000,
+    "max_states": 1000000
+  }
+}

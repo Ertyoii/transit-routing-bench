@@ -1,0 +1,22 @@
+{
+  "flash": {
+    "cells": 1,
+    "max_boardings": 2,
+    "semantics": "static_stop_pair_v1",
+    "walking_policy": "query_role_caps_v1",
+    "limits": {
+      "max_stops": 100,
+      "max_trips": 100,
+      "max_closure_paths": 10000,
+      "max_walk_settled": 100000,
+      "max_transfers": 10000,
+      "max_runs": 10000,
+      "max_work": 1000000,
+      "max_flag_bytes": 1000000,
+      "max_suffix_bytes": 1000000,
+      "max_witnesses": 100000,
+      "max_query_segments": 100000,
+      "max_snapshot_transfers": 10000
+    }
+  }
+}

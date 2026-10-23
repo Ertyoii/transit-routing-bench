@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SG independently feasible saved native witness, reference-only v1",
+  "type": "object",
+  "required": ["schema", "kind", "reference_only", "scalar_optimality_claim", "search_completeness_claim", "dataset_sha256", "query", "query_canonical_json_utf8", "query_canonical_sha256", "query_exact_workload_json_utf8", "query_exact_workload_bytes_sha256", "native_family", "donor_family", "provenance", "validated"],
+  "properties": {
+    "schema": {"const": "sg-feasible-reference-witness-v1"},
+    "kind": {"const": "independently_feasible_saved_native_witness"},
+    "reference_only": {"const": true},
+    "scalar_optimality_claim": {"const": false},
+    "search_completeness_claim": {"const": false},
+    "dataset_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "query": {"type": "object"},
+    "query_canonical_json_utf8": {"type": "string"},
+    "query_canonical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "query_exact_workload_json_utf8": {"type": "string"},
+    "query_exact_workload_bytes_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "native_family": {"enum": ["tad", "range_raptor", "trip_based"]},
+    "donor_family": {"enum": ["TAD", "RAPTOR", "TripBased"]},
+    "validated": {"type": "object", "required": ["journey", "identity", "pattern", "metrics", "duration_seconds"]},
+    "provenance": {
+      "type": "object",
+      "required": ["campaign", "run_id", "window", "dataset_path", "dataset_sha256", "dataset_schema_version", "dataset_id", "workload_path", "workload_sha256", "frozen_plan_path", "frozen_plan_sha256", "native_source_sha256", "native_algorithm", "native_driver", "native_routing_sha256", "native_binary_sha256", "command_path", "command_sha256", "result_path", "result_sha256", "source_process_status", "source_input_freeze", "native_pass_file", "native_pass_path", "native_pass_sha256", "native_repetition", "native_warmup", "native_manifest_path", "native_manifest_sha256", "native_record_index", "native_stage", "saved_witness_occurrence_index", "source_point_index", "source_native_query", "source_ready", "source_ready_query", "source_branch", "source_saved_journey_canonical_sha256", "source_feasible_at_emitted_ready", "source_ready_validation_error", "transformation", "transform_kind", "transformed_initial_leg_count", "transformed_journey_canonical_sha256", "source_initial_walking_seconds", "materialized_ready", "readiness_contract", "source_native_complete", "source_independent_row_status"],
+      "properties": {
+        "native_stage": {"enum": ["raw", "final"]},
+        "source_branch": {"enum": ["transit_point", "direct_walking", "point_journey"]},
+        "transform_kind": {"enum": ["reanchor_initial_contiguous_walks", "identity"]},
+        "native_warmup": {"const": false},
+        "native_repetition": {"const": 0},
+        "source_point_index": {"type": ["integer", "null"], "minimum": 0},
+        "native_record_index": {"type": "integer", "minimum": 0},
+        "source_ready": {"type": "integer", "minimum": 0},
+        "materialized_ready": {"type": "integer", "minimum": 0},
+        "transformed_initial_leg_count": {"type": "integer", "minimum": 0}
+      }
+    }
+  },
+  "semantic_requirements": [
+    "Hash-bind this schema, the completed audit REPORT, ARTIFACT_SHA256, and full OFFERED_NATIVE_ROWS ledger before import.",
+    "Bind exact dataset/model schema, workload, full query caps and fixed horizon; query ID alone never permits a join.",
+    "Re-open hash-bound command, result when present, native manifest and pass. Verify freeze/build/runtime/source/binary and descriptor repetition/warmup.",
+    "Locate source witness by native_record_index, native_stage, source_branch and source_point_index. Verify canonical source journey digest.",
+    "Verify original initial walking timestamps are anchored at source_ready with exact model durations before transformation. Apply only declared transform to initial contiguous walk prefix. Keep ride, middle-walk and egress events fixed. Check transformed digest.",
+    "Independently reconstruct every transformed leg using Checker under the exact recipient base query. Do not import source-ready metrics unchanged.",
+    "Occurrence locators must be unique. Duplicate journey identities across distinct raw/final/point occurrences are valid lineage and merge without losing provenance.",
+    "This is feasible-reference enrichment, never a scalar-result record, completed serving row, or a global/profile/TAD frontier proof.",
+    "All offered native rows, including missing/empty/unsupported/preparation-failed outputs, remain explicit in the source ledger."
+  ]
+}

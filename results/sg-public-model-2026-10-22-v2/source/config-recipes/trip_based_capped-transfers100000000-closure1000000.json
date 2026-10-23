@@ -1,0 +1,7 @@
+{
+  "trip_based": {
+    "max_precomputed_transfers": 100000000,
+    "max_queued_segments": 1000000,
+    "transfer_walking_limit": 600
+  }
+}

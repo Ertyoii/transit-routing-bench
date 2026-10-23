@@ -1,0 +1,4534 @@
+{
+  "CSA": "Inherited MIT baseline CSA packages remain only as unchanged project build dependencies. No CSA-package source delta occurs in any branch. CSA is excluded from V2 optimization/candidate/timing claims.",
+  "bases": {
+    "bench-base": "bases/bench-base",
+    "routing-base": "bases/routing-base"
+  },
+  "ordered_branches": [
+    {
+      "changes": [
+        {
+          "after_bytes": 9953,
+          "after_sha256": "96f9ed6c4ef844dd0e761bcc13f78064fbf5c3c61d440b44c2e952db687913fb",
+          "before_bytes": 9842,
+          "before_sha256": "ef171ca2a3827d687687c0a8f21000cd1af9d8534b571f78e91e37c70f75376a",
+          "operation": "modify",
+          "path": "paper/profile.go"
+        },
+        {
+          "after_bytes": 12739,
+          "after_sha256": "8ac65bf55dbde005be52722b2fe9b020da33b451926b30636f00ef6b3f9e9926",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "raptor/indexed_baseline_test.go"
+        },
+        {
+          "after_bytes": 1885,
+          "after_sha256": "59e0d8149cd8948d5a29e87d770971947f49e971f30899e604d3ed3b7e3ba827",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "raptor/indexed_walks.go"
+        },
+        {
+          "after_bytes": 5956,
+          "after_sha256": "c37a7414fb0fbea5d6ab5aecb04d21ba94a12e124b7b4589a9570f89efad5670",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "raptor/indexed_walks_test.go"
+        },
+        {
+          "after_bytes": 9310,
+          "after_sha256": "31a9d899fdfa9c03a8d2dd05512a1676074d9b639196eb1543a03fce6937989b",
+          "before_bytes": 9312,
+          "before_sha256": "ef138e2e6520fffa6344089dd29eea0016a221369c997f37e17a9945ce2d6b61",
+          "operation": "modify",
+          "path": "raptor/multicriteria.go"
+        },
+        {
+          "after_bytes": 8382,
+          "after_sha256": "bec19d510d5cd339f5d3314e62c828cfccf380fc8d0e7430301e45e9ef734f07",
+          "before_bytes": 8289,
+          "before_sha256": "86a73775704c8c34417f272f3d2298346a4cabc9f55cba25f4800a2d43668fd8",
+          "operation": "modify",
+          "path": "raptor/raptor.go"
+        },
+        {
+          "after_bytes": 10955,
+          "after_sha256": "2cd79a4b4e1397bb6120f6d747798e53f5789f86a70d0094ecfb1e525f763fca",
+          "before_bytes": 9423,
+          "before_sha256": "ff4fe3a86923e9f38b8ddfad1fb4754760e475c3b44d76e1f8943b0c7d4141a7",
+          "operation": "modify",
+          "path": "ultra/capped.go"
+        },
+        {
+          "after_bytes": 14210,
+          "after_sha256": "ab0bf5b5f89b954fa9cef4a2225305b0876651c687db80ac4d8081510938d86b",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "ultra/capped_dense_test.go"
+        },
+        {
+          "after_bytes": 8172,
+          "after_sha256": "22e1eaf579d14dbf668de6f9c7e2c91f720ff3d9f25006bf87fd42bb31139ff6",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "ultra/capped_frozen_baseline_test.go"
+        },
+        {
+          "after_bytes": 7437,
+          "after_sha256": "759aa8f49a9d264327f10da34c6747894bdcba837d5aca3529a9ff971f06ed0e",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "ultra/capped_frozen_search_test.go"
+        },
+        {
+          "after_bytes": 6842,
+          "after_sha256": "a6bc2f8297a977bf85656e25fee633303cdfc2331aa2251d02ddd9b8b654d78d",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "ultra/capped_frozen_sparse_test.go"
+        },
+        {
+          "after_bytes": 8632,
+          "after_sha256": "d1faea97db872ab8d89ec08de66f08b916f4809a85193c5e48b1311232581f27",
+          "before_bytes": 7355,
+          "before_sha256": "ffb5faa7cc306622a4589df8d7902784044163b132fd7facb6363806a8a16fac",
+          "operation": "modify",
+          "path": "ultra/capped_search.go"
+        },
+        {
+          "after_bytes": 8575,
+          "after_sha256": "f87a6d7953394cd64d87b9ec2ef68949e49f4495c78d851213080af6183a03ed",
+          "before_bytes": 8473,
+          "before_sha256": "ba02a1ea229167619a0656c3862d7a6db355f9a4ce6141820318f82226a6592b",
+          "operation": "modify",
+          "path": "ultra/sparse.go"
+        },
+        {
+          "after_bytes": 16220,
+          "after_sha256": "5fcc482edb45eb11d01928e8dffb148f00dd2a32f4649a0bb0f6cf27109cd998",
+          "before_bytes": 13941,
+          "before_sha256": "7e0965bae0f16145f23a1b273099e4b1f629d6d5f7d879b01bd3492fe5c9a80e",
+          "operation": "modify",
+          "path": "walking/graph/graph.go"
+        },
+        {
+          "after_bytes": 4484,
+          "after_sha256": "8403f7669c2e6a5058b929d8b424b81110b1297aa6101cb80a857579b6fa9436",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "walking/graph/reach_session.go"
+        },
+        {
+          "after_bytes": 15936,
+          "after_sha256": "39a190a162ced9177960d3a571b16adbbefe6e3df45ba8489b3c9bcead0fbff5",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "walking/graph/reach_session_test.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 158,
+      "name": "routing-noncsa-control",
+      "patch": "patches/01-routing-noncsa-control.patch",
+      "patch_bytes": 104251,
+      "patch_sha256": "a4a5b28a045deb9463925614505770aefc365f8b1e2a783854df47151a0faf94",
+      "projection_sha256": "95490a427a452b68b4a6ae1c8b27a601c3d5ac074134e4095d675697455134a2",
+      "reconstruction_parent": "routing-base",
+      "runtime_source_sha256": "d75f182e9d3edeb0b2d84b657bd9bc1593480d10a1fc07f316cff3515f9aabba"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 1218,
+          "after_sha256": "70dbf5f5133e7939beac7dd12e1dbd90b14200d9295f2f7e6740496c5b828241",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "paper/node_arena.go"
+        },
+        {
+          "after_bytes": 1642,
+          "after_sha256": "24e18c129540fa2a7426215345bc80bb733b86b5a86774bdb27d07b7a3589d4d",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "paper/node_arena_test.go"
+        },
+        {
+          "after_bytes": 2304,
+          "after_sha256": "6607b6be2ce94ef6ec22348d04ca03fa85a1917ad4dc5694f5636bde87ec2c8b",
+          "before_bytes": 1885,
+          "before_sha256": "59e0d8149cd8948d5a29e87d770971947f49e971f30899e604d3ed3b7e3ba827",
+          "operation": "modify",
+          "path": "raptor/indexed_walks.go"
+        },
+        {
+          "after_bytes": 6352,
+          "after_sha256": "a421d1457d7d960d835420783bc859a1d4186c5a01d146f965996e6569e1f9ff",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "raptor/local_walk_ties.go"
+        },
+        {
+          "after_bytes": 5238,
+          "after_sha256": "12dc18a87d11697d074082dd70ee5a0a433995e5986d12c5330e84233931d562",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "raptor/local_walk_ties_test.go"
+        },
+        {
+          "after_bytes": 9603,
+          "after_sha256": "7bcb4922d0b4bee980a2be58181d1017119a10e1d0e5e7a7e961c4f7a75a9ea0",
+          "before_bytes": 9310,
+          "before_sha256": "31a9d899fdfa9c03a8d2dd05512a1676074d9b639196eb1543a03fce6937989b",
+          "operation": "modify",
+          "path": "raptor/multicriteria.go"
+        },
+        {
+          "after_bytes": 8706,
+          "after_sha256": "85e8bb804971f1768910952bbe1c9a59928061b54acd64eaed8288f9ddc26d75",
+          "before_bytes": 8382,
+          "before_sha256": "bec19d510d5cd339f5d3314e62c828cfccf380fc8d0e7430301e45e9ef734f07",
+          "operation": "modify",
+          "path": "raptor/raptor.go"
+        },
+        {
+          "after_bytes": 1348,
+          "after_sha256": "1f86bcfbed13072e69aa7fb04783d1fd916e824e697956bfdf7c128cbdcfa55a",
+          "before_bytes": 743,
+          "before_sha256": "3319c9839c727e512d7eef37a5d078c4c4438769dc7254622bac040bdf535a70",
+          "operation": "modify",
+          "path": "raptor/round_queue.go"
+        },
+        {
+          "after_bytes": 12688,
+          "after_sha256": "6e4d8214d90c4ee52c1591d9d0b7128dd6b9fa4b571418d973b353dd9be29a9f",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "raptor/v2_frozen_test.go"
+        },
+        {
+          "after_bytes": 2832,
+          "after_sha256": "f2df5310c9b1656963bbddf7e0eb9a87f88f872faad59f905c81e3ceeaf73c85",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "raptor/v2_storage_test.go"
+        },
+        {
+          "after_bytes": 14746,
+          "after_sha256": "d961cf22818d4a30a471313267c4b6123dcf9f8b025dde118889f9e0c309ef50",
+          "before_bytes": 14702,
+          "before_sha256": "c05ebc389999a70546748f2e9aadd415e92b2af2b57b117ef8a6ab866acd5c9e",
+          "operation": "modify",
+          "path": "tripbased/capped_retained.go"
+        },
+        {
+          "after_bytes": 3120,
+          "after_sha256": "85f66d312381ee13a9a8617e85edd664c4fc3351e6961304e1a3f2cfc251fc09",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "tripbased/compact_links.go"
+        },
+        {
+          "after_bytes": 13698,
+          "after_sha256": "eab7fe3a228254c1813b2b8d78b95e24b5e9156e11909f99f00c03971f94a1b6",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "tripbased/compact_links_test.go"
+        },
+        {
+          "after_bytes": 19531,
+          "after_sha256": "4888ff851c113d1ba9378166601bdf53accab7de1171428125dbac3d7ffaf7d0",
+          "before_bytes": 19517,
+          "before_sha256": "1ea53260bdf2dedb271f269c738b271895aeb389a0275917c17923ed7ef5829b",
+          "operation": "modify",
+          "path": "tripbased/flash.go"
+        },
+        {
+          "after_bytes": 9271,
+          "after_sha256": "69a2a37340fe46c29ea70645b7e68457000bc73a1e9a806f9173be10d0c7fd5b",
+          "before_bytes": 9226,
+          "before_sha256": "6b5d85fb4b14390529ef2a01d1c91ed5a2c7d39c7957834286d79cbe7e75acab",
+          "operation": "modify",
+          "path": "tripbased/flash_profile.go"
+        },
+        {
+          "after_bytes": 8942,
+          "after_sha256": "217ab3ffdcc071e44e3499fae1049fd0149132211f4fda60e6bd57a7fd5a95a8",
+          "before_bytes": 8898,
+          "before_sha256": "e65439c050357c31fc7b00b974b16e9fe488a9380d56779efb089e3de59655d3",
+          "operation": "modify",
+          "path": "tripbased/flash_retained.go"
+        },
+        {
+          "after_bytes": 9931,
+          "after_sha256": "ee3eced244a67a3e9f5007c16272a395c06f4da4bf830e936fe1b94dd9d063bc",
+          "before_bytes": 9716,
+          "before_sha256": "1d0e6061c3cfafc2c7a2cbc1bdca5854ca77e03b3cd43b754c6dd502f53ad80e",
+          "operation": "modify",
+          "path": "tripbased/flash_rules.go"
+        },
+        {
+          "after_bytes": 6848,
+          "after_sha256": "f504d676424c3733c5a03c00eb1b929afa9ee3c13df8ddb988d9ed9efced1205",
+          "before_bytes": 6721,
+          "before_sha256": "fd36b6c2e2259448928383ce8e7efb403027c980880770f7f9eaf97decd1c06e",
+          "operation": "modify",
+          "path": "tripbased/flash_transfers.go"
+        },
+        {
+          "after_bytes": 8013,
+          "after_sha256": "b0503beb184bf7e89f4b8ac16b6e9d427fafe809b348016c993b29930e12e607",
+          "before_bytes": 7871,
+          "before_sha256": "cf39823376309fb08f5c091caeeb95a79aca06316738673c49db1e76d9ac28e5",
+          "operation": "modify",
+          "path": "tripbased/index.go"
+        },
+        {
+          "after_bytes": 8103,
+          "after_sha256": "454c9313f2b02518d4542857e74b7077ad25ce4de32a4944e1d0a1ab1e937cc3",
+          "before_bytes": 8062,
+          "before_sha256": "b85fd359a5362825de485da9015fcab9a08a361f9913eac749402f330284c91b",
+          "operation": "modify",
+          "path": "tripbased/query.go"
+        },
+        {
+          "after_bytes": 1359,
+          "after_sha256": "5c3fff927b5143a367f5129e59701be4e2e9fe11e511a659c7e7078c12586c34",
+          "before_bytes": 1331,
+          "before_sha256": "d6c0b99c764e6603598bec90088e10466bf9943802a2b2180e7a2d5e3e005190",
+          "operation": "modify",
+          "path": "tripbased/transfer_storage.go"
+        },
+        {
+          "after_bytes": 8637,
+          "after_sha256": "602c1378895e5400d986b45add793c54b8aa7c7e73d96961722519a952677176",
+          "before_bytes": 8632,
+          "before_sha256": "d1faea97db872ab8d89ec08de66f08b916f4809a85193c5e48b1311232581f27",
+          "operation": "modify",
+          "path": "ultra/capped_search.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 166,
+      "name": "routing-noncsa-noarena",
+      "patch": "patches/02-routing-noncsa-noarena.patch",
+      "patch_bytes": 63147,
+      "patch_sha256": "ca0464555330a50ea9ef5b65a4bde521c2110e68be5e0e4b6f702a00f624bf09",
+      "projection_sha256": "a04f8e1c598c8ad3682b0e15479b1a77ea8c7cd437ff5c84c7e9e51d25a9d1a6",
+      "reconstruction_parent": "routing-noncsa-control",
+      "runtime_source_sha256": "bf68eef07b51f2f9bb44c50f8696a8bfaea7a29990ea8b651b47a43de1f72ce6"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 6400,
+          "after_sha256": "3bd6840176ae90241579a428899818fb03ff9272d9d0e01d609231e9d7202fd0",
+          "before_bytes": 6352,
+          "before_sha256": "a421d1457d7d960d835420783bc859a1d4186c5a01d146f965996e6569e1f9ff",
+          "operation": "modify",
+          "path": "raptor/local_walk_ties.go"
+        },
+        {
+          "after_bytes": 9644,
+          "after_sha256": "7d3798453682a02d679ca736d7f20d5f6387dd97a44fe616a4701fa1f64fd54d",
+          "before_bytes": 9603,
+          "before_sha256": "7bcb4922d0b4bee980a2be58181d1017119a10e1d0e5e7a7e961c4f7a75a9ea0",
+          "operation": "modify",
+          "path": "raptor/multicriteria.go"
+        },
+        {
+          "after_bytes": 8754,
+          "after_sha256": "995ac45d2e91790ea9aea8b317731983eb484868ef43ea22ccc5740ee43acddc",
+          "before_bytes": 8706,
+          "before_sha256": "85e8bb804971f1768910952bbe1c9a59928061b54acd64eaed8288f9ddc26d75",
+          "operation": "modify",
+          "path": "raptor/raptor.go"
+        },
+        {
+          "after_bytes": 8686,
+          "after_sha256": "5f569ff3205fb691eb6f9d17f7aad5facd10923d6363470596d6771d4cae51bb",
+          "before_bytes": 8637,
+          "before_sha256": "602c1378895e5400d986b45add793c54b8aa7c7e73d96961722519a952677176",
+          "operation": "modify",
+          "path": "ultra/capped_search.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 166,
+      "name": "routing-noncsa",
+      "patch": "patches/03-routing-noncsa.patch",
+      "patch_bytes": 5873,
+      "patch_sha256": "19cef3a7f68a02383d3a43e27bcf7c1c683698735caa9fde5f676a60b0781670",
+      "projection_sha256": "fd5e7cc8ed08b2e37c4fc2d3d8827877467e659f18caf2ada4b89e4f41feb7a6",
+      "reconstruction_parent": "routing-noncsa-noarena",
+      "runtime_source_sha256": "1da7ba71f9a0c79a55cb560c9e944f2013c1268ee781c803559bbf0298d60b63"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 10207,
+          "after_sha256": "c6f19c96bde2bf9b9eaa41b3e700552fc38f67d10094fda978055dc5e5f45dda",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "ultra/local_walk_ties.go"
+        },
+        {
+          "after_bytes": 4877,
+          "after_sha256": "d217ca715491259ffdbe23938d3509e72758c7b541c9e233e492fff1783a2570",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "ultra/local_walk_ties_test.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 168,
+      "name": "routing-noncsa-quality",
+      "patch": "patches/04-routing-noncsa-quality.patch",
+      "patch_bytes": 15712,
+      "patch_sha256": "4a0ddc3dea898f53c9daaa53374c29db6f6362937286e7969f506a164954f596",
+      "projection_sha256": "defa9b16f3ae988be02eabdb39ad15eb7aaaa895ad14f2061aa3487278ab3e71",
+      "reconstruction_parent": "routing-noncsa-noarena",
+      "runtime_source_sha256": "75ff0aee89fe7372032d892e0251ab2aece55117b66a6b56738268812828dd6d"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 8196,
+          "after_sha256": "7ec5ea24bb15492972580f61d326fc299b3665ce5b3aa7857d853610967365fc",
+          "before_bytes": 7044,
+          "before_sha256": "81f63bb9d674bd0e9955b4aa493b1657ed9c8c7992d04c9fc76960ef92805a15",
+          "operation": "modify",
+          "path": "raptor/range.go"
+        },
+        {
+          "after_bytes": 7238,
+          "after_sha256": "24b16a3a5935c5262e102f96444d1c2c1f4dc3963ba0db1bcda5f3c055faa59f",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "raptor/range_frozen_native_test.go"
+        },
+        {
+          "after_bytes": 7154,
+          "after_sha256": "f34ba6d84d8d12e0514148d234b8ed6bff8a149d5a495e0cb9b528333a2795cc",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "raptor/range_storage_test.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 168,
+      "name": "routing-range-opt",
+      "patch": "patches/05-routing-range-opt.patch",
+      "patch_bytes": 21991,
+      "patch_sha256": "80fc870112ce0fe6b39db101a999ade7673f65c5d3652d3009faf406b4e409b8",
+      "projection_sha256": "44ff17e583824930309ae9acb3619329148efece6e192028433ef4095676cffb",
+      "reconstruction_parent": "routing-noncsa-noarena",
+      "runtime_source_sha256": "8935d954b988a5a6d626d09176506b6c85d1ce371447ea76bfc35def874efc00"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 3918,
+          "after_sha256": "0c9590242b29b11ee049b223c828e511a16785a6c3eda65a4d3810f5ff29fa34",
+          "before_bytes": 3923,
+          "before_sha256": "e071918fcd8db1941a791108d0f54c787420fe76d3df161ae3ee7cc5e2e64eb9",
+          "operation": "modify",
+          "path": "tripbased/bounded_walking.go"
+        },
+        {
+          "after_bytes": 17741,
+          "after_sha256": "f63854c75da62f1dd48fdae03357a7ec2871bac8fda60b22d41778acd525740e",
+          "before_bytes": 17523,
+          "before_sha256": "640b9cd381f4995d3591315d11a3860e18cb7f8cd89db68a5a0d9641cea83c71",
+          "operation": "modify",
+          "path": "tripbased/capped_patterns.go"
+        },
+        {
+          "after_bytes": 4028,
+          "after_sha256": "41148da11b11ac8e38aca3150b847571bfa78a9bb06794ee70ca3dd701a60083",
+          "before_bytes": 3816,
+          "before_sha256": "d686016f8800364ad351da9bab8a440d4daa50042b5c59164ea526c168ec649c",
+          "operation": "modify",
+          "path": "tripbased/cost_summary.go"
+        },
+        {
+          "after_bytes": 20440,
+          "after_sha256": "fc6c1977c7952d31023106e2d651ed2dc9736fc2862ea412e795414f31cb2c28",
+          "before_bytes": 19531,
+          "before_sha256": "4888ff851c113d1ba9378166601bdf53accab7de1171428125dbac3d7ffaf7d0",
+          "operation": "modify",
+          "path": "tripbased/flash.go"
+        },
+        {
+          "after_bytes": 7311,
+          "after_sha256": "20c480930e61705b5f55d08397401bfecfd63c9b1358f11f543a0daaf354dea3",
+          "before_bytes": 6809,
+          "before_sha256": "00206c170c2e0dd1b05126d5efd02d75ff05d6873c0434e57254b3620ee0914e",
+          "operation": "modify",
+          "path": "tripbased/flash_graph.go"
+        },
+        {
+          "after_bytes": 15914,
+          "after_sha256": "8490e05e837dfac1f4943dd524c273083554537f37e557f4d99b3c0126ef4f76",
+          "before_bytes": 15454,
+          "before_sha256": "0cb573f7cf9cedcee86931596b67f2e9333bdf911d6b80ec34d6f359e49d1801",
+          "operation": "modify",
+          "path": "tripbased/trex.go"
+        },
+        {
+          "after_bytes": 2193,
+          "after_sha256": "d71a3c0c009a53e3fac7a9b30f654bc9710f0bcb18c9e18f3c71e9739f80bf89",
+          "before_bytes": 1999,
+          "before_sha256": "6051dc45d12e3a535ab2f02bf31090d0cd386d5e22c408132dca13a6f43ac0d7",
+          "operation": "modify",
+          "path": "tripbased/trex_diagnostic.go"
+        },
+        {
+          "after_bytes": 9625,
+          "after_sha256": "86d8c09216d6051cf7c617ad19096f7124cba58792fb4c1656caa12f7b79f3cc",
+          "before_bytes": 8133,
+          "before_sha256": "b4ef29a963f239feb16b08e42a91dfc479c90c3ab479b7abea9df4b941cd7913",
+          "operation": "modify",
+          "path": "tripbased/trex_query.go"
+        },
+        {
+          "after_bytes": 4416,
+          "after_sha256": "1f6dcbcdb3743866f5fa698805c5235e41d99136a4dca7b346c298d83da765ca",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "tripbased/trex_walking_scope.go"
+        },
+        {
+          "after_bytes": 10869,
+          "after_sha256": "c1b223ca1b261045c4a84e45110d18041c09ce939f1a8fd636522bf3a0aafeaf",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "tripbased/walking_scope_internal_test.go"
+        },
+        {
+          "after_bytes": 7038,
+          "after_sha256": "37247f8296cf47572f1b8b649fadd939759350065dabd2f4cd25eb22b89ea144",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "tripbased/walking_scope_oracle_test.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 169,
+      "name": "routing-native-prep",
+      "patch": "patches/06-routing-native-prep.patch",
+      "patch_bytes": 37651,
+      "patch_sha256": "c3628e88726e47b6f64961bdccf6fbbac15dc1e31cc3173e3b68b90c490642d4",
+      "projection_sha256": "eee890143755772e99a8c21c0e0810ee9f82403087e04917675b210abe183f21",
+      "reconstruction_parent": "routing-noncsa-noarena",
+      "runtime_source_sha256": "fde4d693250c1bb2df2ee7d2befe56c083d1c65ba73eed3c48010888449a650e"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 10207,
+          "after_sha256": "c6f19c96bde2bf9b9eaa41b3e700552fc38f67d10094fda978055dc5e5f45dda",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "ultra/local_walk_ties.go"
+        },
+        {
+          "after_bytes": 4877,
+          "after_sha256": "d217ca715491259ffdbe23938d3509e72758c7b541c9e233e492fff1783a2570",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "ultra/local_walk_ties_test.go"
+        },
+        {
+          "after_bytes": 1706,
+          "after_sha256": "54b17a5a48b3f87a43fe519d73b7de46d8df0bcccbe752adb0c4540f12f5cd21",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "ultra/sparse_cost.go"
+        },
+        {
+          "after_bytes": 3726,
+          "after_sha256": "4f99daeb3ee8b63a6a96397b12bde8f1480c604b9a4cb8ebd93a03f1979d1565",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "ultra/sparse_cost_test.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 170,
+      "name": "routing-sparse-cost-summary",
+      "patch": "patches/07-routing-sparse-cost-summary.patch",
+      "patch_bytes": 21360,
+      "patch_sha256": "4d74fc120963e04614fd7fe043c6cee3fa734286651f7669a53de9f39dbf0e66",
+      "projection_sha256": "6781568b03dfd70e642ec5eb96b4bfcbd073b8fa5bb8aa434982d0320ba8a447",
+      "reconstruction_parent": "routing-noncsa-noarena",
+      "runtime_source_sha256": "1b4b7d495ca2d156a3960dca5335f8b26b1450bcc1f79f57be2a25cad134aeaa"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 4029,
+          "after_sha256": "7892623f050bee51f1d38a7ff43ef6e0585140b028fdb7f5fcc26215ad891dbb",
+          "before_bytes": 4028,
+          "before_sha256": "41148da11b11ac8e38aca3150b847571bfa78a9bb06794ee70ca3dd701a60083",
+          "operation": "modify",
+          "path": "tripbased/cost_summary.go"
+        },
+        {
+          "after_bytes": 16117,
+          "after_sha256": "9e600f8ab60366f7de16c239fd2281a1237a8571897b862ffbd52bf4ca935561",
+          "before_bytes": 15914,
+          "before_sha256": "8490e05e837dfac1f4943dd524c273083554537f37e557f4d99b3c0126ef4f76",
+          "operation": "modify",
+          "path": "tripbased/trex.go"
+        },
+        {
+          "after_bytes": 4315,
+          "after_sha256": "418107b649dd467b74254ce8655e6bd1f9dcaf5ee3f7e4c70c3fc36536f50809",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "tripbased/trex_compact.go"
+        },
+        {
+          "after_bytes": 4230,
+          "after_sha256": "0e5b9efb840cd97afc8db6abd7cba6a3ce55e178731e2d1bd1763a7b9f3ab078",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "tripbased/trex_compact_test.go"
+        },
+        {
+          "after_bytes": 2370,
+          "after_sha256": "0263a076d3371f1b5167602b59b78208cb820207e0e54843b7c3e9647f64ccb0",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "tripbased/trex_compact_wholeword_test.go"
+        },
+        {
+          "after_bytes": 8699,
+          "after_sha256": "c013628d58e754f04961f893b96352133a4521f933f89b43e3caaf47bf6af40a",
+          "before_bytes": 8658,
+          "before_sha256": "6b2014268e6b19b1ebb9d0744a23fafe745f3e6e2d591a712b8da0d8dbc89b40",
+          "operation": "modify",
+          "path": "tripbased/trex_customization.go"
+        },
+        {
+          "after_bytes": 2194,
+          "after_sha256": "6d3ac02a360d9741ac457d4ec31aae837792dc684fab795680bf29a14ab89ff6",
+          "before_bytes": 2193,
+          "before_sha256": "d71a3c0c009a53e3fac7a9b30f654bc9710f0bcb18c9e18f3c71e9739f80bf89",
+          "operation": "modify",
+          "path": "tripbased/trex_diagnostic.go"
+        },
+        {
+          "after_bytes": 7166,
+          "after_sha256": "163d8d47e7aa020bd55ecd46bfd3fac1d4486925acde44f91dbda4be69cb5b01",
+          "before_bytes": 6449,
+          "before_sha256": "5593e6b73434b7055884d00a205ec1567dd34204527819d44ab0b1e1570f76d3",
+          "operation": "modify",
+          "path": "tripbased/trex_partition.go"
+        },
+        {
+          "after_bytes": 4635,
+          "after_sha256": "82e8819d86e69f71d22e28875b4f266be3fec7b0e39f2935c49bd0c925e34852",
+          "before_bytes": 4632,
+          "before_sha256": "731aac977eeb4ddb81df4c6dd0c144e5f4b3a94697ce9a69814d4516210a60bd",
+          "operation": "modify",
+          "path": "tripbased/trex_proofs.go"
+        },
+        {
+          "after_bytes": 7696,
+          "after_sha256": "09daf774ef6bdc3bc399f7abcf2536b5cfd5d20e42d54a9f628cb82839217465",
+          "before_bytes": 7695,
+          "before_sha256": "318df6095e71cb0d0c545034ae6427cd3266ce79226a3357ae47b86eb8e34ab8",
+          "operation": "modify",
+          "path": "tripbased/trex_proofs_test.go"
+        },
+        {
+          "after_bytes": 9681,
+          "after_sha256": "13fff151e308e770839bb093bf952a0461d48874d5a784a88bf2472265f9ff64",
+          "before_bytes": 9625,
+          "before_sha256": "86d8c09216d6051cf7c617ad19096f7124cba58792fb4c1656caa12f7b79f3cc",
+          "operation": "modify",
+          "path": "tripbased/trex_query.go"
+        },
+        {
+          "after_bytes": 6018,
+          "after_sha256": "0fa08c43c341190e32c7200304fd62a6c6a1944e4434f79d72c0ab93d22c4832",
+          "before_bytes": 3937,
+          "before_sha256": "05385e29ecb9dcb98baec226568f2a026b07a7c10149a38f5da0174102d74531",
+          "operation": "modify",
+          "path": "tripbased/trex_storage.go"
+        },
+        {
+          "after_bytes": 3264,
+          "after_sha256": "4be8706804d5f48d104438ebeb70d19d7cb36d359304c10f658ee5698a8f9c0a",
+          "before_bytes": 3238,
+          "before_sha256": "4b5b6c93c4437d314c5908675ebbd90a65f17687067b4e216db2049e6cfeab37",
+          "operation": "modify",
+          "path": "tripbased/trex_storage_test.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 172,
+      "name": "routing-trex-compact",
+      "patch": "patches/08-routing-trex-compact.patch",
+      "patch_bytes": 27867,
+      "patch_sha256": "c62f4c78e4daf89a3e42ffba3d3ac52ba6e63abb8da742546ce835bb2ced7fe3",
+      "projection_sha256": "4b057602325066ee5c0f3f05c38f4f1b5f1647683c33c7d4615f8d42835a0347",
+      "reconstruction_parent": "routing-native-prep",
+      "runtime_source_sha256": "224e4934d374a283cc7f5eacc133833a44b17eb948303d623b494e1e2a438ff5"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 7486,
+          "after_sha256": "0646c6d4847d06f05fe01548be80b8434382f563273d69b592f109d0bd6e172b",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "tripbased/capped_answer_walk_ties.go"
+        },
+        {
+          "after_bytes": 3934,
+          "after_sha256": "d77e751fdf98e157611ed314ee41e03ce1a6048950d304828ece299cd7d96609",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "tripbased/capped_answer_walk_ties_native_test.go"
+        },
+        {
+          "after_bytes": 11298,
+          "after_sha256": "66248a6887380e4b3894c4ff5d69b8199c9c638da2aa03b8040703d5058e402f",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "tripbased/capped_answer_walk_ties_test.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 172,
+      "name": "routing-tb-answer-ties",
+      "patch": "patches/09-routing-tb-answer-ties.patch",
+      "patch_bytes": 23601,
+      "patch_sha256": "f043df637b793322d026184e753588cc2560517b8d08529701f71706553feb14",
+      "projection_sha256": "32b461746834e277ae5125dd8a857d92be798508813e47fb6bc89edfa604bb58",
+      "reconstruction_parent": "routing-native-prep",
+      "runtime_source_sha256": "48d69ca3dc1b784e87958b52857956b54002987858a9210199d526bf29c6eac6"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 10207,
+          "after_sha256": "c6f19c96bde2bf9b9eaa41b3e700552fc38f67d10094fda978055dc5e5f45dda",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "ultra/local_walk_ties.go"
+        },
+        {
+          "after_bytes": 4877,
+          "after_sha256": "d217ca715491259ffdbe23938d3509e72758c7b541c9e233e492fff1783a2570",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "ultra/local_walk_ties_test.go"
+        },
+        {
+          "after_bytes": 1978,
+          "after_sha256": "f530048bc21a9ac0e4ce7f26d3ca61f1eeb625f1a821880c0daefa171ac370b9",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "ultra/sparse_cost.go"
+        },
+        {
+          "after_bytes": 4129,
+          "after_sha256": "6e012027d3c07205a9de99e7c29079d968771bea6322ae1bc5cf260c714d77e6",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "ultra/sparse_cost_test.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 176,
+      "name": "routing-sparse-lean-v3",
+      "patch": "patches/10-routing-sparse-lean-v3.patch",
+      "patch_bytes": 22103,
+      "patch_sha256": "6b5c907188878aca1bce364d3fffc7ea4fbfd23ab4426a48b4648fb81df3fce6",
+      "projection_sha256": "d569baa3c965ccaf5fc0ec2bf5a83d6addf735b0a6bdc3a104a032854b24f75f",
+      "reconstruction_parent": "routing-tb-answer-ties",
+      "runtime_source_sha256": "669d12f93082a743ae678da7f9198ad7c87ae93cea2c7e3bec073ac6c12c322e"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 8712,
+          "after_sha256": "998e2ce1b757f9ec0d1ecfcee0d134e47950f5ca813993a469fdd236f73091be",
+          "before_bytes": 7311,
+          "before_sha256": "20c480930e61705b5f55d08397401bfecfd63c9b1358f11f543a0daaf354dea3",
+          "operation": "modify",
+          "path": "tripbased/flash_graph.go"
+        },
+        {
+          "after_bytes": 5889,
+          "after_sha256": "e16b1d4a288aafc02a58c5b86081ce1ba000e22e060108d96e428f754460d6e7",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "tripbased/walking_prefix_internal_test.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 173,
+      "name": "routing-walk-prefix-v1",
+      "patch": "patches/11-routing-walk-prefix-v1.patch",
+      "patch_bytes": 9079,
+      "patch_sha256": "967816bd9eedb0613d3a0663519f3a0fb4d778d7837c249032715d41e630ea75",
+      "projection_sha256": "a942295ad97ba0af6609c5dcd80972612e523bfe880ef0ae95e2d5b03e4dc863",
+      "reconstruction_parent": "routing-trex-compact",
+      "runtime_source_sha256": "629ee27198193b8b1136c0333475a76ec30fec55a98207ea5223cc77f978d8c3"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 8439,
+          "after_sha256": "487acca7ba40008912d4b2fd5a0f470d785939adac117f5c7f792f3de15b83a1",
+          "before_bytes": 7750,
+          "before_sha256": "4b25111ba3a2d7823c0b857a1e64f1176da511a122bc084d48391507645d0243",
+          "operation": "modify",
+          "path": "cmd/familybench/adapters.go"
+        },
+        {
+          "after_bytes": 24344,
+          "after_sha256": "8d7fa892996bee135e223be14e7db82290f52ffdc4b1cbab4260311318d0891c",
+          "before_bytes": 23201,
+          "before_sha256": "dadb25019b65225eb74486b34aef2ee2c9f85efd6c02534b9abbaaebc96341e7",
+          "operation": "modify",
+          "path": "cmd/familybench/main.go"
+        },
+        {
+          "after_bytes": 3670,
+          "after_sha256": "ca7a3f911ef4f979df65e1af34cdf3172fe4391648501238c4d5e031ced97c26",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/familybench/stream.go"
+        },
+        {
+          "after_bytes": 5818,
+          "after_sha256": "6664c846d36f5c6b355661aa1db9b6ad46d1385a6ca9307b853854256e2a1b09",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/familybench/stream_test.go"
+        },
+        {
+          "after_bytes": 1204,
+          "after_sha256": "7351ed10cbb91afdf22e55a90b96eae52302a02c69c635929f8d80d2616bbee8",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "regression/mcraptor/local_walk_ties_test.go"
+        },
+        {
+          "after_bytes": 11531,
+          "after_sha256": "76fd9ddcf40d08bf235e24f8d8b498d27361cce51c596e82b7c9b591e4a9c3a4",
+          "before_bytes": 10954,
+          "before_sha256": "5d09b48141acf5a7c22b00fd8b993ff1358fceff8ab75f6ec62bbb484695c774",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 795,
+          "after_sha256": "10e6b0bc1e73443e66c4975fe839d456c5e0d459bdebd28b0d15a1736259a25a",
+          "before_bytes": 763,
+          "before_sha256": "6104e9ca3bda74cd69cbe4d4f38da9e0f639a5283ba0941fe1107519cfd84357",
+          "operation": "modify",
+          "path": "scripts/build.sh"
+        },
+        {
+          "after_bytes": 1218,
+          "after_sha256": "70dbf5f5133e7939beac7dd12e1dbd90b14200d9295f2f7e6740496c5b828241",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/paper/node_arena.go"
+        },
+        {
+          "after_bytes": 9953,
+          "after_sha256": "96f9ed6c4ef844dd0e761bcc13f78064fbf5c3c61d440b44c2e952db687913fb",
+          "before_bytes": 9842,
+          "before_sha256": "ef171ca2a3827d687687c0a8f21000cd1af9d8534b571f78e91e37c70f75376a",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/paper/profile.go"
+        },
+        {
+          "after_bytes": 2304,
+          "after_sha256": "6607b6be2ce94ef6ec22348d04ca03fa85a1917ad4dc5694f5636bde87ec2c8b",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/indexed_walks.go"
+        },
+        {
+          "after_bytes": 6352,
+          "after_sha256": "a421d1457d7d960d835420783bc859a1d4186c5a01d146f965996e6569e1f9ff",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/local_walk_ties.go"
+        },
+        {
+          "after_bytes": 9603,
+          "after_sha256": "7bcb4922d0b4bee980a2be58181d1017119a10e1d0e5e7a7e961c4f7a75a9ea0",
+          "before_bytes": 9312,
+          "before_sha256": "ef138e2e6520fffa6344089dd29eea0016a221369c997f37e17a9945ce2d6b61",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/multicriteria.go"
+        },
+        {
+          "after_bytes": 8706,
+          "after_sha256": "85e8bb804971f1768910952bbe1c9a59928061b54acd64eaed8288f9ddc26d75",
+          "before_bytes": 8289,
+          "before_sha256": "86a73775704c8c34417f272f3d2298346a4cabc9f55cba25f4800a2d43668fd8",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/raptor.go"
+        },
+        {
+          "after_bytes": 1348,
+          "after_sha256": "1f86bcfbed13072e69aa7fb04783d1fd916e824e697956bfdf7c128cbdcfa55a",
+          "before_bytes": 743,
+          "before_sha256": "3319c9839c727e512d7eef37a5d078c4c4438769dc7254622bac040bdf535a70",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/round_queue.go"
+        },
+        {
+          "after_bytes": 14746,
+          "after_sha256": "d961cf22818d4a30a471313267c4b6123dcf9f8b025dde118889f9e0c309ef50",
+          "before_bytes": 14702,
+          "before_sha256": "c05ebc389999a70546748f2e9aadd415e92b2af2b57b117ef8a6ab866acd5c9e",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_retained.go"
+        },
+        {
+          "after_bytes": 3120,
+          "after_sha256": "85f66d312381ee13a9a8617e85edd664c4fc3351e6961304e1a3f2cfc251fc09",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/compact_links.go"
+        },
+        {
+          "after_bytes": 19531,
+          "after_sha256": "4888ff851c113d1ba9378166601bdf53accab7de1171428125dbac3d7ffaf7d0",
+          "before_bytes": 19517,
+          "before_sha256": "1ea53260bdf2dedb271f269c738b271895aeb389a0275917c17923ed7ef5829b",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash.go"
+        },
+        {
+          "after_bytes": 9271,
+          "after_sha256": "69a2a37340fe46c29ea70645b7e68457000bc73a1e9a806f9173be10d0c7fd5b",
+          "before_bytes": 9226,
+          "before_sha256": "6b5d85fb4b14390529ef2a01d1c91ed5a2c7d39c7957834286d79cbe7e75acab",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_profile.go"
+        },
+        {
+          "after_bytes": 8942,
+          "after_sha256": "217ab3ffdcc071e44e3499fae1049fd0149132211f4fda60e6bd57a7fd5a95a8",
+          "before_bytes": 8898,
+          "before_sha256": "e65439c050357c31fc7b00b974b16e9fe488a9380d56779efb089e3de59655d3",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_retained.go"
+        },
+        {
+          "after_bytes": 9931,
+          "after_sha256": "ee3eced244a67a3e9f5007c16272a395c06f4da4bf830e936fe1b94dd9d063bc",
+          "before_bytes": 9716,
+          "before_sha256": "1d0e6061c3cfafc2c7a2cbc1bdca5854ca77e03b3cd43b754c6dd502f53ad80e",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_rules.go"
+        },
+        {
+          "after_bytes": 6848,
+          "after_sha256": "f504d676424c3733c5a03c00eb1b929afa9ee3c13df8ddb988d9ed9efced1205",
+          "before_bytes": 6721,
+          "before_sha256": "fd36b6c2e2259448928383ce8e7efb403027c980880770f7f9eaf97decd1c06e",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_transfers.go"
+        },
+        {
+          "after_bytes": 8013,
+          "after_sha256": "b0503beb184bf7e89f4b8ac16b6e9d427fafe809b348016c993b29930e12e607",
+          "before_bytes": 7871,
+          "before_sha256": "cf39823376309fb08f5c091caeeb95a79aca06316738673c49db1e76d9ac28e5",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/index.go"
+        },
+        {
+          "after_bytes": 8103,
+          "after_sha256": "454c9313f2b02518d4542857e74b7077ad25ce4de32a4944e1d0a1ab1e937cc3",
+          "before_bytes": 8062,
+          "before_sha256": "b85fd359a5362825de485da9015fcab9a08a361f9913eac749402f330284c91b",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/query.go"
+        },
+        {
+          "after_bytes": 1359,
+          "after_sha256": "5c3fff927b5143a367f5129e59701be4e2e9fe11e511a659c7e7078c12586c34",
+          "before_bytes": 1331,
+          "before_sha256": "d6c0b99c764e6603598bec90088e10466bf9943802a2b2180e7a2d5e3e005190",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/transfer_storage.go"
+        },
+        {
+          "after_bytes": 10955,
+          "after_sha256": "2cd79a4b4e1397bb6120f6d747798e53f5789f86a70d0094ecfb1e525f763fca",
+          "before_bytes": 9423,
+          "before_sha256": "ff4fe3a86923e9f38b8ddfad1fb4754760e475c3b44d76e1f8943b0c7d4141a7",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/ultra/capped.go"
+        },
+        {
+          "after_bytes": 8637,
+          "after_sha256": "602c1378895e5400d986b45add793c54b8aa7c7e73d96961722519a952677176",
+          "before_bytes": 7355,
+          "before_sha256": "ffb5faa7cc306622a4589df8d7902784044163b132fd7facb6363806a8a16fac",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/ultra/capped_search.go"
+        },
+        {
+          "after_bytes": 8575,
+          "after_sha256": "f87a6d7953394cd64d87b9ec2ef68949e49f4495c78d851213080af6183a03ed",
+          "before_bytes": 8473,
+          "before_sha256": "ba02a1ea229167619a0656c3862d7a6db355f9a4ce6141820318f82226a6592b",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/ultra/sparse.go"
+        },
+        {
+          "after_bytes": 16220,
+          "after_sha256": "5fcc482edb45eb11d01928e8dffb148f00dd2a32f4649a0bb0f6cf27109cd998",
+          "before_bytes": 13941,
+          "before_sha256": "7e0965bae0f16145f23a1b273099e4b1f629d6d5f7d879b01bd3492fe5c9a80e",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/walking/graph/graph.go"
+        },
+        {
+          "after_bytes": 4484,
+          "after_sha256": "8403f7669c2e6a5058b929d8b424b81110b1297aa6101cb80a857579b6fa9436",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/walking/graph/reach_session.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 224,
+      "name": "bench-noncsa",
+      "patch": "patches/12-bench-noncsa.patch",
+      "patch_bytes": 87178,
+      "patch_sha256": "c3897a7c26b754c92b723208353be7793a6b6e0c6532e876c369b89e34616c1a",
+      "projection_sha256": "87f7fff64913fe617a8b99c1836442ec2640450ee9ce410cb5eee58e757836f0",
+      "reconstruction_parent": "bench-base",
+      "runtime_source_sha256": "57a35582225b86f826c53c04fe851fb9753b5a92aea74f5b1491cd1cc882d503"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 2099,
+          "after_sha256": "b444970fe3d707bd7267ff0d83e64ba9a942a089f41ee190f6d789938491aeac",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/corechgraphbench/audit.go"
+        },
+        {
+          "after_bytes": 9871,
+          "after_sha256": "6e52bd66c500b41905cfc1734c087f1615333bd4c855836794a27f687c904a95",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/corechgraphbench/audit_test.go"
+        },
+        {
+          "after_bytes": 22989,
+          "after_sha256": "5f1790735ed3b49048d819fd5fc6bdee204721a80a63c631337c1ca3a47eb62f",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/corechgraphbench/main.go"
+        },
+        {
+          "after_bytes": 15568,
+          "after_sha256": "e4ec3c844d17aff8af6123689003f28de58b20a0019d80a5bc15d833c5049195",
+          "before_bytes": 14258,
+          "before_sha256": "96847b3062f5d428f24a56ac8cbf0263dedae2ad59743c908db98f5958d5c2e2",
+          "operation": "modify",
+          "path": "cmd/profilebench/main.go"
+        },
+        {
+          "after_bytes": 1358,
+          "after_sha256": "1839dabd9b171bca0d10a12080073746aa83e4eab25c0815556670574673c44c",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/profilebench/point_input.go"
+        },
+        {
+          "after_bytes": 1135,
+          "after_sha256": "cd7f3d69a54a2afd57d5de08f9d47c01ac90d37b97d99410cbec7f79530799b3",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/profilebench/point_input_test.go"
+        },
+        {
+          "after_bytes": 14136,
+          "after_sha256": "dadb9c03ee91367ea8a7c7c1a061fcb73e820d40894dcda0f3eb8f3944efb138",
+          "before_bytes": 13294,
+          "before_sha256": "0fb3c50a02a1aa5b259528e907e05768b63875d60f5c838913dfd66541d7a405",
+          "operation": "modify",
+          "path": "cmd/tadbench/main.go"
+        },
+        {
+          "after_bytes": 812,
+          "after_sha256": "4412aab7e9161a19f3cff63c29006802b6b7e40cec49262ff78d33e451951668",
+          "before_bytes": 763,
+          "before_sha256": "6104e9ca3bda74cd69cbe4d4f38da9e0f639a5283ba0941fe1107519cfd84357",
+          "operation": "modify",
+          "path": "scripts/build.sh"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 221,
+      "name": "bench-auxiliary",
+      "patch": "patches/13-bench-auxiliary.patch",
+      "patch_bytes": 56385,
+      "patch_sha256": "2d28a528241e435e236fd8528491c6e2b05b8da186c35d1edc1dd08e24b42c4d",
+      "projection_sha256": "5f0ae55803f6afea312e8768eca2278fc198dfdf43ca09f771e824461d76d527",
+      "reconstruction_parent": "bench-base",
+      "runtime_source_sha256": "beb889841761e4757c2d9bff4673d744c41e54590fdfbb6f59ce4aff1215c90e"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 7750,
+          "after_sha256": "4b25111ba3a2d7823c0b857a1e64f1176da511a122bc084d48391507645d0243",
+          "before_bytes": 8439,
+          "before_sha256": "487acca7ba40008912d4b2fd5a0f470d785939adac117f5c7f792f3de15b83a1",
+          "operation": "modify",
+          "path": "cmd/familybench/adapters.go"
+        },
+        {
+          "after_bytes": 23687,
+          "after_sha256": "d335cc6d3a85e044b8b085abbe23ff12bec10d70d53beb6383d600a00fddeefc",
+          "before_bytes": 24344,
+          "before_sha256": "8d7fa892996bee135e223be14e7db82290f52ffdc4b1cbab4260311318d0891c",
+          "operation": "modify",
+          "path": "cmd/familybench/main.go"
+        },
+        {
+          "after_bytes": null,
+          "after_sha256": null,
+          "before_bytes": 3670,
+          "before_sha256": "ca7a3f911ef4f979df65e1af34cdf3172fe4391648501238c4d5e031ced97c26",
+          "operation": "delete",
+          "path": "cmd/familybench/stream.go"
+        },
+        {
+          "after_bytes": null,
+          "after_sha256": null,
+          "before_bytes": 5818,
+          "before_sha256": "6664c846d36f5c6b355661aa1db9b6ad46d1385a6ca9307b853854256e2a1b09",
+          "operation": "delete",
+          "path": "cmd/familybench/stream_test.go"
+        },
+        {
+          "after_bytes": 3669,
+          "after_sha256": "6a09e6aa1b0e59bf2d2395dcd887fe8a3b28a9c1c646a970502517ff17428a78",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/scalaroracle/main.go"
+        },
+        {
+          "after_bytes": 963,
+          "after_sha256": "bc4d250ab90a2a3ad6d71f673a8d278e82a90b2f3700febcad4968f9fd0e03fa",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/selectorprobe/main.go"
+        },
+        {
+          "after_bytes": 10273,
+          "after_sha256": "e6fdc21577f3eb03264681ead2f93b76fbedcf618a2a93f9e994d4f8b355360c",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "oracle/scalar.go"
+        },
+        {
+          "after_bytes": 4061,
+          "after_sha256": "d6ef1989b0a33284a3844801b0e0ba30575a78903e9f0ccff06dbab3bc09c87d",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "oracle/scalar_test.go"
+        },
+        {
+          "after_bytes": 3206,
+          "after_sha256": "faaca641372d879b7e99a82f6f1bdfbd120707d3fb6cb8088dc9ffdf12eef010",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "regression/bounded_lean_test.go"
+        },
+        {
+          "after_bytes": null,
+          "after_sha256": null,
+          "before_bytes": 1204,
+          "before_sha256": "7351ed10cbb91afdf22e55a90b96eae52302a02c69c635929f8d80d2616bbee8",
+          "operation": "delete",
+          "path": "regression/mcraptor/local_walk_ties_test.go"
+        },
+        {
+          "after_bytes": 11453,
+          "after_sha256": "6f3d6679c4e3ab80395d7face6c92868bd9ca61bcbaf9115ff02259a4faea22f",
+          "before_bytes": 11531,
+          "before_sha256": "76fd9ddcf40d08bf235e24f8d8b498d27361cce51c596e82b7c9b591e4a9c3a4",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 790,
+          "after_sha256": "8184f0929dd28a61003c793805de620b0c521f8342bc9c934298ce3b16dd5bc3",
+          "before_bytes": 795,
+          "before_sha256": "10e6b0bc1e73443e66c4975fe839d456c5e0d459bdebd28b0d15a1736259a25a",
+          "operation": "modify",
+          "path": "scripts/build.sh"
+        },
+        {
+          "after_bytes": 812,
+          "after_sha256": "74ce47839f41e1fdeda00e60bacbb7ae51eb6ff7a4b8dfa297fcb94b003ae287",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "scripts/update-routing-lock.py"
+        },
+        {
+          "after_bytes": null,
+          "after_sha256": null,
+          "before_bytes": 1218,
+          "before_sha256": "70dbf5f5133e7939beac7dd12e1dbd90b14200d9295f2f7e6740496c5b828241",
+          "operation": "delete",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/paper/node_arena.go"
+        },
+        {
+          "after_bytes": 1885,
+          "after_sha256": "59e0d8149cd8948d5a29e87d770971947f49e971f30899e604d3ed3b7e3ba827",
+          "before_bytes": 2304,
+          "before_sha256": "6607b6be2ce94ef6ec22348d04ca03fa85a1917ad4dc5694f5636bde87ec2c8b",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/indexed_walks.go"
+        },
+        {
+          "after_bytes": null,
+          "after_sha256": null,
+          "before_bytes": 6352,
+          "before_sha256": "a421d1457d7d960d835420783bc859a1d4186c5a01d146f965996e6569e1f9ff",
+          "operation": "delete",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/local_walk_ties.go"
+        },
+        {
+          "after_bytes": 9310,
+          "after_sha256": "31a9d899fdfa9c03a8d2dd05512a1676074d9b639196eb1543a03fce6937989b",
+          "before_bytes": 9603,
+          "before_sha256": "7bcb4922d0b4bee980a2be58181d1017119a10e1d0e5e7a7e961c4f7a75a9ea0",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/multicriteria.go"
+        },
+        {
+          "after_bytes": 8382,
+          "after_sha256": "bec19d510d5cd339f5d3314e62c828cfccf380fc8d0e7430301e45e9ef734f07",
+          "before_bytes": 8706,
+          "before_sha256": "85e8bb804971f1768910952bbe1c9a59928061b54acd64eaed8288f9ddc26d75",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/raptor.go"
+        },
+        {
+          "after_bytes": 743,
+          "after_sha256": "3319c9839c727e512d7eef37a5d078c4c4438769dc7254622bac040bdf535a70",
+          "before_bytes": 1348,
+          "before_sha256": "1f86bcfbed13072e69aa7fb04783d1fd916e824e697956bfdf7c128cbdcfa55a",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/round_queue.go"
+        },
+        {
+          "after_bytes": 16854,
+          "after_sha256": "71a8561e20c65045c4ec65f008d7b994c441f17621c9d2e64f3ddb2f855db88f",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/bounded.go"
+        },
+        {
+          "after_bytes": 5693,
+          "after_sha256": "47aa14200655b7baafbb0fac53d14be7cf54fbadfae8cadc045e3a3c0a290f36",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/bounded_test.go"
+        },
+        {
+          "after_bytes": 11659,
+          "after_sha256": "d1da5b3416d843dc9e9f3bd303c19529386251856eca728c07222365d71952ff",
+          "before_bytes": 10165,
+          "before_sha256": "f92dc795483533d0c7d1bbfeecff3c56a8b9e516d30c85cfc48a92c515a9e8d2",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/choices.go"
+        },
+        {
+          "after_bytes": 2695,
+          "after_sha256": "9db7855a5cea9469e039fe8bfa5c543df8d0183d9cd3c5bb57b453b75b6a5927",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/lean.go"
+        },
+        {
+          "after_bytes": 12325,
+          "after_sha256": "fcb35c8914345f9eebbbf78cb0bf18df19f0e5d1dc7054833d7f9ca90f9bd8fe",
+          "before_bytes": 10693,
+          "before_sha256": "0305ce81032f25cb01a721a7567330d8339babbcebdf889ad61404b35e70d627",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/quality.go"
+        },
+        {
+          "after_bytes": 14702,
+          "after_sha256": "c05ebc389999a70546748f2e9aadd415e92b2af2b57b117ef8a6ab866acd5c9e",
+          "before_bytes": 14746,
+          "before_sha256": "d961cf22818d4a30a471313267c4b6123dcf9f8b025dde118889f9e0c309ef50",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_retained.go"
+        },
+        {
+          "after_bytes": null,
+          "after_sha256": null,
+          "before_bytes": 3120,
+          "before_sha256": "85f66d312381ee13a9a8617e85edd664c4fc3351e6961304e1a3f2cfc251fc09",
+          "operation": "delete",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/compact_links.go"
+        },
+        {
+          "after_bytes": 19517,
+          "after_sha256": "1ea53260bdf2dedb271f269c738b271895aeb389a0275917c17923ed7ef5829b",
+          "before_bytes": 19531,
+          "before_sha256": "4888ff851c113d1ba9378166601bdf53accab7de1171428125dbac3d7ffaf7d0",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash.go"
+        },
+        {
+          "after_bytes": 9226,
+          "after_sha256": "6b5d85fb4b14390529ef2a01d1c91ed5a2c7d39c7957834286d79cbe7e75acab",
+          "before_bytes": 9271,
+          "before_sha256": "69a2a37340fe46c29ea70645b7e68457000bc73a1e9a806f9173be10d0c7fd5b",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_profile.go"
+        },
+        {
+          "after_bytes": 8898,
+          "after_sha256": "e65439c050357c31fc7b00b974b16e9fe488a9380d56779efb089e3de59655d3",
+          "before_bytes": 8942,
+          "before_sha256": "217ab3ffdcc071e44e3499fae1049fd0149132211f4fda60e6bd57a7fd5a95a8",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_retained.go"
+        },
+        {
+          "after_bytes": 9716,
+          "after_sha256": "1d0e6061c3cfafc2c7a2cbc1bdca5854ca77e03b3cd43b754c6dd502f53ad80e",
+          "before_bytes": 9931,
+          "before_sha256": "ee3eced244a67a3e9f5007c16272a395c06f4da4bf830e936fe1b94dd9d063bc",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_rules.go"
+        },
+        {
+          "after_bytes": 6721,
+          "after_sha256": "fd36b6c2e2259448928383ce8e7efb403027c980880770f7f9eaf97decd1c06e",
+          "before_bytes": 6848,
+          "before_sha256": "f504d676424c3733c5a03c00eb1b929afa9ee3c13df8ddb988d9ed9efced1205",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_transfers.go"
+        },
+        {
+          "after_bytes": 7871,
+          "after_sha256": "cf39823376309fb08f5c091caeeb95a79aca06316738673c49db1e76d9ac28e5",
+          "before_bytes": 8013,
+          "before_sha256": "b0503beb184bf7e89f4b8ac16b6e9d427fafe809b348016c993b29930e12e607",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/index.go"
+        },
+        {
+          "after_bytes": 8062,
+          "after_sha256": "b85fd359a5362825de485da9015fcab9a08a361f9913eac749402f330284c91b",
+          "before_bytes": 8103,
+          "before_sha256": "454c9313f2b02518d4542857e74b7077ad25ce4de32a4944e1d0a1ab1e937cc3",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/query.go"
+        },
+        {
+          "after_bytes": 1331,
+          "after_sha256": "d6c0b99c764e6603598bec90088e10466bf9943802a2b2180e7a2d5e3e005190",
+          "before_bytes": 1359,
+          "before_sha256": "5c3fff927b5143a367f5129e59701be4e2e9fe11e511a659c7e7078c12586c34",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/transfer_storage.go"
+        },
+        {
+          "after_bytes": 9423,
+          "after_sha256": "ff4fe3a86923e9f38b8ddfad1fb4754760e475c3b44d76e1f8943b0c7d4141a7",
+          "before_bytes": 10955,
+          "before_sha256": "2cd79a4b4e1397bb6120f6d747798e53f5789f86a70d0094ecfb1e525f763fca",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/ultra/capped.go"
+        },
+        {
+          "after_bytes": 7355,
+          "after_sha256": "ffb5faa7cc306622a4589df8d7902784044163b132fd7facb6363806a8a16fac",
+          "before_bytes": 8637,
+          "before_sha256": "602c1378895e5400d986b45add793c54b8aa7c7e73d96961722519a952677176",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/ultra/capped_search.go"
+        },
+        {
+          "after_bytes": 8473,
+          "after_sha256": "ba02a1ea229167619a0656c3862d7a6db355f9a4ce6141820318f82226a6592b",
+          "before_bytes": 8575,
+          "before_sha256": "f87a6d7953394cd64d87b9ec2ef68949e49f4495c78d851213080af6183a03ed",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/ultra/sparse.go"
+        },
+        {
+          "after_bytes": 8433,
+          "after_sha256": "18a068d4feedf9390f212a13d34859bdc2d57b9b5d8a82a49631e0f5c35e9f89",
+          "before_bytes": 7617,
+          "before_sha256": "467b568a761fb7e1bbb45da32d54fa1539f9fceca1e6cbb6a7e04d3d71e298ef",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/validate/journey.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 227,
+      "name": "bench-selector",
+      "patch": "patches/14-bench-selector.patch",
+      "patch_bytes": 131200,
+      "patch_sha256": "3c44e17d5f2e26e767bed69684ce55f32040dbacae1adbbb6968c361cb246ede",
+      "projection_sha256": "ff2c29d0e15b51b9953002143515f71d2e7b4f60e47facf6230a6416880b314d",
+      "reconstruction_parent": "bench-noncsa",
+      "runtime_source_sha256": "644deb378bbcf6c4493d70ca12a16dd14744ea33ed7a7fec49befa3a79f5ddfd"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 11453,
+          "after_sha256": "59154866b2028c8b1de928ac4eca8f4b902f113463c9013a0e14b6e12dff2840",
+          "before_bytes": 11453,
+          "before_sha256": "6f3d6679c4e3ab80395d7face6c92868bd9ca61bcbaf9115ff02259a4faea22f",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 18826,
+          "after_sha256": "b23345b9e8899b6275a833f64ca90f8e5bfb743960b7fc9e960a5d8d831d5e56",
+          "before_bytes": 16854,
+          "before_sha256": "71a8561e20c65045c4ec65f008d7b994c441f17621c9d2e64f3ddb2f855db88f",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/bounded.go"
+        },
+        {
+          "after_bytes": 7484,
+          "after_sha256": "e1b97e382426fabeb6babecf9a63ac7761cd6f7de26819806233494f13b9cd46",
+          "before_bytes": 5693,
+          "before_sha256": "47aa14200655b7baafbb0fac53d14be7cf54fbadfae8cadc045e3a3c0a290f36",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/bounded_test.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 227,
+      "name": "bench-selector-hybrid",
+      "patch": "patches/15-bench-selector-hybrid.patch",
+      "patch_bytes": 7884,
+      "patch_sha256": "8576cd2e0be69210661adac4ac902a9b688a6befc5a80977867a4f589f5b6f48",
+      "projection_sha256": "3fe3a1237859b5b07a05b95c896f4f87985cd566f158570d51c42ca1c638ab82",
+      "reconstruction_parent": "bench-selector",
+      "runtime_source_sha256": "0efc459a46ab952644f3a7e828759da15a664485eb7da7c9bf93f908fa4b7bc7"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 1027,
+          "after_sha256": "0f3eaddb8f6d7f65b3a46abecae68c462734b575984778abdce84a91367688a8",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/familybench/local_walk_ties_test.go"
+        },
+        {
+          "after_bytes": 9729,
+          "after_sha256": "f3903f12443d5f4a26a2bdd03a3ef139d4a8e32e03103acc609b2d9d063f78b7",
+          "before_bytes": 8625,
+          "before_sha256": "c9d95e90913a9e205bb83db07a9dda705b3342931995a2591ec34b78fb1f088a",
+          "operation": "modify",
+          "path": "cmd/familybench/scoped.go"
+        },
+        {
+          "after_bytes": 1565,
+          "after_sha256": "eb34773c40a93029d2ffa3de18b50b0c0aba3dd024bea9a8a4b8fc52976ebf6f",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "regression/mcraptor/ultra_local_walk_ties_test.go"
+        },
+        {
+          "after_bytes": 11519,
+          "after_sha256": "32e20b5cd80cc5a3a0b701ff04f1ead6993aa4e6eb7a2203cf504103b4e2c32b",
+          "before_bytes": 11531,
+          "before_sha256": "76fd9ddcf40d08bf235e24f8d8b498d27361cce51c596e82b7c9b591e4a9c3a4",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 10207,
+          "after_sha256": "c6f19c96bde2bf9b9eaa41b3e700552fc38f67d10094fda978055dc5e5f45dda",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/ultra/local_walk_ties.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 227,
+      "name": "bench-noncsa-quality",
+      "patch": "patches/16-bench-noncsa-quality.patch",
+      "patch_bytes": 17743,
+      "patch_sha256": "99b2df3946b3e56ce8620c9680dc773b9dfc95b24685583bb07721ab4105b5f6",
+      "projection_sha256": "f9505a8507b09cb0c9fadc60611b1f1b5d7593fdf8fc9eadf57069bb19b07df2",
+      "reconstruction_parent": "bench-noncsa",
+      "runtime_source_sha256": "cac84833a319bb5dd0260f239eff8b446990a44576c9991120881bcae35d72c4"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 11845,
+          "after_sha256": "225970b9981cc9ced28439d86a7e730d8994975852d473cbc719ebc36ebab43f",
+          "before_bytes": 12088,
+          "before_sha256": "56877ff26ab1334bbaea405854249360838e332f1ab5f93851888e61cfc5ed3c",
+          "operation": "modify",
+          "path": "regression/profilequery/profiles_test.go"
+        },
+        {
+          "after_bytes": 13823,
+          "after_sha256": "739a33722e45e71bf3df6283eeca54b81b1fe8bd6c89df2df190acca66d96cdf",
+          "before_bytes": 11531,
+          "before_sha256": "76fd9ddcf40d08bf235e24f8d8b498d27361cce51c596e82b7c9b591e4a9c3a4",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 42,
+          "after_sha256": "9974b0356fd24da7a600b197652a8bad9922f7b41f3b61dd8281f5043fdb61c6",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/.gitignore"
+        },
+        {
+          "after_bytes": 2561,
+          "after_sha256": "19b7b249815a5071d636936017923987328b2438bee49be347a4cc25193b1433",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/cmd/walkserve/main.go"
+        },
+        {
+          "after_bytes": 56,
+          "after_sha256": "85eef43891c31f75b74f1815609f3abdfce139039ea0262ed269db74892f8ce8",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/go.mod"
+        },
+        {
+          "after_bytes": 8196,
+          "after_sha256": "7ec5ea24bb15492972580f61d326fc299b3665ce5b3aa7857d853610967365fc",
+          "before_bytes": 7044,
+          "before_sha256": "81f63bb9d674bd0e9955b4aa493b1657ed9c8c7992d04c9fc76960ef92805a15",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/range.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 227,
+      "name": "bench-range",
+      "patch": "patches/17-bench-range.patch",
+      "patch_bytes": 17376,
+      "patch_sha256": "9af6cbf3e45dab2e2ff741a6de83bdc77b112f50ff2cef50e6e58b283bd95ced",
+      "projection_sha256": "78978657a605c4b981ff87a3290f47bc38eb3be44ab747bbe2e876f2486d7e6d",
+      "reconstruction_parent": "bench-noncsa",
+      "runtime_source_sha256": "5b8d2be33ea01bd8e80a91e142eae50a8724e8296a8fbd9b9b8717b6fb7ec72a"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 7750,
+          "after_sha256": "4b25111ba3a2d7823c0b857a1e64f1176da511a122bc084d48391507645d0243",
+          "before_bytes": 8439,
+          "before_sha256": "487acca7ba40008912d4b2fd5a0f470d785939adac117f5c7f792f3de15b83a1",
+          "operation": "modify",
+          "path": "cmd/familybench/adapters.go"
+        },
+        {
+          "after_bytes": 25198,
+          "after_sha256": "1de55d3eb455326bef40d5d4c7fc53f4178757551b319e42872dc5eefe3dcd9b",
+          "before_bytes": 24344,
+          "before_sha256": "8d7fa892996bee135e223be14e7db82290f52ffdc4b1cbab4260311318d0891c",
+          "operation": "modify",
+          "path": "cmd/familybench/main.go"
+        },
+        {
+          "after_bytes": null,
+          "after_sha256": null,
+          "before_bytes": 1204,
+          "before_sha256": "7351ed10cbb91afdf22e55a90b96eae52302a02c69c635929f8d80d2616bbee8",
+          "operation": "delete",
+          "path": "regression/mcraptor/local_walk_ties_test.go"
+        },
+        {
+          "after_bytes": 13553,
+          "after_sha256": "b844123285955e80515f4a91b8d1b1fb5d0f1afc03f85700f507470b54e4ed7c",
+          "before_bytes": 11531,
+          "before_sha256": "76fd9ddcf40d08bf235e24f8d8b498d27361cce51c596e82b7c9b591e4a9c3a4",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 42,
+          "after_sha256": "9974b0356fd24da7a600b197652a8bad9922f7b41f3b61dd8281f5043fdb61c6",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/.gitignore"
+        },
+        {
+          "after_bytes": 2561,
+          "after_sha256": "19b7b249815a5071d636936017923987328b2438bee49be347a4cc25193b1433",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/cmd/walkserve/main.go"
+        },
+        {
+          "after_bytes": 56,
+          "after_sha256": "85eef43891c31f75b74f1815609f3abdfce139039ea0262ed269db74892f8ce8",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/go.mod"
+        },
+        {
+          "after_bytes": null,
+          "after_sha256": null,
+          "before_bytes": 1218,
+          "before_sha256": "70dbf5f5133e7939beac7dd12e1dbd90b14200d9295f2f7e6740496c5b828241",
+          "operation": "delete",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/paper/node_arena.go"
+        },
+        {
+          "after_bytes": 1885,
+          "after_sha256": "59e0d8149cd8948d5a29e87d770971947f49e971f30899e604d3ed3b7e3ba827",
+          "before_bytes": 2304,
+          "before_sha256": "6607b6be2ce94ef6ec22348d04ca03fa85a1917ad4dc5694f5636bde87ec2c8b",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/indexed_walks.go"
+        },
+        {
+          "after_bytes": null,
+          "after_sha256": null,
+          "before_bytes": 6352,
+          "before_sha256": "a421d1457d7d960d835420783bc859a1d4186c5a01d146f965996e6569e1f9ff",
+          "operation": "delete",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/local_walk_ties.go"
+        },
+        {
+          "after_bytes": 9310,
+          "after_sha256": "31a9d899fdfa9c03a8d2dd05512a1676074d9b639196eb1543a03fce6937989b",
+          "before_bytes": 9603,
+          "before_sha256": "7bcb4922d0b4bee980a2be58181d1017119a10e1d0e5e7a7e961c4f7a75a9ea0",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/multicriteria.go"
+        },
+        {
+          "after_bytes": 8382,
+          "after_sha256": "bec19d510d5cd339f5d3314e62c828cfccf380fc8d0e7430301e45e9ef734f07",
+          "before_bytes": 8706,
+          "before_sha256": "85e8bb804971f1768910952bbe1c9a59928061b54acd64eaed8288f9ddc26d75",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/raptor.go"
+        },
+        {
+          "after_bytes": 743,
+          "after_sha256": "3319c9839c727e512d7eef37a5d078c4c4438769dc7254622bac040bdf535a70",
+          "before_bytes": 1348,
+          "before_sha256": "1f86bcfbed13072e69aa7fb04783d1fd916e824e697956bfdf7c128cbdcfa55a",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/round_queue.go"
+        },
+        {
+          "after_bytes": 16148,
+          "after_sha256": "790b7ce92915f742208057440e5a8864fa7ec74602d440b5c95601cc5ba390f2",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/bounded.go"
+        },
+        {
+          "after_bytes": 11371,
+          "after_sha256": "ae61c9819d9b00679c7fcae1836b1570be84612e2f6ea2b25d8ceebc6522ad25",
+          "before_bytes": 10165,
+          "before_sha256": "f92dc795483533d0c7d1bbfeecff3c56a8b9e516d30c85cfc48a92c515a9e8d2",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/choices.go"
+        },
+        {
+          "after_bytes": 2695,
+          "after_sha256": "9db7855a5cea9469e039fe8bfa5c543df8d0183d9cd3c5bb57b453b75b6a5927",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/lean.go"
+        },
+        {
+          "after_bytes": 12325,
+          "after_sha256": "fcb35c8914345f9eebbbf78cb0bf18df19f0e5d1dc7054833d7f9ca90f9bd8fe",
+          "before_bytes": 10693,
+          "before_sha256": "0305ce81032f25cb01a721a7567330d8339babbcebdf889ad61404b35e70d627",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/quality.go"
+        },
+        {
+          "after_bytes": 14702,
+          "after_sha256": "c05ebc389999a70546748f2e9aadd415e92b2af2b57b117ef8a6ab866acd5c9e",
+          "before_bytes": 14746,
+          "before_sha256": "d961cf22818d4a30a471313267c4b6123dcf9f8b025dde118889f9e0c309ef50",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_retained.go"
+        },
+        {
+          "after_bytes": null,
+          "after_sha256": null,
+          "before_bytes": 3120,
+          "before_sha256": "85f66d312381ee13a9a8617e85edd664c4fc3351e6961304e1a3f2cfc251fc09",
+          "operation": "delete",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/compact_links.go"
+        },
+        {
+          "after_bytes": 19517,
+          "after_sha256": "1ea53260bdf2dedb271f269c738b271895aeb389a0275917c17923ed7ef5829b",
+          "before_bytes": 19531,
+          "before_sha256": "4888ff851c113d1ba9378166601bdf53accab7de1171428125dbac3d7ffaf7d0",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash.go"
+        },
+        {
+          "after_bytes": 9226,
+          "after_sha256": "6b5d85fb4b14390529ef2a01d1c91ed5a2c7d39c7957834286d79cbe7e75acab",
+          "before_bytes": 9271,
+          "before_sha256": "69a2a37340fe46c29ea70645b7e68457000bc73a1e9a806f9173be10d0c7fd5b",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_profile.go"
+        },
+        {
+          "after_bytes": 8898,
+          "after_sha256": "e65439c050357c31fc7b00b974b16e9fe488a9380d56779efb089e3de59655d3",
+          "before_bytes": 8942,
+          "before_sha256": "217ab3ffdcc071e44e3499fae1049fd0149132211f4fda60e6bd57a7fd5a95a8",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_retained.go"
+        },
+        {
+          "after_bytes": 9716,
+          "after_sha256": "1d0e6061c3cfafc2c7a2cbc1bdca5854ca77e03b3cd43b754c6dd502f53ad80e",
+          "before_bytes": 9931,
+          "before_sha256": "ee3eced244a67a3e9f5007c16272a395c06f4da4bf830e936fe1b94dd9d063bc",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_rules.go"
+        },
+        {
+          "after_bytes": 6721,
+          "after_sha256": "fd36b6c2e2259448928383ce8e7efb403027c980880770f7f9eaf97decd1c06e",
+          "before_bytes": 6848,
+          "before_sha256": "f504d676424c3733c5a03c00eb1b929afa9ee3c13df8ddb988d9ed9efced1205",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_transfers.go"
+        },
+        {
+          "after_bytes": 7871,
+          "after_sha256": "cf39823376309fb08f5c091caeeb95a79aca06316738673c49db1e76d9ac28e5",
+          "before_bytes": 8013,
+          "before_sha256": "b0503beb184bf7e89f4b8ac16b6e9d427fafe809b348016c993b29930e12e607",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/index.go"
+        },
+        {
+          "after_bytes": 8062,
+          "after_sha256": "b85fd359a5362825de485da9015fcab9a08a361f9913eac749402f330284c91b",
+          "before_bytes": 8103,
+          "before_sha256": "454c9313f2b02518d4542857e74b7077ad25ce4de32a4944e1d0a1ab1e937cc3",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/query.go"
+        },
+        {
+          "after_bytes": 1331,
+          "after_sha256": "d6c0b99c764e6603598bec90088e10466bf9943802a2b2180e7a2d5e3e005190",
+          "before_bytes": 1359,
+          "before_sha256": "5c3fff927b5143a367f5129e59701be4e2e9fe11e511a659c7e7078c12586c34",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/transfer_storage.go"
+        },
+        {
+          "after_bytes": 8632,
+          "after_sha256": "d1faea97db872ab8d89ec08de66f08b916f4809a85193c5e48b1311232581f27",
+          "before_bytes": 8637,
+          "before_sha256": "602c1378895e5400d986b45add793c54b8aa7c7e73d96961722519a952677176",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/ultra/capped_search.go"
+        },
+        {
+          "after_bytes": 8433,
+          "after_sha256": "18a068d4feedf9390f212a13d34859bdc2d57b9b5d8a82a49631e0f5c35e9f89",
+          "before_bytes": 7617,
+          "before_sha256": "467b568a761fb7e1bbb45da32d54fa1539f9fceca1e6cbb6a7e04d3d71e298ef",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/validate/journey.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 225,
+      "name": "bench-v2-control",
+      "patch": "patches/18-bench-v2-control.patch",
+      "patch_bytes": 80750,
+      "patch_sha256": "3078499ba01551bbf20115624204b82bbb9d9b8c3b7ec626d069ea2074f27fd0",
+      "projection_sha256": "88689492f87bd9527003664603747c2228c270ede213dca24dc7c36f12fc1094",
+      "reconstruction_parent": "bench-noncsa",
+      "runtime_source_sha256": "d208fdf4953b478d6266d8442b45eede96a4515adc7942a8fa049b401a5308bf"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 25198,
+          "after_sha256": "1de55d3eb455326bef40d5d4c7fc53f4178757551b319e42872dc5eefe3dcd9b",
+          "before_bytes": 24344,
+          "before_sha256": "8d7fa892996bee135e223be14e7db82290f52ffdc4b1cbab4260311318d0891c",
+          "operation": "modify",
+          "path": "cmd/familybench/main.go"
+        },
+        {
+          "after_bytes": 13851,
+          "after_sha256": "4528f745b810a41c4d82ba3139453cc8ed81feea53c4f1a870a6458e5cd8f04f",
+          "before_bytes": 11531,
+          "before_sha256": "76fd9ddcf40d08bf235e24f8d8b498d27361cce51c596e82b7c9b591e4a9c3a4",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 42,
+          "after_sha256": "9974b0356fd24da7a600b197652a8bad9922f7b41f3b61dd8281f5043fdb61c6",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/.gitignore"
+        },
+        {
+          "after_bytes": 2561,
+          "after_sha256": "19b7b249815a5071d636936017923987328b2438bee49be347a4cc25193b1433",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/cmd/walkserve/main.go"
+        },
+        {
+          "after_bytes": 56,
+          "after_sha256": "85eef43891c31f75b74f1815609f3abdfce139039ea0262ed269db74892f8ce8",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/go.mod"
+        },
+        {
+          "after_bytes": 16148,
+          "after_sha256": "790b7ce92915f742208057440e5a8864fa7ec74602d440b5c95601cc5ba390f2",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/bounded.go"
+        },
+        {
+          "after_bytes": 11371,
+          "after_sha256": "ae61c9819d9b00679c7fcae1836b1570be84612e2f6ea2b25d8ceebc6522ad25",
+          "before_bytes": 10165,
+          "before_sha256": "f92dc795483533d0c7d1bbfeecff3c56a8b9e516d30c85cfc48a92c515a9e8d2",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/choices.go"
+        },
+        {
+          "after_bytes": 2695,
+          "after_sha256": "9db7855a5cea9469e039fe8bfa5c543df8d0183d9cd3c5bb57b453b75b6a5927",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/lean.go"
+        },
+        {
+          "after_bytes": 12325,
+          "after_sha256": "fcb35c8914345f9eebbbf78cb0bf18df19f0e5d1dc7054833d7f9ca90f9bd8fe",
+          "before_bytes": 10693,
+          "before_sha256": "0305ce81032f25cb01a721a7567330d8339babbcebdf889ad61404b35e70d627",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/quality.go"
+        },
+        {
+          "after_bytes": 8433,
+          "after_sha256": "18a068d4feedf9390f212a13d34859bdc2d57b9b5d8a82a49631e0f5c35e9f89",
+          "before_bytes": 7617,
+          "before_sha256": "467b568a761fb7e1bbb45da32d54fa1539f9fceca1e6cbb6a7e04d3d71e298ef",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/validate/journey.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 229,
+      "name": "bench-v2-storage",
+      "patch": "patches/19-bench-v2-storage.patch",
+      "patch_bytes": 44743,
+      "patch_sha256": "38f653b22ea3eded4967876e29511663769734a610b8aebfe50f7f2c25a64fc5",
+      "projection_sha256": "01bb6e52e487c204840b597a473e72b0ea4b343a04bdc746dd97f3f65610c9f3",
+      "reconstruction_parent": "bench-noncsa",
+      "runtime_source_sha256": "f9dfc93f191151c7bc788bc8f66b62a8930d788e1583a9789c647ce51f8834e9"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 25198,
+          "after_sha256": "1de55d3eb455326bef40d5d4c7fc53f4178757551b319e42872dc5eefe3dcd9b",
+          "before_bytes": 24344,
+          "before_sha256": "8d7fa892996bee135e223be14e7db82290f52ffdc4b1cbab4260311318d0891c",
+          "operation": "modify",
+          "path": "cmd/familybench/main.go"
+        },
+        {
+          "after_bytes": 13848,
+          "after_sha256": "54136c002d176eb960a84850c9d94ca6f1bcefe2255dd2e0cc66f7019034c6b4",
+          "before_bytes": 11531,
+          "before_sha256": "76fd9ddcf40d08bf235e24f8d8b498d27361cce51c596e82b7c9b591e4a9c3a4",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 42,
+          "after_sha256": "9974b0356fd24da7a600b197652a8bad9922f7b41f3b61dd8281f5043fdb61c6",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/.gitignore"
+        },
+        {
+          "after_bytes": 2561,
+          "after_sha256": "19b7b249815a5071d636936017923987328b2438bee49be347a4cc25193b1433",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/cmd/walkserve/main.go"
+        },
+        {
+          "after_bytes": 56,
+          "after_sha256": "85eef43891c31f75b74f1815609f3abdfce139039ea0262ed269db74892f8ce8",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/go.mod"
+        },
+        {
+          "after_bytes": 6400,
+          "after_sha256": "3bd6840176ae90241579a428899818fb03ff9272d9d0e01d609231e9d7202fd0",
+          "before_bytes": 6352,
+          "before_sha256": "a421d1457d7d960d835420783bc859a1d4186c5a01d146f965996e6569e1f9ff",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/local_walk_ties.go"
+        },
+        {
+          "after_bytes": 9644,
+          "after_sha256": "7d3798453682a02d679ca736d7f20d5f6387dd97a44fe616a4701fa1f64fd54d",
+          "before_bytes": 9603,
+          "before_sha256": "7bcb4922d0b4bee980a2be58181d1017119a10e1d0e5e7a7e961c4f7a75a9ea0",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/multicriteria.go"
+        },
+        {
+          "after_bytes": 8754,
+          "after_sha256": "995ac45d2e91790ea9aea8b317731983eb484868ef43ea22ccc5740ee43acddc",
+          "before_bytes": 8706,
+          "before_sha256": "85e8bb804971f1768910952bbe1c9a59928061b54acd64eaed8288f9ddc26d75",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/raptor.go"
+        },
+        {
+          "after_bytes": 16148,
+          "after_sha256": "790b7ce92915f742208057440e5a8864fa7ec74602d440b5c95601cc5ba390f2",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/bounded.go"
+        },
+        {
+          "after_bytes": 11371,
+          "after_sha256": "ae61c9819d9b00679c7fcae1836b1570be84612e2f6ea2b25d8ceebc6522ad25",
+          "before_bytes": 10165,
+          "before_sha256": "f92dc795483533d0c7d1bbfeecff3c56a8b9e516d30c85cfc48a92c515a9e8d2",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/choices.go"
+        },
+        {
+          "after_bytes": 2695,
+          "after_sha256": "9db7855a5cea9469e039fe8bfa5c543df8d0183d9cd3c5bb57b453b75b6a5927",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/lean.go"
+        },
+        {
+          "after_bytes": 12325,
+          "after_sha256": "fcb35c8914345f9eebbbf78cb0bf18df19f0e5d1dc7054833d7f9ca90f9bd8fe",
+          "before_bytes": 10693,
+          "before_sha256": "0305ce81032f25cb01a721a7567330d8339babbcebdf889ad61404b35e70d627",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/quality.go"
+        },
+        {
+          "after_bytes": 8686,
+          "after_sha256": "5f569ff3205fb691eb6f9d17f7aad5facd10923d6363470596d6771d4cae51bb",
+          "before_bytes": 8637,
+          "before_sha256": "602c1378895e5400d986b45add793c54b8aa7c7e73d96961722519a952677176",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/ultra/capped_search.go"
+        },
+        {
+          "after_bytes": 8433,
+          "after_sha256": "18a068d4feedf9390f212a13d34859bdc2d57b9b5d8a82a49631e0f5c35e9f89",
+          "before_bytes": 7617,
+          "before_sha256": "467b568a761fb7e1bbb45da32d54fa1539f9fceca1e6cbb6a7e04d3d71e298ef",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/validate/journey.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 229,
+      "name": "bench-v2-slab",
+      "patch": "patches/20-bench-v2-slab.patch",
+      "patch_bytes": 52439,
+      "patch_sha256": "0674d69829bf6ebe7a8800f53f95de026592815a92fc7102fa16c2dc3c211f38",
+      "projection_sha256": "82e6d2d1b7217907d339b9ce0a0aecddcb74aca7201811168f8177f2ed8b48d6",
+      "reconstruction_parent": "bench-noncsa",
+      "runtime_source_sha256": "f011a4af7dc952dccb68bd257cf0978fe204e24b6792e872a1a6370a7cc53e2c"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 1027,
+          "after_sha256": "0f3eaddb8f6d7f65b3a46abecae68c462734b575984778abdce84a91367688a8",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/familybench/local_walk_ties_test.go"
+        },
+        {
+          "after_bytes": 9729,
+          "after_sha256": "f3903f12443d5f4a26a2bdd03a3ef139d4a8e32e03103acc609b2d9d063f78b7",
+          "before_bytes": 8625,
+          "before_sha256": "c9d95e90913a9e205bb83db07a9dda705b3342931995a2591ec34b78fb1f088a",
+          "operation": "modify",
+          "path": "cmd/familybench/scoped.go"
+        },
+        {
+          "after_bytes": 1565,
+          "after_sha256": "eb34773c40a93029d2ffa3de18b50b0c0aba3dd024bea9a8a4b8fc52976ebf6f",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "regression/mcraptor/ultra_local_walk_ties_test.go"
+        },
+        {
+          "after_bytes": 13951,
+          "after_sha256": "9f25a470acd5cd30f7dd32c1cb3a3d19831fcb23ca8c12e239f0998386381d3d",
+          "before_bytes": 13851,
+          "before_sha256": "4528f745b810a41c4d82ba3139453cc8ed81feea53c4f1a870a6458e5cd8f04f",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 18826,
+          "after_sha256": "b23345b9e8899b6275a833f64ca90f8e5bfb743960b7fc9e960a5d8d831d5e56",
+          "before_bytes": 16148,
+          "before_sha256": "790b7ce92915f742208057440e5a8864fa7ec74602d440b5c95601cc5ba390f2",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/bounded.go"
+        },
+        {
+          "after_bytes": 11659,
+          "after_sha256": "d1da5b3416d843dc9e9f3bd303c19529386251856eca728c07222365d71952ff",
+          "before_bytes": 11371,
+          "before_sha256": "ae61c9819d9b00679c7fcae1836b1570be84612e2f6ea2b25d8ceebc6522ad25",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/choices.go"
+        },
+        {
+          "after_bytes": 10207,
+          "after_sha256": "c6f19c96bde2bf9b9eaa41b3e700552fc38f67d10094fda978055dc5e5f45dda",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/ultra/local_walk_ties.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 232,
+      "name": "bench-v2-quality",
+      "patch": "patches/21-bench-v2-quality.patch",
+      "patch_bytes": 26838,
+      "patch_sha256": "e349cea334ae18f648f808184b10e107e77ebe4ca0c9167150b94d045fea73a2",
+      "projection_sha256": "e686b39fa6648ff791ebd97379ca95f3d15adddffdc8591a5232b9e49337994c",
+      "reconstruction_parent": "bench-v2-storage",
+      "runtime_source_sha256": "b60e66f73113e8b2c3928febc6f552fc691a9cc8eda1980cc1934b9c7944e6cf"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 2099,
+          "after_sha256": "b444970fe3d707bd7267ff0d83e64ba9a942a089f41ee190f6d789938491aeac",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/corechgraphbench/audit.go"
+        },
+        {
+          "after_bytes": 9871,
+          "after_sha256": "6e52bd66c500b41905cfc1734c087f1615333bd4c855836794a27f687c904a95",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/corechgraphbench/audit_test.go"
+        },
+        {
+          "after_bytes": 22989,
+          "after_sha256": "5f1790735ed3b49048d819fd5fc6bdee204721a80a63c631337c1ca3a47eb62f",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/corechgraphbench/main.go"
+        },
+        {
+          "after_bytes": 23201,
+          "after_sha256": "dadb25019b65225eb74486b34aef2ee2c9f85efd6c02534b9abbaaebc96341e7",
+          "before_bytes": 25198,
+          "before_sha256": "1de55d3eb455326bef40d5d4c7fc53f4178757551b319e42872dc5eefe3dcd9b",
+          "operation": "modify",
+          "path": "cmd/familybench/main.go"
+        },
+        {
+          "after_bytes": null,
+          "after_sha256": null,
+          "before_bytes": 3670,
+          "before_sha256": "ca7a3f911ef4f979df65e1af34cdf3172fe4391648501238c4d5e031ced97c26",
+          "operation": "delete",
+          "path": "cmd/familybench/stream.go"
+        },
+        {
+          "after_bytes": null,
+          "after_sha256": null,
+          "before_bytes": 5818,
+          "before_sha256": "6664c846d36f5c6b355661aa1db9b6ad46d1385a6ca9307b853854256e2a1b09",
+          "operation": "delete",
+          "path": "cmd/familybench/stream_test.go"
+        },
+        {
+          "after_bytes": 15568,
+          "after_sha256": "e4ec3c844d17aff8af6123689003f28de58b20a0019d80a5bc15d833c5049195",
+          "before_bytes": 14258,
+          "before_sha256": "96847b3062f5d428f24a56ac8cbf0263dedae2ad59743c908db98f5958d5c2e2",
+          "operation": "modify",
+          "path": "cmd/profilebench/main.go"
+        },
+        {
+          "after_bytes": 1358,
+          "after_sha256": "1839dabd9b171bca0d10a12080073746aa83e4eab25c0815556670574673c44c",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/profilebench/point_input.go"
+        },
+        {
+          "after_bytes": 1135,
+          "after_sha256": "cd7f3d69a54a2afd57d5de08f9d47c01ac90d37b97d99410cbec7f79530799b3",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/profilebench/point_input_test.go"
+        },
+        {
+          "after_bytes": 14136,
+          "after_sha256": "dadb9c03ee91367ea8a7c7c1a061fcb73e820d40894dcda0f3eb8f3944efb138",
+          "before_bytes": 13294,
+          "before_sha256": "0fb3c50a02a1aa5b259528e907e05768b63875d60f5c838913dfd66541d7a405",
+          "operation": "modify",
+          "path": "cmd/tadbench/main.go"
+        },
+        {
+          "after_bytes": 13362,
+          "after_sha256": "12a7a3ce569af4e2b9beeb85ecbfe0ac2571ce2f95134e6563517fcf82f56858",
+          "before_bytes": 13553,
+          "before_sha256": "b844123285955e80515f4a91b8d1b1fb5d0f1afc03f85700f507470b54e4ed7c",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 812,
+          "after_sha256": "4412aab7e9161a19f3cff63c29006802b6b7e40cec49262ff78d33e451951668",
+          "before_bytes": 795,
+          "before_sha256": "10e6b0bc1e73443e66c4975fe839d456c5e0d459bdebd28b0d15a1736259a25a",
+          "operation": "modify",
+          "path": "scripts/build.sh"
+        },
+        {
+          "after_bytes": null,
+          "after_sha256": null,
+          "before_bytes": 16148,
+          "before_sha256": "790b7ce92915f742208057440e5a8864fa7ec74602d440b5c95601cc5ba390f2",
+          "operation": "delete",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/bounded.go"
+        },
+        {
+          "after_bytes": 10165,
+          "after_sha256": "f92dc795483533d0c7d1bbfeecff3c56a8b9e516d30c85cfc48a92c515a9e8d2",
+          "before_bytes": 11371,
+          "before_sha256": "ae61c9819d9b00679c7fcae1836b1570be84612e2f6ea2b25d8ceebc6522ad25",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/choices.go"
+        },
+        {
+          "after_bytes": null,
+          "after_sha256": null,
+          "before_bytes": 2695,
+          "before_sha256": "9db7855a5cea9469e039fe8bfa5c543df8d0183d9cd3c5bb57b453b75b6a5927",
+          "operation": "delete",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/lean.go"
+        },
+        {
+          "after_bytes": 10693,
+          "after_sha256": "0305ce81032f25cb01a721a7567330d8339babbcebdf889ad61404b35e70d627",
+          "before_bytes": 12325,
+          "before_sha256": "fcb35c8914345f9eebbbf78cb0bf18df19f0e5d1dc7054833d7f9ca90f9bd8fe",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/quality.go"
+        },
+        {
+          "after_bytes": 7617,
+          "after_sha256": "467b568a761fb7e1bbb45da32d54fa1539f9fceca1e6cbb6a7e04d3d71e298ef",
+          "before_bytes": 8433,
+          "before_sha256": "18a068d4feedf9390f212a13d34859bdc2d57b9b5d8a82a49631e0f5c35e9f89",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/validate/journey.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 226,
+      "name": "bench-v2-aux-control",
+      "patch": "patches/22-bench-v2-aux-control.patch",
+      "patch_bytes": 106951,
+      "patch_sha256": "3bf7df231bdd2332869e33df647d1546fd0fc7d5457d28e12466d580e36f6a56",
+      "projection_sha256": "10b7aaaa09593deff25f0ad7d7c7f664aea3fe5dc7d61455ab9fec0b7744f59f",
+      "reconstruction_parent": "bench-v2-control",
+      "runtime_source_sha256": "2453afc5a945f510c09a9ad6a2566f673303b807d9fef75ef90630fe8bb9dcdf"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 13658,
+          "after_sha256": "05c94550ea7b5bb39e58c44bc70b98af1ad57b31cc5433a5a8087d5822008f70",
+          "before_bytes": 13362,
+          "before_sha256": "12a7a3ce569af4e2b9beeb85ecbfe0ac2571ce2f95134e6563517fcf82f56858",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 1218,
+          "after_sha256": "70dbf5f5133e7939beac7dd12e1dbd90b14200d9295f2f7e6740496c5b828241",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/paper/node_arena.go"
+        },
+        {
+          "after_bytes": 2304,
+          "after_sha256": "6607b6be2ce94ef6ec22348d04ca03fa85a1917ad4dc5694f5636bde87ec2c8b",
+          "before_bytes": 1885,
+          "before_sha256": "59e0d8149cd8948d5a29e87d770971947f49e971f30899e604d3ed3b7e3ba827",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/indexed_walks.go"
+        },
+        {
+          "after_bytes": 6352,
+          "after_sha256": "a421d1457d7d960d835420783bc859a1d4186c5a01d146f965996e6569e1f9ff",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/local_walk_ties.go"
+        },
+        {
+          "after_bytes": 9603,
+          "after_sha256": "7bcb4922d0b4bee980a2be58181d1017119a10e1d0e5e7a7e961c4f7a75a9ea0",
+          "before_bytes": 9310,
+          "before_sha256": "31a9d899fdfa9c03a8d2dd05512a1676074d9b639196eb1543a03fce6937989b",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/multicriteria.go"
+        },
+        {
+          "after_bytes": 8196,
+          "after_sha256": "7ec5ea24bb15492972580f61d326fc299b3665ce5b3aa7857d853610967365fc",
+          "before_bytes": 7044,
+          "before_sha256": "81f63bb9d674bd0e9955b4aa493b1657ed9c8c7992d04c9fc76960ef92805a15",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/range.go"
+        },
+        {
+          "after_bytes": 8706,
+          "after_sha256": "85e8bb804971f1768910952bbe1c9a59928061b54acd64eaed8288f9ddc26d75",
+          "before_bytes": 8382,
+          "before_sha256": "bec19d510d5cd339f5d3314e62c828cfccf380fc8d0e7430301e45e9ef734f07",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/raptor.go"
+        },
+        {
+          "after_bytes": 1348,
+          "after_sha256": "1f86bcfbed13072e69aa7fb04783d1fd916e824e697956bfdf7c128cbdcfa55a",
+          "before_bytes": 743,
+          "before_sha256": "3319c9839c727e512d7eef37a5d078c4c4438769dc7254622bac040bdf535a70",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/round_queue.go"
+        },
+        {
+          "after_bytes": 14746,
+          "after_sha256": "d961cf22818d4a30a471313267c4b6123dcf9f8b025dde118889f9e0c309ef50",
+          "before_bytes": 14702,
+          "before_sha256": "c05ebc389999a70546748f2e9aadd415e92b2af2b57b117ef8a6ab866acd5c9e",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_retained.go"
+        },
+        {
+          "after_bytes": 3120,
+          "after_sha256": "85f66d312381ee13a9a8617e85edd664c4fc3351e6961304e1a3f2cfc251fc09",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/compact_links.go"
+        },
+        {
+          "after_bytes": 19531,
+          "after_sha256": "4888ff851c113d1ba9378166601bdf53accab7de1171428125dbac3d7ffaf7d0",
+          "before_bytes": 19517,
+          "before_sha256": "1ea53260bdf2dedb271f269c738b271895aeb389a0275917c17923ed7ef5829b",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash.go"
+        },
+        {
+          "after_bytes": 9271,
+          "after_sha256": "69a2a37340fe46c29ea70645b7e68457000bc73a1e9a806f9173be10d0c7fd5b",
+          "before_bytes": 9226,
+          "before_sha256": "6b5d85fb4b14390529ef2a01d1c91ed5a2c7d39c7957834286d79cbe7e75acab",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_profile.go"
+        },
+        {
+          "after_bytes": 8942,
+          "after_sha256": "217ab3ffdcc071e44e3499fae1049fd0149132211f4fda60e6bd57a7fd5a95a8",
+          "before_bytes": 8898,
+          "before_sha256": "e65439c050357c31fc7b00b974b16e9fe488a9380d56779efb089e3de59655d3",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_retained.go"
+        },
+        {
+          "after_bytes": 9931,
+          "after_sha256": "ee3eced244a67a3e9f5007c16272a395c06f4da4bf830e936fe1b94dd9d063bc",
+          "before_bytes": 9716,
+          "before_sha256": "1d0e6061c3cfafc2c7a2cbc1bdca5854ca77e03b3cd43b754c6dd502f53ad80e",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_rules.go"
+        },
+        {
+          "after_bytes": 6848,
+          "after_sha256": "f504d676424c3733c5a03c00eb1b929afa9ee3c13df8ddb988d9ed9efced1205",
+          "before_bytes": 6721,
+          "before_sha256": "fd36b6c2e2259448928383ce8e7efb403027c980880770f7f9eaf97decd1c06e",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_transfers.go"
+        },
+        {
+          "after_bytes": 8013,
+          "after_sha256": "b0503beb184bf7e89f4b8ac16b6e9d427fafe809b348016c993b29930e12e607",
+          "before_bytes": 7871,
+          "before_sha256": "cf39823376309fb08f5c091caeeb95a79aca06316738673c49db1e76d9ac28e5",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/index.go"
+        },
+        {
+          "after_bytes": 8103,
+          "after_sha256": "454c9313f2b02518d4542857e74b7077ad25ce4de32a4944e1d0a1ab1e937cc3",
+          "before_bytes": 8062,
+          "before_sha256": "b85fd359a5362825de485da9015fcab9a08a361f9913eac749402f330284c91b",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/query.go"
+        },
+        {
+          "after_bytes": 1359,
+          "after_sha256": "5c3fff927b5143a367f5129e59701be4e2e9fe11e511a659c7e7078c12586c34",
+          "before_bytes": 1331,
+          "before_sha256": "d6c0b99c764e6603598bec90088e10466bf9943802a2b2180e7a2d5e3e005190",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/transfer_storage.go"
+        },
+        {
+          "after_bytes": 8637,
+          "after_sha256": "602c1378895e5400d986b45add793c54b8aa7c7e73d96961722519a952677176",
+          "before_bytes": 8632,
+          "before_sha256": "d1faea97db872ab8d89ec08de66f08b916f4809a85193c5e48b1311232581f27",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/ultra/capped_search.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 229,
+      "name": "bench-v2-aux-range",
+      "patch": "patches/23-bench-v2-aux-range.patch",
+      "patch_bytes": 41927,
+      "patch_sha256": "cec097b6662450639ab02f14dfb72ebde588698b2f1440bb05e3dcf22487176d",
+      "projection_sha256": "5aa67a3b839192420dba86ee71f7abb3b4e5d64edd2168da9e1be28d0a52a9f3",
+      "reconstruction_parent": "bench-v2-aux-control",
+      "runtime_source_sha256": "2a9110f3572edc3e82f94ac5343711d153ed5f90af8d54cca8be424017045cd4"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 25375,
+          "after_sha256": "fdafe4dead6adb133be925bb2940c069e9200249425ae6e500ecb316d754e3eb",
+          "before_bytes": 25198,
+          "before_sha256": "1de55d3eb455326bef40d5d4c7fc53f4178757551b319e42872dc5eefe3dcd9b",
+          "operation": "modify",
+          "path": "cmd/familybench/main.go"
+        },
+        {
+          "after_bytes": 8262,
+          "after_sha256": "8304e8e97caa99818aaebd558033e0f929181cdb33d9be14cedf7303ac6c8555",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/inputpreflight/config.go"
+        },
+        {
+          "after_bytes": 7437,
+          "after_sha256": "43fa2bce257ae0894f7457c035a2cef6ac6208870bae7daa2437c97e4f654600",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/inputpreflight/main.go"
+        },
+        {
+          "after_bytes": 4071,
+          "after_sha256": "b7156f7bb2342b81745d9aae201197efd39e87e0cfae451cf6a74de8f14b6dc4",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/inputpreflight/main_test.go"
+        },
+        {
+          "after_bytes": 14413,
+          "after_sha256": "e95586aceae4ef8f1b4b651d4af10caebb6361816d2b883d388f8b109e379388",
+          "before_bytes": 14258,
+          "before_sha256": "96847b3062f5d428f24a56ac8cbf0263dedae2ad59743c908db98f5958d5c2e2",
+          "operation": "modify",
+          "path": "cmd/profilebench/main.go"
+        },
+        {
+          "after_bytes": 13449,
+          "after_sha256": "846e3e32d1d42adc65243312c45b81f548b1267406833a8e7b7cbc976cb97b0a",
+          "before_bytes": 13294,
+          "before_sha256": "0fb3c50a02a1aa5b259528e907e05768b63875d60f5c838913dfd66541d7a405",
+          "operation": "modify",
+          "path": "cmd/tadbench/main.go"
+        },
+        {
+          "after_bytes": 4449,
+          "after_sha256": "0bb6703aab00b0f2a9db52510bd76211a5d0c051e8b7b800cd52f3ad73a9acef",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "workloadseed/seed.go"
+        },
+        {
+          "after_bytes": 2625,
+          "after_sha256": "be25761dd3c086747e810a84ce2c7979dd6231c1b467ecb016db89db21e08ba1",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "workloadseed/seed_test.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 230,
+      "name": "bench-v3-control",
+      "patch": "patches/24-bench-v3-control.patch",
+      "patch_bytes": 41958,
+      "patch_sha256": "ee6b5ec223d4202f4a1599ea28fbafaaedd790582e171c23930f81a54a925d92",
+      "projection_sha256": "7a87f198f99c88dd7123252bf8cce4d01d3743e403b8e458940f3b7c1af748fc",
+      "reconstruction_parent": "bench-v2-control",
+      "runtime_source_sha256": "05a41ecd0b4687e83b57d8a548835137c2d049755815dcbef01bb92590a17800"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 25375,
+          "after_sha256": "fdafe4dead6adb133be925bb2940c069e9200249425ae6e500ecb316d754e3eb",
+          "before_bytes": 25198,
+          "before_sha256": "1de55d3eb455326bef40d5d4c7fc53f4178757551b319e42872dc5eefe3dcd9b",
+          "operation": "modify",
+          "path": "cmd/familybench/main.go"
+        },
+        {
+          "after_bytes": 8262,
+          "after_sha256": "8304e8e97caa99818aaebd558033e0f929181cdb33d9be14cedf7303ac6c8555",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/inputpreflight/config.go"
+        },
+        {
+          "after_bytes": 7437,
+          "after_sha256": "43fa2bce257ae0894f7457c035a2cef6ac6208870bae7daa2437c97e4f654600",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/inputpreflight/main.go"
+        },
+        {
+          "after_bytes": 4071,
+          "after_sha256": "b7156f7bb2342b81745d9aae201197efd39e87e0cfae451cf6a74de8f14b6dc4",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/inputpreflight/main_test.go"
+        },
+        {
+          "after_bytes": 14413,
+          "after_sha256": "e95586aceae4ef8f1b4b651d4af10caebb6361816d2b883d388f8b109e379388",
+          "before_bytes": 14258,
+          "before_sha256": "96847b3062f5d428f24a56ac8cbf0263dedae2ad59743c908db98f5958d5c2e2",
+          "operation": "modify",
+          "path": "cmd/profilebench/main.go"
+        },
+        {
+          "after_bytes": 13449,
+          "after_sha256": "846e3e32d1d42adc65243312c45b81f548b1267406833a8e7b7cbc976cb97b0a",
+          "before_bytes": 13294,
+          "before_sha256": "0fb3c50a02a1aa5b259528e907e05768b63875d60f5c838913dfd66541d7a405",
+          "operation": "modify",
+          "path": "cmd/tadbench/main.go"
+        },
+        {
+          "after_bytes": 4449,
+          "after_sha256": "0bb6703aab00b0f2a9db52510bd76211a5d0c051e8b7b800cd52f3ad73a9acef",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "workloadseed/seed.go"
+        },
+        {
+          "after_bytes": 2625,
+          "after_sha256": "be25761dd3c086747e810a84ce2c7979dd6231c1b467ecb016db89db21e08ba1",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "workloadseed/seed_test.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 234,
+      "name": "bench-v3-storage",
+      "patch": "patches/25-bench-v3-storage.patch",
+      "patch_bytes": 41958,
+      "patch_sha256": "ee6b5ec223d4202f4a1599ea28fbafaaedd790582e171c23930f81a54a925d92",
+      "projection_sha256": "928c08978a9497640430f4af5ec55cf5fb29b59bc68c5adc2f5d040a2ecef6dd",
+      "reconstruction_parent": "bench-v2-storage",
+      "runtime_source_sha256": "a3e16f8a6ed93afbece0d8fba0d4a4cfbdb28b9872843fd1ff141ee270ae272e"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 25375,
+          "after_sha256": "fdafe4dead6adb133be925bb2940c069e9200249425ae6e500ecb316d754e3eb",
+          "before_bytes": 25198,
+          "before_sha256": "1de55d3eb455326bef40d5d4c7fc53f4178757551b319e42872dc5eefe3dcd9b",
+          "operation": "modify",
+          "path": "cmd/familybench/main.go"
+        },
+        {
+          "after_bytes": 8262,
+          "after_sha256": "8304e8e97caa99818aaebd558033e0f929181cdb33d9be14cedf7303ac6c8555",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/inputpreflight/config.go"
+        },
+        {
+          "after_bytes": 7437,
+          "after_sha256": "43fa2bce257ae0894f7457c035a2cef6ac6208870bae7daa2437c97e4f654600",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/inputpreflight/main.go"
+        },
+        {
+          "after_bytes": 4071,
+          "after_sha256": "b7156f7bb2342b81745d9aae201197efd39e87e0cfae451cf6a74de8f14b6dc4",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/inputpreflight/main_test.go"
+        },
+        {
+          "after_bytes": 14413,
+          "after_sha256": "e95586aceae4ef8f1b4b651d4af10caebb6361816d2b883d388f8b109e379388",
+          "before_bytes": 14258,
+          "before_sha256": "96847b3062f5d428f24a56ac8cbf0263dedae2ad59743c908db98f5958d5c2e2",
+          "operation": "modify",
+          "path": "cmd/profilebench/main.go"
+        },
+        {
+          "after_bytes": 13449,
+          "after_sha256": "846e3e32d1d42adc65243312c45b81f548b1267406833a8e7b7cbc976cb97b0a",
+          "before_bytes": 13294,
+          "before_sha256": "0fb3c50a02a1aa5b259528e907e05768b63875d60f5c838913dfd66541d7a405",
+          "operation": "modify",
+          "path": "cmd/tadbench/main.go"
+        },
+        {
+          "after_bytes": 4449,
+          "after_sha256": "0bb6703aab00b0f2a9db52510bd76211a5d0c051e8b7b800cd52f3ad73a9acef",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "workloadseed/seed.go"
+        },
+        {
+          "after_bytes": 2625,
+          "after_sha256": "be25761dd3c086747e810a84ce2c7979dd6231c1b467ecb016db89db21e08ba1",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "workloadseed/seed_test.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 234,
+      "name": "bench-v3-slab",
+      "patch": "patches/26-bench-v3-slab.patch",
+      "patch_bytes": 41958,
+      "patch_sha256": "ee6b5ec223d4202f4a1599ea28fbafaaedd790582e171c23930f81a54a925d92",
+      "projection_sha256": "7f8931f3b2935e435137cde8e0d18941f827b2172084c8979663bf2c6952717f",
+      "reconstruction_parent": "bench-v2-slab",
+      "runtime_source_sha256": "bcc362cf6971f9359bcb79c37520e02ff204b5bb2d0aa72fb75be2d9fb7dad8d"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 25375,
+          "after_sha256": "fdafe4dead6adb133be925bb2940c069e9200249425ae6e500ecb316d754e3eb",
+          "before_bytes": 25198,
+          "before_sha256": "1de55d3eb455326bef40d5d4c7fc53f4178757551b319e42872dc5eefe3dcd9b",
+          "operation": "modify",
+          "path": "cmd/familybench/main.go"
+        },
+        {
+          "after_bytes": 8328,
+          "after_sha256": "a0b45d79c33e195d7f7772d6905a3bd71a45271104642ff624ad2cdeefa7eb8d",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/inputpreflight/config.go"
+        },
+        {
+          "after_bytes": 7437,
+          "after_sha256": "43fa2bce257ae0894f7457c035a2cef6ac6208870bae7daa2437c97e4f654600",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/inputpreflight/main.go"
+        },
+        {
+          "after_bytes": 4071,
+          "after_sha256": "b7156f7bb2342b81745d9aae201197efd39e87e0cfae451cf6a74de8f14b6dc4",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/inputpreflight/main_test.go"
+        },
+        {
+          "after_bytes": 14413,
+          "after_sha256": "e95586aceae4ef8f1b4b651d4af10caebb6361816d2b883d388f8b109e379388",
+          "before_bytes": 14258,
+          "before_sha256": "96847b3062f5d428f24a56ac8cbf0263dedae2ad59743c908db98f5958d5c2e2",
+          "operation": "modify",
+          "path": "cmd/profilebench/main.go"
+        },
+        {
+          "after_bytes": 13449,
+          "after_sha256": "846e3e32d1d42adc65243312c45b81f548b1267406833a8e7b7cbc976cb97b0a",
+          "before_bytes": 13294,
+          "before_sha256": "0fb3c50a02a1aa5b259528e907e05768b63875d60f5c838913dfd66541d7a405",
+          "operation": "modify",
+          "path": "cmd/tadbench/main.go"
+        },
+        {
+          "after_bytes": 4449,
+          "after_sha256": "0bb6703aab00b0f2a9db52510bd76211a5d0c051e8b7b800cd52f3ad73a9acef",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "workloadseed/seed.go"
+        },
+        {
+          "after_bytes": 2625,
+          "after_sha256": "be25761dd3c086747e810a84ce2c7979dd6231c1b467ecb016db89db21e08ba1",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "workloadseed/seed_test.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 237,
+      "name": "bench-v3-quality",
+      "patch": "patches/27-bench-v3-quality.patch",
+      "patch_bytes": 42026,
+      "patch_sha256": "27b7d71210c29f829b41b33dfcbf38613bc211524c5544bee650b9e515effe68",
+      "projection_sha256": "d37e1fc6ab8f05f7d1e84570bcb682f4e40e5df85c17f5cc1b21983600d58208",
+      "reconstruction_parent": "bench-v2-quality",
+      "runtime_source_sha256": "4a5e7f5d4e760a1e5bcace3a87f828c20dc04cc0faf4aa22a2291ca62110bda3"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 2189,
+          "after_sha256": "c38dea1074d3c3f804e9482dd3876cd13862818893f144127cf54891a12a45e9",
+          "before_bytes": 2099,
+          "before_sha256": "b444970fe3d707bd7267ff0d83e64ba9a942a089f41ee190f6d789938491aeac",
+          "operation": "modify",
+          "path": "cmd/corechgraphbench/audit.go"
+        },
+        {
+          "after_bytes": 23041,
+          "after_sha256": "904d538c1c9c4d4afa8133fe0997ea0e8eac43c3057c7a2a42ede5ab313c680c",
+          "before_bytes": 22989,
+          "before_sha256": "5f1790735ed3b49048d819fd5fc6bdee204721a80a63c631337c1ca3a47eb62f",
+          "operation": "modify",
+          "path": "cmd/corechgraphbench/main.go"
+        },
+        {
+          "after_bytes": 23378,
+          "after_sha256": "66ef222fe03ff8b8d9f4240c07b99b25a09968fb9926dbacc99653379bc665d1",
+          "before_bytes": 23201,
+          "before_sha256": "dadb25019b65225eb74486b34aef2ee2c9f85efd6c02534b9abbaaebc96341e7",
+          "operation": "modify",
+          "path": "cmd/familybench/main.go"
+        },
+        {
+          "after_bytes": 8262,
+          "after_sha256": "8304e8e97caa99818aaebd558033e0f929181cdb33d9be14cedf7303ac6c8555",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/inputpreflight/config.go"
+        },
+        {
+          "after_bytes": 7437,
+          "after_sha256": "43fa2bce257ae0894f7457c035a2cef6ac6208870bae7daa2437c97e4f654600",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/inputpreflight/main.go"
+        },
+        {
+          "after_bytes": 4071,
+          "after_sha256": "b7156f7bb2342b81745d9aae201197efd39e87e0cfae451cf6a74de8f14b6dc4",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/inputpreflight/main_test.go"
+        },
+        {
+          "after_bytes": 15723,
+          "after_sha256": "98cbeba1309aedd9324e0c3a39c4abf3508b7a7bb3fdbefb465bd3024ed95504",
+          "before_bytes": 15568,
+          "before_sha256": "e4ec3c844d17aff8af6123689003f28de58b20a0019d80a5bc15d833c5049195",
+          "operation": "modify",
+          "path": "cmd/profilebench/main.go"
+        },
+        {
+          "after_bytes": 1448,
+          "after_sha256": "3e86a58af80ef3acbb2fc961cd7a86450e9b803d243f104354a396cb051da3f0",
+          "before_bytes": 1358,
+          "before_sha256": "1839dabd9b171bca0d10a12080073746aa83e4eab25c0815556670574673c44c",
+          "operation": "modify",
+          "path": "cmd/profilebench/point_input.go"
+        },
+        {
+          "after_bytes": 1223,
+          "after_sha256": "046939cb869057e5c05fa8e0bba8529cc5413605a401a11c58833b13c29a8c70",
+          "before_bytes": 1135,
+          "before_sha256": "cd7f3d69a54a2afd57d5de08f9d47c01ac90d37b97d99410cbec7f79530799b3",
+          "operation": "modify",
+          "path": "cmd/profilebench/point_input_test.go"
+        },
+        {
+          "after_bytes": 14291,
+          "after_sha256": "978afd310c0366fbcf6c4a9711c91282ed56dc2918ddccd7dbf3babd2ded161f",
+          "before_bytes": 14136,
+          "before_sha256": "dadb9c03ee91367ea8a7c7c1a061fcb73e820d40894dcda0f3eb8f3944efb138",
+          "operation": "modify",
+          "path": "cmd/tadbench/main.go"
+        },
+        {
+          "after_bytes": 4449,
+          "after_sha256": "0bb6703aab00b0f2a9db52510bd76211a5d0c051e8b7b800cd52f3ad73a9acef",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "workloadseed/seed.go"
+        },
+        {
+          "after_bytes": 2625,
+          "after_sha256": "be25761dd3c086747e810a84ce2c7979dd6231c1b467ecb016db89db21e08ba1",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "workloadseed/seed_test.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 231,
+      "name": "bench-v3-aux-control",
+      "patch": "patches/28-bench-v3-aux-control.patch",
+      "patch_bytes": 51564,
+      "patch_sha256": "4af1c02c2547e25b898cb592e94d8b86c724a931524b8a603c6b0e78f37905f2",
+      "projection_sha256": "414776a97bd268bf40c843c722a137f63c1f0eb0cf393c97ad380392cc8c8759",
+      "reconstruction_parent": "bench-v2-aux-control",
+      "runtime_source_sha256": "6d514baae4b34a33fc9b92ef19d6169fae727848a2f8ac70387a3d091ea3dca4"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 2189,
+          "after_sha256": "c38dea1074d3c3f804e9482dd3876cd13862818893f144127cf54891a12a45e9",
+          "before_bytes": 2099,
+          "before_sha256": "b444970fe3d707bd7267ff0d83e64ba9a942a089f41ee190f6d789938491aeac",
+          "operation": "modify",
+          "path": "cmd/corechgraphbench/audit.go"
+        },
+        {
+          "after_bytes": 23041,
+          "after_sha256": "904d538c1c9c4d4afa8133fe0997ea0e8eac43c3057c7a2a42ede5ab313c680c",
+          "before_bytes": 22989,
+          "before_sha256": "5f1790735ed3b49048d819fd5fc6bdee204721a80a63c631337c1ca3a47eb62f",
+          "operation": "modify",
+          "path": "cmd/corechgraphbench/main.go"
+        },
+        {
+          "after_bytes": 23378,
+          "after_sha256": "66ef222fe03ff8b8d9f4240c07b99b25a09968fb9926dbacc99653379bc665d1",
+          "before_bytes": 23201,
+          "before_sha256": "dadb25019b65225eb74486b34aef2ee2c9f85efd6c02534b9abbaaebc96341e7",
+          "operation": "modify",
+          "path": "cmd/familybench/main.go"
+        },
+        {
+          "after_bytes": 8262,
+          "after_sha256": "8304e8e97caa99818aaebd558033e0f929181cdb33d9be14cedf7303ac6c8555",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/inputpreflight/config.go"
+        },
+        {
+          "after_bytes": 7437,
+          "after_sha256": "43fa2bce257ae0894f7457c035a2cef6ac6208870bae7daa2437c97e4f654600",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/inputpreflight/main.go"
+        },
+        {
+          "after_bytes": 4071,
+          "after_sha256": "b7156f7bb2342b81745d9aae201197efd39e87e0cfae451cf6a74de8f14b6dc4",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/inputpreflight/main_test.go"
+        },
+        {
+          "after_bytes": 15723,
+          "after_sha256": "98cbeba1309aedd9324e0c3a39c4abf3508b7a7bb3fdbefb465bd3024ed95504",
+          "before_bytes": 15568,
+          "before_sha256": "e4ec3c844d17aff8af6123689003f28de58b20a0019d80a5bc15d833c5049195",
+          "operation": "modify",
+          "path": "cmd/profilebench/main.go"
+        },
+        {
+          "after_bytes": 1448,
+          "after_sha256": "3e86a58af80ef3acbb2fc961cd7a86450e9b803d243f104354a396cb051da3f0",
+          "before_bytes": 1358,
+          "before_sha256": "1839dabd9b171bca0d10a12080073746aa83e4eab25c0815556670574673c44c",
+          "operation": "modify",
+          "path": "cmd/profilebench/point_input.go"
+        },
+        {
+          "after_bytes": 1223,
+          "after_sha256": "046939cb869057e5c05fa8e0bba8529cc5413605a401a11c58833b13c29a8c70",
+          "before_bytes": 1135,
+          "before_sha256": "cd7f3d69a54a2afd57d5de08f9d47c01ac90d37b97d99410cbec7f79530799b3",
+          "operation": "modify",
+          "path": "cmd/profilebench/point_input_test.go"
+        },
+        {
+          "after_bytes": 14291,
+          "after_sha256": "978afd310c0366fbcf6c4a9711c91282ed56dc2918ddccd7dbf3babd2ded161f",
+          "before_bytes": 14136,
+          "before_sha256": "dadb9c03ee91367ea8a7c7c1a061fcb73e820d40894dcda0f3eb8f3944efb138",
+          "operation": "modify",
+          "path": "cmd/tadbench/main.go"
+        },
+        {
+          "after_bytes": 4449,
+          "after_sha256": "0bb6703aab00b0f2a9db52510bd76211a5d0c051e8b7b800cd52f3ad73a9acef",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "workloadseed/seed.go"
+        },
+        {
+          "after_bytes": 2625,
+          "after_sha256": "be25761dd3c086747e810a84ce2c7979dd6231c1b467ecb016db89db21e08ba1",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "workloadseed/seed_test.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 234,
+      "name": "bench-v3-aux-range",
+      "patch": "patches/29-bench-v3-aux-range.patch",
+      "patch_bytes": 51564,
+      "patch_sha256": "4af1c02c2547e25b898cb592e94d8b86c724a931524b8a603c6b0e78f37905f2",
+      "projection_sha256": "2088cadf224bc6c3ac79d07f2a8dacc3c2d61588deb587d4c896e345bdc8ffff",
+      "reconstruction_parent": "bench-v2-aux-range",
+      "runtime_source_sha256": "3fa5ad649e14437fc4b0f71bafcb32f05087440bc9fa61602b1e829ed591c51c"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 15723,
+          "after_sha256": "98cbeba1309aedd9324e0c3a39c4abf3508b7a7bb3fdbefb465bd3024ed95504",
+          "before_bytes": 14413,
+          "before_sha256": "e95586aceae4ef8f1b4b651d4af10caebb6361816d2b883d388f8b109e379388",
+          "operation": "modify",
+          "path": "cmd/profilebench/main.go"
+        },
+        {
+          "after_bytes": 1448,
+          "after_sha256": "3e86a58af80ef3acbb2fc961cd7a86450e9b803d243f104354a396cb051da3f0",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/profilebench/point_input.go"
+        },
+        {
+          "after_bytes": 1223,
+          "after_sha256": "046939cb869057e5c05fa8e0bba8529cc5413605a401a11c58833b13c29a8c70",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/profilebench/point_input_test.go"
+        },
+        {
+          "after_bytes": 14291,
+          "after_sha256": "978afd310c0366fbcf6c4a9711c91282ed56dc2918ddccd7dbf3babd2ded161f",
+          "before_bytes": 13449,
+          "before_sha256": "846e3e32d1d42adc65243312c45b81f548b1267406833a8e7b7cbc976cb97b0a",
+          "operation": "modify",
+          "path": "cmd/tadbench/main.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 236,
+      "name": "bench-native-v4-prep",
+      "patch": "patches/30-bench-native-v4-prep.patch",
+      "patch_bytes": 19484,
+      "patch_sha256": "427398d14179fe0875ee6cfb98fea10f7b7f9923c90f2cbae72d762f4652eced",
+      "projection_sha256": "006ce20bc74df2a1cc3ba6e079205a58ec3ae4ee70ea1d59c68ee5242897c451",
+      "reconstruction_parent": "bench-v3-storage",
+      "runtime_source_sha256": "ddcceb658fecedb50328879b53cf0cf2ac4a0194854b3d7f566e5b006d7de54d"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 2189,
+          "after_sha256": "c38dea1074d3c3f804e9482dd3876cd13862818893f144127cf54891a12a45e9",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/corechgraphbench/audit.go"
+        },
+        {
+          "after_bytes": 9871,
+          "after_sha256": "6e52bd66c500b41905cfc1734c087f1615333bd4c855836794a27f687c904a95",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/corechgraphbench/audit_test.go"
+        },
+        {
+          "after_bytes": 23358,
+          "after_sha256": "ab618eb5a4bb687d3dc6c69ecde645b30d73f01b873bb053cd9f6a7441ed21c4",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/corechgraphbench/main.go"
+        },
+        {
+          "after_bytes": 25677,
+          "after_sha256": "9a66b5d40c570aa15074666856ecaea2514470fa2a9e0cec60ea3e4890348a29",
+          "before_bytes": 25375,
+          "before_sha256": "fdafe4dead6adb133be925bb2940c069e9200249425ae6e500ecb316d754e3eb",
+          "operation": "modify",
+          "path": "cmd/familybench/main.go"
+        },
+        {
+          "after_bytes": 16100,
+          "after_sha256": "f0d6b8815e90bce5d3c836c10f964aa7e05844b12acb917b0706d75d9f630f8a",
+          "before_bytes": 15723,
+          "before_sha256": "98cbeba1309aedd9324e0c3a39c4abf3508b7a7bb3fdbefb465bd3024ed95504",
+          "operation": "modify",
+          "path": "cmd/profilebench/main.go"
+        },
+        {
+          "after_bytes": 14584,
+          "after_sha256": "280185139f82d59278db8c24473aa6a86c84dbe0ee73736c7e1c5a33af345569",
+          "before_bytes": 14291,
+          "before_sha256": "978afd310c0366fbcf6c4a9711c91282ed56dc2918ddccd7dbf3babd2ded161f",
+          "operation": "modify",
+          "path": "cmd/tadbench/main.go"
+        },
+        {
+          "after_bytes": 15405,
+          "after_sha256": "f8e845a4ad3071e4ee9c1dc069696a48f7b92cc632833ba0a8b859df02f413f4",
+          "before_bytes": 14937,
+          "before_sha256": "7c395ce423a6c4988501c8f66b6396bd138892b046d2713534b812031dce07a2",
+          "operation": "modify",
+          "path": "cmd/ultrabench/main.go"
+        },
+        {
+          "after_bytes": 2583,
+          "after_sha256": "432d229a1168266e3dc1e5731f93846e7847bafad2b8a70651640fa817a3ea60",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/ultrabench/native_seed_test.go"
+        },
+        {
+          "after_bytes": 1097,
+          "after_sha256": "c5bb4c461e28e3d7ed0f4989eac8956b3b81bdc6ad0d2c5adb6a269892f2d98e",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "nativeinputprobe/probe.go"
+        },
+        {
+          "after_bytes": 14106,
+          "after_sha256": "08a171b1f4eba41d99a8faceb41daed905f8e2c5ad65e07096492aec4c2d806a",
+          "before_bytes": 13851,
+          "before_sha256": "4528f745b810a41c4d82ba3139453cc8ed81feea53c4f1a870a6458e5cd8f04f",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 3918,
+          "after_sha256": "0c9590242b29b11ee049b223c828e511a16785a6c3eda65a4d3810f5ff29fa34",
+          "before_bytes": 3923,
+          "before_sha256": "e071918fcd8db1941a791108d0f54c787420fe76d3df161ae3ee7cc5e2e64eb9",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/bounded_walking.go"
+        },
+        {
+          "after_bytes": 17741,
+          "after_sha256": "f63854c75da62f1dd48fdae03357a7ec2871bac8fda60b22d41778acd525740e",
+          "before_bytes": 17523,
+          "before_sha256": "640b9cd381f4995d3591315d11a3860e18cb7f8cd89db68a5a0d9641cea83c71",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_patterns.go"
+        },
+        {
+          "after_bytes": 4028,
+          "after_sha256": "41148da11b11ac8e38aca3150b847571bfa78a9bb06794ee70ca3dd701a60083",
+          "before_bytes": 3816,
+          "before_sha256": "d686016f8800364ad351da9bab8a440d4daa50042b5c59164ea526c168ec649c",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/cost_summary.go"
+        },
+        {
+          "after_bytes": 20440,
+          "after_sha256": "fc6c1977c7952d31023106e2d651ed2dc9736fc2862ea412e795414f31cb2c28",
+          "before_bytes": 19531,
+          "before_sha256": "4888ff851c113d1ba9378166601bdf53accab7de1171428125dbac3d7ffaf7d0",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash.go"
+        },
+        {
+          "after_bytes": 7311,
+          "after_sha256": "20c480930e61705b5f55d08397401bfecfd63c9b1358f11f543a0daaf354dea3",
+          "before_bytes": 6809,
+          "before_sha256": "00206c170c2e0dd1b05126d5efd02d75ff05d6873c0434e57254b3620ee0914e",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_graph.go"
+        },
+        {
+          "after_bytes": 15914,
+          "after_sha256": "8490e05e837dfac1f4943dd524c273083554537f37e557f4d99b3c0126ef4f76",
+          "before_bytes": 15454,
+          "before_sha256": "0cb573f7cf9cedcee86931596b67f2e9333bdf911d6b80ec34d6f359e49d1801",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex.go"
+        },
+        {
+          "after_bytes": 2193,
+          "after_sha256": "d71a3c0c009a53e3fac7a9b30f654bc9710f0bcb18c9e18f3c71e9739f80bf89",
+          "before_bytes": 1999,
+          "before_sha256": "6051dc45d12e3a535ab2f02bf31090d0cd386d5e22c408132dca13a6f43ac0d7",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_diagnostic.go"
+        },
+        {
+          "after_bytes": 9625,
+          "after_sha256": "86d8c09216d6051cf7c617ad19096f7124cba58792fb4c1656caa12f7b79f3cc",
+          "before_bytes": 8133,
+          "before_sha256": "b4ef29a963f239feb16b08e42a91dfc479c90c3ab479b7abea9df4b941cd7913",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_query.go"
+        },
+        {
+          "after_bytes": 4416,
+          "after_sha256": "1f6dcbcdb3743866f5fa698805c5235e41d99136a4dca7b346c298d83da765ca",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_walking_scope.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 242,
+      "name": "bench-native-v5-prep",
+      "patch": "patches/31-bench-native-v5-prep.patch",
+      "patch_bytes": 77286,
+      "patch_sha256": "91c49d0904b0d8f9dd21317a0ca58814062fc11204fe36ec23e196f9339a43d6",
+      "projection_sha256": "c8828053f1541cc25173f7840abee6bce8a9d12930f3e857ac2e67c7e2f679fe",
+      "reconstruction_parent": "bench-native-v4-prep",
+      "runtime_source_sha256": "a3a1ad010800687a6d2a507626343a1000e01745aaeb3aba13c7ad5e50760ba9"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 13905,
+          "after_sha256": "5ccfb659a6ef3a3e1100cbf66780225d35382d0324f3daef54885de05feac6e5",
+          "before_bytes": 14106,
+          "before_sha256": "08a171b1f4eba41d99a8faceb41daed905f8e2c5ad65e07096492aec4c2d806a",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 3923,
+          "after_sha256": "e071918fcd8db1941a791108d0f54c787420fe76d3df161ae3ee7cc5e2e64eb9",
+          "before_bytes": 3918,
+          "before_sha256": "0c9590242b29b11ee049b223c828e511a16785a6c3eda65a4d3810f5ff29fa34",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/bounded_walking.go"
+        },
+        {
+          "after_bytes": 17523,
+          "after_sha256": "640b9cd381f4995d3591315d11a3860e18cb7f8cd89db68a5a0d9641cea83c71",
+          "before_bytes": 17741,
+          "before_sha256": "f63854c75da62f1dd48fdae03357a7ec2871bac8fda60b22d41778acd525740e",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_patterns.go"
+        },
+        {
+          "after_bytes": 3816,
+          "after_sha256": "d686016f8800364ad351da9bab8a440d4daa50042b5c59164ea526c168ec649c",
+          "before_bytes": 4028,
+          "before_sha256": "41148da11b11ac8e38aca3150b847571bfa78a9bb06794ee70ca3dd701a60083",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/cost_summary.go"
+        },
+        {
+          "after_bytes": 19531,
+          "after_sha256": "4888ff851c113d1ba9378166601bdf53accab7de1171428125dbac3d7ffaf7d0",
+          "before_bytes": 20440,
+          "before_sha256": "fc6c1977c7952d31023106e2d651ed2dc9736fc2862ea412e795414f31cb2c28",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash.go"
+        },
+        {
+          "after_bytes": 6809,
+          "after_sha256": "00206c170c2e0dd1b05126d5efd02d75ff05d6873c0434e57254b3620ee0914e",
+          "before_bytes": 7311,
+          "before_sha256": "20c480930e61705b5f55d08397401bfecfd63c9b1358f11f543a0daaf354dea3",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_graph.go"
+        },
+        {
+          "after_bytes": 15454,
+          "after_sha256": "0cb573f7cf9cedcee86931596b67f2e9333bdf911d6b80ec34d6f359e49d1801",
+          "before_bytes": 15914,
+          "before_sha256": "8490e05e837dfac1f4943dd524c273083554537f37e557f4d99b3c0126ef4f76",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex.go"
+        },
+        {
+          "after_bytes": 1999,
+          "after_sha256": "6051dc45d12e3a535ab2f02bf31090d0cd386d5e22c408132dca13a6f43ac0d7",
+          "before_bytes": 2193,
+          "before_sha256": "d71a3c0c009a53e3fac7a9b30f654bc9710f0bcb18c9e18f3c71e9739f80bf89",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_diagnostic.go"
+        },
+        {
+          "after_bytes": 8133,
+          "after_sha256": "b4ef29a963f239feb16b08e42a91dfc479c90c3ab479b7abea9df4b941cd7913",
+          "before_bytes": 9625,
+          "before_sha256": "86d8c09216d6051cf7c617ad19096f7124cba58792fb4c1656caa12f7b79f3cc",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_query.go"
+        },
+        {
+          "after_bytes": null,
+          "after_sha256": null,
+          "before_bytes": 4416,
+          "before_sha256": "1f6dcbcdb3743866f5fa698805c5235e41d99136a4dca7b346c298d83da765ca",
+          "operation": "delete",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_walking_scope.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 241,
+      "name": "bench-native-v5-fullmetric-fixed",
+      "patch": "patches/32-bench-native-v5-fullmetric-fixed.patch",
+      "patch_bytes": 25915,
+      "patch_sha256": "5ba0baca6b94a141337b8d89908f44117c4aec2c63007f02020ddd8a84e38810",
+      "projection_sha256": "01fc3936bd35095404e3b1a806c092ae2262b4c398a02c52c2a6f51ce72f6d66",
+      "reconstruction_parent": "bench-native-v5-prep",
+      "runtime_source_sha256": "f28767549aa86debc5a2d1f842c9d6615b863e419c6d77274e7dc93ec59c8028"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 11845,
+          "after_sha256": "225970b9981cc9ced28439d86a7e730d8994975852d473cbc719ebc36ebab43f",
+          "before_bytes": 12088,
+          "before_sha256": "56877ff26ab1334bbaea405854249360838e332f1ab5f93851888e61cfc5ed3c",
+          "operation": "modify",
+          "path": "regression/profilequery/profiles_test.go"
+        },
+        {
+          "after_bytes": 14115,
+          "after_sha256": "e19145dce6463fcf8eab5c84a9bbbc36ed3960739c1a3a91a6edde1f2e7df975",
+          "before_bytes": 14106,
+          "before_sha256": "08a171b1f4eba41d99a8faceb41daed905f8e2c5ad65e07096492aec4c2d806a",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 242,
+      "name": "bench-native-v5-range-control",
+      "patch": "patches/33-bench-native-v5-range-control.patch",
+      "patch_bytes": 1875,
+      "patch_sha256": "9159f8dcffa502eb76cc6c675cda231541ccab4716d38e68162e1a985e545348",
+      "projection_sha256": "21067fc3ebc007907850912584853537df0641f936656ba8f7648023245ad5cd",
+      "reconstruction_parent": "bench-native-v5-prep",
+      "runtime_source_sha256": "6d2e48f3a5a201bf4b82a827e1f64b99cfdd90a61e4b1d0caa408150fcb007dc"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 14107,
+          "after_sha256": "dfeb3a03ef2d4fb49902f0a4afeaf9cea884b65d7df9a1599e75797083d01886",
+          "before_bytes": 14115,
+          "before_sha256": "e19145dce6463fcf8eab5c84a9bbbc36ed3960739c1a3a91a6edde1f2e7df975",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 8196,
+          "after_sha256": "7ec5ea24bb15492972580f61d326fc299b3665ce5b3aa7857d853610967365fc",
+          "before_bytes": 7044,
+          "before_sha256": "81f63bb9d674bd0e9955b4aa493b1657ed9c8c7992d04c9fc76960ef92805a15",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/range.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 242,
+      "name": "bench-native-v5-range",
+      "patch": "patches/34-bench-native-v5-range.patch",
+      "patch_bytes": 8694,
+      "patch_sha256": "7585ee1d6ee543edd89930e80b8e5bacace49c04c8c00e45d2184f1021e3440f",
+      "projection_sha256": "b33466d1b1613b6e70ae809773dc10ae258b040a5f7f38dbe51d3071d60fb274",
+      "reconstruction_parent": "bench-native-v5-range-control",
+      "runtime_source_sha256": "5f1f2d1a4b3888f9b8a698e2665ba6dd1c8b0e8777a4b2f444a65448b510bc2a"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 14215,
+          "after_sha256": "562ddf0d3a74d492871d55326e99e04c040000b6972d85cbfbc748f81e15951b",
+          "before_bytes": 14106,
+          "before_sha256": "08a171b1f4eba41d99a8faceb41daed905f8e2c5ad65e07096492aec4c2d806a",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 4029,
+          "after_sha256": "7892623f050bee51f1d38a7ff43ef6e0585140b028fdb7f5fcc26215ad891dbb",
+          "before_bytes": 4028,
+          "before_sha256": "41148da11b11ac8e38aca3150b847571bfa78a9bb06794ee70ca3dd701a60083",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/cost_summary.go"
+        },
+        {
+          "after_bytes": 16117,
+          "after_sha256": "9e600f8ab60366f7de16c239fd2281a1237a8571897b862ffbd52bf4ca935561",
+          "before_bytes": 15914,
+          "before_sha256": "8490e05e837dfac1f4943dd524c273083554537f37e557f4d99b3c0126ef4f76",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex.go"
+        },
+        {
+          "after_bytes": 4315,
+          "after_sha256": "418107b649dd467b74254ce8655e6bd1f9dcaf5ee3f7e4c70c3fc36536f50809",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_compact.go"
+        },
+        {
+          "after_bytes": 8699,
+          "after_sha256": "c013628d58e754f04961f893b96352133a4521f933f89b43e3caaf47bf6af40a",
+          "before_bytes": 8658,
+          "before_sha256": "6b2014268e6b19b1ebb9d0744a23fafe745f3e6e2d591a712b8da0d8dbc89b40",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_customization.go"
+        },
+        {
+          "after_bytes": 2194,
+          "after_sha256": "6d3ac02a360d9741ac457d4ec31aae837792dc684fab795680bf29a14ab89ff6",
+          "before_bytes": 2193,
+          "before_sha256": "d71a3c0c009a53e3fac7a9b30f654bc9710f0bcb18c9e18f3c71e9739f80bf89",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_diagnostic.go"
+        },
+        {
+          "after_bytes": 7166,
+          "after_sha256": "163d8d47e7aa020bd55ecd46bfd3fac1d4486925acde44f91dbda4be69cb5b01",
+          "before_bytes": 6449,
+          "before_sha256": "5593e6b73434b7055884d00a205ec1567dd34204527819d44ab0b1e1570f76d3",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_partition.go"
+        },
+        {
+          "after_bytes": 4635,
+          "after_sha256": "82e8819d86e69f71d22e28875b4f266be3fec7b0e39f2935c49bd0c925e34852",
+          "before_bytes": 4632,
+          "before_sha256": "731aac977eeb4ddb81df4c6dd0c144e5f4b3a94697ce9a69814d4516210a60bd",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_proofs.go"
+        },
+        {
+          "after_bytes": 9681,
+          "after_sha256": "13fff151e308e770839bb093bf952a0461d48874d5a784a88bf2472265f9ff64",
+          "before_bytes": 9625,
+          "before_sha256": "86d8c09216d6051cf7c617ad19096f7124cba58792fb4c1656caa12f7b79f3cc",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_query.go"
+        },
+        {
+          "after_bytes": 6018,
+          "after_sha256": "0fa08c43c341190e32c7200304fd62a6c6a1944e4434f79d72c0ab93d22c4832",
+          "before_bytes": 3937,
+          "before_sha256": "05385e29ecb9dcb98baec226568f2a026b07a7c10149a38f5da0174102d74531",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_storage.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 243,
+      "name": "bench-native-v5-trex-compact",
+      "patch": "patches/35-bench-native-v5-trex-compact.patch",
+      "patch_bytes": 24690,
+      "patch_sha256": "a6cf1d24f1b3b4019a1f143a444385873f876be3663fc2064031d96e23a3ae78",
+      "projection_sha256": "98200e0476399127df516178d19606cdb000dfbfe05eca66211cfd4ebdb6b587",
+      "reconstruction_parent": "bench-native-v5-prep",
+      "runtime_source_sha256": "949f1bb00c2268e90dee041adab47df1af79490de0be8f09fe05b6f34a4d3706"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 10329,
+          "after_sha256": "e459f3e62ae0751d4d4bfb464cce2bca5203faf90bc59bcb166ad6d7a49059f4",
+          "before_bytes": 9729,
+          "before_sha256": "f3903f12443d5f4a26a2bdd03a3ef139d4a8e32e03103acc609b2d9d063f78b7",
+          "operation": "modify",
+          "path": "cmd/familybench/scoped.go"
+        },
+        {
+          "after_bytes": 4459,
+          "after_sha256": "08799d26b329fe1861cbbad49a09b9321399704fe93882c64fa054df1c4ff010",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/familybench/tb_answer_walk_ties_test.go"
+        },
+        {
+          "after_bytes": 8405,
+          "after_sha256": "358763e734e8603ebef1405547eb78bf8350c0a8f7429b00ce0617a6fa55422d",
+          "before_bytes": 8328,
+          "before_sha256": "a0b45d79c33e195d7f7772d6905a3bd71a45271104642ff624ad2cdeefa7eb8d",
+          "operation": "modify",
+          "path": "cmd/inputpreflight/config.go"
+        },
+        {
+          "after_bytes": 2760,
+          "after_sha256": "6d861608e1b0bc8c411bccd4b9119efe1b9226b6fec64de903f6edb6c4f59ef6",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/inputpreflight/tb_answer_walk_ties_test.go"
+        },
+        {
+          "after_bytes": 20749,
+          "after_sha256": "18a3427a23606148e3d116d8d58320e0713fd42d4a79f9895d83d223f34c5a80",
+          "before_bytes": 13951,
+          "before_sha256": "9f25a470acd5cd30f7dd32c1cb3a3d19831fcb23ca8c12e239f0998386381d3d",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 820,
+          "after_sha256": "43f37426ce820e71d1dde171cbd5b3714fd0dc4b59fb122f00c6d4d39c2565fb",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/internal/capverify/frontier_test.go"
+        },
+        {
+          "after_bytes": 12866,
+          "after_sha256": "b83981a51651d559f32cac6be3861cab6f684e89f6172d252fd96865ebac5a91",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/internal/capverify/prepared_test.go"
+        },
+        {
+          "after_bytes": 2738,
+          "after_sha256": "3b1ff2841fdadfbb8b87b140c318382dc916c37986f8c4a719dced393f72ad84",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/internal/capverify/shadow_test.go"
+        },
+        {
+          "after_bytes": 1642,
+          "after_sha256": "24e18c129540fa2a7426215345bc80bb733b86b5a86774bdb27d07b7a3589d4d",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/paper/node_arena_test.go"
+        },
+        {
+          "after_bytes": 5644,
+          "after_sha256": "f4ce2026818ca7cb57632db7c72da54ab3f97b7db71173efc463096402e2161b",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/dense_test.go"
+        },
+        {
+          "after_bytes": 12264,
+          "after_sha256": "e458a1933b470d0f9aed64fabed3f1f293c9c5cbb6fe7461c9f6ee925c1fd55c",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/frozen_reference_test.go"
+        },
+        {
+          "after_bytes": 12739,
+          "after_sha256": "8ac65bf55dbde005be52722b2fe9b020da33b451926b30636f00ef6b3f9e9926",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/indexed_baseline_test.go"
+        },
+        {
+          "after_bytes": 5956,
+          "after_sha256": "c37a7414fb0fbea5d6ab5aecb04d21ba94a12e124b7b4589a9570f89efad5670",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/indexed_walks_test.go"
+        },
+        {
+          "after_bytes": 5238,
+          "after_sha256": "12dc18a87d11697d074082dd70ee5a0a433995e5986d12c5330e84233931d562",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/local_walk_ties_test.go"
+        },
+        {
+          "after_bytes": 12688,
+          "after_sha256": "6e4d8214d90c4ee52c1591d9d0b7128dd6b9fa4b571418d973b353dd9be29a9f",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/v2_frozen_test.go"
+        },
+        {
+          "after_bytes": 2832,
+          "after_sha256": "f2df5310c9b1656963bbddf7e0eb9a87f88f872faad59f905c81e3ceeaf73c85",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/raptor/v2_storage_test.go"
+        },
+        {
+          "after_bytes": 3918,
+          "after_sha256": "0c9590242b29b11ee049b223c828e511a16785a6c3eda65a4d3810f5ff29fa34",
+          "before_bytes": 3923,
+          "before_sha256": "e071918fcd8db1941a791108d0f54c787420fe76d3df161ae3ee7cc5e2e64eb9",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/bounded_walking.go"
+        },
+        {
+          "after_bytes": 7486,
+          "after_sha256": "0646c6d4847d06f05fe01548be80b8434382f563273d69b592f109d0bd6e172b",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_answer_walk_ties.go"
+        },
+        {
+          "after_bytes": 3934,
+          "after_sha256": "d77e751fdf98e157611ed314ee41e03ce1a6048950d304828ece299cd7d96609",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_answer_walk_ties_native_test.go"
+        },
+        {
+          "after_bytes": 11298,
+          "after_sha256": "66248a6887380e4b3894c4ff5d69b8199c9c638da2aa03b8040703d5058e402f",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_answer_walk_ties_test.go"
+        },
+        {
+          "after_bytes": 17741,
+          "after_sha256": "f63854c75da62f1dd48fdae03357a7ec2871bac8fda60b22d41778acd525740e",
+          "before_bytes": 17523,
+          "before_sha256": "640b9cd381f4995d3591315d11a3860e18cb7f8cd89db68a5a0d9641cea83c71",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_patterns.go"
+        },
+        {
+          "after_bytes": 5748,
+          "after_sha256": "fc45789a64b950f693d631410b17725236a2aa8e1aa7aba570eb46749d7bf87c",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_patterns_oracle_test.go"
+        },
+        {
+          "after_bytes": 11818,
+          "after_sha256": "059a07ce04e0b480d144ab98c5fd48f4f3a6d0b672b33ed6a5e218d0b8fb5baa",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_patterns_test.go"
+        },
+        {
+          "after_bytes": 2505,
+          "after_sha256": "72311d688e70fdfd92ba7c8151fd5bb03609437eab4e05b64a166fc9e9916481",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_profile_work_test.go"
+        },
+        {
+          "after_bytes": 2102,
+          "after_sha256": "389198d995cff2a9063cc3b828e14d35dba6e41b424c527c7cddc853624b9c82",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_retained_internal_test.go"
+        },
+        {
+          "after_bytes": 21938,
+          "after_sha256": "990b0f00fbc05b7cdda40ca0e168e8e725dd2dd4499915c64f13f82f71f79d4a",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_retained_oracle_test.go"
+        },
+        {
+          "after_bytes": 2262,
+          "after_sha256": "21c21df9b542d034a3e199146eab9044b081ce1c5ab9e6af014fe52cee93de82",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_source_domain_internal_test.go"
+        },
+        {
+          "after_bytes": 11351,
+          "after_sha256": "add9750ef5ca977e35bb0f89c982e1d2232e0e39e9056d3689dbe4b7bc011c8c",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_source_domain_oracle_test.go"
+        },
+        {
+          "after_bytes": 13698,
+          "after_sha256": "eab7fe3a228254c1813b2b8d78b95e24b5e9156e11909f99f00c03971f94a1b6",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/compact_links_test.go"
+        },
+        {
+          "after_bytes": 4028,
+          "after_sha256": "41148da11b11ac8e38aca3150b847571bfa78a9bb06794ee70ca3dd701a60083",
+          "before_bytes": 3816,
+          "before_sha256": "d686016f8800364ad351da9bab8a440d4daa50042b5c59164ea526c168ec649c",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/cost_summary.go"
+        },
+        {
+          "after_bytes": 20440,
+          "after_sha256": "fc6c1977c7952d31023106e2d651ed2dc9736fc2862ea412e795414f31cb2c28",
+          "before_bytes": 19531,
+          "before_sha256": "4888ff851c113d1ba9378166601bdf53accab7de1171428125dbac3d7ffaf7d0",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash.go"
+        },
+        {
+          "after_bytes": 2725,
+          "after_sha256": "99ac41f098b66a583f5fbf686a82fca263ac7f6fa28f9b335d721ec3ddccea8f",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_breakpoints_test.go"
+        },
+        {
+          "after_bytes": 1359,
+          "after_sha256": "8f23ae34c7c1b16e0107c3f8e8e1580c1d9a860e73546024f90c1a1f2e9526ec",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_cap_test.go"
+        },
+        {
+          "after_bytes": 7311,
+          "after_sha256": "20c480930e61705b5f55d08397401bfecfd63c9b1358f11f543a0daaf354dea3",
+          "before_bytes": 6809,
+          "before_sha256": "00206c170c2e0dd1b05126d5efd02d75ff05d6873c0434e57254b3620ee0914e",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_graph.go"
+        },
+        {
+          "after_bytes": 5813,
+          "after_sha256": "159564f615b51e172719b1364ab38083992a29b52885bd7addc562218adae229",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_partition_test.go"
+        },
+        {
+          "after_bytes": 12652,
+          "after_sha256": "7ce409c7a7003a5c93813218f99ee8c8a8d04521c6e5bf1c91b3c3d57fd3fd98",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_retained_test.go"
+        },
+        {
+          "after_bytes": 10850,
+          "after_sha256": "bcb733b37473ced61f38e1d740bc00eb65726423f327ca21bbe8e3e39082eee5",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_role_caps_test.go"
+        },
+        {
+          "after_bytes": 15683,
+          "after_sha256": "d6068a539e7ba48fb1fca890bfc7b82bb7dff01dc11fabffaf30ff00b0e22db2",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_rules_test.go"
+        },
+        {
+          "after_bytes": 10711,
+          "after_sha256": "127560575ad33056f7c989f2a67ec387e09671c175b88163e0ac2a01e6a4bda0",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_test.go"
+        },
+        {
+          "after_bytes": 5834,
+          "after_sha256": "52b658d9a4c809391800d6e22e31445596bff3cf5758f18295970bdf079da3fd",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/independent_spec_test.go"
+        },
+        {
+          "after_bytes": 9702,
+          "after_sha256": "51d318ce919149115270cee61114910eeb2f4c990019c4c25f4ac0088fee1c4a",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/partial_snapshot_test.go"
+        },
+        {
+          "after_bytes": 9881,
+          "after_sha256": "cb0d12ba17d0a6d7d32737a0d29de80bd8f3528e7b9323656d7e9f47caed4984",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/patterns_test.go"
+        },
+        {
+          "after_bytes": 1556,
+          "after_sha256": "f778be488fc905a076e8c25c6439817d96405c945fb0de63e3a72a6f445105fc",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/reviewer_partial_snapshot_test.go"
+        },
+        {
+          "after_bytes": 6158,
+          "after_sha256": "4a21ec8d72ed3f6635d910a56d0a870626980746ab104bf9ee1b3aadc04ce06a",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/reviewer_rank_loss_control_test.go"
+        },
+        {
+          "after_bytes": 1949,
+          "after_sha256": "ea95962c175553efb8d36a4068688434f7a2d030a267aac569cffc93d4bb1ef5",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/scalable_dags_test.go"
+        },
+        {
+          "after_bytes": 2130,
+          "after_sha256": "f100fa7123a81db78e406ed6591c78685ec1a80d4ac3265185084947df663e29",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/transfer_storage_test.go"
+        },
+        {
+          "after_bytes": 15914,
+          "after_sha256": "8490e05e837dfac1f4943dd524c273083554537f37e557f4d99b3c0126ef4f76",
+          "before_bytes": 15454,
+          "before_sha256": "0cb573f7cf9cedcee86931596b67f2e9333bdf911d6b80ec34d6f359e49d1801",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex.go"
+        },
+        {
+          "after_bytes": 8364,
+          "after_sha256": "b7e54852ae4bce59b7ba00307417cc910f9cc4aa96a0697eb3a1a4ab01c5f919",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_cap_certification_test.go"
+        },
+        {
+          "after_bytes": 2235,
+          "after_sha256": "2b71c71d37126b9f10882036872aaa8d49fd01c28e0c3fe188201bbb4cb5cd80",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_cap_kernel_diagnostic_test.go"
+        },
+        {
+          "after_bytes": 2193,
+          "after_sha256": "d71a3c0c009a53e3fac7a9b30f654bc9710f0bcb18c9e18f3c71e9739f80bf89",
+          "before_bytes": 1999,
+          "before_sha256": "6051dc45d12e3a535ab2f02bf31090d0cd386d5e22c408132dca13a6f43ac0d7",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_diagnostic.go"
+        },
+        {
+          "after_bytes": 1648,
+          "after_sha256": "bada5b15cf11c882a640b3013a398eb98a1593bf23f7ebf9d2f36424092c94ef",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_fixed_cap_independent_test.go"
+        },
+        {
+          "after_bytes": 6706,
+          "after_sha256": "62949b764088907bb829aaaf45ce22fff64962e2ef2de46226c8c33e5421c325",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_fixed_transfer_cap_candidate_test.go"
+        },
+        {
+          "after_bytes": 4519,
+          "after_sha256": "4ed0bd08f01731a9ce709e5a50f91190e2192fcd8cc8750b22124603836a210b",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_preprocessing_test.go"
+        },
+        {
+          "after_bytes": 7695,
+          "after_sha256": "318df6095e71cb0d0c545034ae6427cd3266ce79226a3357ae47b86eb8e34ab8",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_proofs_test.go"
+        },
+        {
+          "after_bytes": 9625,
+          "after_sha256": "86d8c09216d6051cf7c617ad19096f7124cba58792fb4c1656caa12f7b79f3cc",
+          "before_bytes": 8133,
+          "before_sha256": "b4ef29a963f239feb16b08e42a91dfc479c90c3ab479b7abea9df4b941cd7913",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_query.go"
+        },
+        {
+          "after_bytes": 11460,
+          "after_sha256": "602fcf3dc585da1f2e41d864fd7113fcfa588f641a6f7ac4528e648288b497bd",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_role_cap_candidate_test.go"
+        },
+        {
+          "after_bytes": 2159,
+          "after_sha256": "55d4fb6aaa9b9d20830fbace6fe2deb54ab7343240a34eaee5758c4b2676c671",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_shadow_reporting_test.go"
+        },
+        {
+          "after_bytes": 3238,
+          "after_sha256": "4b5b6c93c4437d314c5908675ebbd90a65f17687067b4e216db2049e6cfeab37",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_storage_test.go"
+        },
+        {
+          "after_bytes": 4416,
+          "after_sha256": "1f6dcbcdb3743866f5fa698805c5235e41d99136a4dca7b346c298d83da765ca",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_walking_scope.go"
+        },
+        {
+          "after_bytes": 9769,
+          "after_sha256": "c1f0eaf7cda2b8e795aceba37c2858d4a0d93afc6a9832d798b857c6a7cca14e",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/tripbased_test.go"
+        },
+        {
+          "after_bytes": 10869,
+          "after_sha256": "c1b223ca1b261045c4a84e45110d18041c09ce939f1a8fd636522bf3a0aafeaf",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/walking_scope_internal_test.go"
+        },
+        {
+          "after_bytes": 7038,
+          "after_sha256": "37247f8296cf47572f1b8b649fadd939759350065dabd2f4cd25eb22b89ea144",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/walking_scope_oracle_test.go"
+        },
+        {
+          "after_bytes": 14210,
+          "after_sha256": "ab0bf5b5f89b954fa9cef4a2225305b0876651c687db80ac4d8081510938d86b",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/ultra/capped_dense_test.go"
+        },
+        {
+          "after_bytes": 8172,
+          "after_sha256": "22e1eaf579d14dbf668de6f9c7e2c91f720ff3d9f25006bf87fd42bb31139ff6",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/ultra/capped_frozen_baseline_test.go"
+        },
+        {
+          "after_bytes": 7437,
+          "after_sha256": "759aa8f49a9d264327f10da34c6747894bdcba837d5aca3529a9ff971f06ed0e",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/ultra/capped_frozen_search_test.go"
+        },
+        {
+          "after_bytes": 6842,
+          "after_sha256": "a6bc2f8297a977bf85656e25fee633303cdfc2331aa2251d02ddd9b8b654d78d",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/ultra/capped_frozen_sparse_test.go"
+        },
+        {
+          "after_bytes": 2135,
+          "after_sha256": "f0e30628e8d515792d2c642bb6588428cccc93900f7903296da679c28ed06c4b",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/walking/cache_test.go"
+        },
+        {
+          "after_bytes": 7806,
+          "after_sha256": "83428892036d5daa1d3597fb4fb7d56c24a19ca9087b9562fdc0700c726d6962",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/walking/graph/graph_test.go"
+        },
+        {
+          "after_bytes": 15936,
+          "after_sha256": "39a190a162ced9177960d3a571b16adbbefe6e3df45ba8489b3c9bcead0fbff5",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/walking/graph/reach_session_test.go"
+        },
+        {
+          "after_bytes": 2106,
+          "after_sha256": "82e2bd1ae63215d2f10c87c7eb9d207dc8f0305a40d028b6bbc73bf28380e748",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/walking/httpapi/handler_test.go"
+        },
+        {
+          "after_bytes": 2090,
+          "after_sha256": "60c7d3690c0d924cf8740b92f3412070c475b8fca542f1f0b258b92832f52478",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/walking/osm/load_test.go"
+        },
+        {
+          "after_bytes": 10253,
+          "after_sha256": "e99e06fd05cf2727036ed00efccae029691f979fc65003a47d16aad917df06c4",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/walking/transit/bindings_test.go"
+        },
+        {
+          "after_bytes": 4060,
+          "after_sha256": "ebe81197bece71cc2465dfdab258d4f0a9407ba227956f964a1979cb81841c07",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/walking/transit/catalog_test.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 299,
+      "name": "bench-tb-answer-ties",
+      "patch": "patches/36-bench-tb-answer-ties.patch",
+      "patch_bytes": 489799,
+      "patch_sha256": "c0feb280a701ea79c8f31591ed079522886adf0825a69598a2b220c66da254c8",
+      "projection_sha256": "20c25ac3cfc451902ff2de29e3075e2fd529fffeb774bb98602e9883de49ab1b",
+      "reconstruction_parent": "bench-v3-quality",
+      "runtime_source_sha256": "e649ee915719090b95751bba437805a484751649ad4240a017321fd2c3130497"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 8526,
+          "after_sha256": "27b0e88d7d6a55c4c7ceb5efb96d434e4042c75774dcd4e278175bc93c9a4e33",
+          "before_bytes": 8439,
+          "before_sha256": "487acca7ba40008912d4b2fd5a0f470d785939adac117f5c7f792f3de15b83a1",
+          "operation": "modify",
+          "path": "cmd/familybench/adapters.go"
+        },
+        {
+          "after_bytes": 2641,
+          "after_sha256": "13a03815ebfdc83ff05417a273aa69e19d35a96e9dca033eb277642793b6a930",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/familybench/diagnostics.go"
+        },
+        {
+          "after_bytes": 5927,
+          "after_sha256": "6db98ba6b6cae316b441d54675303f3aa1022bef1092b8219841e9f8f73030f9",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/familybench/diagnostics_test.go"
+        },
+        {
+          "after_bytes": 1027,
+          "after_sha256": "0f3eaddb8f6d7f65b3a46abecae68c462734b575984778abdce84a91367688a8",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/familybench/local_walk_ties_test.go"
+        },
+        {
+          "after_bytes": 26607,
+          "after_sha256": "764e6c3face6ed7b6b50f89d2f91bf2d0ea91d59f723d3e339d75a915032e573",
+          "before_bytes": 25375,
+          "before_sha256": "fdafe4dead6adb133be925bb2940c069e9200249425ae6e500ecb316d754e3eb",
+          "operation": "modify",
+          "path": "cmd/familybench/main.go"
+        },
+        {
+          "after_bytes": 10332,
+          "after_sha256": "fd76cbcda1480035d3faa912784727698c0750f8c1acdd169622c91dc5078c92",
+          "before_bytes": 8625,
+          "before_sha256": "c9d95e90913a9e205bb83db07a9dda705b3342931995a2591ec34b78fb1f088a",
+          "operation": "modify",
+          "path": "cmd/familybench/scoped.go"
+        },
+        {
+          "after_bytes": 8328,
+          "after_sha256": "a0b45d79c33e195d7f7772d6905a3bd71a45271104642ff624ad2cdeefa7eb8d",
+          "before_bytes": 8262,
+          "before_sha256": "8304e8e97caa99818aaebd558033e0f929181cdb33d9be14cedf7303ac6c8555",
+          "operation": "modify",
+          "path": "cmd/inputpreflight/config.go"
+        },
+        {
+          "after_bytes": 14413,
+          "after_sha256": "e95586aceae4ef8f1b4b651d4af10caebb6361816d2b883d388f8b109e379388",
+          "before_bytes": 15723,
+          "before_sha256": "98cbeba1309aedd9324e0c3a39c4abf3508b7a7bb3fdbefb465bd3024ed95504",
+          "operation": "modify",
+          "path": "cmd/profilebench/main.go"
+        },
+        {
+          "after_bytes": null,
+          "after_sha256": null,
+          "before_bytes": 1448,
+          "before_sha256": "3e86a58af80ef3acbb2fc961cd7a86450e9b803d243f104354a396cb051da3f0",
+          "operation": "delete",
+          "path": "cmd/profilebench/point_input.go"
+        },
+        {
+          "after_bytes": null,
+          "after_sha256": null,
+          "before_bytes": 1223,
+          "before_sha256": "046939cb869057e5c05fa8e0bba8529cc5413605a401a11c58833b13c29a8c70",
+          "operation": "delete",
+          "path": "cmd/profilebench/point_input_test.go"
+        },
+        {
+          "after_bytes": 13449,
+          "after_sha256": "846e3e32d1d42adc65243312c45b81f548b1267406833a8e7b7cbc976cb97b0a",
+          "before_bytes": 14291,
+          "before_sha256": "978afd310c0366fbcf6c4a9711c91282ed56dc2918ddccd7dbf3babd2ded161f",
+          "operation": "modify",
+          "path": "cmd/tadbench/main.go"
+        },
+        {
+          "after_bytes": 1565,
+          "after_sha256": "eb34773c40a93029d2ffa3de18b50b0c0aba3dd024bea9a8a4b8fc52976ebf6f",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "regression/mcraptor/ultra_local_walk_ties_test.go"
+        },
+        {
+          "after_bytes": 13951,
+          "after_sha256": "9f25a470acd5cd30f7dd32c1cb3a3d19831fcb23ca8c12e239f0998386381d3d",
+          "before_bytes": 13851,
+          "before_sha256": "4528f745b810a41c4d82ba3139453cc8ed81feea53c4f1a870a6458e5cd8f04f",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 18826,
+          "after_sha256": "b23345b9e8899b6275a833f64ca90f8e5bfb743960b7fc9e960a5d8d831d5e56",
+          "before_bytes": 16148,
+          "before_sha256": "790b7ce92915f742208057440e5a8864fa7ec74602d440b5c95601cc5ba390f2",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/bounded.go"
+        },
+        {
+          "after_bytes": 11659,
+          "after_sha256": "d1da5b3416d843dc9e9f3bd303c19529386251856eca728c07222365d71952ff",
+          "before_bytes": 11371,
+          "before_sha256": "ae61c9819d9b00679c7fcae1836b1570be84612e2f6ea2b25d8ceebc6522ad25",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/choices.go"
+        },
+        {
+          "after_bytes": 10207,
+          "after_sha256": "c6f19c96bde2bf9b9eaa41b3e700552fc38f67d10094fda978055dc5e5f45dda",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/ultra/local_walk_ties.go"
+        },
+        {
+          "after_bytes": 1706,
+          "after_sha256": "54b17a5a48b3f87a43fe519d73b7de46d8df0bcccbe752adb0c4540f12f5cd21",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/ultra/sparse_cost.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 240,
+      "name": "bench-sparse-lean-diagnostics",
+      "patch": "patches/37-bench-sparse-lean-diagnostics.patch",
+      "patch_bytes": 65412,
+      "patch_sha256": "2b10a23afa40d99a2ebcede3b2a9e356a658471e8e5dfe112031fc83c0cda421",
+      "projection_sha256": "cfe6c002c0b5e4c9732f02662dfa66325a2efc9c7ede3cf9e7481e0a2130da1e",
+      "reconstruction_parent": "bench-native-v4-prep",
+      "runtime_source_sha256": "3a306d2e7903804f37d5b176d832ee79b8a7f7b165cf6e984f36d8055b017821"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 8547,
+          "after_sha256": "f44ebc70a25f090bd1c96cc459d65445afd04f8e78cbb1d29e8dea35f5551133",
+          "before_bytes": 8439,
+          "before_sha256": "487acca7ba40008912d4b2fd5a0f470d785939adac117f5c7f792f3de15b83a1",
+          "operation": "modify",
+          "path": "cmd/familybench/adapters.go"
+        },
+        {
+          "after_bytes": 3321,
+          "after_sha256": "1a0182e22038820e2f78fb2dc6df4adb4264c629c10064170c1d52b41fc5bcc1",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/familybench/diagnostics.go"
+        },
+        {
+          "after_bytes": 10114,
+          "after_sha256": "753daaa7674f7d11fccc9c0524de81da02ce13240f09a284513688c7cdd29cf0",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/familybench/diagnostics_test.go"
+        },
+        {
+          "after_bytes": 27158,
+          "after_sha256": "8dd54dffc257c4babfdb6713cf77da6eccf45978dea3aeec168b5dcd1edeb123",
+          "before_bytes": 25375,
+          "before_sha256": "fdafe4dead6adb133be925bb2940c069e9200249425ae6e500ecb316d754e3eb",
+          "operation": "modify",
+          "path": "cmd/familybench/main.go"
+        },
+        {
+          "after_bytes": 10822,
+          "after_sha256": "b5b009b3d53e12491759e6267841e1d9ed9486b5ebb6c49bd3ab4bd691c650e2",
+          "before_bytes": 10329,
+          "before_sha256": "e459f3e62ae0751d4d4bfb464cce2bca5203faf90bc59bcb166ad6d7a49059f4",
+          "operation": "modify",
+          "path": "cmd/familybench/scoped.go"
+        },
+        {
+          "after_bytes": 1097,
+          "after_sha256": "c5bb4c461e28e3d7ed0f4989eac8956b3b81bdc6ad0d2c5adb6a269892f2d98e",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "nativeinputprobe/probe.go"
+        },
+        {
+          "after_bytes": 20824,
+          "after_sha256": "7b82d1fcb462ac58e0bf6db6ec99082618a76f8ccb05b87c30f49dd2b6ce3698",
+          "before_bytes": 20749,
+          "before_sha256": "18a3427a23606148e3d116d8d58320e0713fd42d4a79f9895d83d223f34c5a80",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 1978,
+          "after_sha256": "f530048bc21a9ac0e4ce7f26d3ca61f1eeb625f1a821880c0daefa171ac370b9",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/ultra/sparse_cost.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 303,
+      "name": "bench-sparse-lean-v3",
+      "patch": "patches/38-bench-sparse-lean-v3.patch",
+      "patch_bytes": 28540,
+      "patch_sha256": "119a7b21d66d978eab1b9a50f3294fa8837f8b6b04ecc1740562a8cc8a542c24",
+      "projection_sha256": "0b098ce110fba77c017d3cd87fc50dcf12fe4ab84df2ad3bae5e76caba4c9f73",
+      "reconstruction_parent": "bench-tb-answer-ties",
+      "runtime_source_sha256": "72c399c1fbc5bc0ce4568cf1607df039ad3d66fd63cec7d79655dc96ece3dcfc"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 14312,
+          "after_sha256": "8ed48c15cf5bea2b7d0cb128dc6d528e1f2269cd5858e56da733bd14a5f5b0da",
+          "before_bytes": 14215,
+          "before_sha256": "562ddf0d3a74d492871d55326e99e04c040000b6972d85cbfbc748f81e15951b",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 8712,
+          "after_sha256": "998e2ce1b757f9ec0d1ecfcee0d134e47950f5ca813993a469fdd236f73091be",
+          "before_bytes": 7311,
+          "before_sha256": "20c480930e61705b5f55d08397401bfecfd63c9b1358f11f543a0daaf354dea3",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_graph.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 243,
+      "name": "bench-native-v6-walk-prefix-v1",
+      "patch": "patches/39-bench-native-v6-walk-prefix-v1.patch",
+      "patch_bytes": 5299,
+      "patch_sha256": "660c1e0c21e44e034089f2543caec703695d104f8adb96428c85dad2885a75af",
+      "projection_sha256": "fb9f9872afebf87fb7d09b1dacbf1ee7896b8ab90d0ddbed87f779d6379ef1aa",
+      "reconstruction_parent": "bench-native-v5-trex-compact",
+      "runtime_source_sha256": "02af303c27e155210e8b5df4146932218fd135fc5aa846e2d139baaa41c1ff65"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 18437,
+          "after_sha256": "d91bb11a61616ea8cb9e50c247e2eff10d45af14847ea4235f8dd84a145b2ce5",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "FINITE_SAFE_MATRIX.json"
+        },
+        {
+          "after_bytes": 292,
+          "after_sha256": "506d5e6f0a3fe4582804c0e1a65f7d6a45673b4ac533c94b6f5db31823e4f7ce",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "HYBRID_FILL_MATRIX.json"
+        },
+        {
+          "after_bytes": 27226,
+          "after_sha256": "65e5b4b7536275d2ec845922d17e930a7c97bcbdbe9799c65a35a7a93c0e305b",
+          "before_bytes": 27158,
+          "before_sha256": "8dd54dffc257c4babfdb6713cf77da6eccf45978dea3aeec168b5dcd1edeb123",
+          "operation": "modify",
+          "path": "cmd/familybench/main.go"
+        },
+        {
+          "after_bytes": 1105,
+          "after_sha256": "67ed027a28630e0aaf57ea2ce0edc4d9f912590ff4bd9aa562bc27872fd36032",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/finitesafeprobe/main.go"
+        },
+        {
+          "after_bytes": 3036,
+          "after_sha256": "de7e9cf563625e2670d82320456a1880dde69e7488988556ad090c8c28f8ff3d",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "regression/finite_safe_lean_test.go"
+        },
+        {
+          "after_bytes": 21219,
+          "after_sha256": "c5191db0e3f369b27f5f23a9fe9a0f8604b26b1cd2554d5cf91a98e3513cfb19",
+          "before_bytes": 20824,
+          "before_sha256": "7b82d1fcb462ac58e0bf6db6ec99082618a76f8ccb05b87c30f49dd2b6ce3698",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 12276,
+          "after_sha256": "b2223d075788edb645083682d4ecb5e12e34d66e747393673fcbda9549dd94d5",
+          "before_bytes": 11659,
+          "before_sha256": "d1da5b3416d843dc9e9f3bd303c19529386251856eca728c07222365d71952ff",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/choices.go"
+        },
+        {
+          "after_bytes": 11621,
+          "after_sha256": "22be30f8c399ab6b4e615995a8e1ed9dd966d3254ca53f333de1f6128de722a7",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/finite_safe.go"
+        },
+        {
+          "after_bytes": 1566,
+          "after_sha256": "9078311f3529533abce60caa2e6f64f329458aaddd54e7e35d1ea8f13107c28a",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/finite_safe_evaluate.go"
+        },
+        {
+          "after_bytes": 5104,
+          "after_sha256": "0b175f9d38d6396f3f62eac9154b68019d8a12c7f7a35e0c9f26185e23e81ce8",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/finite_safe_test.go"
+        },
+        {
+          "after_bytes": 12403,
+          "after_sha256": "86627124f80d29833aeca397328f51aae79346927ee13c5d9954b59888fd5157",
+          "before_bytes": 12325,
+          "before_sha256": "fcb35c8914345f9eebbbf78cb0bf18df19f0e5d1dc7054833d7f9ca90f9bd8fe",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/quality.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 310,
+      "name": "bench-finite20-safe-q01",
+      "patch": "patches/40-bench-finite20-safe-q01.patch",
+      "patch_bytes": 47897,
+      "patch_sha256": "966bf4476d9c91433d700eea6d67836962eb9401278e2f7b1e8aa2f066aabb7d",
+      "projection_sha256": "6bc37efe1f0a5c474e9b09f3e3786d542f4ab3dd0cad084eb2be9503f1a94744",
+      "reconstruction_parent": "bench-sparse-lean-v3",
+      "runtime_source_sha256": "4bf158e54e4018ce3bf255790b74a49f53a0d0b34b802ae483a655508d2a5a79"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 19488,
+          "after_sha256": "5c7d8a1c93683dd5d97234a66fe0a50ec3ece9570b5b1504d21958bd8b8dc650",
+          "before_bytes": 292,
+          "before_sha256": "506d5e6f0a3fe4582804c0e1a65f7d6a45673b4ac533c94b6f5db31823e4f7ce",
+          "operation": "modify",
+          "path": "HYBRID_FILL_MATRIX.json"
+        },
+        {
+          "after_bytes": 27294,
+          "after_sha256": "987c073b00f008dba51753d1b4cc49d2765ed8963417cbcc966ae2718a475290",
+          "before_bytes": 27226,
+          "before_sha256": "65e5b4b7536275d2ec845922d17e930a7c97bcbdbe9799c65a35a7a93c0e305b",
+          "operation": "modify",
+          "path": "cmd/familybench/main.go"
+        },
+        {
+          "after_bytes": 1273,
+          "after_sha256": "1734538b045802f2afbcbd67d3f37733a2f2056fd53d185fc4e5bbeeea7b4761",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/hybridfillprobe/main.go"
+        },
+        {
+          "after_bytes": 2796,
+          "after_sha256": "1c7c3820df4a93ebb1b6a89ee2270cc1752fee15c57cbb9c7e3c25da9a5711e0",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "regression/hybrid_fill_lean_test.go"
+        },
+        {
+          "after_bytes": 21533,
+          "after_sha256": "c8a32528fdd589194c1550a80e13d640e1770f01b4c07a50fe6e93da37fbacc3",
+          "before_bytes": 21219,
+          "before_sha256": "c5191db0e3f369b27f5f23a9fe9a0f8604b26b1cd2554d5cf91a98e3513cfb19",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 13046,
+          "after_sha256": "f6e4fbf04d5c00cc4d25d0cfde3e86ebf3c87831b742ee5abd0f1d9a03b002dc",
+          "before_bytes": 12276,
+          "before_sha256": "b2223d075788edb645083682d4ecb5e12e34d66e747393673fcbda9549dd94d5",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/choices.go"
+        },
+        {
+          "after_bytes": 10669,
+          "after_sha256": "13916c3e2c63555688d59a72235e51c83b381ecaacea34a5ec8489ce55f2c2ca",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/hybrid_fill.go"
+        },
+        {
+          "after_bytes": 1217,
+          "after_sha256": "c10555d3b4bb4cf2e29d203b8ef51304647218ecd0c37c9e700fcc17b7b8def5",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/hybrid_fill_evaluate.go"
+        },
+        {
+          "after_bytes": 4012,
+          "after_sha256": "e1ae05bf1cc4a5bd76948b250e19c21a896b5d12091154dc75f42e2f88885773",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/hybrid_fill_test.go"
+        },
+        {
+          "after_bytes": 12488,
+          "after_sha256": "232de68d0b4a0d45e2506c839a9af2cb5702abd3c042f3ea63af96e0533b93d2",
+          "before_bytes": 12403,
+          "before_sha256": "86627124f80d29833aeca397328f51aae79346927ee13c5d9954b59888fd5157",
+          "operation": "modify",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/quality.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 315,
+      "name": "bench-safe-fill-B-q01",
+      "patch": "patches/41-bench-safe-fill-B-q01.patch",
+      "patch_bytes": 47156,
+      "patch_sha256": "c3b6823a009971cecf5144bea5f223b1c86f273b33a402d75d52c07d7bc397ab",
+      "projection_sha256": "4d5653ed2ab7ed12b1ff1420c3e9c96dce7753217be7e7e6692acecbb5bec8f7",
+      "reconstruction_parent": "bench-finite20-safe-q01",
+      "runtime_source_sha256": "8f13517d8a75df4c155e735eb1a03bbfd80012f3cd0de7e32827d1cb13b3628f"
+    },
+    {
+      "changes": [
+        {
+          "after_bytes": 951,
+          "after_sha256": "abdb45b36942be164d279bc1fc0ec5418c01857612eed5ab67dd68b77de54502",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "cmd/offlinefeatureprobe/main.go"
+        },
+        {
+          "after_bytes": 14254,
+          "after_sha256": "50b9ad44cffe12dfeb2bcab3f2d4e8ae24c7ecd3356b569d62d55ead1f5d36b5",
+          "before_bytes": 13951,
+          "before_sha256": "9f25a470acd5cd30f7dd32c1cb3a3d19831fcb23ca8c12e239f0998386381d3d",
+          "operation": "modify",
+          "path": "routing.lock.json"
+        },
+        {
+          "after_bytes": 4233,
+          "after_sha256": "4a4061e24c2199ee0dc505295a660071c7dde3cea1d2f82e069cb1d2175e4a36",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/offline_wrapper.go"
+        },
+        {
+          "after_bytes": 2322,
+          "after_sha256": "b393dd7390a03689337b1a374c0418a2cf3b9d31342908dbe69099b6faa87fe9",
+          "before_bytes": null,
+          "before_sha256": null,
+          "operation": "add",
+          "path": "vendor/github.com/ertyoii/transit-routing-go/recommend/offline_wrapper_test.go"
+        }
+      ],
+      "exact_in_memory_replay": true,
+      "files": 240,
+      "name": "offline-feature-probe-v3-attempt01",
+      "patch": "patches/42-offline-feature-probe-v3-attempt01.patch",
+      "patch_bytes": 9455,
+      "patch_sha256": "c985865ad32302b45fd3430385ab0706bfcd68a356ce57f238440da2f45c2b09",
+      "projection_sha256": "73dd664e1a61a83dddd760607dc89883102bbddf590783f500ae8cdc2c2e2bbd",
+      "reconstruction_parent": "bench-v3-quality",
+      "runtime_source_sha256": "51e302d142bd16235a669dd00c7558405c21dff020f1107735873e0c26118615"
+    }
+  ],
+  "schema": "sg-v2-ordered-source-deltas-v1",
+  "semantics": "reconstruction_parent defines an exact byte-delta dependency, not a claim of historical Git parentage. Reconstruct ancestors in listed order, then copy the declared parent and apply this branch patch. New/deleted files are fully represented in relative unified patches.",
+  "status": "CODE_ONLY_REVIEW_CANDIDATE_NOT_SELECTED_RESULTS"
+}

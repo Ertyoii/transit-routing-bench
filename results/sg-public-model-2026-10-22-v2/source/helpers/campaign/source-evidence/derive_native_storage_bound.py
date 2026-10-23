@@ -1,0 +1,12 @@
+#!/usr/bin/env python3
+"""Static degree/algebra storage bound; no shortest-path/routing execution."""
+import argparse, collections, hashlib, json, pathlib
+p=argparse.ArgumentParser();p.add_argument('--footpath-delta',required=True);p.add_argument('--largest-scc',required=True,type=int);p.add_argument('--extra-edges',type=int,default=70);p.add_argument('--out',required=True);a=p.parse_args()
+b=pathlib.Path(a.footpath_delta).read_bytes();edges=json.loads(b)
+out=collections.Counter(e['from'] for e in edges);inn=collections.Counter(e['to'] for e in edges)
+D=max(max(out.values()),max(inn.values()));k=a.extra_edges;w1=len(edges)+k
+w2old=sum(inn[v]*out[v] for v in out.keys()|inn.keys());w2=w2old+k*(max(inn.values())+max(out.values()))+k*k
+w3old=sum(inn[e['from']]*out[e['to']] for e in edges);w3=w3old+3*k*D*D+3*k*k*D+k**3
+n=a.largest_scc;q=n*(n-1);h=q+max(0,q-w1)+max(0,q-w1-w2)+max(0,q-w1-w2-w3)
+r={'scope':'static algebraic storage lower bound; no routing, build, shortest paths or benchmark executed','footpath_delta_sha256':hashlib.sha256(b).hexdigest(),'delta_edges':len(edges),'additional_edges_upper_bound':k,'largest_primary_strong_component':n,'ordered_nonself_pairs':q,'minimum_closure_paths_in_component_including_self':n*n,'maximum_old_in_degree':max(inn.values()),'maximum_old_out_degree':max(out.values()),'one_edge_walks_upper_bound':w1,'two_edge_walks_old':w2old,'two_edge_walks_upper_bound':w2,'three_edge_walks_old':w3old,'three_edge_walks_upper_bound':w3,'minimum_total_raw_footpath_elements_for_component':h,'amd64_path_struct_bytes':48,'amd64_model_footpath_struct_bytes':88,'path_rows_logical_bytes_lower_bound':n*n*48,'raw_edge_elements_logical_bytes_lower_bound':h*88,'walk_map_keys_plus_path_pointers_logical_bytes_lower_bound':n*n*16,'single_closure_logical_bytes_lower_bound':n*n*64+h*88,'excludes':'slice/map capacity slack, allocator size classes, graph/model/timetable copies, strings, TB links, flags, TREX edges, checker, quality, transient heaps and profiles','degree_bound_method':'Old degree products count walks of length2 and3. Additional edges are placed adversarially using maximum degree and binomial placement bounds. Distinct pairs reachable within h edges cannot exceed summed walk counts of lengths1..h. Every remaining reachable ordered pair needs at least h+1 raw edges. Weighted shortest paths cannot use fewer edges than unweighted reachability requires.'}
+pathlib.Path(a.out).write_text(json.dumps(r,indent=2,sort_keys=True)+'\n')

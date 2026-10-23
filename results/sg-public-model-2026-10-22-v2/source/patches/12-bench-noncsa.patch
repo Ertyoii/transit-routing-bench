@@ -1,0 +1,2280 @@
+--- a/cmd/familybench/adapters.go
++++ b/cmd/familybench/adapters.go
+@@ -24,7 +24,7 @@
+ 	kind   string
+ }
+ 
+-var names = []string{"csa_arrival_single", "csa_arrival_shared", "csa_score_single", "csa_score_shared", "ea_csa_layered", "raptor", "mc_raptor", "trip_based", "flash_tb", "transfer_patterns", "scalable_tp", "trex", "raptor_early", "mc_raptor_early"}
++var names = []string{"csa_arrival_single", "csa_arrival_shared", "csa_score_single", "csa_score_shared", "ea_csa_layered", "raptor", "mc_raptor", "trip_based", "flash_tb", "transfer_patterns", "scalable_tp", "trex", "raptor_early", "mc_raptor_early", "raptor_local_walk_ties", "raptor_early_local_walk_ties"}
+ 
+ func prepare(ctx context.Context, d model.Dataset, name string, k, maxLabels, maxTransfers, maxWork, maxWitnesses int) (*router, error) {
+ 	r := &router{kind: "pareto"}
+@@ -113,13 +113,21 @@
+ 			v, e := x.Search(c, q)
+ 			return rawResult{v.Journeys, v.Complete, v.Stats, e}
+ 		}
+-	case "raptor", "raptor_early":
++	case "raptor", "raptor_early", "raptor_local_walk_ties", "raptor_early_local_walk_ties":
+ 		x, e := raptor.New(d)
+ 		if e != nil {
+ 			return r, e
+ 		}
+ 		r.config = x.Capabilities()
+-		r.single = func(c context.Context, q model.Query) rawResult {
++		localTies := name == "raptor_local_walk_ties" || name == "raptor_early_local_walk_ties"
++		if localTies {
++			r.config = map[string]any{"capability": x.Capabilities(), "tie_refinement": "local_equal_time_stop_equal_trip_onboard_equal_arrival_answer", "minimum_walking_representatives_complete": false, "native_contract": "arrival_boardings_2d_not_3d"}
++		}
++		r.single = func(c context.Context, q model.Query) rawResult {
++			if localTies {
++				v, stats, e := x.SearchLocalWalkTies(c, q, name == "raptor_early_local_walk_ties")
++				return rawResult{v.Journeys, v.Complete, map[string]any{"router": v.Stats, "early_pruning": stats}, e}
++			}
+ 			if name == "raptor_early" {
+ 				v, stats, e := x.SearchEarlyPruning(c, q)
+ 				return rawResult{v.Journeys, v.Complete, map[string]any{"router": v.Stats, "early_pruning": stats}, e}
+--- a/cmd/familybench/main.go
++++ b/cmd/familybench/main.go
+@@ -24,6 +24,8 @@
+ 	"time"
+ )
+ 
++var processStarted = time.Now()
++
+ type item struct {
+ 	Stratum string      `json:"stratum"`
+ 	Query   model.Query `json:"query"`
+@@ -45,8 +47,10 @@
+ 	ScoreThroughK   int  `json:"score_certified_through_k"`
+ }
+ type record struct {
+-	Quality   *recommend.Result `json:"recommendation_quality,omitempty"`
+-	QualityNS int64             `json:"quality_ns"`
++	Quality             *recommend.Result `json:"recommendation_quality,omitempty"`
++	QualityNS           int64             `json:"quality_ns"`
++	PublishedResponseNS *int64            `json:"published_response_ns,omitempty"`
++	SerializationNS     *int64            `json:"serialization_ns,omitempty"`
+ 	item
+ 	Raw              []model.Journey             `json:"raw"`
+ 	Final            []model.Validated           `json:"final"`
+@@ -168,6 +172,7 @@
+ 	witnesses := flag.Int("max-witnesses", 2000000, "development retained preprocessing witness guard")
+ 	rssStop := flag.Int64("rss-safety-stop", 12000000000, "sampled development peakRSS stop; not hard memory confinement")
+ 	quality := flag.Bool("quality", false, "measure validated candidates and pattern_anchors_v1 selection; included in response time")
++	streamResponses := flag.Bool("stream-responses", false, "write each measured ordinary validated answer immediately to available-responses.jsonl; separately time publication")
+ 	preferencesPath := flag.String("preference-scenarios", "", "explicit finite choice scenarios; requires quality; measured within response")
+ 	flag.Parse()
+ 	var choiceConfig *recommend.ChoiceConfig
+@@ -192,6 +197,15 @@
+ 	}
+ 	if e := os.Mkdir(*out, 0700); e != nil {
+ 		return e
++	}
++	var publisher *responsePublisher
++	if *streamResponses {
++		f, e := os.OpenFile(filepath.Join(*out, "available-responses.jsonl"), os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0600)
++		if e != nil {
++			return e
++		}
++		defer f.Close()
++		publisher = &responsePublisher{answers: f, marker: os.Stdout, processStarted: processStarted}
+ 	}
+ 	prov, e := experiment.Identify(".")
+ 	if e != nil {
+@@ -477,6 +491,15 @@
+ 		rng := rand.New(rand.NewPCG(w.Seed, uint64(rep)))
+ 		rng.Shuffle(len(items), func(i, j int) { items[i], items[j] = items[j], items[i] })
+ 		p := pass{Algorithm: *alg, Repetition: rep, Warmup: rep < *warm, Records: []record{}, Batches: []batchRecord{}}
++		appendRecord := func(z record, submitted time.Time) error {
++			if publisher != nil && !forced && !p.Warmup {
++				if e := publisher.publish(&z, submitted); e != nil {
++					return e
++				}
++			}
++			p.Records = append(p.Records, z)
++			return nil
++		}
+ 		beginPass := time.Now()
+ 		limit := *deadline
+ 		if forced {
+@@ -494,7 +517,10 @@
+ 			ctx, cancel := context.WithDeadline(context.Background(), submitted.Add(limit))
+ 			if prepErr != nil {
+ 				for _, i := range part {
+-					p.Records = append(p.Records, finalize(i, rawResult{Err: prepErr}, submitted, bi, nil, 0, 0, ctx, limit))
++					if e := appendRecord(finalize(i, rawResult{Err: prepErr}, submitted, bi, nil, 0, 0, ctx, limit), submitted); e != nil {
++						cancel()
++						return e
++					}
+ 				}
+ 			} else if r.shared != nil {
+ 				qs := []model.Query{}
+@@ -512,7 +538,10 @@
+ 					return fmt.Errorf("shared adapter lost lanes")
+ 				}
+ 				for i, v := range raw {
+-					p.Records = append(p.Records, finalize(part[i], v, submitted, bi, nil, start, done, ctx, limit))
++					if e := appendRecord(finalize(part[i], v, submitted, bi, nil, start, done, ctx, limit), submitted); e != nil {
++						cancel()
++						return e
++					}
+ 				}
+ 			} else {
+ 				for _, i := range part {
+@@ -522,7 +551,10 @@
+ 					core := time.Since(t).Nanoseconds()
+ 					br.CoreNS += core
+ 					done := time.Since(submitted).Nanoseconds()
+-					p.Records = append(p.Records, finalize(i, raw, submitted, bi, &core, start, done, ctx, limit))
++					if e := appendRecord(finalize(i, raw, submitted, bi, &core, start, done, ctx, limit), submitted); e != nil {
++						cancel()
++						return e
++					}
+ 				}
+ 			}
+ 			br.MakespanNS = time.Since(submitted).Nanoseconds()
+@@ -597,7 +629,7 @@
+ 	if r.cost != nil {
+ 		finalCost = r.cost()
+ 	}
+-	_, e = experiment.WriteArtifact(filepath.Join(*out, "summary.json"), map[string]any{"success": !fatal, "success_scope": "No malformed route/adapter/unknown routing failure; budget/unsupported/deadline rows retained. Cross-process quality audited separately.", "algorithm": *alg, "kind": r.kind, "configuration": r.config, "quality_preparation": qualityPrep, "quality_enabled": *quality, "preference_config": choiceConfig, "preference_config_sha256": preferenceSHA, "candidate_k": *k, "display_k": []int{1, 3, 5, 10}, "penalty": 300, "batch_size": *size, "repetitions": *reps, "warmups": *warm, "batch_deadline_ns": deadline.Nanoseconds(), "preparation_deadline_ns": prepTimeout.Nanoseconds(), "rss_sampled_safety_stop_bytes": *rssStop, "rss_sampling_interval_ns": int64(100000000), "hard_memory_cap": false, "hard_cpu_confinement": false, "gomaxprocs": runtime.GOMAXPROCS(0), "go_version": runtime.Version(), "goos": runtime.GOOS, "goarch": runtime.GOARCH, "hardware": os.Getenv("TRANSIT_BENCH_HARDWARE"), "provenance": prov, "dataset_sha256": dh, "queries_sha256": qh, "fixture_manifest_sha256": fixtureSHA, "scoped_configuration_sha256": scopedSHA, "seed": w.Seed, "method": w.Method, "input_load_ns": loadNS, "preparation": prep, "checker_preparation": checkPrep, "passes": summaries, "throughput_interval": ci, "index_cost_final": finalCost, "resources_final": experiment.SnapshotResources(), "scope": "Native development with recorded resources;8GB/four cores is a cost reference, not an acceptance gate. One router/process. Common batch submission deadline includes queue/search/validation/ranking. No divided shared-core latency; process RSS separate from cumulative allocations; no worker subprocesses."})
++	_, e = experiment.WriteArtifact(filepath.Join(*out, "summary.json"), map[string]any{"success": !fatal, "success_scope": "No malformed route/adapter/unknown routing failure; budget/unsupported/deadline rows retained. Cross-process quality audited separately.", "algorithm": *alg, "kind": r.kind, "configuration": r.config, "quality_preparation": qualityPrep, "quality_enabled": *quality, "preference_config": choiceConfig, "preference_config_sha256": preferenceSHA, "candidate_k": *k, "display_k": []int{1, 3, 5, 10}, "penalty": 300, "batch_size": *size, "repetitions": *reps, "warmups": *warm, "batch_deadline_ns": deadline.Nanoseconds(), "preparation_deadline_ns": prepTimeout.Nanoseconds(), "rss_sampled_safety_stop_bytes": *rssStop, "rss_sampling_interval_ns": int64(100000000), "hard_memory_cap": false, "hard_cpu_confinement": false, "gomaxprocs": runtime.GOMAXPROCS(0), "go_version": runtime.Version(), "goos": runtime.GOOS, "goarch": runtime.GOARCH, "hardware": os.Getenv("TRANSIT_BENCH_HARDWARE"), "provenance": prov, "dataset_sha256": dh, "queries_sha256": qh, "fixture_manifest_sha256": fixtureSHA, "scoped_configuration_sha256": scopedSHA, "seed": w.Seed, "method": w.Method, "input_load_ns": loadNS, "preparation": prep, "checker_preparation": checkPrep, "passes": summaries, "throughput_interval": ci, "index_cost_final": finalCost, "response_stream": publisher.summary(), "resources_final": experiment.SnapshotResources(), "scope": "Native development with recorded resources;8GB/four cores is a cost reference, not an acceptance gate. One router/process. Common batch submission deadline includes queue/search/validation/ranking. No divided shared-core latency; process RSS separate from cumulative allocations; no worker subprocesses."})
+ 	if e != nil {
+ 		return e
+ 	}
+--- /dev/null
++++ b/cmd/familybench/stream.go
+@@ -0,0 +1,89 @@
++package main
++
++import (
++	"encoding/json"
++	"fmt"
++	"io"
++	"time"
++
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/presentation"
++	"github.com/ertyoii/transit-routing-go/recommend"
++)
++
++// Streamed answers are actual validated witnesses, not routing-start or
++// readiness markers. Unbuffered writes return before availability is recorded.
++// The sink is the local process filesystem, not a network/client transport.
++type availableAnswer struct {
++	Event      string                      `json:"event"`
++	Query      model.Query                 `json:"query"`
++	Completed  bool                        `json:"completed"`
++	Attempted  bool                        `json:"attempted"`
++	Status     string                      `json:"status"`
++	Error      string                      `json:"error,omitempty"`
++	ValidEmpty bool                        `json:"valid_empty"`
++	Final      []model.Validated           `json:"final"`
++	Display    map[int]presentation.Result `json:"display_options"`
++	Quality    *recommend.Result           `json:"recommendation_quality,omitempty"`
++	ResponseNS int64                       `json:"response_ns"`
++}
++
++type availableMarker struct {
++	Event               string `json:"event"`
++	QueryID             string `json:"query_id"`
++	AvailableUTC        string `json:"available_utc"`
++	ProcessElapsedNS    int64  `json:"process_elapsed_ns"`
++	PublishedResponseNS int64  `json:"published_response_ns"`
++	SerializationNS     int64  `json:"serialization_ns"`
++	Sink                string `json:"sink"`
++}
++
++type responsePublisher struct {
++	answers         io.Writer
++	marker          io.Writer
++	processStarted  time.Time
++	first           *availableMarker
++	records         int
++	serializationNS int64
++}
++
++func writeJSONLine(w io.Writer, v any) error {
++	b, e := json.Marshal(v)
++	if e != nil {
++		return e
++	}
++	b = append(b, '\n')
++	n, e := w.Write(b)
++	if e == nil && n != len(b) {
++		e = io.ErrShortWrite
++	}
++	return e
++}
++
++func (p *responsePublisher) publish(z *record, submitted time.Time) error {
++	begin := time.Now()
++	a := availableAnswer{Event: "available_answer", Query: z.Query, Completed: z.Completed, Attempted: z.Attempted, Status: z.Status, Error: z.Error, ValidEmpty: z.ValidEmpty, Final: z.Final, Display: z.Display, Quality: z.Quality, ResponseNS: z.ResponseNS}
++	if e := writeJSONLine(p.answers, a); e != nil {
++		return fmt.Errorf("response stream: %w", e)
++	}
++	available := time.Now()
++	published, serialization := available.Sub(submitted).Nanoseconds(), available.Sub(begin).Nanoseconds()
++	z.PublishedResponseNS, z.SerializationNS = &published, &serialization
++	p.records++
++	p.serializationNS += serialization
++	if p.first == nil && z.Completed && z.Attempted {
++		m := availableMarker{Event: "first_available_answer", QueryID: z.Query.ID, AvailableUTC: available.UTC().Format(time.RFC3339Nano), ProcessElapsedNS: available.Sub(p.processStarted).Nanoseconds(), PublishedResponseNS: published, SerializationNS: serialization, Sink: "available-responses.jsonl (local unbuffered filesystem write, not network delivery)"}
++		if e := writeJSONLine(p.marker, m); e != nil {
++			return fmt.Errorf("first answer marker: %w", e)
++		}
++		p.first = &m
++	}
++	return nil
++}
++
++func (p *responsePublisher) summary() map[string]any {
++	if p == nil {
++		return map[string]any{"enabled": false}
++	}
++	return map[string]any{"enabled": true, "file": "available-responses.jsonl", "scope": "measured ordinary records only; warmups and forced deadlines excluded; local unbuffered filesystem availability, not network delivery; historical response_ns ends before serialization", "records": p.records, "serialization_ns": p.serializationNS, "first_available_answer": p.first}
++}
+--- /dev/null
++++ b/cmd/familybench/stream_test.go
+@@ -0,0 +1,172 @@
++package main
++
++import (
++	"bytes"
++	"encoding/json"
++	"errors"
++	"io"
++	"os"
++	"os/exec"
++	"path/filepath"
++	"strings"
++	"testing"
++	"time"
++
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/presentation"
++)
++
++type shortStream struct{}
++
++func (shortStream) Write(p []byte) (int, error) { return len(p) - 1, nil }
++
++type brokenStream struct{}
++
++func (brokenStream) Write(p []byte) (int, error) { return 0, errors.New("sink unavailable") }
++
++func TestResponsePublisherActualAnswerAndFirstCompleteMarker(t *testing.T) {
++	var answers, marker bytes.Buffer
++	begin := time.Now().Add(-time.Second)
++	p := responsePublisher{answers: &answers, marker: &marker, processStarted: begin}
++	failed := record{item: item{Query: model.Query{ID: "failed"}}, Attempted: true, Status: "deadline", Final: []model.Validated{}, Display: map[int]presentation.Result{}}
++	if e := p.publish(&failed, begin); e != nil {
++		t.Fatal(e)
++	}
++	if marker.Len() != 0 || p.first != nil {
++		t.Fatal("failed outcome is not an available successful answer")
++	}
++	valid := model.Validated{Journey: model.Journey{Legs: []model.Leg{{Kind: "ride", Ref: "c", Departure: 2, Arrival: 5}}}}
++	z := record{item: item{Query: model.Query{ID: "answer"}}, Completed: true, Attempted: true, Status: "complete", Final: []model.Validated{valid}, Display: map[int]presentation.Result{}, ResponseNS: 42}
++	if e := p.publish(&z, begin); e != nil {
++		t.Fatal(e)
++	}
++	if z.PublishedResponseNS == nil || *z.PublishedResponseNS <= 42 || z.SerializationNS == nil || *z.SerializationNS < 0 {
++		t.Fatal("publication timing missing", z)
++	}
++	var a availableAnswer
++	lines := strings.Split(strings.TrimSpace(answers.String()), "\n")
++	if len(lines) != 2 {
++		t.Fatal("not incremental JSONL", answers.String())
++	}
++	if e := json.Unmarshal([]byte(lines[1]), &a); e != nil {
++		t.Fatal(e)
++	}
++	if !a.Completed || a.Query.ID != "answer" || len(a.Final) != 1 || a.Final[0].Journey.Legs[0].Ref != "c" || a.ResponseNS != 42 {
++		t.Fatal("missing actual validated witness", a)
++	}
++	var m availableMarker
++	if e := json.Unmarshal(bytes.TrimSpace(marker.Bytes()), &m); e != nil {
++		t.Fatal(e)
++	}
++	if m.Event != "first_available_answer" || m.QueryID != "answer" || m.ProcessElapsedNS <= 0 || m.AvailableUTC == "" {
++		t.Fatal("invalid availability marker", m)
++	}
++	old := marker.String()
++	if e := p.publish(&z, begin); e != nil {
++		t.Fatal(e)
++	}
++	if marker.String() != old {
++		t.Fatal("first marker repeated")
++	}
++	if p.summary()["records"] != 3 {
++		t.Fatal("stream count")
++	}
++	var off *responsePublisher
++	if off.summary()["enabled"] != false {
++		t.Fatal("disabled publisher")
++	}
++}
++
++func TestResponsePublisherWriteFailuresNeverClaimAvailability(t *testing.T) {
++	z := record{item: item{Query: model.Query{ID: "answer"}}, Completed: true, Attempted: true, Status: "complete"}
++	for _, sink := range []io.Writer{shortStream{}, brokenStream{}} {
++		var marker bytes.Buffer
++		p := responsePublisher{answers: sink, marker: &marker, processStarted: time.Now()}
++		if e := p.publish(&z, time.Now()); e == nil {
++			t.Fatal("ignored failed stream")
++		}
++		if marker.Len() != 0 || p.first != nil || p.records != 0 {
++			t.Fatal("reported unavailable write")
++		}
++	}
++}
++
++func TestResponseStreamProcessBoundary(t *testing.T) {
++	root, e := filepath.Abs("../..")
++	if e != nil {
++		t.Fatal(e)
++	}
++	env := append(os.Environ(), "GOTOOLCHAIN=local", "GOWORK=off", "GOPROXY=off", "GOSUMDB=off", "GOMAXPROCS=2")
++	binary := filepath.Join(t.TempDir(), "familybench")
++	build := exec.Command("sh", "scripts/build.sh", "familybench", binary)
++	build.Dir, build.Env = root, env
++	if out, e := build.CombinedOutput(); e != nil {
++		t.Fatalf("build: %v\n%s", e, out)
++	}
++	outDir := filepath.Join(t.TempDir(), "result")
++	cmd := exec.Command(binary, "-fixture", "testdata/scoped.manifest.json", "-algorithm", "raptor", "-warmups", "1", "-repetitions", "1", "-batch-size", "1", "-stream-responses", "-out-dir", outDir)
++	cmd.Dir, cmd.Env = root, env
++	output, e := cmd.CombinedOutput()
++	if e != nil {
++		t.Fatalf("CLI: %v\n%s", e, output)
++	}
++	data, e := os.ReadFile(filepath.Join(outDir, "available-responses.jsonl"))
++	if e != nil {
++		t.Fatal(e)
++	}
++	lines := strings.Split(strings.TrimSpace(string(data)), "\n")
++	if len(lines) != 3 {
++		t.Fatal("warmup or forced-deadline leaked into measured stream", len(lines))
++	}
++	for _, line := range lines {
++		var a availableAnswer
++		if e := json.Unmarshal([]byte(line), &a); e != nil {
++			t.Fatal(e)
++		}
++		if !a.Completed || !a.Attempted || a.Status != "complete" {
++			t.Fatal("bad ordinary answer", a)
++		}
++	}
++	markers := 0
++	for _, line := range strings.Split(string(output), "\n") {
++		if strings.HasPrefix(line, "{\"event\":\"first_available_answer\"") {
++			markers++
++		}
++	}
++	if markers != 1 {
++		t.Fatal("missing or repeated first available answer", markers, string(output))
++	}
++	for _, name := range []string{"pass-00.json", "pass-01.json", "forced-deadline.json"} {
++		var artifact pass
++		data, e := os.ReadFile(filepath.Join(outDir, name))
++		if e != nil {
++			t.Fatal(e)
++		}
++		if e = json.Unmarshal(data, &artifact); e != nil {
++			t.Fatal(e)
++		}
++		for _, r := range artifact.Records {
++			want := name == "pass-01.json"
++			if (r.PublishedResponseNS != nil) != want || (r.SerializationNS != nil) != want {
++				t.Fatal("publication timer classification", name, r.Query.ID)
++			}
++		}
++	}
++	var summary struct {
++		Stream struct {
++			Enabled bool             `json:"enabled"`
++			Records int              `json:"records"`
++			First   *availableMarker `json:"first_available_answer"`
++		} `json:"response_stream"`
++	}
++	data, e = os.ReadFile(filepath.Join(outDir, "summary.json"))
++	if e != nil {
++		t.Fatal(e)
++	}
++	if e = json.Unmarshal(data, &summary); e != nil {
++		t.Fatal(e)
++	}
++	if !summary.Stream.Enabled || summary.Stream.Records != 3 || summary.Stream.First == nil {
++		t.Fatal("missing summary binding", summary)
++	}
++}
+--- /dev/null
++++ b/regression/mcraptor/local_walk_ties_test.go
+@@ -0,0 +1,41 @@
++package mcraptor_test
++
++import (
++	"context"
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/raptor"
++	"reflect"
++	"testing"
++)
++
++// Independent finite-word enumeration checks the unchanged 2D cap vector;
++// it does not reuse either native RAPTOR to generate the expected answer.
++func TestLocalWalkTiesIndependentWords2D(t *testing.T) {
++	for seed := uint64(0); seed < 96; seed++ {
++		d, q := generated(seed)
++		all := fullWords(d, q, 7)
++		want := objectives(all, q.MaxBoardings)
++		x, e := raptor.New(d)
++		if e != nil {
++			t.Fatal(e)
++		}
++		for _, early := range []bool{false, true} {
++			r, _, e := x.SearchLocalWalkTies(context.Background(), q, early)
++			if e != nil || !r.Complete {
++				t.Fatal(seed, early, e, r)
++			}
++			got := objectives(metrics(t, d, q, r.Journeys), q.MaxBoardings)
++			if !reflect.DeepEqual(got, want) {
++				t.Fatalf("seed=%d early=%v want=%v got=%v", seed, early, want, got)
++			}
++			// Same-vector walking refinement is only local, not a 3D completeness claim.
++			for _, m := range metrics(t, d, q, r.Journeys) {
++				if m.WalkingSeconds < 0 || m.Boardings > q.MaxBoardings {
++					t.Fatal("invalid objectives", m)
++				}
++			}
++		}
++	}
++}
++
++var _ model.Query
+--- a/routing.lock.json
++++ b/routing.lock.json
+@@ -1,7 +1,6 @@
+ {
+-  "module": "github.com/ertyoii/transit-routing-go",
+-  "version": "v0.1.0-pre.3",
+-  "commit": "b102816018b1db87304c751f2cd601a2abe4057a",
++  "baseline_source_sha256": "f7cf70d1a970fb70077fa13299cdb8c991e8712c44fe1fb19ba10a5befccdd2d",
++  "commit": "725520af0cff62792f70b941d4d69066eecb1010",
+   "files": {
+     "LICENSE": "3c524d60abb36a8a9d25782594ea2f8665f56b5811b38c53ff62754b96f49da7",
+     "THIRD_PARTY_NOTICES.md": "6016bae242130d6a43b111a0457427b43f047f4bd0aa607cccda2000577bce0b",
+@@ -24,7 +23,8 @@
+     "model/binding.go": "0c9cbef951029a396931a7a8af204d1d34e8b5ce4777fee8d1c9d3d3d0379b0a",
+     "model/model.go": "ff1ad33cb87e072171d4a4844d89b0e159773dacf9dd85b6c17979c5809f6a7d",
+     "model/query_validator.go": "a05147dc2d502100e4f9e8b90f9ec29742cffa6fb0f3ba846634c1b089810213",
+-    "paper/profile.go": "ef171ca2a3827d687687c0a8f21000cd1af9d8534b571f78e91e37c70f75376a",
++    "paper/node_arena.go": "70dbf5f5133e7939beac7dd12e1dbd90b14200d9295f2f7e6740496c5b828241",
++    "paper/profile.go": "96f9ed6c4ef844dd0e761bcc13f78064fbf5c3c61d440b44c2e952db687913fb",
+     "paper/walking_bound.go": "5b1d0638fcdbbb839313346bd85d9841dcaad490c9340f79f73b74b5da97f419",
+     "presentation/rank.go": "5723df6970f463db4b5445ad685e90d1667f673c940f5201ac055a643835da7e",
+     "profilecsa/scan.go": "84779bd360aa0a5bd4aa37854d3f36cb3f150c81214563438a583478341af349",
+@@ -40,10 +40,12 @@
+     "provenance/notices/ultra-reference-LICENSE.txt": "d5baa7300225514cda71dc7d69c842572112380be743e30d467ec03a37d1837d",
+     "provenance/source-pins.json": "8b451a972b3a1927d22587cc0ff9f47115e216fb99a1ec5b8b04d1fc70bf0490",
+     "raptor/early_pruning.go": "a0ae73b3306cc58a72c1474476e7ecad94ae614c3c47aacbd479201b4e49329d",
+-    "raptor/multicriteria.go": "ef138e2e6520fffa6344089dd29eea0016a221369c997f37e17a9945ce2d6b61",
++    "raptor/indexed_walks.go": "6607b6be2ce94ef6ec22348d04ca03fa85a1917ad4dc5694f5636bde87ec2c8b",
++    "raptor/local_walk_ties.go": "a421d1457d7d960d835420783bc859a1d4186c5a01d146f965996e6569e1f9ff",
++    "raptor/multicriteria.go": "7bcb4922d0b4bee980a2be58181d1017119a10e1d0e5e7a7e961c4f7a75a9ea0",
+     "raptor/range.go": "81f63bb9d674bd0e9955b4aa493b1657ed9c8c7992d04c9fc76960ef92805a15",
+-    "raptor/raptor.go": "86a73775704c8c34417f272f3d2298346a4cabc9f55cba25f4800a2d43668fd8",
+-    "raptor/round_queue.go": "3319c9839c727e512d7eef37a5d078c4c4438769dc7254622bac040bdf535a70",
++    "raptor/raptor.go": "85e8bb804971f1768910952bbe1c9a59928061b54acd64eaed8288f9ddc26d75",
++    "raptor/round_queue.go": "1f86bcfbed13072e69aa7fb04783d1fd916e824e697956bfdf7c128cbdcfa55a",
+     "recommend/choices.go": "f92dc795483533d0c7d1bbfeecff3c56a8b9e516d30c85cfc48a92c515a9e8d2",
+     "recommend/quality.go": "0305ce81032f25cb01a721a7567330d8339babbcebdf889ad61404b35e70d627",
+     "selection/reserved.go": "180080a439d9aadb56b5245cd614d850751352026f1ea3c4e1ce2c8f8de246ca",
+@@ -54,21 +56,22 @@
+     "tripbased/bounded_walking.go": "e071918fcd8db1941a791108d0f54c787420fe76d3df161ae3ee7cc5e2e64eb9",
+     "tripbased/capped_patterns.go": "640b9cd381f4995d3591315d11a3860e18cb7f8cd89db68a5a0d9641cea83c71",
+     "tripbased/capped_query.go": "507df1a5dbafc58bee3c06eeb6ee2220889611f9efc24677f0933fae694ff8e2",
+-    "tripbased/capped_retained.go": "c05ebc389999a70546748f2e9aadd415e92b2af2b57b117ef8a6ab866acd5c9e",
++    "tripbased/capped_retained.go": "d961cf22818d4a30a471313267c4b6123dcf9f8b025dde118889f9e0c309ef50",
+     "tripbased/capped_source_domain.go": "b65293af7afcc05e3c8fd6c25d07d4ee618d1e49e91ca53cf3a6b1c9757179f8",
++    "tripbased/compact_links.go": "85f66d312381ee13a9a8617e85edd664c4fc3351e6961304e1a3f2cfc251fc09",
+     "tripbased/cost_summary.go": "d686016f8800364ad351da9bab8a440d4daa50042b5c59164ea526c168ec649c",
+-    "tripbased/flash.go": "1ea53260bdf2dedb271f269c738b271895aeb389a0275917c17923ed7ef5829b",
++    "tripbased/flash.go": "4888ff851c113d1ba9378166601bdf53accab7de1171428125dbac3d7ffaf7d0",
+     "tripbased/flash_breakpoints.go": "af8a66abc935a28445495a40a043b47d2f884a3b161779a254905f39e2af4bb3",
+     "tripbased/flash_capped.go": "4d0b3ae6b31ae1c0545e3db70339aefc1b8ae6fd4b0d9769004ab3bbb51d7cdb",
+     "tripbased/flash_graph.go": "00206c170c2e0dd1b05126d5efd02d75ff05d6873c0434e57254b3620ee0914e",
+-    "tripbased/flash_profile.go": "6b5d85fb4b14390529ef2a01d1c91ed5a2c7d39c7957834286d79cbe7e75acab",
+-    "tripbased/flash_retained.go": "e65439c050357c31fc7b00b974b16e9fe488a9380d56779efb089e3de59655d3",
+-    "tripbased/flash_rules.go": "1d0e6061c3cfafc2c7a2cbc1bdca5854ca77e03b3cd43b754c6dd502f53ad80e",
+-    "tripbased/flash_transfers.go": "fd36b6c2e2259448928383ce8e7efb403027c980880770f7f9eaf97decd1c06e",
+-    "tripbased/index.go": "cf39823376309fb08f5c091caeeb95a79aca06316738673c49db1e76d9ac28e5",
++    "tripbased/flash_profile.go": "69a2a37340fe46c29ea70645b7e68457000bc73a1e9a806f9173be10d0c7fd5b",
++    "tripbased/flash_retained.go": "217ab3ffdcc071e44e3499fae1049fd0149132211f4fda60e6bd57a7fd5a95a8",
++    "tripbased/flash_rules.go": "ee3eced244a67a3e9f5007c16272a395c06f4da4bf830e936fe1b94dd9d063bc",
++    "tripbased/flash_transfers.go": "f504d676424c3733c5a03c00eb1b929afa9ee3c13df8ddb988d9ed9efced1205",
++    "tripbased/index.go": "b0503beb184bf7e89f4b8ac16b6e9d427fafe809b348016c993b29930e12e607",
+     "tripbased/patterns.go": "9a3a6fd29ad1d7a3d55c09da141df02a31ae833d32dd7d50b60da890e564e945",
+     "tripbased/patterns_query.go": "37485d9bf79815bc21e07f46e34788c4c7f1cfbb20344cd92addc2aaddd36767",
+-    "tripbased/query.go": "b85fd359a5362825de485da9015fcab9a08a361f9913eac749402f330284c91b",
++    "tripbased/query.go": "454c9313f2b02518d4542857e74b7077ad25ce4de32a4944e1d0a1ab1e937cc3",
+     "tripbased/scalable.go": "84a071f41b7586cc70fac46cdb84a8f079f564f4ba0ed7ba01ec0d0d1f8f8f7e",
+     "tripbased/scalable_border.go": "38f9c17113bda9836ede4f51b783b2c87628414e4cc27f38bb1718788f27d7c5",
+     "tripbased/scalable_cache.go": "80e8292354f838c04e05cda40b404104af4732fe4125832fccf4f88a11e27d8d",
+@@ -77,7 +80,7 @@
+     "tripbased/scalable_hierarchy.go": "56c98501fbce4faa6ff75d3347a9fdf47f3992f8ac1a91eab87ba666e29f1e89",
+     "tripbased/scalable_partition.go": "c156bf61ccb7808b900199c113f3115f527a3d48e723b233903abd155d44624d",
+     "tripbased/scalable_reduce.go": "4e40925a72332a37c41b6fc33defb28b0627854bcc80c04a2ab16b4ebe9a3f19",
+-    "tripbased/transfer_storage.go": "d6c0b99c764e6603598bec90088e10466bf9943802a2b2180e7a2d5e3e005190",
++    "tripbased/transfer_storage.go": "5c3fff927b5143a367f5129e59701be4e2e9fe11e511a659c7e7078c12586c34",
+     "tripbased/trex.go": "0cb573f7cf9cedcee86931596b67f2e9333bdf911d6b80ec34d6f359e49d1801",
+     "tripbased/trex_cap_certificate.go": "6a7e9889828bd1c8e40f6b70d4193ce7bc949e2708d9d6b8ba7e244fe9b749c8",
+     "tripbased/trex_customization.go": "6b2014268e6b19b1ebb9d0744a23fafe745f3e6e2d591a712b8da0d8dbc89b40",
+@@ -91,24 +94,26 @@
+     "tripbased/trex_storage.go": "05385e29ecb9dcb98baec226568f2a026b07a7c10149a38f5da0174102d74531",
+     "tripbased/trex_work.go": "d1019998737e5d5df302dfc6134d6a039eac1949facc62cc44e18152ff8d9cf7",
+     "ultra/active.go": "2ff9e41a15f9877dbc1e4f147c0999bec7db8455372ff632c4d825df355dec93",
+-    "ultra/capped.go": "ff4fe3a86923e9f38b8ddfad1fb4754760e475c3b44d76e1f8943b0c7d4141a7",
+-    "ultra/capped_search.go": "ffb5faa7cc306622a4589df8d7902784044163b132fd7facb6363806a8a16fac",
++    "ultra/capped.go": "2cd79a4b4e1397bb6120f6d747798e53f5789f86a70d0094ecfb1e525f763fca",
++    "ultra/capped_search.go": "602c1378895e5400d986b45add793c54b8aa7c7e73d96961722519a952677176",
+     "ultra/index.go": "c826f9a3736693055267046b04639a18219badfbb3f1e6105caa11a288b60c04",
+     "ultra/reuse.go": "0acde4d1dce13c107465258a5d14fe6e4872e533110965ab58d077663caac4c0",
+     "ultra/routes.go": "f01d85ecf9b01b381cb0081e02bd958b1a65705d8988e971a3512de08e7ad283",
+     "ultra/search.go": "719be0b0fef669a83dece8f86ca5e4258399c48a1586f7158c2f431804d7cbfe",
+-    "ultra/sparse.go": "ba02a1ea229167619a0656c3862d7a6db355f9a4ce6141820318f82226a6592b",
++    "ultra/sparse.go": "f87a6d7953394cd64d87b9ec2ef68949e49f4495c78d851213080af6183a03ed",
+     "validate/journey.go": "467b568a761fb7e1bbb45da32d54fa1539f9fceca1e6cbb6a7e04d3d71e298ef",
+     "walking/cache.go": "a6ce8c4ca31beba49587aa1d4a00f10aafc4994c9531e53a98caff5baec73f3d",
+     "walking/contract.go": "03921ca99783454f3f4556782e6421257bb149e2708cb22af4a376216a86445f",
+-    "walking/graph/graph.go": "7e0965bae0f16145f23a1b273099e4b1f629d6d5f7d879b01bd3492fe5c9a80e",
++    "walking/graph/graph.go": "5fcc482edb45eb11d01928e8dffb148f00dd2a32f4649a0bb0f6cf27109cd998",
++    "walking/graph/reach_session.go": "8403f7669c2e6a5058b929d8b424b81110b1297aa6101cb80a857579b6fa9436",
+     "walking/httpapi/handler.go": "cc718267008fc54375517601939c35b5fc4a1f86ce069d4c57f7d6772a36e539",
+     "walking/osm/load.go": "7ef78a3ca7827eb0ca8563a829149e95416559ec8b13e673144d64f82c8d0019",
+     "walking/transit/bindings.go": "01f4535d6a97e6838c71e44176f2555183e70ed8e45d4b91493c86be1b353c71",
+     "walking/transit/catalog.go": "b20f53c78b38bf6426d4180f89bf6545bee3638d7ae46d909847dddc734a0fa8",
+     "walking/transit/graph.go": "07ec2ac36311597ed657b686be7bc222ef3ac7ec022473d1f55729f5754b6fbe"
+   },
+-  "source_sha256": "b795aeec8da53a1e9ab6f37be762bd3956b2a0f68bb2bc6ba94ed589006a2ae3",
+-  "origin": "Local public source candidate for https://github.com/Ertyoii/transit-routing-go; exact local revision, native and final composed/result review pending; v0.1.0-pre.3 remains unreleased and no tag is implied",
+-  "baseline_source_sha256": "f7cf70d1a970fb70077fa13299cdb8c991e8712c44fe1fb19ba10a5befccdd2d"
++  "module": "github.com/ertyoii/transit-routing-go",
++  "origin": "V2 local non-CSA candidate: ancestry 725520a (walking/RAPTOR) plus cd88c9c ULTRA; query-local round/route/dense-walking reuse, pointer-free Trip-Based retained links, separately named local walking ties. commit retains ancestry; full file hashes identify changes. No GitHub push.",
++  "source_sha256": "5f0131d0170104085b1f9dbabe85f32b9f4b1b5da8f4f9a06fba00e750014850",
++  "version": "v0.1.0-pre.3"
+ }
+--- a/scripts/build.sh
++++ b/scripts/build.sh
+@@ -8,5 +8,5 @@
+ command_name=${1:?command required}
+ output_path=${2:?output path required}
+ case "$command_name" in transitbench|csabench|gtfsimport|routebench|querygen|candidateprobe|tbbench|profilebench|mcbench|tadbench|legproof|corechbench|ultrabench|flashbench|tpbench|stpbench|trexbench|familybench|walkingparity|fixturecheck) ;; *) printf 'Unknown command\n' >&2; exit 1;; esac
+-build_hash=$(go run -mod=vendor ./cmd/sourcehash)
+-go build -mod=vendor -trimpath -ldflags "-X github.com/ertyoii/transit-routing-bench/experiment.BuildSourceSHA256=$build_hash" -o "$output_path" "./cmd/$command_name"
++build_hash=$(go run -buildvcs=false -mod=vendor ./cmd/sourcehash)
++go build -buildvcs=false -mod=vendor -trimpath -ldflags "-X github.com/ertyoii/transit-routing-bench/experiment.BuildSourceSHA256=$build_hash" -o "$output_path" "./cmd/$command_name"
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/paper/node_arena.go
+@@ -0,0 +1,39 @@
++package paper
++
++import "github.com/ertyoii/transit-routing-go/model"
++
++// NodeArena amortizes witness-node allocation within a single query. Every
++// returned node has a stable address and remains owned by its parent chain;
++// slabs are never reset or reused while any node may still be referenced.
++// The arena must not be shared between concurrent queries.
++type NodeArena struct {
++	slab []Node
++	used int
++}
++
++const nodeSlabSize = 32
++
++func (a *NodeArena) node(parent *Node, leg model.Leg) *Node {
++	if a.used == len(a.slab) {
++		a.slab = make([]Node, nodeSlabSize)
++		a.used = 0
++	}
++	n := &a.slab[a.used]
++	a.used++
++	*n = Node{Previous: parent, Leg: leg}
++	return n
++}
++
++// Ride records exactly the same leg as Ride, without a per-leg allocation.
++func (a *NodeArena) Ride(parent *Node, c model.Connection) *Node {
++	return a.node(parent, model.Leg{Kind: "ride", Ref: c.ID, Departure: c.Departure, Arrival: c.Arrival})
++}
++
++// Append records the same ordered walking legs and timestamps as Path.Append.
++func (a *NodeArena) Append(p Path, n *Node, start int64) *Node {
++	for _, w := range p.Edges {
++		n = a.node(n, model.Leg{Kind: "walk", Ref: w.ID, Departure: start, Arrival: start + w.Duration})
++		start += w.Duration
++	}
++	return n
++}
+--- a/vendor/github.com/ertyoii/transit-routing-go/paper/profile.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/paper/profile.go
+@@ -223,16 +223,18 @@
+ }
+ 
+ type Walker struct {
+-	p     *Profile
+-	q     model.Query
+-	cache map[string][]Path
+-	Count int
++	p        *Profile
++	q        model.Query
++	cache    map[string][]Path
++	reach    *graph.ReachSession
++	snapshot string
++	Count    int
+ }
+ 
+ func (p *Profile) Walker(q model.Query) *Walker {
+ 	w := *q.Walking
+ 	q.Walking = &w
+-	return &Walker{p: p, q: q, cache: map[string][]Path{}}
++	return &Walker{p: p, q: q, cache: map[string][]Path{}, reach: p.walkingGraph.NewReachSession(), snapshot: p.walkingGraph.Descriptor().SnapshotID}
+ }
+ 
+ type entry struct {
+@@ -267,8 +269,8 @@
+ 	if w.q.Destination != "" {
+ 		targets = append(targets, walking.Endpoint{NodeID: w.q.Destination})
+ 	}
+-	closure, err := w.p.walkingGraph.ReachWithTargets(ctx, walking.ReachRequest{Targets: targets,
+-		SnapshotID: w.p.walkingGraph.Descriptor().SnapshotID, From: walking.Endpoint{NodeID: from},
++	closure, err := w.reach.ReachWithTargets(ctx, walking.ReachRequest{Targets: targets,
++		SnapshotID: w.snapshot, From: walking.Endpoint{NodeID: from},
+ 		Options: walking.Options{Role: walking.Closure, MaxSeconds: limit, AccessibleOnly: w.q.AccessibleOnly, StopAt: w.q.Destination},
+ 	}, w.p.walkingTargets)
+ 	if err != nil {
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/raptor/indexed_walks.go
+@@ -0,0 +1,83 @@
++package raptor
++
++import (
++	"context"
++	"sort"
++
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/paper"
++)
++
++// pathState is query-local metadata parallel to one immutable walking closure.
++// A transfer's ready delay depends on its stop pair, walking duration and the
++// query's fixed buffer, not on the arrival time or the route that reached it.
++// Resolve lazily at the original call site, preserving rule-error ordering.
++type pathState struct {
++	stop    int
++	delay   int64
++	ready   bool
++	allowed bool
++}
++
++type indexedClosure struct {
++	paths  []paper.Path
++	states []pathState
++}
++
++type indexedWalks struct {
++	index  *Index
++	query  model.Query
++	walker *paper.Walker
++	early  bool
++	rows   []indexedClosure
++}
++
++func (x *Index) indexedWalks(walker *paper.Walker, q model.Query, early bool) indexedWalks {
++	return indexedWalks{
++		index:  x,
++		query:  q,
++		walker: walker,
++		early:  early,
++		rows:   make([]indexedClosure, len(x.atStop)),
++	}
++}
++
++func (w *indexedWalks) paths(ctx context.Context, from string, source int) ([]paper.Path, []pathState, error) {
++	// A cached native path lookup polls Context.Err exactly once. Dense rows
++	// preserve that poll and the first-lookup reconstruction/sort order without
++	// repeating either walking-cache string-map lookup on every route label.
++	row := &w.rows[source]
++	if row.paths != nil {
++		return row.paths, row.states, ctx.Err()
++	}
++	paths, err := w.walker.Paths(ctx, from)
++	if err != nil {
++		return nil, nil, err
++	}
++	if w.early {
++		paths = append([]paper.Path(nil), paths...)
++		sort.Slice(paths, func(i, j int) bool {
++			if paths[i].Duration != paths[j].Duration {
++				return paths[i].Duration < paths[j].Duration
++			}
++			return paths[i].To < paths[j].To
++		})
++	}
++	states := make([]pathState, len(paths))
++	for i, p := range paths {
++		states[i].stop = w.index.stopIDs[p.To]
++	}
++	row.paths, row.states = paths, states
++	return paths, states, nil
++}
++
++func (w *indexedWalks) readyTime(state *pathState, from string, path paper.Path, arrival int64) (int64, bool, error) {
++	if !state.ready {
++		delay, allowed, err := w.index.p.ReadyTime(w.query, from, path.To, 0, path.Duration)
++		if err != nil {
++			return 0, false, err
++		}
++		state.delay, state.allowed, state.ready = delay, allowed, true
++	}
++	return arrival + state.delay, state.allowed, nil
++}
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/raptor/local_walk_ties.go
+@@ -0,0 +1,209 @@
++package raptor
++
++import (
++	"context"
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/paper"
++	"sort"
++)
++
++// SearchLocalWalkTies retains the native 2D arrival/boardings frontier and one
++// readiness label per stop. It refines equal-time stop labels, equal-trip
++// onboard alternatives and equal-arrival answers toward less total walking.
++// Later readiness/lower-walking states are still discarded: this is NOT an
++// exhaustive minimum-walking representative algorithm or a 3D McRAPTOR fallback.
++// It is separately named because witness ties and work counters may change.
++func (x *Index) SearchLocalWalkTies(ctx context.Context, q model.Query, early bool) (paper.Result, EarlyPruningStats, error) {
++	return x.searchLocalWalkTies(ctx, q, early)
++}
++
++func (x *Index) searchLocalWalkTies(ctx context.Context, q model.Query, early bool) (out paper.Result, pruning EarlyPruningStats, err error) {
++	out.Journeys = []model.Journey{}
++	defer func() {
++		out.Complete = err == nil
++		if err != nil {
++			out.Error = err.Error()
++		}
++	}()
++	if err = x.p.CheckContext(ctx, q); err != nil {
++		return
++	}
++	if err = ctx.Err(); err != nil {
++		return
++	}
++	if !x.p.Accessible(q, q.Origin) || !x.p.Accessible(q, q.Destination) {
++		return
++	}
++	if q.Origin == q.Destination {
++		out.Journeys = append(out.Journeys, paper.Journey(nil))
++		return
++	}
++	walker := x.p.Walker(q)
++	walks := x.indexedWalks(walker, q, early)
++	defer func() { out.Stats.WalkClosures = walker.Count }()
++	previous := make([]paper.Label, len(x.atStop))
++	previousSet := make([]bool, len(x.atStop))
++	previousWalk := make([]int64, len(x.atStop))
++	previousStops := []int{}
++	bestArrival := paper.Infinity
++	paths, states, e := walks.paths(ctx, q.Origin, x.stopIDs[q.Origin])
++	if e != nil {
++		err = e
++		return
++	}
++	for i, w := range paths {
++		at := q.Departure + w.Duration
++		if early {
++			pruning.Checks++
++			if at >= bestArrival {
++				pruning.skip(len(paths) - i)
++				break
++			}
++		}
++		if at > q.LatestArrival {
++			continue
++		}
++		n := w.Append(nil, q.Departure)
++		if w.To == q.Destination {
++			if w.Duration <= q.Walking.Direct {
++				bestArrival = at
++				out.Journeys = append(out.Journeys, paper.Journey(n))
++			}
++			continue
++		}
++		if w.Duration <= q.Walking.Access {
++			stop := states[i].stop
++			if !previousSet[stop] {
++				previousStops = append(previousStops, stop)
++			}
++			previousSet[stop] = true
++			previous[stop] = paper.Label{Time: at, Parent: n}
++			previousWalk[stop] = w.Duration
++		}
++	}
++	next := make([]paper.Label, len(x.atStop))
++	nextSet := make([]bool, len(x.atStop))
++	nextWalk := make([]int64, len(x.atStop))
++	nextStops := []int{}
++	queue := make([]int, len(x.routes))
++	routes := []int{}
++	// Exact-round readiness is kept separate from raw alighting and access
++	// labels: role caps and stop-pair rules make ordinary stop-local pruning unsafe.
++	for b := 1; b <= q.MaxBoardings && len(previousStops) > 0; b++ {
++		if err = ctx.Err(); err != nil {
++			return
++		}
++		out.Stats.Rounds++
++		queue, routes = x.collectRoutesInto(previousStops, queue, routes)
++		for _, stop := range nextStops {
++			nextSet[stop] = false
++			next[stop] = paper.Label{}
++		}
++		nextStops = nextStops[:0]
++		best := paper.Label{Time: paper.Infinity}
++		bestWalk := paper.Infinity
++		for _, r := range routes {
++			if err = ctx.Err(); err != nil {
++				return
++			}
++			out.Stats.Routes++
++			route := x.routes[r]
++			current := -1
++			currentWalk := int64(0)
++			var parent *paper.Node
++			for i := queue[r] - 1; i < len(route.trips[0].cs); i++ {
++				if err = ctx.Err(); err != nil {
++					return
++				}
++				prototype := route.trips[0].cs[i]
++				if label := previous[route.from[i]]; previousSet[route.from[i]] && prototype.Pickup && x.p.Accessible(q, prototype.From) {
++					hi := len(route.trips)
++					if current >= 0 {
++						hi = current + 1
++					}
++					t := sort.Search(hi, func(j int) bool { return route.trips[j].cs[i].Departure >= label.Time })
++					if t < len(route.trips) && (current < 0 || t < current || t == current && previousWalk[route.from[i]] < currentWalk) && x.p.TripAllowed(q, route.trips[t].id) {
++						current = t
++						parent = label.Parent
++						currentWalk = previousWalk[route.from[i]]
++					}
++				}
++				if current < 0 {
++					continue
++				}
++				c := route.trips[current].cs[i]
++				out.Stats.Connections++
++				if c.Arrival > q.LatestArrival {
++					current = -1
++					continue
++				}
++				parent = paper.Ride(parent, c)
++				if !c.Dropoff || !x.p.Accessible(q, c.To) {
++					continue
++				}
++				if c.To == q.Destination {
++					if c.Arrival < best.Time || c.Arrival == best.Time && currentWalk < bestWalk {
++						bestWalk = currentWalk
++						best = paper.Label{Time: c.Arrival, Parent: parent}
++					}
++					current = -1
++					continue
++				}
++				paths, states, e := walks.paths(ctx, c.To, route.to[i])
++				if e != nil {
++					err = e
++					return
++				}
++				for i, w := range paths {
++					at := c.Arrival + w.Duration
++					if early {
++						pruning.Checks++
++						if at >= bestArrival || at > best.Time {
++							pruning.skip(len(paths) - i)
++							break
++						}
++					}
++					if at > q.LatestArrival {
++						continue
++					}
++					if w.To == q.Destination {
++						if w.Duration <= q.Walking.Egress && (at < best.Time || at == best.Time && currentWalk+w.Duration < bestWalk) {
++							bestWalk = currentWalk + w.Duration
++							best = paper.Label{Time: at, Parent: w.Append(parent, c.Arrival)}
++						}
++						continue
++					}
++					if b == q.MaxBoardings || w.Duration > q.Walking.Transfer {
++						continue
++					}
++					at, allowed, e := walks.readyTime(&states[i], c.To, w, c.Arrival)
++					if e != nil {
++						err = e
++						return
++					}
++					if !allowed || at > q.LatestArrival {
++						continue
++					}
++					stop := states[i].stop
++					if !nextSet[stop] || at < next[stop].Time || at == next[stop].Time && currentWalk+w.Duration < nextWalk[stop] {
++						if !nextSet[stop] {
++							nextStops = append(nextStops, stop)
++						}
++						nextSet[stop] = true
++						nextWalk[stop] = currentWalk + w.Duration
++						next[stop] = paper.Label{Time: at, Parent: w.Append(parent, c.Arrival)}
++					}
++				}
++			}
++		}
++		if best.Time < bestArrival {
++			bestArrival = best.Time
++			out.Journeys = append(out.Journeys, paper.Journey(best.Parent))
++		}
++		previous, next = next, previous
++		previousSet, nextSet = nextSet, previousSet
++		previousWalk, nextWalk = nextWalk, previousWalk
++		previousStops, nextStops = nextStops, previousStops
++	}
++	return
++}
+--- a/vendor/github.com/ertyoii/transit-routing-go/raptor/multicriteria.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/raptor/multicriteria.go
+@@ -156,7 +156,7 @@
+ 		return nil
+ 	}
+ 	walker := x.p.Walker(q)
+-	walks := orderedWalks{walker: walker, enabled: cfg.EarlyPruning, cache: map[string][]paper.Path{}}
++	walks := x.indexedWalks(walker, q, cfg.EarlyPruning)
+ 	dominated := func(at, walk int64, boards int) bool {
+ 		for _, a := range answers {
+ 			out.Stats.EarlyPruning.DominanceChecks++
+@@ -167,7 +167,7 @@
+ 		return false
+ 	}
+ 	defer func() { out.Stats.WalkClosures = walker.Count }()
+-	paths, e := walks.paths(ctx, q.Origin)
++	paths, states, e := walks.paths(ctx, q.Origin, x.stopIDs[q.Origin])
+ 	if e != nil {
+ 		err = e
+ 		return
+@@ -196,7 +196,7 @@
+ 		}
+ 		if w.Duration <= q.Walking.Access {
+ 			var e error
+-			stop := x.stopIDs[w.To]
++			stop := states[i].stop
+ 			wasEmpty := len(previous[stop]) == 0
+ 			previous[stop], _, e = addStop(previous[stop], multiLabel{at, w.Duration, nil}, w, q.Departure)
+ 			if wasEmpty && len(previous[stop]) > 0 {
+@@ -208,18 +208,27 @@
+ 			}
+ 		}
+ 	}
++	next := make([][]multiLabel, len(x.atStop))
++	nextStops := []int{}
++	queue := make([]int, len(x.routes))
++	routes := []int{}
++	bag := []routeLabel{}
+ 	for boards := 1; boards <= q.MaxBoardings && len(previousStops) > 0; boards++ {
+ 		if err = ctx.Err(); err != nil {
+ 			return
+ 		}
+ 		out.Stats.Rounds++
+-		queue, routes := x.collectRoutes(previousStops)
+-		next := make([][]multiLabel, len(x.atStop))
+-		nextStops := []int{}
++		queue, routes = x.collectRoutesInto(previousStops, queue, routes)
++		for _, stop := range nextStops {
++			clear(next[stop][:cap(next[stop])])
++			next[stop] = next[stop][:0]
++		}
++		nextStops = nextStops[:0]
+ 		for _, r := range routes {
+ 			out.Stats.Routes++
+ 			route := x.routes[r]
+-			bag := []routeLabel{}
++			clear(bag[:cap(bag)])
++			bag = bag[:0]
+ 			for i := queue[r] - 1; i < len(route.trips[0].cs); i++ {
+ 				if err = ctx.Err(); err != nil {
+ 					return
+@@ -269,7 +278,7 @@
+ 						continue
+ 					}
+ 					continuing = append(continuing, l)
+-					paths, e := walks.paths(ctx, c.To)
++					paths, states, e := walks.paths(ctx, c.To, route.to[i])
+ 					if e != nil {
+ 						err = e
+ 						return
+@@ -297,7 +306,7 @@
+ 						if boards == q.MaxBoardings || w.Duration > q.Walking.Transfer {
+ 							continue
+ 						}
+-						at, allowed, e := x.p.ReadyTime(q, c.To, w.To, c.Arrival, w.Duration)
++						at, allowed, e := walks.readyTime(&states[i], c.To, w, c.Arrival)
+ 						if e != nil {
+ 							err = e
+ 							return
+@@ -305,7 +314,7 @@
+ 						if !allowed || at > q.LatestArrival {
+ 							continue
+ 						}
+-						stop := x.stopIDs[w.To]
++						stop := states[i].stop
+ 						newBag, _, e := addStop(next[stop], multiLabel{at, l.walk + w.Duration, l.parent}, w, c.Arrival)
+ 						if e != nil {
+ 							err = e
+@@ -321,7 +330,8 @@
+ 				bag = continuing
+ 			}
+ 		}
+-		previous, previousStops = next, nextStops
++		previous, next = next, previous
++		previousStops, nextStops = nextStops, previousStops
+ 	}
+ 	return
+ }
+--- a/vendor/github.com/ertyoii/transit-routing-go/raptor/raptor.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/raptor/raptor.go
+@@ -17,6 +17,7 @@
+ type route struct {
+ 	trips []trip
+ 	from  []int
++	to    []int
+ }
+ type occurrence struct{ route, position int }
+ type Index struct {
+@@ -108,8 +109,10 @@
+ 	for r := range x.routes {
+ 		route := &x.routes[r]
+ 		route.from = make([]int, len(route.trips[0].cs))
++		route.to = make([]int, len(route.trips[0].cs))
+ 		for i, c := range route.trips[0].cs {
+ 			route.from[i] = x.stopIDs[c.From]
++			route.to[i] = x.stopIDs[c.To]
+ 			x.at[c.From] = append(x.at[c.From], occurrence{r, i})
+ 		}
+ 	}
+@@ -151,13 +154,13 @@
+ 		return
+ 	}
+ 	walker := x.p.Walker(q)
+-	walks := orderedWalks{walker: walker, enabled: early, cache: map[string][]paper.Path{}}
++	walks := x.indexedWalks(walker, q, early)
+ 	defer func() { out.Stats.WalkClosures = walker.Count }()
+ 	previous := make([]paper.Label, len(x.atStop))
+ 	previousSet := make([]bool, len(x.atStop))
+ 	previousStops := []int{}
+ 	bestArrival := paper.Infinity
+-	paths, e := walks.paths(ctx, q.Origin)
++	paths, states, e := walks.paths(ctx, q.Origin, x.stopIDs[q.Origin])
+ 	if e != nil {
+ 		err = e
+ 		return
+@@ -183,7 +186,7 @@
+ 			continue
+ 		}
+ 		if w.Duration <= q.Walking.Access {
+-			stop := x.stopIDs[w.To]
++			stop := states[i].stop
+ 			if !previousSet[stop] {
+ 				previousStops = append(previousStops, stop)
+ 			}
+@@ -191,6 +194,11 @@
+ 			previous[stop] = paper.Label{Time: at, Parent: n}
+ 		}
+ 	}
++	next := make([]paper.Label, len(x.atStop))
++	nextSet := make([]bool, len(x.atStop))
++	nextStops := []int{}
++	queue := make([]int, len(x.routes))
++	routes := []int{}
+ 	// Exact-round readiness is kept separate from raw alighting and access
+ 	// labels: role caps and stop-pair rules make ordinary stop-local pruning unsafe.
+ 	for b := 1; b <= q.MaxBoardings && len(previousStops) > 0; b++ {
+@@ -198,10 +206,12 @@
+ 			return
+ 		}
+ 		out.Stats.Rounds++
+-		queue, routes := x.collectRoutes(previousStops)
+-		next := make([]paper.Label, len(x.atStop))
+-		nextSet := make([]bool, len(x.atStop))
+-		nextStops := []int{}
++		queue, routes = x.collectRoutesInto(previousStops, queue, routes)
++		for _, stop := range nextStops {
++			nextSet[stop] = false
++			next[stop] = paper.Label{}
++		}
++		nextStops = nextStops[:0]
+ 		best := paper.Label{Time: paper.Infinity}
+ 		for _, r := range routes {
+ 			if err = ctx.Err(); err != nil {
+@@ -217,7 +227,11 @@
+ 				}
+ 				prototype := route.trips[0].cs[i]
+ 				if label := previous[route.from[i]]; previousSet[route.from[i]] && prototype.Pickup && x.p.Accessible(q, prototype.From) {
+-					t := sort.Search(len(route.trips), func(j int) bool { return route.trips[j].cs[i].Departure >= label.Time })
++					hi := len(route.trips)
++					if current >= 0 {
++						hi = current
++					}
++					t := sort.Search(hi, func(j int) bool { return route.trips[j].cs[i].Departure >= label.Time })
+ 					if t < len(route.trips) && (current < 0 || t < current) && x.p.TripAllowed(q, route.trips[t].id) {
+ 						current = t
+ 						parent = label.Parent
+@@ -243,7 +257,7 @@
+ 					current = -1
+ 					continue
+ 				}
+-				paths, e := walks.paths(ctx, c.To)
++				paths, states, e := walks.paths(ctx, c.To, route.to[i])
+ 				if e != nil {
+ 					err = e
+ 					return
+@@ -269,7 +283,7 @@
+ 					if b == q.MaxBoardings || w.Duration > q.Walking.Transfer {
+ 						continue
+ 					}
+-					at, allowed, e := x.p.ReadyTime(q, c.To, w.To, c.Arrival, w.Duration)
++					at, allowed, e := walks.readyTime(&states[i], c.To, w, c.Arrival)
+ 					if e != nil {
+ 						err = e
+ 						return
+@@ -277,7 +291,7 @@
+ 					if !allowed || at > q.LatestArrival {
+ 						continue
+ 					}
+-					stop := x.stopIDs[w.To]
++					stop := states[i].stop
+ 					if !nextSet[stop] || at < next[stop].Time {
+ 						if !nextSet[stop] {
+ 							nextStops = append(nextStops, stop)
+@@ -292,7 +306,9 @@
+ 			bestArrival = best.Time
+ 			out.Journeys = append(out.Journeys, paper.Journey(best.Parent))
+ 		}
+-		previous, previousSet, previousStops = next, nextSet, nextStops
++		previous, next = next, previous
++		previousSet, nextSet = nextSet, previousSet
++		previousStops, nextStops = nextStops, previousStops
+ 	}
+ 	return
+ }
+--- a/vendor/github.com/ertyoii/transit-routing-go/raptor/round_queue.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/raptor/round_queue.go
+@@ -22,3 +22,25 @@
+ 	sort.Ints(routes)
+ 	return
+ }
++
++// collectRoutesInto preserves collectRoutes order and minima but reuses
++// query-local storage. Only the previous touched entries need clearing.
++func (x *Index) collectRoutesInto(stops, positions, routes []int) ([]int, []int) {
++	for _, r := range routes {
++		positions[r] = 0
++	}
++	routes = routes[:0]
++	for _, s := range stops {
++		for _, o := range x.atStop[s] {
++			p := o.position + 1
++			if positions[o.route] == 0 {
++				routes = append(routes, o.route)
++				positions[o.route] = p
++			} else if p < positions[o.route] {
++				positions[o.route] = p
++			}
++		}
++	}
++	sort.Ints(routes)
++	return positions, routes
++}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_retained.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_retained.go
+@@ -343,7 +343,8 @@
+ 				if n == k {
+ 					continue
+ 				}
+-				for _, tr := range b.cp.links[seg.trip][i] {
++				for _, packed := range b.cp.links[seg.trip][i] {
++					tr := b.cp.linkData.unpack(packed)
+ 					if e := x.p.tick(s.ctx); e != nil {
+ 						return e
+ 					}
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/compact_links.go
+@@ -0,0 +1,85 @@
++package tripbased
++
++import "github.com/ertyoii/transit-routing-go/paper"
++
++// compactLink is the immutable retained representation, not a query label.
++// Ordinary links occupy 12 pointer-free bytes: a nonnegative trip index, a
++// boarding position, and an ID in the owning index's immutable path pool.
++// Decoding restores the original native-int link and the exact Path pointer.
++// In particular, destination repairs remain query-local and never edit a pool.
++type compactLink struct {
++	trip        int32
++	board, walk uint32
++}
++
++type transferLinkData struct {
++	paths []*paper.Path
++	wide  []link
++}
++
++func (d *transferLinkData) unpack(v compactLink) link {
++	if v.trip >= 0 {
++		return link{int(v.trip), int(v.board), d.paths[v.walk]}
++	}
++	// A negative trip is an escape, with the native-link index in the other
++	// two words. The escape retains the full native domain without introducing
++	// a dataset-size limit or silently narrowing an index/path count.
++	return d.wide[uint64(v.board)<<32|uint64(v.walk)]
++}
++
++// transferLinkBuilder is construction-local. Its identity map is discarded
++// after preparation; only one pointer per distinct retained Path stays alive.
++// Paths are interned by pointer, not value, preserving ownership and identity.
++type transferLinkBuilder struct {
++	data     *transferLinkData
++	paths    map[*paper.Path]uint32
++	owned    bool
++	lastPath *paper.Path
++	lastID   uint32
++	lastOK   bool
++}
++
++func (b *transferLinkBuilder) pack(v link) compactLink {
++	// Transfer emission visits all receiving lines for one walking path at a
++	// time. Repeated links for that path need neither a hash lookup nor any
++	// additional allocation. Keep this small fast path inlineable.
++	if uint64(v.trip) <= 1<<31-1 && uint64(v.board) <= 1<<32-1 && b.lastOK && v.walk == b.lastPath {
++		return compactLink{int32(v.trip), uint32(v.board), b.lastID}
++	}
++	return b.packSlow(v)
++}
++
++func (b *transferLinkBuilder) packSlow(v link) compactLink {
++	if !b.owned {
++		// An Index may be shallow-copied for FLASH. Appending to its private pool
++		// must not overwrite a neighbouring owner's unused backing capacity.
++		b.data.paths = b.data.paths[:len(b.data.paths):len(b.data.paths)]
++		b.data.wide = b.data.wide[:len(b.data.wide):len(b.data.wide)]
++		b.owned = true
++	}
++	const maxTrip = uint64(1<<31 - 1)
++	const maxWord = uint64(1<<32 - 1)
++	if v.trip >= 0 && uint64(v.trip) <= maxTrip && v.board >= 0 && uint64(v.board) <= maxWord {
++		if b.paths == nil {
++			b.paths = make(map[*paper.Path]uint32, len(b.data.paths))
++			for i, path := range b.data.paths {
++				b.paths[path] = uint32(i)
++			}
++		}
++		id, exists := b.paths[v.walk]
++		if exists {
++			b.lastPath, b.lastID, b.lastOK = v.walk, id, true
++			return compactLink{int32(v.trip), uint32(v.board), id}
++		}
++		if uint64(len(b.data.paths)) <= maxWord {
++			id = uint32(len(b.data.paths))
++			b.data.paths = append(b.data.paths, v.walk)
++			b.paths[v.walk] = id
++			b.lastPath, b.lastID, b.lastOK = v.walk, id, true
++			return compactLink{int32(v.trip), uint32(v.board), id}
++		}
++	}
++	id := uint64(len(b.data.wide))
++	b.data.wide = append(b.data.wide, v)
++	return compactLink{-1, uint32(id >> 32), uint32(id)}
++}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash.go
+@@ -341,9 +341,9 @@
+ 	}
+ 	cp := *x.base
+ 	if c.Semantics == "" {
+-		cp.links = make([][][]link, len(cp.trips))
++		cp.links = make([][][]compactLink, len(cp.trips))
+ 		for ti, t := range cp.trips {
+-			cp.links[ti] = make([][]link, len(t.cs))
++			cp.links[ti] = make([][]compactLink, len(t.cs))
+ 		}
+ 	}
+ 	x.cp = &cp
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_profile.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_profile.go
+@@ -235,7 +235,8 @@
+ 						x.snap.Stats.LocalPruned++
+ 						continue
+ 					}
+-					for ei, tr := range x.cp.links[seg.trip][i] {
++					for ei, packed := range x.cp.links[seg.trip][i] {
++						tr := x.cp.linkData.unpack(packed)
+ 						if e := p.w.tick(); e != nil {
+ 							return e
+ 						}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_retained.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_retained.go
+@@ -259,7 +259,8 @@
+ 				if n == k {
+ 					continue
+ 				}
+-				for _, tr := range x.cp.links[seg.trip][i] {
++				for _, packed := range x.cp.links[seg.trip][i] {
++					tr := x.cp.linkData.unpack(packed)
+ 					if e := p.w.tick(); e != nil {
+ 						return e
+ 					}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_rules.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_rules.go
+@@ -31,7 +31,8 @@
+ 		x.ruleOffsets[ti] = make([]int, len(t.cs))
+ 		for i, links := range x.cp.links[ti] {
+ 			x.ruleOffsets[ti][i] = x.ruleTransferCount
+-			for _, tr := range links {
++			for _, packed := range links {
++				tr := x.cp.linkData.unpack(packed)
+ 				if e := w.tick(); e != nil {
+ 					return e
+ 				}
+@@ -84,7 +85,8 @@
+ 	out := make([]FlashTransfer, 0, x.ruleTransferCount)
+ 	for ti, t := range x.cp.trips {
+ 		for i, links := range x.cp.links[ti] {
+-			for j, tr := range links {
++			for j, packed := range links {
++				tr := x.cp.linkData.unpack(packed)
+ 				raw := []string{}
+ 				for _, e := range tr.walk.Edges {
+ 					raw = append(raw, e.ID)
+@@ -151,7 +153,8 @@
+ 				dst[cell/64] |= uint64(1) << uint(cell%64)
+ 			}
+ 		}
+-		for _, tr := range x.cp.links[ev.trip][ev.pos] {
++		for _, packed := range x.cp.links[ev.trip][ev.pos] {
++			tr := x.cp.linkData.unpack(packed)
+ 			if e := w.tick(); e != nil {
+ 				return e
+ 			}
+@@ -169,7 +172,8 @@
+ 	}
+ 	for ti, exits := range x.cp.links {
+ 		for i, links := range exits {
+-			for j, tr := range links {
++			for j, packed := range links {
++				tr := x.cp.linkData.unpack(packed)
+ 				if e := w.tick(); e != nil {
+ 					return e
+ 				}
+@@ -287,7 +291,8 @@
+ 				if n == k {
+ 					continue
+ 				}
+-				for _, tr := range x.cp.links[ti][i] {
++				for _, packed := range x.cp.links[ti][i] {
++					tr := x.cp.linkData.unpack(packed)
+ 					if e := enqueue(n+1, tr.trip, tr.board, path, tr.walk); e != nil {
+ 						return e
+ 					}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_transfers.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_transfers.go
+@@ -137,6 +137,7 @@
+ type flashKey struct{ from, exit, to, board int }
+ 
+ func (x *FlashIndex) transULTRA(w *flashWork) error {
++	linkBuilder := transferLinkBuilder{data: &x.cp.linkData}
+ 	keys := map[flashKey]int{}
+ 	x.transferIDs = make([][][]int, len(x.base.trips))
+ 	for i, t := range x.base.trips {
+@@ -200,7 +201,7 @@
+ 				}
+ 				id := len(x.snap.Transfers)
+ 				keys[k] = id
+-				x.cp.links[k.from][k.exit] = append(x.cp.links[k.from][k.exit], link{k.to, k.board, walk})
++				x.cp.links[k.from][k.exit] = append(x.cp.links[k.from][k.exit], linkBuilder.pack(link{k.to, k.board, walk}))
+ 				x.transferIDs[k.from][k.exit] = append(x.transferIDs[k.from][k.exit], id)
+ 				raw := []string{}
+ 				for _, e := range walk.Edges {
+@@ -219,10 +220,10 @@
+ 				order[j] = j
+ 			}
+ 			sort.Slice(order, func(a, b int) bool {
+-				u, v := links[order[a]], links[order[b]]
++				u, v := x.cp.linkData.unpack(links[order[a]]), x.cp.linkData.unpack(links[order[b]])
+ 				return x.eventOffset[u.trip]+u.board < x.eventOffset[v.trip]+v.board
+ 			})
+-			ll := make([]link, len(links))
++			ll := make([]compactLink, len(links))
+ 			ii := make([]int, len(ids))
+ 			for j, k := range order {
+ 				ll[j] = links[k]
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/index.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/index.go
+@@ -47,13 +47,14 @@
+ 	walk        *paper.Path
+ }
+ type Index struct {
+-	p     *paper.Profile
+-	cfg   Config
+-	trips []trip
+-	lines []line
+-	at    map[string][]occurrence
+-	links [][][]link
+-	prep  Preparation
++	p        *paper.Profile
++	cfg      Config
++	trips    []trip
++	lines    []line
++	at       map[string][]occurrence
++	links    [][][]compactLink
++	linkData transferLinkData
++	prep     Preparation
+ }
+ 
+ func (x *Index) Preparation() Preparation { return x.prep }
+@@ -174,8 +175,9 @@
+ 	if !transfers {
+ 		return x, nil
+ 	}
+-	x.links = make([][][]link, len(x.trips))
++	x.links = make([][][]compactLink, len(x.trips))
+ 	storage := transferLinkStorage{limit: cfg.MaxTransfers}
++	linkBuilder := transferLinkBuilder{data: &x.linkData}
+ 	// Query-independent closure: no destination is absorbing during preparation.
+ 	// Legacy Search requires egress >= intermediate walk so a path passing its
+ 	// destination is dominated by terminating there. SearchCappedWalking instead
+@@ -183,7 +185,7 @@
+ 	prepQuery := model.Query{AccessibleOnly: cfg.AccessibleOnly, TransferBuffer: cfg.TransferBuffer, Walking: &model.WalkingLimits{Transfer: cfg.TransferWalkingLimit}}
+ 	walker := p.Walker(prepQuery)
+ 	for ti, t := range x.trips {
+-		x.links[ti] = make([][]link, len(t.cs))
++		x.links[ti] = make([][]compactLink, len(t.cs))
+ 		if !p.TripAllowed(prepQuery, t.id) {
+ 			continue
+ 		}
+@@ -232,7 +234,7 @@
+ 					if x.prep.Transfers == cfg.MaxTransfers {
+ 						return nil, fmt.Errorf("Trip-Based preprocessing incomplete: transfer budget %d exhausted", cfg.MaxTransfers)
+ 					}
+-					storage.append(link{u, o.position, w})
++					storage.append(linkBuilder.pack(link{u, o.position, w}))
+ 					x.prep.Transfers++
+ 				}
+ 			}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/query.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/query.go
+@@ -198,7 +198,7 @@
+ 				if boards == q.MaxBoardings || i >= s.end || c.Arrival >= best.Time {
+ 					continue
+ 				}
+-				for ei, tr := range x.links[s.trip][i] {
++				for ei, packed := range x.links[s.trip][i] {
+ 					out.Stats.Transfers++
+ 					if filter != nil && !filter(s.trip, i, ei) {
+ 						out.Stats.FlagRejected++
+@@ -210,6 +210,7 @@
+ 							return
+ 						}
+ 					}
++					tr := x.linkData.unpack(packed)
+ 					if tr.walk.Duration > q.Walking.Transfer || c.Arrival+tr.walk.Duration > q.LatestArrival || x.trips[tr.trip].cs[tr.board].Arrival > q.LatestArrival {
+ 						continue
+ 					}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/transfer_storage.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/transfer_storage.go
+@@ -6,14 +6,14 @@
+ // A finished row has no spare capacity, so a later append cannot overwrite
+ // a neighbouring row. The builder is construction-local, not a shared cache.
+ type transferLinkStorage struct {
+-	data                  []link
++	data                  []compactLink
+ 	start, emitted, limit int
+ }
+ 
+ const transferLinkChunk = 4096
+ 
+ func (s *transferLinkStorage) begin() { s.start = len(s.data) }
+-func (s *transferLinkStorage) append(v link) {
++func (s *transferLinkStorage) append(v compactLink) {
+ 	if len(s.data) == cap(s.data) {
+ 		n := len(s.data) - s.start
+ 		// No row can exceed the remaining declared transfer count. Multiplication
+@@ -26,7 +26,7 @@
+ 				capacity = 2 * n
+ 			}
+ 		}
+-		next := make([]link, n, capacity)
++		next := make([]compactLink, n, capacity)
+ 		copy(next, s.data[s.start:])
+ 		s.data = next
+ 		s.start = 0
+@@ -34,7 +34,7 @@
+ 	s.data = append(s.data, v)
+ 	s.emitted++
+ }
+-func (s *transferLinkStorage) finish() []link {
++func (s *transferLinkStorage) finish() []compactLink {
+ 	if s.start == len(s.data) {
+ 		return nil
+ 	}
+--- a/vendor/github.com/ertyoii/transit-routing-go/ultra/capped.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/ultra/capped.go
+@@ -54,10 +54,26 @@
+ // Static stop-pair rules and pickup/dropoff are supported. All paper.Profile
+ // aggregate-resource and trip/route-rule guards remain in force.
+ type CappedIndex struct {
+-	x    *Index
+-	prep CappedPreparation
+-	rows map[string][]paper.Path
+-	at   map[string][]occurrence
++	x           *Index
++	prep        CappedPreparation
++	stopIDs     map[string]int
++	rows        [][]cappedPath
++	at          [][]occurrence
++	from, to    [][]int
++	accessible  []bool
++	tripAllowed []bool
++	transit     []bool
++}
++
++// cappedPath retains the original raw witness, with immutable endpoint and
++// static rule metadata. A negative minimum means use the query's default buffer;
++// an explicit type-0 rule instead has minimum zero, even with a nonzero buffer.
++type cappedPath struct {
++	paper.Path
++	to        int
++	minimum   int64
++	allowed   bool
++	ruleError error
+ }
+ 
+ func (x *CappedIndex) Preparation() CappedPreparation { return x.prep }
+@@ -70,7 +86,7 @@
+ // ordinary ULTRA work meanings. No Core-CH or timetable shortcut sparsity is
+ // claimed in this mode.
+ func BuildCapped(ctx context.Context, d model.Dataset, cfg CappedConfig) (out *CappedIndex, err error) {
+-	out = &CappedIndex{prep: CappedPreparation{Profile: "ultra_raptor_transfer_complete_capped_v1", Config: cfg}, rows: map[string][]paper.Path{}, at: map[string][]occurrence{}}
++	out = &CappedIndex{prep: CappedPreparation{Profile: "ultra_raptor_transfer_complete_capped_v1", Config: cfg}, stopIDs: map[string]int{}}
+ 	defer func() {
+ 		out.prep.Complete = err == nil
+ 		if err != nil {
+@@ -89,11 +105,22 @@
+ 	}
+ 	x := &Index{p: p, transit: map[string]bool{}, rawOut: map[string][]model.Footpath{}, rawIn: map[string][]model.Footpath{}}
+ 	out.x = x
++	// Ordinals are immutable and private to this index. Queries allocate all
++	// mutable labels and caches locally, preserving concurrent-query ownership.
++	for _, stop := range p.Data.Stops {
++		out.stopIDs[stop.ID] = len(out.stopIDs)
++		out.accessible = append(out.accessible, stop.Accessible == model.Yes)
++	}
++	out.rows = make([][]cappedPath, len(out.stopIDs))
++	out.at = make([][]occurrence, len(out.stopIDs))
++	out.transit = make([]bool, len(out.stopIDs))
+ 	byTrip := map[string][]model.Connection{}
+ 	for _, c := range p.Data.Connections {
+ 		byTrip[c.TripID] = append(byTrip[c.TripID], c)
+ 		x.transit[c.From] = true
+ 		x.transit[c.To] = true
++		out.transit[out.stopIDs[c.From]] = true
++		out.transit[out.stopIDs[c.To]] = true
+ 	}
+ 	for _, edge := range p.Data.Footpaths {
+ 		if cfg.AccessibleOnly && (edge.Accessible != model.Yes || p.Stops[edge.From].Accessible != model.Yes || p.Stops[edge.To].Accessible != model.Yes) {
+@@ -132,7 +159,7 @@
+ 		if err != nil {
+ 			return
+ 		}
+-		paths := []paper.Path{}
++		paths := []cappedPath{}
+ 		targets := []string{}
+ 		for target := range r.distance {
+ 			if x.transit[target] {
+@@ -154,9 +181,14 @@
+ 			if err != nil {
+ 				return
+ 			}
+-			paths = append(paths, path)
+-		}
+-		out.rows[source] = paths
++			decision, ruleError := p.Rules.Resolve(model.Connection{To: source}, model.Connection{From: target}, 0)
++			minimum := decision.Minimum
++			if decision.RuleID == "" {
++				minimum = -1
++			}
++			paths = append(paths, cappedPath{path, out.stopIDs[target], minimum, decision.Allowed, ruleError})
++		}
++		out.rows[out.stopIDs[source]] = paths
+ 		out.prep.TransferRows++
+ 	}
+ 	return
+@@ -234,11 +266,17 @@
+ 		x.x.routes = append(x.x.routes, groups...)
+ 	}
+ 	for ri, r := range x.x.routes {
++		from := make([]int, len(r.trips[0].cs))
++		to := make([]int, len(r.trips[0].cs))
++		x.tripAllowed = append(x.tripAllowed, x.x.p.Trips[r.trips[0].id].Accessible == model.Yes)
+ 		for pos, c := range r.trips[0].cs {
++			from[pos], to[pos] = x.stopIDs[c.From], x.stopIDs[c.To]
+ 			if c.Pickup {
+-				x.at[c.From] = append(x.at[c.From], occurrence{ri, pos})
+-			}
+-		}
++				x.at[from[pos]] = append(x.at[from[pos]], occurrence{ri, pos})
++			}
++		}
++		x.from = append(x.from, from)
++		x.to = append(x.to, to)
+ 	}
+ 	return w.check()
+ }
+--- a/vendor/github.com/ertyoii/transit-routing-go/ultra/capped_search.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/ultra/capped_search.go
+@@ -37,6 +37,8 @@
+ 		return
+ 	}
+ 	p := x.x.p
++	n := len(x.stopIDs)
++	destination := x.stopIDs[q.Destination]
+ 	if !p.Accessible(q, q.Origin) || !p.Accessible(q, q.Destination) {
+ 		return
+ 	}
+@@ -67,7 +69,12 @@
+ 		out.Journeys = append(out.Journeys, paper.Journey(parent))
+ 		return nil
+ 	}
+-	previous := map[string]paper.Label{}
++	previous := make([]paper.Label, n)
++	previousSet := make([]bool, n)
++	previousStops := []int{}
++	next := make([]paper.Label, n)
++	nextSet := make([]bool, n)
++	nextStops := []int{}
+ 	endpoints := []string{}
+ 	for stop := range forward.distance {
+ 		endpoints = append(endpoints, stop)
+@@ -90,21 +97,25 @@
+ 					return
+ 				}
+ 			}
+-		} else if q.MaxBoardings > 0 && x.x.transit[stop] && forward.distance[stop] <= q.Walking.Access {
++		} else if q.MaxBoardings > 0 && x.transit[x.stopIDs[stop]] && forward.distance[stop] <= q.Walking.Access {
+ 			edges, e := x.path(forward, stop, &w)
+ 			if e != nil {
+ 				return out, e
+ 			}
+-			previous[stop] = paper.Label{Time: at, Parent: (paper.Path{Edges: edges}).Append(nil, q.Departure)}
+-		}
+-	}
+-	rows := map[string][]paper.Path{}
+-	getRow := func(from string) ([]paper.Path, error) {
+-		if r, ok := rows[from]; ok {
+-			return r, nil
++			id := x.stopIDs[stop]
++			previousStops = append(previousStops, id)
++			previousSet[id] = true
++			previous[id] = paper.Label{Time: at, Parent: (paper.Path{Edges: edges}).Append(nil, q.Departure)}
++		}
++	}
++	rows := make([][]cappedPath, n)
++	rowSet := make([]bool, n)
++	getRow := func(from int, fromName string) ([]cappedPath, error) {
++		if rowSet[from] {
++			return rows[from], nil
+ 		}
+ 		out.Stats.RowUses++
+-		r := []paper.Path{}
++		r := []cappedPath{}
+ 		var detour *rawSearch
+ 		for _, path := range x.rows[from] {
+ 			if e := w.check(); e != nil {
+@@ -125,7 +136,7 @@
+ 			}
+ 			if crosses {
+ 				if detour == nil {
+-					d, e := x.walk(from, q.Walking.Transfer, false, q.Destination, &w)
++					d, e := x.walk(fromName, q.Walking.Transfer, false, q.Destination, &w)
+ 					out.Stats.WalkSearches++
+ 					out.Stats.DestinationRepairs++
+ 					if e != nil {
+@@ -141,37 +152,52 @@
+ 				if e != nil {
+ 					return nil, e
+ 				}
+-				path = paper.Path{To: path.To, Duration: duration, Edges: edges}
++				path.Path = paper.Path{To: path.To, Duration: duration, Edges: edges}
+ 			}
+ 			r = append(r, path)
+ 		}
+ 		rows[from] = r
++		rowSet[from] = true
+ 		return r, nil
+ 	}
+-	egress := map[string][]model.Footpath{}
+-	for boards := 1; boards <= q.MaxBoardings && len(previous) > 0; boards++ {
++	egress := make([][]model.Footpath, n)
++	egressSet := make([]bool, n)
++	backwardDistance := make([]int64, n)
++	backwardSet := make([]bool, n)
++	for name, duration := range backward.distance {
++		id := x.stopIDs[name]
++		backwardDistance[id], backwardSet[id] = duration, true
++	}
++	selected := make([]int, len(x.x.routes))
++	routeIDs := []int{}
++	for boards := 1; boards <= q.MaxBoardings && len(previousStops) > 0; boards++ {
+ 		if err = w.check(); err != nil {
+ 			return
+ 		}
+ 		out.Stats.Rounds++
+-		selected := map[int]int{}
+-		for stop := range previous {
++		for _, ri := range routeIDs {
++			selected[ri] = 0
++		}
++		routeIDs = routeIDs[:0]
++		for _, stop := range previousStops {
+ 			for _, o := range x.at[stop] {
+ 				if err = w.connection(); err != nil {
+ 					return
+ 				}
+ 				out.Stats.RouteOccurrenceChecks++
+-				if old, ok := selected[o.route]; !ok || o.position < old {
+-					selected[o.route] = o.position
+-				}
+-			}
+-		}
+-		routeIDs := []int{}
+-		for id := range selected {
+-			routeIDs = append(routeIDs, id)
++				if old := selected[o.route]; old == 0 || o.position+1 < old {
++					if old == 0 {
++						routeIDs = append(routeIDs, o.route)
++					}
++					selected[o.route] = o.position + 1
++				}
++			}
+ 		}
+ 		sort.Ints(routeIDs)
+-		next := map[string]paper.Label{}
++		for _, stop := range nextStops {
++			nextSet[stop] = false
++		}
++		nextStops = nextStops[:0]
+ 		best := paper.Label{Time: bestArrival}
+ 		for _, ri := range routeIDs {
+ 			if err = w.check(); err != nil {
+@@ -179,17 +205,18 @@
+ 			}
+ 			out.Stats.RouteScans++
+ 			r := x.x.routes[ri]
+-			if !p.TripAllowed(q, r.trips[0].id) {
++			if q.AccessibleOnly && !x.tripAllowed[ri] {
+ 				continue
+ 			}
+ 			current := -1
+ 			var parent *paper.Node
+-			for pos := selected[ri]; pos < len(r.trips[0].cs); pos++ {
++			for pos := selected[ri] - 1; pos < len(r.trips[0].cs); pos++ {
+ 				if err = w.connection(); err != nil {
+ 					return
+ 				}
+ 				proto := r.trips[0].cs[pos]
+-				if l, ok := previous[proto.From]; ok && proto.Pickup && p.Accessible(q, proto.From) {
++				fromID := x.from[ri][pos]
++				if l := previous[fromID]; previousSet[fromID] && proto.Pickup && (!q.AccessibleOnly || x.accessible[fromID]) {
+ 					lo, hi := 0, len(r.trips)
+ 					if current >= 0 {
+ 						hi = current
+@@ -220,31 +247,33 @@
+ 					continue
+ 				}
+ 				parent = paper.Ride(parent, c)
+-				if !c.Dropoff || !p.Accessible(q, c.To) {
+-					continue
+-				}
+-				if c.To == q.Destination {
++				toID := x.to[ri][pos]
++				if !c.Dropoff || q.AccessibleOnly && !x.accessible[toID] {
++					continue
++				}
++				if toID == destination {
+ 					if c.Arrival < best.Time {
+ 						best = paper.Label{Time: c.Arrival, Parent: parent}
+ 					}
+ 					current = -1
+ 					continue
+ 				}
+-				if duration, ok := backward.distance[c.To]; ok && c.Arrival+duration < best.Time && c.Arrival+duration <= q.LatestArrival {
+-					edges, exists := egress[c.To]
+-					if !exists {
++				if duration := backwardDistance[toID]; backwardSet[toID] && c.Arrival+duration < best.Time && c.Arrival+duration <= q.LatestArrival {
++					edges := egress[toID]
++					if !egressSet[toID] {
+ 						edges, err = x.path(backward, c.To, &w)
+ 						if err != nil {
+ 							return
+ 						}
+-						egress[c.To] = edges
++						egress[toID] = edges
++						egressSet[toID] = true
+ 					}
+ 					best = paper.Label{Time: c.Arrival + duration, Parent: (paper.Path{Edges: edges}).Append(parent, c.Arrival)}
+ 				}
+ 				if boards == q.MaxBoardings || c.Arrival >= best.Time {
+ 					continue
+ 				}
+-				paths, e := getRow(c.To)
++				paths, e := getRow(toID, c.To)
+ 				if e != nil {
+ 					return out, e
+ 				}
+@@ -253,16 +282,24 @@
+ 						return
+ 					}
+ 					out.Stats.TransferPairVisits++
+-					ready, allowed, e := p.ReadyTime(q, c.To, path.To, c.Arrival, path.Duration)
+-					if e != nil {
+-						return out, e
+-					}
++					if path.ruleError != nil {
++						return out, path.ruleError
++					}
++					minimum := path.minimum
++					if minimum < 0 {
++						minimum = q.TransferBuffer
++					}
++					ready, allowed := c.Arrival+max(path.Duration, minimum), path.allowed
+ 					if !allowed || ready > q.LatestArrival || ready >= best.Time {
+ 						continue
+ 					}
+-					old, ok := next[path.To]
+-					if !ok || ready < old.Time {
+-						next[path.To] = paper.Label{Time: ready, Parent: path.Append(parent, c.Arrival)}
++					old := next[path.to]
++					if !nextSet[path.to] || ready < old.Time {
++						if !nextSet[path.to] {
++							nextStops = append(nextStops, path.to)
++							nextSet[path.to] = true
++						}
++						next[path.to] = paper.Label{Time: ready, Parent: path.Path.Append(parent, c.Arrival)}
+ 					}
+ 				}
+ 			}
+@@ -273,7 +310,9 @@
+ 			}
+ 			bestArrival = best.Time
+ 		}
+-		previous = next
++		previous, next = next, previous
++		previousSet, nextSet = nextSet, previousSet
++		previousStops, nextStops = nextStops, previousStops
+ 	}
+ 	return
+ }
+--- a/vendor/github.com/ertyoii/transit-routing-go/ultra/sparse.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/ultra/sparse.go
+@@ -142,13 +142,15 @@
+ 		incoming[stop] = cs
+ 	}
+ 	sources := []string{}
+-	for from := range out.index.rows {
+-		sources = append(sources, from)
++	for from := range out.index.x.transit {
++		if out.index.rows[out.index.stopIDs[from]] != nil {
++			sources = append(sources, from)
++		}
+ 	}
+ 	sort.Strings(sources)
+ 	for _, from := range sources {
+-		kept := []paper.Path{}
+-		for _, path := range out.index.rows[from] {
++		kept := []cappedPath{}
++		for _, path := range out.index.rows[out.index.stopIDs[from]] {
+ 			if err = check(); err != nil {
+ 				return
+ 			}
+@@ -245,7 +247,7 @@
+ 				out.prep.RetainedPairs++
+ 			}
+ 		}
+-		out.index.rows[from] = kept
++		out.index.rows[out.index.stopIDs[from]] = kept
+ 	}
+ 	return
+ }
+--- a/vendor/github.com/ertyoii/transit-routing-go/walking/graph/graph.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/walking/graph/graph.go
+@@ -38,6 +38,12 @@
+ 	edges      map[string]walking.Segment
+ 	out        map[string][]walking.Segment
+ 	limits     Limits
++	// Canonical node ordinals preserve the existing lexical queue tie order.
++	nodeIndex    map[string]int
++	nodeIDs      []string
++	accessible   []bool
++	indexedEdges []walking.Segment
++	indexedOut   [][]indexedEdge
+ }
+ 
+ func New(d Data, limits Limits) (*Graph, error) {
+@@ -101,6 +107,20 @@
+ 		return nil, walking.ErrStale
+ 	}
+ 	g.descriptor = d.Descriptor
++	g.nodeIndex = make(map[string]int, len(d.Nodes))
++	g.nodeIDs = make([]string, len(d.Nodes))
++	g.accessible = make([]bool, len(d.Nodes))
++	g.indexedOut = make([][]indexedEdge, len(d.Nodes))
++	for i, n := range d.Nodes {
++		g.nodeIndex[n.ID] = i
++		g.nodeIDs[i] = n.ID
++		g.accessible[i] = n.Accessible == walking.Yes
++	}
++	g.indexedEdges = d.Edges
++	for i, e := range d.Edges {
++		from, to := g.nodeIndex[e.From], g.nodeIndex[e.To]
++		g.indexedOut[from] = append(g.indexedOut[from], indexedEdge{to: to, edge: i})
++	}
+ 	return g, nil
+ }
+ func (g *Graph) Descriptor() walking.Descriptor {
+@@ -165,12 +185,14 @@
+ func (q *queue) Pop() any     { a := *q; v := a[len(a)-1]; *q = a[:len(a)-1]; return v }
+ 
+ type search struct {
+-	dist map[string]int64
+-	prev map[string]walking.Segment
++	dist  map[string]int64
++	prev  map[string]walking.Segment
++	dense *reachScratch
++	graph *Graph
+ }
+ 
+ func (g *Graph) search(ctx context.Context, from string, o walking.Options) (search, error) {
+-	s := search{map[string]int64{from: 0}, map[string]walking.Segment{}}
++	s := search{dist: map[string]int64{from: 0}, prev: map[string]walking.Segment{}}
+ 	h := &queue{{from, 0}}
+ 	settled, visits := 0, 0
+ 	for h.Len() > 0 {
+@@ -216,13 +238,29 @@
+ 	}
+ 	return s, nil
+ }
++func (s search) distance(to string) (int64, bool) {
++	if s.dense != nil {
++		i := s.graph.nodeIndex[to]
++		return s.dense.dist[i], s.dense.seen[i] == s.dense.generation
++	}
++	v, ok := s.dist[to]
++	return v, ok
++}
++func (s search) previous(to string) walking.Segment {
++	if s.dense != nil {
++		return s.graph.indexedEdges[s.dense.prev[s.graph.nodeIndex[to]]]
++	}
++	return s.prev[to]
++}
+ func (g *Graph) result(ctx context.Context, from, to string, s search, remaining *int) (walking.Result, error) {
+ 	r := walking.Result{SnapshotID: g.descriptor.SnapshotID, From: from, To: to, Status: walking.Unreachable}
+-	seconds, ok := s.dist[to]
++	seconds, ok := s.distance(to)
+ 	if !ok {
+ 		return r, nil
+ 	}
+-	p := walking.Path{SnapshotID: r.SnapshotID, From: from, To: to, Seconds: seconds, Segments: []walking.Segment{}}
++	// Count first so the returned witness needs one exact-sized segment buffer.
++	// The old append-then-CloneResult path copied every segment buffer twice.
++	count := 0
+ 	for at := to; at != from; {
+ 		if e := ctx.Err(); e != nil {
+ 			return walking.Result{}, e
+@@ -231,16 +269,25 @@
+ 			return walking.Result{}, walking.ErrBudget
+ 		}
+ 		*remaining--
+-		edge := s.prev[at]
+-		p.Segments = append(p.Segments, edge)
++		count++
++		at = s.previous(at).From
++	}
++	p := walking.Path{SnapshotID: r.SnapshotID, From: from, To: to, Seconds: seconds, Segments: make([]walking.Segment, count)}
++	at := to
++	for i := count - 1; i >= 0; i-- {
++		if e := ctx.Err(); e != nil {
++			return walking.Result{}, e
++		}
++		edge := s.previous(at)
++		// Segment values only contain one mutable child. Copy it exactly once so
++		// callers cannot mutate the immutable graph or another response's witness.
++		edge.Witness.EdgeIDs = append([]string{}, edge.Witness.EdgeIDs...)
++		p.Segments[i] = edge
+ 		at = edge.From
+-	}
+-	for i, j := 0, len(p.Segments)-1; i < j; i, j = i+1, j-1 {
+-		p.Segments[i], p.Segments[j] = p.Segments[j], p.Segments[i]
+ 	}
+ 	r.Status = walking.Reachable
+ 	r.Path = &p
+-	return walking.CloneResult(r), nil
++	return r, nil
+ }
+ func (g *Graph) Route(ctx context.Context, r walking.Request) (walking.Result, error) {
+ 	if e := g.check(ctx, r.SnapshotID, r.From, r.Options); e != nil {
+@@ -310,6 +357,9 @@
+ // targets. A nil set follows ordinary Reach semantics. A nonnil empty set selects
+ // no nodes except explicit request targets; no hidden endpoint is added.
+ func (g *Graph) ReachWithTargets(ctx context.Context, r walking.ReachRequest, selected *TargetSet) (walking.ReachResult, error) {
++	return g.reachWithTargets(ctx, r, selected, nil)
++}
++func (g *Graph) reachWithTargets(ctx context.Context, r walking.ReachRequest, selected *TargetSet, scratch *reachScratch) (walking.ReachResult, error) {
+ 	if e := ctx.Err(); e != nil {
+ 		return walking.ReachResult{}, e
+ 	}
+@@ -334,19 +384,44 @@
+ 	if e := g.check(ctx, r.SnapshotID, r.From, r.Options); e != nil {
+ 		return walking.ReachResult{}, e
+ 	}
+-	s, e := g.search(ctx, r.From.NodeID, r.Options)
++	var s search
++	var e error
++	if scratch == nil {
++		s, e = g.search(ctx, r.From.NodeID, r.Options)
++	} else {
++		s, e = g.searchDense(ctx, r.From.NodeID, r.Options, scratch)
++	}
+ 	if e != nil {
+ 		return walking.ReachResult{}, e
+ 	}
+-	keys := make([]string, 0, len(s.dist))
+-	for k := range s.dist {
++	reached := len(s.dist)
++	if scratch != nil {
++		reached = len(scratch.touched)
++	}
++	capacity := reached
++	if selected != nil {
++		capacity = min(capacity, len(selected.ids)+len(targets))
++	} else if len(targets) > 0 {
++		capacity = min(capacity, len(targets))
++	}
++	keys := make([]string, 0, capacity)
++	include := func(k string) {
+ 		if (selected != nil || len(targets) > 0) && !targets[k] && (selected == nil || !selected.ids[k]) {
+-			continue
++			return
+ 		}
+ 		keys = append(keys, k)
+ 	}
++	if scratch != nil {
++		for _, i := range scratch.touched {
++			include(g.nodeIDs[i])
++		}
++	} else {
++		for k := range s.dist {
++			include(k)
++		}
++	}
+ 	sort.Strings(keys)
+-	out := walking.ReachResult{SnapshotID: g.descriptor.SnapshotID, Paths: []walking.Path{}}
++	out := walking.ReachResult{SnapshotID: g.descriptor.SnapshotID, Paths: make([]walking.Path, 0, len(keys))}
+ 	remaining := g.limits.MaxResultSegments
+ 	for _, k := range keys {
+ 		if e := ctx.Err(); e != nil {
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/walking/graph/reach_session.go
+@@ -0,0 +1,174 @@
++package graph
++
++import (
++	"context"
++
++	"github.com/ertyoii/transit-routing-go/walking"
++)
++
++type indexedEdge struct {
++	to   int
++	edge int
++}
++
++// ReachSession reuses search storage across closure requests on one immutable
++// graph. It retains no paths, changes no graph state, and returns independently
++// owned witnesses. Concurrent calls are serialized; different sessions never
++// share mutable search storage. Copies of a session share its gate and scratch.
++type ReachSession struct {
++	graph   *Graph
++	gate    chan struct{}
++	scratch *reachScratch
++}
++
++// NewReachSession creates an initially empty closure session. Dense search
++// storage is allocated lazily on its first valid request, not at graph creation.
++func (g *Graph) NewReachSession() *ReachSession {
++	return &ReachSession{graph: g, gate: make(chan struct{}, 1), scratch: &reachScratch{}}
++}
++
++// ReachWithTargets has the same reconstruction, work-budget, accessibility,
++// absorbing-node, and cancellation contract as Graph.ReachWithTargets.
++func (s *ReachSession) ReachWithTargets(ctx context.Context, r walking.ReachRequest, selected *TargetSet) (walking.ReachResult, error) {
++	if e := ctx.Err(); e != nil {
++		return walking.ReachResult{}, e
++	}
++	select {
++	case s.gate <- struct{}{}:
++		defer func() { <-s.gate }()
++	case <-ctx.Done():
++		return walking.ReachResult{}, ctx.Err()
++	}
++	return s.graph.reachWithTargets(ctx, r, selected, s.scratch)
++}
++
++type denseEntry struct {
++	node    int
++	seconds int64
++}
++
++type reachScratch struct {
++	dist       []int64
++	prev       []int
++	seen       []uint32
++	generation uint32
++	touched    []int
++	queue      []denseEntry
++}
++
++func (s *reachScratch) reset(nodes int) {
++	if len(s.dist) != nodes {
++		s.dist = make([]int64, nodes)
++		s.prev = make([]int, nodes)
++		s.seen = make([]uint32, nodes)
++	}
++	s.generation++
++	if s.generation == 0 {
++		// Generation wrap must never make an ancient distance look reachable.
++		clear(s.seen)
++		s.generation = 1
++	}
++	s.touched = s.touched[:0]
++	s.queue = s.queue[:0]
++}
++
++func denseLess(a, b denseEntry) bool {
++	if a.seconds == b.seconds {
++		// Node ordinals are canonical lexical IDs, exactly matching queue.Less.
++		return a.node < b.node
++	}
++	return a.seconds < b.seconds
++}
++func (s *reachScratch) push(v denseEntry) {
++	s.queue = append(s.queue, v)
++	for i := len(s.queue) - 1; i > 0; {
++		parent := (i - 1) / 2
++		if !denseLess(s.queue[i], s.queue[parent]) {
++			break
++		}
++		s.queue[i], s.queue[parent] = s.queue[parent], s.queue[i]
++		i = parent
++	}
++}
++func (s *reachScratch) pop() denseEntry {
++	out := s.queue[0]
++	last := len(s.queue) - 1
++	s.queue[0] = s.queue[last]
++	s.queue = s.queue[:last]
++	for i := 0; ; {
++		left := 2*i + 1
++		if left >= len(s.queue) {
++			break
++		}
++		child := left
++		if right := left + 1; right < len(s.queue) && denseLess(s.queue[right], s.queue[left]) {
++			child = right
++		}
++		if !denseLess(s.queue[child], s.queue[i]) {
++			break
++		}
++		s.queue[i], s.queue[child] = s.queue[child], s.queue[i]
++		i = child
++	}
++	return out
++}
++
++func (g *Graph) searchDense(ctx context.Context, from string, o walking.Options, s *reachScratch) (search, error) {
++	s.reset(len(g.nodeIDs))
++	origin := g.nodeIndex[from]
++	s.dist[origin] = 0
++	s.seen[origin] = s.generation
++	s.touched = append(s.touched, origin)
++	s.push(denseEntry{node: origin})
++	stopAt := -1
++	if o.StopAt != "" {
++		stopAt = g.nodeIndex[o.StopAt]
++	}
++	settled, visits := 0, 0
++	for len(s.queue) > 0 {
++		if e := ctx.Err(); e != nil {
++			return search{}, e
++		}
++		u := s.pop()
++		if u.seconds != s.dist[u.node] {
++			continue
++		}
++		settled++
++		if settled > g.limits.MaxSettled {
++			return search{}, walking.ErrBudget
++		}
++		if u.node == stopAt || o.AccessibleOnly && !g.accessible[u.node] {
++			continue
++		}
++		for _, next := range g.indexedOut[u.node] {
++			if e := ctx.Err(); e != nil {
++				return search{}, e
++			}
++			visits++
++			if visits > g.limits.MaxEdgeVisits {
++				return search{}, walking.ErrBudget
++			}
++			edge := g.indexedEdges[next.edge]
++			if o.AccessibleOnly && (edge.Accessible != walking.Yes || !g.accessible[next.to]) {
++				continue
++			}
++			n := u.seconds + edge.Seconds
++			if n > o.MaxSeconds {
++				continue
++			}
++			if s.seen[next.to] != s.generation || n < s.dist[next.to] {
++				if s.seen[next.to] != s.generation {
++					s.touched = append(s.touched, next.to)
++				}
++				s.dist[next.to] = n
++				s.prev[next.to] = next.edge
++				s.seen[next.to] = s.generation
++				s.push(denseEntry{node: next.to, seconds: n})
++			}
++		}
++	}
++	if e := ctx.Err(); e != nil {
++		return search{}, e
++	}
++	return search{dense: s, graph: g}, nil
++}

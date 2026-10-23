@@ -1,0 +1,952 @@
+--- a/cmd/familybench/main.go
++++ b/cmd/familybench/main.go
+@@ -9,6 +9,7 @@
+ 	"github.com/ertyoii/transit-routing-bench/evaluation"
+ 	"github.com/ertyoii/transit-routing-bench/experiment"
+ 	"github.com/ertyoii/transit-routing-bench/fixtures"
++	"github.com/ertyoii/transit-routing-bench/workloadseed"
+ 	"github.com/ertyoii/transit-routing-go/comparison"
+ 	"github.com/ertyoii/transit-routing-go/csa"
+ 	"github.com/ertyoii/transit-routing-go/model"
+@@ -31,10 +32,10 @@
+ 	Query   model.Query `json:"query"`
+ }
+ type workload struct {
+-	Seed          uint64 `json:"seed"`
+-	Method        string `json:"method"`
+-	DatasetSHA256 string `json:"dataset_sha256"`
+-	Items         []item `json:"items"`
++	Seed          workloadseed.Seed `json:"seed"`
++	Method        string            `json:"method"`
++	DatasetSHA256 string            `json:"dataset_sha256"`
++	Items         []item            `json:"items"`
+ }
+ type contracts struct {
+ 	Walking         bool `json:"arrival_boardings_walking"`
+@@ -260,7 +261,7 @@
+ 			return err
+ 		}
+ 		dh = fixtures.Sum(data)
+-		w = workload{Seed: uint64(manifest.Seed), Method: manifest.Generator, DatasetSHA256: dh}
++		w = workload{Seed: workloadseed.Numeric(uint64(manifest.Seed)), Method: manifest.Generator, DatasetSHA256: dh}
+ 		for _, q := range bundle.Queries {
+ 			w.Items = append(w.Items, item{Stratum: "original_synthetic", Query: q})
+ 		}
+@@ -509,7 +510,7 @@
+ 	}
+ 	runPass := func(rep int, forced bool) error {
+ 		items := append([]item{}, w.Items...)
+-		rng := rand.New(rand.NewPCG(w.Seed, uint64(rep)))
++		rng := rand.New(rand.NewPCG(w.Seed.Uint64(), uint64(rep)))
+ 		rng.Shuffle(len(items), func(i, j int) { items[i], items[j] = items[j], items[i] })
+ 		p := pass{Algorithm: *alg, Repetition: rep, Warmup: rep < *warm, Records: []record{}, Batches: []batchRecord{}}
+ 		appendRecord := func(z record, submitted time.Time) error {
+@@ -640,7 +641,7 @@
+ 	}
+ 	var ci any
+ 	if len(qps) > 1 {
+-		v, e := experiment.ThroughputConfidence(qps, w.Seed)
++		v, e := experiment.ThroughputConfidence(qps, w.Seed.Uint64())
+ 		if e != nil {
+ 			return e
+ 		}
+@@ -650,7 +651,7 @@
+ 	if r.cost != nil {
+ 		finalCost = r.cost()
+ 	}
+-	_, e = experiment.WriteArtifact(filepath.Join(*out, "summary.json"), map[string]any{"success": !fatal, "success_scope": "No malformed route/adapter/unknown routing failure; budget/unsupported/deadline rows retained. Cross-process quality audited separately.", "algorithm": *alg, "kind": r.kind, "configuration": r.config, "quality_preparation": qualityPrep, "quality_enabled": *quality, "preference_config": choiceConfig, "preference_config_sha256": preferenceSHA, "candidate_k": *k, "display_k": displayLimits, "penalty": 300, "batch_size": *size, "repetitions": *reps, "warmups": *warm, "batch_deadline_ns": deadline.Nanoseconds(), "preparation_deadline_ns": prepTimeout.Nanoseconds(), "rss_sampled_safety_stop_bytes": *rssStop, "rss_sampling_interval_ns": int64(100000000), "hard_memory_cap": false, "hard_cpu_confinement": false, "gomaxprocs": runtime.GOMAXPROCS(0), "go_version": runtime.Version(), "goos": runtime.GOOS, "goarch": runtime.GOARCH, "hardware": os.Getenv("TRANSIT_BENCH_HARDWARE"), "provenance": prov, "dataset_sha256": dh, "queries_sha256": qh, "fixture_manifest_sha256": fixtureSHA, "scoped_configuration_sha256": scopedSHA, "seed": w.Seed, "method": w.Method, "input_load_ns": loadNS, "preparation": prep, "checker_preparation": checkPrep, "passes": summaries, "throughput_interval": ci, "index_cost_final": finalCost, "response_stream": publisher.summary(), "resources_final": experiment.SnapshotResources(), "scope": "Native development with recorded resources;8GB/four cores is a cost reference, not an acceptance gate. One router/process. Common batch submission deadline includes queue/search/validation/ranking. No divided shared-core latency; process RSS separate from cumulative allocations; no worker subprocesses."})
++	_, e = experiment.WriteArtifact(filepath.Join(*out, "summary.json"), map[string]any{"success": !fatal, "success_scope": "No malformed route/adapter/unknown routing failure; budget/unsupported/deadline rows retained. Cross-process quality audited separately.", "algorithm": *alg, "kind": r.kind, "configuration": r.config, "quality_preparation": qualityPrep, "quality_enabled": *quality, "preference_config": choiceConfig, "preference_config_sha256": preferenceSHA, "candidate_k": *k, "display_k": displayLimits, "penalty": 300, "batch_size": *size, "repetitions": *reps, "warmups": *warm, "batch_deadline_ns": deadline.Nanoseconds(), "preparation_deadline_ns": prepTimeout.Nanoseconds(), "rss_sampled_safety_stop_bytes": *rssStop, "rss_sampling_interval_ns": int64(100000000), "hard_memory_cap": false, "hard_cpu_confinement": false, "gomaxprocs": runtime.GOMAXPROCS(0), "go_version": runtime.Version(), "goos": runtime.GOOS, "goarch": runtime.GOARCH, "hardware": os.Getenv("TRANSIT_BENCH_HARDWARE"), "provenance": prov, "dataset_sha256": dh, "queries_sha256": qh, "fixture_manifest_sha256": fixtureSHA, "scoped_configuration_sha256": scopedSHA, "seed": w.Seed, "seed_metadata": w.Seed.Metadata(), "method": w.Method, "input_load_ns": loadNS, "preparation": prep, "checker_preparation": checkPrep, "passes": summaries, "throughput_interval": ci, "index_cost_final": finalCost, "response_stream": publisher.summary(), "resources_final": experiment.SnapshotResources(), "scope": "Native development with recorded resources;8GB/four cores is a cost reference, not an acceptance gate. One router/process. Common batch submission deadline includes queue/search/validation/ranking. No divided shared-core latency; process RSS separate from cumulative allocations; no worker subprocesses."})
+ 	if e != nil {
+ 		return e
+ 	}
+--- /dev/null
++++ b/cmd/inputpreflight/config.go
+@@ -0,0 +1,204 @@
++package main
++
++import (
++	"fmt"
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/tripbased"
++	"github.com/ertyoii/transit-routing-go/ultra"
++)
++
++// scopedConfig is explicit experiment input. It has no hidden production-sized
++// defaults and never derives a looser walking cap from the query roster.
++type scopedConfig struct {
++	TripBased            *tripbased.Config                           `json:"trip_based,omitempty"`
++	Flash                *tripbased.FlashConfig                      `json:"flash,omitempty"`
++	Sparse               *ultra.SparseConfig                         `json:"ultra_sparse,omitempty"`
++	ULTRA                *ultra.CappedConfig                         `json:"ultra,omitempty"`
++	ULTRAQuery           *ultra.Limits                               `json:"ultra_query,omitempty"`
++	Patterns             *tripbased.DestinationCappedPatternConfig   `json:"patterns,omitempty"`
++	TREX                 *tripbased.TREXConfig                       `json:"trex,omitempty"`
++	Verify               *tripbased.TREXStaticCapVerifyLimits        `json:"verification,omitempty"`
++	SourceDomainPatterns *tripbased.DestinationSourceDomainConfig    `json:"source_domain_patterns,omitempty"`
++	TFixedTransferCap    *int64                                      `json:"trex_fixed_transfer_cap,omitempty"`
++	VerifyPreparation    *tripbased.TREXRawVerifierPreparationLimits `json:"verification_preparation,omitempty"`
++}
++
++var scopedNames = []string{
++	"trip_based_capped",
++	"ultra_transfer_complete_capped",
++	"ultra_capped_local_walk_ties",
++	"ultra_subset_local_walk_ties",
++	"ultra_cap_safe_stay_witness_subset_v1",
++	"flash_tb_static_stop_pair_suffix_flags_role_caps_v1",
++	"tp_destination_fixed_caps_experimental",
++	"trex_static_caps_mandatory_verified_experimental",
++	tpSourceDomainName,
++	trexDefinedProbeName,
++}
++
++func isScoped(name string) bool {
++	for _, v := range scopedNames {
++		if name == v {
++			return true
++		}
++	}
++	return false
++}
++
++const tpSourceDomainName = "tp_source_domain_retained_fixed_caps_experimental_v1"
++const trexDefinedProbeName = "trex_fixed_transfer_cap_ranked_defined_probe_verified_experimental_v1"
++
++// New policy fields cannot silently change the meaning of a legacy adapter.
++func validateQualificationV2Selection(name string, c scopedConfig) error {
++	if c.SourceDomainPatterns != nil && name != tpSourceDomainName {
++		return fmt.Errorf("source_domain_patterns requires %s", tpSourceDomainName)
++	}
++	if (c.TFixedTransferCap != nil || c.VerifyPreparation != nil) && name != trexDefinedProbeName {
++		return fmt.Errorf("fixed transfer cap and verifier preparation require %s", trexDefinedProbeName)
++	}
++	if name == tpSourceDomainName && c.SourceDomainPatterns == nil {
++		return fmt.Errorf("source_domain_patterns configuration required")
++	}
++	if name == trexDefinedProbeName && (c.TREX == nil || c.Verify == nil || c.TFixedTransferCap == nil || c.VerifyPreparation == nil) {
++		return fmt.Errorf("trex, verification, trex_fixed_transfer_cap and verification_preparation configurations required")
++	}
++	return nil
++}
++
++// Validate settings whose owning constructor may inspect them only after an
++// earlier resource decline. This is configuration validation, not preprocessing
++// or a replacement for the library's dataset/capability checks. Keep these
++// exposed configuration requirements aligned with the pinned vendor contract.
++func validateScopedPreparation(d model.Dataset, c scopedConfig) error {
++	if c.SourceDomainPatterns != nil {
++		v := c.SourceDomainPatterns.Retained
++		if err := validateFlashPreparation(d, v.Scope.Patterns.Profile); err != nil {
++			return err
++		}
++		if v.MaxPendingSegments <= 0 || v.MaxSourceSeeds <= 0 {
++			return fmt.Errorf("positive retained source-domain preparation limits required")
++		}
++	}
++	if c.TFixedTransferCap != nil && *c.TFixedTransferCap < 0 {
++		return fmt.Errorf("fixed transfer walking cap must be nonnegative")
++	}
++	if c.VerifyPreparation != nil {
++		v := *c.VerifyPreparation
++		if v.MaxRows <= 0 || v.MaxWork <= 0 || v.MaxPayloadBytes <= 0 {
++			return fmt.Errorf("positive raw verifier preparation limits required")
++		}
++	}
++	if c.Flash != nil {
++		if err := validateFlashPreparation(d, *c.Flash); err != nil {
++			return err
++		}
++	}
++	if c.Patterns != nil {
++		if err := validateFlashPreparation(d, c.Patterns.Patterns.Profile); err != nil {
++			return err
++		}
++	}
++	if c.ULTRAQuery != nil {
++		l := *c.ULTRAQuery
++		if !positiveULTRALimits(l) {
++			return fmt.Errorf("positive ULTRA query limits required")
++		}
++	}
++	if c.Verify != nil && (c.Verify.MaxStates <= 0 || c.Verify.MaxJourneys <= 0 || c.Verify.MaxScans <= 0) {
++		return fmt.Errorf("positive verification limits required")
++	}
++	if c.TREX != nil && len(c.TREX.Partition) > 0 {
++		p := c.TREX.Partition
++		if c.TREX.Levels < 0 || c.TREX.Levels > 12 {
++			return fmt.Errorf("invalid T-REX partition levels")
++		}
++		if len(p) != len(d.Stops) {
++			return fmt.Errorf("invalid T-REX partition: must cover exactly all stops")
++		}
++		used := make([]bool, 1<<uint(c.TREX.Levels))
++		for _, s := range d.Stops {
++			leaf, ok := p[s.ID]
++			if !ok || leaf < 0 || leaf >= len(used) {
++				return fmt.Errorf("invalid T-REX partition leaf")
++			}
++			used[leaf] = true
++		}
++		for _, present := range used {
++			if !present {
++				return fmt.Errorf("invalid T-REX partition: empty leaf")
++			}
++		}
++		// Endpoints in the same leaf imply their entire weak walking component
++		// is unsplit; no routing or partition-construction logic is shared here.
++		for _, edge := range d.Footpaths {
++			if p[edge.From] != p[edge.To] {
++				return fmt.Errorf("invalid T-REX partition: cuts a walking component")
++			}
++		}
++	}
++	return nil
++}
++
++func positiveULTRALimits(l ultra.Limits) bool {
++	return l.MaxRuns > 0 && l.MaxConnectionVisits > 0 && l.MaxWalkSettled > 0 && l.MaxWalkEdges > 0 && l.MaxShortcuts > 0 && l.MaxOutputLegs > 0
++}
++
++func validateFlashPreparation(d model.Dataset, c tripbased.FlashConfig) error {
++	l := c.Limits
++	if c.Cells < 1 || c.Cells > len(d.Stops) || c.MaxBoardings < 1 || c.MaxBoardings > 32 || l.MaxStops < 1 || l.MaxTrips < 1 || l.MaxClosurePaths < 1 || l.MaxWalkSettled < 1 || l.MaxTransfers < 1 || l.MaxRuns < 1 || l.MaxWork < 1 || l.MaxFlagBytes < 1 || l.MaxWitnesses < 1 || l.MaxQuerySegments < 1 {
++		return fmt.Errorf("invalid FLASH preparation configuration: positive configuration/budgets required")
++	}
++	if c.Semantics == "static_stop_pair_v1" && (l.MaxSuffixBytes <= 0 || l.MaxSnapshotTransfers <= 0) {
++		return fmt.Errorf("invalid FLASH preparation configuration: positive suffix-state byte and snapshot-record budgets required")
++	}
++	return nil
++}
++
++// Static input checks only. No constructor or graph preprocessing is called.
++func validateScopedInput(d model.Dataset, name string, c scopedConfig) error {
++	if !isScoped(name) {
++		return fmt.Errorf("scoped configuration supplied for non-scoped adapter %q", name)
++	}
++	present := 0
++	for _, yes := range []bool{c.TripBased != nil, c.Flash != nil, c.Sparse != nil, c.ULTRA != nil, c.Patterns != nil, c.TREX != nil, c.SourceDomainPatterns != nil} {
++		if yes {
++			present++
++		}
++	}
++	if present != 1 {
++		return fmt.Errorf("scoped config requires exactly one algorithm configuration")
++	}
++	if e := validateQualificationV2Selection(name, c); e != nil {
++		return e
++	}
++	if (c.ULTRAQuery != nil && c.ULTRA == nil && c.Sparse == nil) || (c.Verify != nil && c.TREX == nil) {
++		return fmt.Errorf("query/verification config mismatches selected algorithm")
++	}
++	switch name {
++	case "trip_based_capped":
++		if c.TripBased == nil {
++			return fmt.Errorf("trip_based required")
++		}
++	case "flash_tb_static_stop_pair_suffix_flags_role_caps_v1":
++		if c.Flash == nil {
++			return fmt.Errorf("flash required")
++		}
++	case "ultra_transfer_complete_capped", "ultra_capped_local_walk_ties":
++		if c.ULTRA == nil || c.ULTRAQuery == nil {
++			return fmt.Errorf("ultra and ultra_query required")
++		}
++	case "ultra_cap_safe_stay_witness_subset_v1", "ultra_subset_local_walk_ties":
++		if c.Sparse == nil || c.ULTRAQuery == nil {
++			return fmt.Errorf("ultra_sparse and ultra_query required")
++		}
++	case "tp_destination_fixed_caps_experimental":
++		if c.Patterns == nil {
++			return fmt.Errorf("patterns required")
++		}
++	case "trex_static_caps_mandatory_verified_experimental":
++		if c.TREX == nil || c.Verify == nil {
++			return fmt.Errorf("trex and verification required")
++		}
++	}
++	return validateScopedPreparation(d, c)
++}
+--- /dev/null
++++ b/cmd/inputpreflight/main.go
+@@ -0,0 +1,232 @@
++// inputpreflight strictly validates exact input bytes, query bounds/endpoints,
++// hashes and configuration schemas. It never constructs or invokes a router.
++package main
++
++import (
++	"crypto/sha256"
++	"encoding/hex"
++	"encoding/json"
++	"flag"
++	"fmt"
++	"github.com/ertyoii/transit-routing-bench/workloadseed"
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/profilequery"
++	"github.com/ertyoii/transit-routing-go/recommend"
++	"github.com/ertyoii/transit-routing-go/strictjson"
++	"os"
++)
++
++type pointItem struct {
++	Stratum string      `json:"stratum"`
++	Query   model.Query `json:"query"`
++}
++type pointWorkload struct {
++	Seed          workloadseed.Seed `json:"seed"`
++	Method        string            `json:"method"`
++	DatasetSHA256 string            `json:"dataset_sha256"`
++	Items         []pointItem       `json:"items"`
++}
++type profileItem struct {
++	Stratum string             `json:"stratum"`
++	Query   profilequery.Query `json:"query"`
++}
++type profileWorkload struct {
++	Seed          workloadseed.Seed `json:"seed"`
++	Method        string            `json:"method"`
++	DatasetSHA256 string            `json:"dataset_sha256"`
++	Items         []profileItem     `json:"items"`
++}
++type request struct {
++	ID           string `json:"id"`
++	Dataset      string `json:"dataset"`
++	Queries      string `json:"queries"`
++	Schema       string `json:"schema"`
++	Algorithm    string `json:"algorithm,omitempty"`
++	Preferences  string `json:"preferences,omitempty"`
++	ScopedConfig string `json:"scoped_config,omitempty"`
++	ReadySpan    int64  `json:"ready_span_seconds"`
++	MaxWindow    int64  `json:"max_window_seconds"`
++}
++type result struct {
++	ID                string                `json:"id"`
++	Accepted          bool                  `json:"accepted"`
++	Error             string                `json:"error,omitempty"`
++	Schema            string                `json:"schema"`
++	DatasetSHA256     string                `json:"dataset_sha256,omitempty"`
++	QueriesSHA256     string                `json:"queries_sha256,omitempty"`
++	Queries           int                   `json:"query_count"`
++	Seed              workloadseed.Metadata `json:"seed_metadata"`
++	PreferencesSHA256 string                `json:"preferences_sha256,omitempty"`
++	ScopedSHA256      string                `json:"scoped_config_sha256,omitempty"`
++	Scope             string                `json:"scope"`
++}
++type loadedDataset struct {
++	value     model.Dataset
++	hash      string
++	validator *model.QueryValidator
++}
++
++func sum(b []byte) string { h := sha256.Sum256(b); return hex.EncodeToString(h[:]) }
++func read(p string, v any) (string, error) {
++	b, e := os.ReadFile(p)
++	if e != nil {
++		return "", e
++	}
++	if e = strictjson.Decode(b, v); e != nil {
++		return "", e
++	}
++	return sum(b), nil
++}
++func load(p string) (*loadedDataset, error) {
++	var d model.Dataset
++	hash, e := read(p, &d)
++	if e != nil {
++		return nil, e
++	}
++	if e = d.Validate(); e != nil {
++		return nil, e
++	}
++	return &loadedDataset{d, hash, model.NewQueryValidator(d)}, nil
++}
++func check(r request, d *loadedDataset) (out result) {
++	out = result{ID: r.ID, Schema: r.Schema, DatasetSHA256: d.hash, Scope: "input_only_no_routing_no_outcomes"}
++	fail := func(e error) result { out.Error = e.Error(); return out }
++	if r.Schema == "" {
++		r.Schema = "point"
++		out.Schema = r.Schema
++	}
++	if r.MaxWindow < 0 || r.ReadySpan < 0 {
++		return fail(fmt.Errorf("negative profile bounds"))
++	}
++	b, e := os.ReadFile(r.Queries)
++	if e != nil {
++		return fail(e)
++	}
++	out.QueriesSHA256 = sum(b)
++	queries := []profilequery.Query{}
++	var bound string
++	switch r.Schema {
++	case "point", "profile-from-point":
++		var w pointWorkload
++		if e = strictjson.Decode(b, &w); e != nil {
++			return fail(e)
++		}
++		bound = w.DatasetSHA256
++		out.Seed = w.Seed.Metadata()
++		for _, i := range w.Items {
++			q := profilequery.Query{Base: i.Query, End: i.Query.Departure}
++			if r.Schema == "profile-from-point" {
++				if r.ReadySpan > i.Query.LatestArrival-i.Query.Departure {
++					return fail(fmt.Errorf("ready span exceeds fixed horizon: %s", i.Query.ID))
++				}
++				q.End += r.ReadySpan
++			}
++			queries = append(queries, q)
++		}
++	case "profile":
++		var w profileWorkload
++		if e = strictjson.Decode(b, &w); e != nil {
++			return fail(e)
++		}
++		bound = w.DatasetSHA256
++		out.Seed = w.Seed.Metadata()
++		for _, i := range w.Items {
++			queries = append(queries, i.Query)
++		}
++	default:
++		return fail(fmt.Errorf("unsupported input schema %q", r.Schema))
++	}
++	if bound != d.hash || len(queries) == 0 {
++		return fail(fmt.Errorf("workload dataset hash differs or workload empty"))
++	}
++	seen := map[string]bool{}
++	for _, q := range queries {
++		if seen[q.Base.ID] {
++			return fail(fmt.Errorf("duplicate query %q", q.Base.ID))
++		}
++		seen[q.Base.ID] = true
++		if e = d.validator.Validate(q.Base); e != nil {
++			return fail(e)
++		}
++		if r.Schema != "point" && (q.End < q.Base.Departure || q.End > q.Base.LatestArrival || q.End-q.Base.Departure > r.MaxWindow) {
++			return fail(fmt.Errorf("invalid or over-budget verification window: %s", q.Base.ID))
++		}
++	}
++	out.Queries = len(queries)
++	if r.Preferences != "" {
++		var c recommend.ChoiceConfig
++		out.PreferencesSHA256, e = read(r.Preferences, &c)
++		if e != nil {
++			return fail(fmt.Errorf("preferences: %w", e))
++		}
++		if e = c.Validate(); e != nil {
++			return fail(fmt.Errorf("preferences: %w", e))
++		}
++	}
++	if r.ScopedConfig != "" {
++		var c scopedConfig
++		out.ScopedSHA256, e = read(r.ScopedConfig, &c)
++		if e != nil {
++			return fail(fmt.Errorf("scoped: %w", e))
++		}
++		if e = validateScopedInput(d.value, r.Algorithm, c); e != nil {
++			return fail(fmt.Errorf("scoped: %w", e))
++		}
++	} else if isScoped(r.Algorithm) {
++		return fail(fmt.Errorf("scoped adapter requires scoped configuration"))
++	}
++	out.Accepted = true
++	return out
++}
++func main() {
++	dataset := flag.String("dataset", "", "exact normalized dataset")
++	queries := flag.String("queries", "", "exact workload bytes")
++	schema := flag.String("schema", "point", "point, profile or profile-from-point")
++	manifest := flag.String("manifest", "", "strict JSON request array; reuses validated datasets")
++	algorithm := flag.String("algorithm", "", "selected adapter")
++	prefs := flag.String("preferences", "", "exact preference scenarios")
++	scoped := flag.String("scoped-config", "", "exact scoped config")
++	span := flag.Int64("ready-span-seconds", 60, "inclusive derived ready span")
++	maxspan := flag.Int64("max-window-seconds", 600, "complete profile verification bound")
++	flag.Parse()
++	var requests []request
++	if *manifest != "" {
++		if _, e := read(*manifest, &requests); e != nil {
++			fmt.Fprintln(os.Stderr, e)
++			os.Exit(2)
++		}
++	} else {
++		requests = []request{{Dataset: *dataset, Queries: *queries, Schema: *schema, Algorithm: *algorithm, Preferences: *prefs, ScopedConfig: *scoped, ReadySpan: *span, MaxWindow: *maxspan}}
++	}
++	if len(requests) == 0 {
++		fmt.Fprintln(os.Stderr, "empty input manifest")
++		os.Exit(2)
++	}
++	cache := map[string]*loadedDataset{}
++	enc := json.NewEncoder(os.Stdout)
++	failed := false
++	for _, r := range requests {
++		d := cache[r.Dataset]
++		if d == nil {
++			var e error
++			d, e = load(r.Dataset)
++			if e != nil {
++				enc.Encode(result{ID: r.ID, Schema: r.Schema, Error: e.Error(), Scope: "input_only_no_routing_no_outcomes"})
++				failed = true
++				continue
++			}
++			cache[r.Dataset] = d
++		}
++		out := check(r, d)
++		if !out.Accepted {
++			failed = true
++		}
++		if e := enc.Encode(out); e != nil {
++			fmt.Fprintln(os.Stderr, e)
++			os.Exit(2)
++		}
++	}
++	if failed {
++		os.Exit(1)
++	}
++}
+--- /dev/null
++++ b/cmd/inputpreflight/main_test.go
+@@ -0,0 +1,101 @@
++package main
++
++import (
++	"encoding/json"
++	"github.com/ertyoii/transit-routing-go/model"
++	"os"
++	"path/filepath"
++	"strings"
++	"testing"
++)
++
++func testInput(t *testing.T) (*loadedDataset, request, string) {
++	t.Helper()
++	dir := t.TempDir()
++	d := model.Dataset{SchemaVersion: model.SchemaVersion, ID: "input-only", TimeZone: "UTC", ServiceDate: "2026-10-20", Stops: []model.Stop{{ID: "A", Accessible: model.Unknown}, {ID: "B", Accessible: model.Unknown}}}
++	b, _ := json.Marshal(d)
++	if e := d.Validate(); e != nil {
++		t.Fatal(e)
++	}
++	dp := filepath.Join(dir, "dataset.json")
++	os.WriteFile(dp, b, 0600)
++	loaded, e := load(dp)
++	if e != nil {
++		t.Fatal(e)
++	}
++	qp := filepath.Join(dir, "queries.json")
++	r := request{ID: "input", Dataset: dp, Queries: qp, Schema: "point", ReadySpan: 60, MaxWindow: 600}
++	raw := `{"seed":"real-text-id","method":"sealed","dataset_sha256":"` + sum(b) + `","items":[{"stratum":"input","query":{"id":"q","origin":"A","destination":"B","departure":100,"latest_arrival":200,"transfer_buffer":0,"max_walk_seconds":600,"max_boardings":4,"max_legs":20,"accessible_only":false}}]}`
++	os.WriteFile(qp, []byte(raw), 0600)
++	return loaded, r, raw
++}
++func TestPreflightPointAndDerivedPreserveBytes(t *testing.T) {
++	d, r, raw := testInput(t)
++	for _, schema := range []string{"point", "profile-from-point"} {
++		r.Schema = schema
++		got := check(r, d)
++		if !got.Accepted || got.Queries != 1 || got.QueriesSHA256 != sum([]byte(raw)) || got.Seed.SourceText != "real-text-id" {
++			t.Fatal(got)
++		}
++	}
++	after, _ := os.ReadFile(r.Queries)
++	if string(after) != raw {
++		t.Fatal("input bytes modified")
++	}
++	r.ReadySpan = 101
++	if check(r, d).Accepted {
++		t.Fatal("bad fixed-horizon span accepted")
++	}
++}
++func TestPreflightRejectsInputSchemaAndBounds(t *testing.T) {
++	d, r, raw := testInput(t)
++	for _, s := range []string{strings.Replace(raw, `"origin":"A"`, `"origin":"unknown"`, 1), strings.Replace(raw, `"max_legs":20`, `"max_legs":-1`, 1), strings.Replace(raw, `"departure":100`, `"departure":201`, 1), strings.Replace(raw, `"seed":"real-text-id"`, `"seed":null`, 1), strings.Replace(raw, `"method":"sealed"`, `"method":"sealed","unknown":1`, 1), strings.Replace(raw, `"method":"sealed"`, `"method":"sealed","METHOD":"duplicate"`, 1), strings.Replace(raw, d.hash, strings.Repeat("0", 64), 1), strings.Replace(raw, `"items":[`, `"items":[{"stratum":"input","query":{"id":"q","origin":"A","destination":"B","departure":100,"latest_arrival":200,"max_boardings":4,"max_legs":20}},`, 1)} {
++		os.WriteFile(r.Queries, []byte(s), 0600)
++		if got := check(r, d); got.Accepted {
++			t.Fatal("accepted malformed", s)
++		}
++	}
++}
++func TestPreflightNativeProfileSchema(t *testing.T) {
++	d, r, raw := testInput(t)
++	var w pointWorkload
++	if e := json.Unmarshal([]byte(raw), &w); e != nil {
++		t.Fatal(e)
++	}
++	q, _ := json.Marshal(w.Items[0].Query)
++	profile := `{"seed":18446744073709551615,"method":"native","dataset_sha256":"` + d.hash + `","items":[{"stratum":"input","query":{"base":` + string(q) + `,"ready_window_end_inclusive":160}}]}`
++	os.WriteFile(r.Queries, []byte(profile), 0600)
++	r.Schema = "profile"
++	if got := check(r, d); !got.Accepted || got.Seed.Uint64 != 18446744073709551615 {
++		t.Fatal(got)
++	}
++	r.MaxWindow = 59
++	if check(r, d).Accepted {
++		t.Fatal("over-window accepted")
++	}
++	os.WriteFile(r.Queries, []byte(strings.Replace(profile, `:160`, `:201`, 1)), 0600)
++	r.MaxWindow = 600
++	if check(r, d).Accepted {
++		t.Fatal("outside horizon accepted")
++	}
++}
++func TestPreflightConfigsStrict(t *testing.T) {
++	d, r, _ := testInput(t)
++	p := filepath.Join(t.TempDir(), "config.json")
++	r.Preferences = p
++	for _, s := range []string{`{"unknown":1}`, `{"max_candidates":0,"max_subsets":0,"groups":[]}`} {
++		os.WriteFile(p, []byte(s), 0600)
++		if check(r, d).Accepted {
++			t.Fatal("invalid preference accepted")
++		}
++	}
++	r.Preferences = ""
++	r.Algorithm = "trip_based_capped"
++	r.ScopedConfig = p
++	for _, s := range []string{`{"unknown":1}`, `{}`, `{"trip_based":{},"flash":{}}`, `{"ultra":{}}`} {
++		os.WriteFile(p, []byte(s), 0600)
++		if check(r, d).Accepted {
++			t.Fatal("invalid scoped accepted")
++		}
++	}
++}
+--- a/cmd/profilebench/main.go
++++ b/cmd/profilebench/main.go
+@@ -9,6 +9,7 @@
+ 	"github.com/ertyoii/transit-routing-bench/evaluation"
+ 	"github.com/ertyoii/transit-routing-bench/experiment"
+ 	"github.com/ertyoii/transit-routing-bench/fixtures"
++	"github.com/ertyoii/transit-routing-bench/workloadseed"
+ 	"github.com/ertyoii/transit-routing-go/model"
+ 	"github.com/ertyoii/transit-routing-go/paper"
+ 	"github.com/ertyoii/transit-routing-go/profilecsa"
+@@ -30,10 +31,10 @@
+ 	Query   profilequery.Query `json:"query"`
+ }
+ type workload struct {
+-	Seed          uint64 `json:"seed"`
+-	Method        string `json:"method"`
+-	DatasetSHA256 string `json:"dataset_sha256"`
+-	Items         []item `json:"items"`
++	Seed          workloadseed.Seed `json:"seed"`
++	Method        string            `json:"method"`
++	DatasetSHA256 string            `json:"dataset_sha256"`
++	Items         []item            `json:"items"`
+ }
+ type point struct {
+ 	LatestReady int64           `json:"latest_ready"`
+@@ -232,7 +233,7 @@
+ 	allOK := true
+ 	for rep := 0; rep < *warmups+*reps; rep++ {
+ 		items := append([]item{}, w.Items...)
+-		rng := rand.New(rand.NewPCG(w.Seed, uint64(rep)))
++		rng := rand.New(rand.NewPCG(w.Seed.Uint64(), uint64(rep)))
+ 		rng.Shuffle(len(items), func(i, j int) { items[i], items[j] = items[j], items[i] })
+ 		names := []string{"profile_csa", "range_raptor"}
+ 		if rep%2 == 1 {
+@@ -326,7 +327,7 @@
+ 	}
+ 	for name, ss := range samples {
+ 		if len(ss) > 1 {
+-			ci, e := experiment.ThroughputConfidence(ss, w.Seed)
++			ci, e := experiment.ThroughputConfidence(ss, w.Seed.Uint64())
+ 			if e != nil {
+ 				return e
+ 			}
+@@ -334,7 +335,7 @@
+ 			intervals[name] = ci
+ 		}
+ 	}
+-	m := map[string]any{"success": allOK, "contract": "ready_window_arrival_boardings_v1", "dataset_sha256": dh, "workload_sha256": qh, "workload": w, "provenance": provenance, "go_version": runtime.Version(), "goos": runtime.GOOS, "goarch": runtime.GOARCH, "gomaxprocs": runtime.GOMAXPROCS(0), "hardware": *hardware, "created_utc": time.Now().UTC().Format(time.RFC3339Nano), "input_load_ns": loadNS, "preparation": prep, "raptor_preparation": rap.Preparation(), "limits": limits, "core_timeout_ns": timeout.Nanoseconds(), "max_verification_window_seconds": *maxSpan, "warmups": *warmups, "repetitions": *reps, "summaries": summaries, "comparisons": comparisons, "throughput_intervals": intervals, "resources_final": experiment.SnapshotResources(), "notes": []string{"Both algorithms solve identical full ready-time windows with a fixed arrival horizon, separate direct affine branch, and arrival/boarding objective. Not strict top-k.", "Core includes candidate-time construction, walking, search, reconstruction and profile normalization. Response adds complete point/direct witness validation and every integer-ready-time lookup/witness validation. Both exclude input/index preparation and result serialization; IO sidecars retained.", "Saved compact raw profiles and validated points reconstruct every grid answer. Every materialized grid witness is validated; grid files store vectors, not redundant copies of those itineraries.", "Profile query latency is not divided by grid size. Throughput uses actual sequential profile-pass makespan. Failures retain original request denominators; paired coverage is explicit.", "Common preprocessing and materialization are shared and require independent specification/review. Allocations are cumulative deltas; peak RSS is whole-process cumulative, not isolated by algorithm. Three repetitions and uncontrolled shared host limit inference.", "Modeled frequency timetable and unverified OSM connectors do not establish actual Singapore service validity. Regional gate remains closed."}}
++	m := map[string]any{"success": allOK, "contract": "ready_window_arrival_boardings_v1", "dataset_sha256": dh, "workload_sha256": qh, "workload": w, "seed_metadata": w.Seed.Metadata(), "provenance": provenance, "go_version": runtime.Version(), "goos": runtime.GOOS, "goarch": runtime.GOARCH, "gomaxprocs": runtime.GOMAXPROCS(0), "hardware": *hardware, "created_utc": time.Now().UTC().Format(time.RFC3339Nano), "input_load_ns": loadNS, "preparation": prep, "raptor_preparation": rap.Preparation(), "limits": limits, "core_timeout_ns": timeout.Nanoseconds(), "max_verification_window_seconds": *maxSpan, "warmups": *warmups, "repetitions": *reps, "summaries": summaries, "comparisons": comparisons, "throughput_intervals": intervals, "resources_final": experiment.SnapshotResources(), "notes": []string{"Both algorithms solve identical full ready-time windows with a fixed arrival horizon, separate direct affine branch, and arrival/boarding objective. Not strict top-k.", "Core includes candidate-time construction, walking, search, reconstruction and profile normalization. Response adds complete point/direct witness validation and every integer-ready-time lookup/witness validation. Both exclude input/index preparation and result serialization; IO sidecars retained.", "Saved compact raw profiles and validated points reconstruct every grid answer. Every materialized grid witness is validated; grid files store vectors, not redundant copies of those itineraries.", "Profile query latency is not divided by grid size. Throughput uses actual sequential profile-pass makespan. Failures retain original request denominators; paired coverage is explicit.", "Common preprocessing and materialization are shared and require independent specification/review. Allocations are cumulative deltas; peak RSS is whole-process cumulative, not isolated by algorithm. Three repetitions and uncontrolled shared host limit inference.", "Modeled frequency timetable and unverified OSM connectors do not establish actual Singapore service validity. Regional gate remains closed."}}
+ 	if _, e = experiment.WriteArtifact(filepath.Join(*out, "manifest.json"), m); e != nil {
+ 		return e
+ 	}
+--- a/cmd/tadbench/main.go
++++ b/cmd/tadbench/main.go
+@@ -8,6 +8,7 @@
+ 	"github.com/ertyoii/transit-routing-bench/evaluation"
+ 	"github.com/ertyoii/transit-routing-bench/experiment"
+ 	"github.com/ertyoii/transit-routing-bench/fixtures"
++	"github.com/ertyoii/transit-routing-bench/workloadseed"
+ 	"github.com/ertyoii/transit-routing-go/eacsa"
+ 	"github.com/ertyoii/transit-routing-go/model"
+ 	"github.com/ertyoii/transit-routing-go/paper"
+@@ -29,10 +30,10 @@
+ 	Query   model.Query `json:"query"`
+ }
+ type Workload struct {
+-	Seed          uint64 `json:"seed"`
+-	Method        string `json:"method"`
+-	DatasetSHA256 string `json:"dataset_sha256"`
+-	Items         []Item `json:"items"`
++	Seed          workloadseed.Seed `json:"seed"`
++	Method        string            `json:"method"`
++	DatasetSHA256 string            `json:"dataset_sha256"`
++	Items         []Item            `json:"items"`
+ }
+ type Record struct {
+ 	Item
+@@ -171,7 +172,7 @@
+ 	allOK := true
+ 	for rep := 0; rep < *warmups+*reps; rep++ {
+ 		items := append([]Item{}, w.Items...)
+-		rng := rand.New(rand.NewPCG(w.Seed, uint64(rep)))
++		rng := rand.New(rand.NewPCG(w.Seed.Uint64(), uint64(rep)))
+ 		rng.Shuffle(len(items), func(i, j int) { items[i], items[j] = items[j], items[i] })
+ 		names := []string{"ea_csa", "raptor", "tad"}
+ 		names = append(names[rep%3:], names[:rep%3]...)
+@@ -285,7 +286,7 @@
+ 	}
+ 	for name, ss := range samples {
+ 		if len(ss) >= 2 {
+-			ci, e := experiment.ThroughputConfidence(ss, w.Seed)
++			ci, e := experiment.ThroughputConfidence(ss, w.Seed.Uint64())
+ 			if e != nil {
+ 				return e
+ 			}
+@@ -294,7 +295,7 @@
+ 		}
+ 	}
+ 	manifest := map[string]any{
+-		"success": allOK, "dataset_sha256": dh, "workload_sha256": qh, "workload": w, "provenance": provenance,
++		"success": allOK, "dataset_sha256": dh, "workload_sha256": qh, "workload": w, "seed_metadata": w.Seed.Metadata(), "provenance": provenance,
+ 		"output_contracts":                    map[string]string{"tad": "one_earliest_arrival_witness_under_boarding_cap", "ea_csa": "arrival_boardings_pareto_representatives", "raptor": "arrival_boardings_pareto_representatives"},
+ 		"comparison_contract":                 "minimum arrival under identical hard boarding/walking limits; references compute extra Pareto information, so no equal-work speed comparison",
+ 		"independent_earliest_arrival_oracle": "finite synthetic whole-word corpus; not applied to the full model workload",
+--- /dev/null
++++ b/workloadseed/seed.go
+@@ -0,0 +1,144 @@
++// Package workloadseed preserves legacy numeric seeds and gives textual seed
++// identifiers an explicit, reproducible, non-security uint64 mapping.
++package workloadseed
++
++import (
++	"bytes"
++	"crypto/sha256"
++	"encoding/binary"
++	"encoding/json"
++	"fmt"
++	"strconv"
++	"unicode"
++	"unicode/utf8"
++)
++
++const MaxTextBytes = 256
++const MappingVersion = "sha256-first64be-text-seed-v1"
++
++// Domain is hashed byte-for-byte before the decoded, unnormalized UTF-8 text.
++const Domain = "transit-routing-bench/workload-seed/text/v1\x00"
++
++type Seed struct {
++	value   uint64
++	raw     string
++	text    string
++	present bool
++	textual bool
++}
++type Metadata struct {
++	SourceKind    string          `json:"source_kind"`
++	SourceJSON    json.RawMessage `json:"source_json,omitempty"`
++	SourceText    string          `json:"source_text,omitempty"`
++	Mapping       string          `json:"mapping"`
++	Domain        string          `json:"domain,omitempty"`
++	UnicodePolicy string          `json:"unicode_policy,omitempty"`
++	Uint64        uint64          `json:"uint64"`
++}
++
++func Numeric(v uint64) Seed   { return Seed{value: v, raw: strconv.FormatUint(v, 10), present: true} }
++func (s Seed) Uint64() uint64 { return s.value }
++
++// Summary seed remains a JSON number for numeric-output backward compatibility.
++// Call Metadata alongside it so textual provenance never disappears.
++func (s Seed) MarshalJSON() ([]byte, error) { return []byte(strconv.FormatUint(s.value, 10)), nil }
++func (s Seed) Metadata() Metadata {
++	m := Metadata{SourceKind: "missing_legacy_default_zero", Mapping: "identity-uint64-v1", Uint64: s.value}
++	if s.present {
++		m.SourceKind = "uint64"
++		m.SourceJSON = json.RawMessage(s.raw)
++	}
++	if s.textual {
++		m.SourceKind = "text"
++		m.SourceText = s.text
++		m.Mapping = MappingVersion
++		m.Domain = Domain
++		m.UnicodePolicy = "exact UTF-8; no normalization; nonempty; <=256 decoded bytes; no Unicode whitespace or control characters"
++	}
++	return m
++}
++func (s *Seed) UnmarshalJSON(data []byte) error {
++	raw := bytes.TrimSpace(data)
++	if len(raw) == 0 {
++		return fmt.Errorf("seed: empty JSON")
++	}
++	var next Seed
++	if raw[0] == '"' {
++		if !utf8.Valid(raw) {
++			return fmt.Errorf("seed: invalid UTF-8")
++		}
++		if err := checkSurrogates(raw); err != nil {
++			return err
++		}
++		var id string
++		if err := json.Unmarshal(raw, &id); err != nil {
++			return fmt.Errorf("seed: %w", err)
++		}
++		if len(id) == 0 || len(id) > MaxTextBytes {
++			return fmt.Errorf("seed: text must contain 1..%d UTF-8 bytes", MaxTextBytes)
++		}
++		for _, r := range id {
++			if unicode.IsSpace(r) || unicode.IsControl(r) {
++				return fmt.Errorf("seed: whitespace/control in textual identifier")
++			}
++		}
++		sum := sha256.Sum256(append([]byte(Domain), []byte(id)...))
++		next = Seed{value: binary.BigEndian.Uint64(sum[:8]), raw: string(raw), text: id, present: true, textual: true}
++	} else {
++		// Do not route numbers through float64. Only canonical JSON uint64 decimals
++		// are accepted; signs, exponent notation, fractions and overflow are errors.
++		if len(raw) > 1 && raw[0] == '0' {
++			return fmt.Errorf("seed: noncanonical uint64")
++		}
++		for _, c := range raw {
++			if c < '0' || c > '9' {
++				return fmt.Errorf("seed: expected canonical uint64 or textual identifier")
++			}
++		}
++		v, err := strconv.ParseUint(string(raw), 10, 64)
++		if err != nil {
++			return fmt.Errorf("seed: %w", err)
++		}
++		next = Numeric(v)
++	}
++	*s = next
++	return nil
++}
++
++// encoding/json replaces unpaired UTF-16 surrogates with U+FFFD. Reject those
++// malformed identifiers instead of silently changing their hash identity.
++func checkSurrogates(raw []byte) error {
++	for i := 1; i < len(raw)-1; i++ {
++		if raw[i] != '\\' {
++			continue
++		}
++		i++
++		if i >= len(raw)-1 {
++			return fmt.Errorf("seed: malformed string escape")
++		}
++		if raw[i] != 'u' {
++			continue
++		}
++		if i+4 >= len(raw) {
++			return fmt.Errorf("seed: malformed Unicode escape")
++		}
++		code, e := strconv.ParseUint(string(raw[i+1:i+5]), 16, 16)
++		if e != nil {
++			return fmt.Errorf("seed: malformed Unicode escape")
++		}
++		i += 4
++		if code >= 0xD800 && code <= 0xDBFF {
++			if i+6 >= len(raw) || raw[i+1] != '\\' || raw[i+2] != 'u' {
++				return fmt.Errorf("seed: unpaired high surrogate")
++			}
++			low, e := strconv.ParseUint(string(raw[i+3:i+7]), 16, 16)
++			if e != nil || low < 0xDC00 || low > 0xDFFF {
++				return fmt.Errorf("seed: unpaired high surrogate")
++			}
++			i += 6
++		} else if code >= 0xDC00 && code <= 0xDFFF {
++			return fmt.Errorf("seed: unpaired low surrogate")
++		}
++	}
++	return nil
++}
+--- /dev/null
++++ b/workloadseed/seed_test.go
+@@ -0,0 +1,91 @@
++package workloadseed
++
++import (
++	"crypto/sha256"
++	"encoding/binary"
++	"encoding/json"
++	"math"
++	"math/rand/v2"
++	"strings"
++	"testing"
++)
++
++func TestNumericExactAndRNG(t *testing.T) {
++	for _, tc := range []struct {
++		j string
++		v uint64
++	}{{"0", 0}, {"1", 1}, {"9007199254740993", 9007199254740993}, {"18446744073709551615", math.MaxUint64}} {
++		var s Seed
++		if e := json.Unmarshal([]byte(tc.j), &s); e != nil || s.Uint64() != tc.v {
++			t.Fatalf("%s %v %v", tc.j, s, e)
++		}
++		b, _ := json.Marshal(s)
++		if string(b) != tc.j {
++			t.Fatal(string(b))
++		}
++		a := rand.NewPCG(s.Uint64(), 17)
++		bRNG := rand.NewPCG(tc.v, 17)
++		for i := 0; i < 10; i++ {
++			if a.Uint64() != bRNG.Uint64() {
++				t.Fatal("numeric RNG changed")
++			}
++		}
++	}
++}
++func TestTextMapping(t *testing.T) {
++	var a, b, c, d Seed
++	for _, s := range []struct {
++		j string
++		p *Seed
++	}{{`"alpha"`, &a}, {`"alpha"`, &b}, {`"beta"`, &c}, {`"1"`, &d}} {
++		if e := json.Unmarshal([]byte(s.j), s.p); e != nil {
++			t.Fatal(e)
++		}
++	}
++	h := sha256.Sum256([]byte(Domain + "alpha"))
++	if a.Uint64() != binary.BigEndian.Uint64(h[:8]) || a != b || a.Uint64() == c.Uint64() || d.Uint64() == 1 {
++		t.Fatal("mapping mismatch")
++	}
++	m := a.Metadata()
++	if m.SourceText != "alpha" || m.Mapping != MappingVersion || string(m.SourceJSON) != `"alpha"` {
++		t.Fatal(m)
++	}
++}
++func TestRejectInvalid(t *testing.T) {
++	for _, j := range []string{`-1`, `-0`, `1.0`, `1e0`, `+1`, `00`, `01`, `18446744073709551616`, `true`, `false`, `null`, `[]`, `{}`, `""`, `" "`, `"a b"`, `"a\nb"`, `"\ud800"`, `"\udc00"`, `"\ud800\u0041"`, `"\x"`, `"unterminated`, `"` + strings.Repeat("x", 257) + `"`, string([]byte{'"', 255, '"'})} {
++		var s Seed
++		if e := json.Unmarshal([]byte(j), &s); e == nil {
++			t.Errorf("accepted %q", j)
++		}
++	}
++}
++func TestUnicodePolicy(t *testing.T) {
++	var a, b, c, d Seed
++	for _, x := range []struct {
++		j string
++		s *Seed
++	}{{`"é"`, &a}, {`"\u00e9"`, &b}, {`"e\u0301"`, &c}, {`"\ud83d\ude00"`, &d}} {
++		if e := json.Unmarshal([]byte(x.j), x.s); e != nil {
++			t.Fatal(e)
++		}
++	}
++	if a.Uint64() != b.Uint64() || a.Uint64() == c.Uint64() {
++		t.Fatal("Unicode normalization policy")
++	}
++	var max Seed
++	if e := json.Unmarshal([]byte(`"`+strings.Repeat("é", 128)+`"`), &max); e != nil {
++		t.Fatal(e)
++	}
++}
++func TestMissingDefaultsAndFailedDecodeAtomic(t *testing.T) {
++	var w struct {
++		Seed Seed `json:"seed"`
++	}
++	if e := json.Unmarshal([]byte(`{}`), &w); e != nil || w.Seed.Uint64() != 0 || w.Seed.Metadata().SourceKind != "missing_legacy_default_zero" {
++		t.Fatal(w, e)
++	}
++	s := Numeric(9)
++	if e := s.UnmarshalJSON([]byte(`null`)); e == nil || s.Uint64() != 9 {
++		t.Fatal("failed mutation")
++	}
++}

@@ -1,0 +1,171 @@
+--- a/routing.lock.json
++++ b/routing.lock.json
+@@ -44,8 +44,8 @@
+     "raptor/range.go": "81f63bb9d674bd0e9955b4aa493b1657ed9c8c7992d04c9fc76960ef92805a15",
+     "raptor/raptor.go": "bec19d510d5cd339f5d3314e62c828cfccf380fc8d0e7430301e45e9ef734f07",
+     "raptor/round_queue.go": "3319c9839c727e512d7eef37a5d078c4c4438769dc7254622bac040bdf535a70",
+-    "recommend/bounded.go": "71a8561e20c65045c4ec65f008d7b994c441f17621c9d2e64f3ddb2f855db88f",
+-    "recommend/bounded_test.go": "47aa14200655b7baafbb0fac53d14be7cf54fbadfae8cadc045e3a3c0a290f36",
++    "recommend/bounded.go": "b23345b9e8899b6275a833f64ca90f8e5bfb743960b7fc9e960a5d8d831d5e56",
++    "recommend/bounded_test.go": "e1b97e382426fabeb6babecf9a63ac7761cd6f7de26819806233494f13b9cd46",
+     "recommend/choices.go": "d1da5b3416d843dc9e9f3bd303c19529386251856eca728c07222365d71952ff",
+     "recommend/lean.go": "9db7855a5cea9469e039fe8bfa5c543df8d0183d9cd3c5bb57b453b75b6a5927",
+     "recommend/quality.go": "fcb35c8914345f9eebbbf78cb0bf18df19f0e5d1dc7054833d7f9ca90f9bd8fe",
+@@ -114,6 +114,6 @@
+   },
+   "module": "github.com/ertyoii/transit-routing-go",
+   "origin": "V2 local selector methodology candidate, bounded continuous regret and explicitly lean checker-backed presentation; original upstream commit retained as ancestry, source changes identified by full file hashes.",
+-  "source_sha256": "3e11f25e2eaa95157b329a264c69b1c4a19222c7934103d34452710209463fea",
++  "source_sha256": "c8102013becb949b21038188a4d361e5689105dcdcb4727b2ab0ce36bd9145da",
+   "version": "v0.1.0-pre.3"
+ }
+--- a/vendor/github.com/ertyoii/transit-routing-go/recommend/bounded.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/recommend/bounded.go
+@@ -23,6 +23,7 @@
+ 	MaxCriticalPoints int     `json:"max_critical_points"`
+ 	MaxWork           int64   `json:"max_work"`
+ 	MaxMatrixBytes    int64   `json:"max_matrix_bytes,omitempty"`
++	ExactWhenFeasible bool    `json:"exact_when_feasible,omitempty"`
+ 	Exact             bool    `json:"exact_subset_search"`
+ }
+ 
+@@ -35,6 +36,9 @@
+ 	}
+ 	if len(c.Limits) < 1 || len(c.Limits) > 4 || c.MaxCriticalPoints < 4 || c.MaxCriticalPoints > 1000000 || c.MaxWork < 1 || c.MaxWork > 10000000000 || c.MaxMatrixBytes < 0 || c.MaxMatrixBytes > 268435456 {
+ 		return fmt.Errorf("invalid continuous compute bounds")
++	}
++	if c.Exact && c.ExactWhenFeasible {
++		return fmt.Errorf("exact and auto-exact subset modes are mutually exclusive")
+ 	}
+ 	prev := 0
+ 	for _, k := range c.Limits {
+@@ -51,6 +55,9 @@
+ 	Walk     float64 `json:"extra_walk_weight"`
+ }
+ type ContinuousSelection struct {
++	PredictedExactWork    int64        `json:"predicted_exact_total_work_upper_bound,omitempty"`
++	PredictedExactSubsets int64        `json:"predicted_exact_additional_subsets_upper_bound,omitempty"`
++	ExactResourceFeasible bool         `json:"exact_resource_feasible,omitempty"`
+ 	ConditionalOnPrevious bool         `json:"conditional_on_previous_requested_selection"`
+ 	Limit                 int          `json:"limit"`
+ 	Selected              []string     `json:"selected"`
+@@ -441,6 +448,43 @@
+ 	return best, value, nil
+ }
+ 
++// exactResourceBound predicts before beginning exhaustive search. It includes
++// all already charged pool/geometry/matrix work plus every size1..k subset's
++// score comparisons, with conservative additional branch-comparison allowance.
++// Pattern constraints can only reduce this bound. It never uses quality outcomes
++// or preference-grid results, and is not a fallback after a guard is exhausted.
++func (e *boundedEngine) exactResourceBound(k int, forced []int) (work, states int64) {
++	work = e.work
++	n := len(e.fs) - len(forced)
++	cap := int64(e.maxSubsets) + 1
++	choose := func(n, k int) int64 {
++		if k < 0 || k > n {
++			return 0
++		}
++		if k > n-k {
++			k = n - k
++		}
++		v := int64(1)
++		for i := 1; i <= k; i++ {
++			v = v * int64(n-k+i) / int64(i)
++			if v > cap {
++				return cap
++			}
++		}
++		return v
++	}
++	for size := max(1, len(forced)); size <= k; size++ {
++		count := choose(n, size-len(forced))
++		states += count
++		per := int64(size*len(e.points) + len(e.fs)*(size+1)*(size+1))
++		work += count * per
++		if work > e.cfg.MaxWork || states > int64(e.maxSubsets-e.subsets) {
++			return work, states
++		}
++	}
++	return work, states
++}
++
+ // SelectBounded accepts already validated features for replay/offline evaluation.
+ // Its only exactness claim is supplied-pool score regret over the declared domain;
+ // IEEE-754 geometry is tested at tolerance, not a formal real-arithmetic proof.
+@@ -519,9 +563,14 @@
+ 		var v boundedValue
+ 		method := "greedy_best_swap_local"
+ 		exact := false
+-		if c.Exact {
++		predictedWork, predictedStates := e.exactResourceBound(k, forced)
++		feasible := predictedWork <= c.MaxWork && predictedStates <= int64(e.maxSubsets-e.subsets)
++		if c.Exact || c.ExactWhenFeasible && feasible {
+ 			selected, v, err = e.exact(k, forced)
+ 			method = "exhaustive_subset"
++			if c.ExactWhenFeasible {
++				method = "exhaustive_subset_resource_feasible"
++			}
+ 			exact = true
+ 		} else {
+ 			selected, v, err = e.greedy(k, forced)
+@@ -530,7 +579,7 @@
+ 			return
+ 		}
+ 		sort.Ints(selected)
+-		s := ContinuousSelection{ConditionalOnPrevious: len(forced) > 0, Limit: limit, Selected: []string{}, Method: method, Complete: true, SubsetOptimal: exact, WorstAbsolute: &v.a, WorstNormalized: &v.r, EvaluatedSubsets: e.subsets - before}
++		s := ContinuousSelection{PredictedExactWork: predictedWork, PredictedExactSubsets: predictedStates, ExactResourceFeasible: feasible, ConditionalOnPrevious: len(forced) > 0, Limit: limit, Selected: []string{}, Method: method, Complete: true, SubsetOptimal: exact, WorstAbsolute: &v.a, WorstNormalized: &v.r, EvaluatedSubsets: e.subsets - before}
+ 		aw, rw := e.points[v.ai], e.points[v.ri]
+ 		s.AbsoluteWitness = &aw
+ 		s.NormalizedWitness = &rw
+--- a/vendor/github.com/ertyoii/transit-routing-go/recommend/bounded_test.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/recommend/bounded_test.go
+@@ -151,3 +151,48 @@
+ 		t.Fatal("ambiguous lean/bounded config accepted")
+ 	}
+ }
++func TestAutoExactResourceDecisionIndependentAndDeterministic(t *testing.T) {
++	fs := []Feature{f("A", 1900, 0, 300), f("B", 1600, 2, 0), f("C", 2500, 0, 0), f("R", 1800, 1, 100)}
++	cfg := boundedConfig(false)
++	cfg.Bounded.ExactWhenFeasible = true
++	auto, err := SelectBounded(context.Background(), fs, cfg)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if !auto.Selections[0].SubsetOptimal || auto.Selections[0].Method != "exhaustive_subset_resource_feasible" {
++		t.Fatalf("tiny feasible pool did not use exact: %+v", auto)
++	}
++	cfg.Bounded.ExactWhenFeasible = false
++	cfg.Bounded.Exact = true
++	exact, err := SelectBounded(context.Background(), fs, cfg)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if !reflect.DeepEqual(auto.Selections[0].Selected, exact.Selections[0].Selected) || *auto.Selections[0].WorstAbsolute != *exact.Selections[0].WorstAbsolute {
++		t.Fatal("auto differs exact")
++	}
++	// A many-label synthetic pool forces conservative fallback before the search.
++	fs = nil
++	for i := 0; i < 16; i++ {
++		fs = append(fs, f(string(rune('a'+i)), int64(1000+80*i), 15-i, int64(i*i*2)))
++	}
++	cfg = boundedConfig(false)
++	cfg.Bounded.ExactWhenFeasible = true
++	cfg.Bounded.Limits = []int{3}
++	cfg.Bounded.MaxWork = 100000
++	auto, err = SelectBounded(context.Background(), fs, cfg)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if auto.Selections[0].SubsetOptimal || auto.Selections[0].Method != "greedy_best_swap_local" || auto.Selections[0].ExactResourceFeasible {
++		t.Fatalf("resource-infeasible exact decision wrong: %+v", auto.Selections[0])
++	}
++	cfg.Bounded.ExactWhenFeasible = false
++	greedy, err := SelectBounded(context.Background(), fs, cfg)
++	if err != nil {
++		t.Fatal(err)
++	}
++	if !reflect.DeepEqual(auto.Selections[0].Selected, greedy.Selections[0].Selected) {
++		t.Fatal("preflight fallback changes greedy output")
++	}
++}

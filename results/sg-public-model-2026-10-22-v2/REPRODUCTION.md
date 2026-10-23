@@ -1,0 +1,21 @@
+# Reproduction and evidence levels
+
+## What can be checked from this public release
+
+The source tree is preserved byte-for-byte from the 814-file allowlisted source candidate. Start inside `source/`, use `BRANCH_RECONSTRUCTION.json` and its explicit parents, and apply only each branch's ordered patch to its declared base/parent. Sibling patches must not be stacked. `source/scripts/reconstruct_code.py` is a create-only offline byte materializer; its historical instructions and qualification limits are retained unchanged. All 42 patch files, new/deleted-file representations, two base projections, source/test snapshots, MIT/CC0 notices and source hashes remain present. The packager historically checked generated in-memory patch replay and base/source hashes, not builds, binaries or experimental outcomes.
+
+Exact source preservation includes historical absolute-path literals and hash assertions. Those literals are source provenance, not copied files, live download endpoints or a promise of portable execution. Do not silently replace them or claim a sanitized/portable rewrite has the original seal. Any future portability changes need their own source review, digest, qualification and new seals. Some original orchestration wrappers and all uncleared data remain withheld. The complete routing Git object/modes/author metadata and historical executable/build identity were not independently reconstructed.
+
+The three result files are immutable arithmetic projections of the independently accepted final descriptive report. JSON retains all 18 identities and exact nine raw/final/display by full/family-out/lineage-out summaries per product, pooled clocks and four exact window/block pairs. CSV contains 234 contexts times nine stage/panel rows. Markdown is the concise numeric view, not a new score computation. Quantiles, signed maxima, eligibility and all failure/unknown denominators must retain their current meaning.
+
+`EVIDENCE_BINDINGS.json` gives original receipt/report/source digests and byte counts without publishing their private locations or payloads. Hash-only references preserve identity, not public availability, data rights or independently executable proof. The underlying final-report audit independently checked exact arithmetic/provenance across all 234 contexts and original pooled clocks. Its separately reviewed source was a new arithmetic reader of pinned compact V4 arrays, not persisted validation-interpreter reuse, a new scientific method, a general-purpose parser qualification or a replacement for accepted operational readers. That report reader, full private report and private audit payloads are not shipped here; source identity does not imply their publication or full result reproduction.
+
+## What is not reproduced by these files
+
+1. Source reconstruction is not a build/test pass or historical executable identity. Original hashes cannot certify a future changed toolchain, layout or input.
+2. Invented tiny/scoped fixtures support only synthetic behavior checks. They cannot recreate the real public-modeled network, exact workloads, indexes, saved witnesses, certificates, actual feature pools or final timings.
+3. Full-model regeneration and independent per-offer proof replay require lawfully supplied original-equivalent data, private workload/reference artifacts, exact source/configuration/resource/order bindings and freshly accepted input/source seals. No permission or public fetch location is inferred from an opaque digest.
+4. Timing replication requires new declared experiments and resource/environment accounting. The current release did not run routers, models, searches, selectors or scorers, and did not retry or replace any final measurement.
+5. Optional phase-B, rail and passenger robustness tiers are not final routing experiments here. An optional physical scalar replay, if separately performed, is not silently incorporated as final serving or public proof.
+
+The source pack's historical self-review candidate status remains honest. Independent scientific numerical acceptance of the private report is separate from independent review of this complete public payload, rights clearance, source replay, synthetic qualification, full-data proof replay and publication. No missing historical review is invented.

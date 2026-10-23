@@ -1,0 +1,9 @@
+{
+  "max_candidates": 1024,
+  "max_subsets": 200000,
+  "lean_delivery": true,
+  "delivery_policy": "pattern_anchors_v1",
+  "delivery_limits": [
+    3
+  ]
+}

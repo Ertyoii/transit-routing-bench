@@ -1,0 +1,1967 @@
+[
+  {
+    "extra_walk_weight": 1.3333333333333333,
+    "id": "halton_001",
+    "transfer_seconds": 450.0
+  },
+  {
+    "extra_walk_weight": 2.6666666666666665,
+    "id": "halton_002",
+    "transfer_seconds": 225.0
+  },
+  {
+    "extra_walk_weight": 0.4444444444444444,
+    "id": "halton_003",
+    "transfer_seconds": 675.0
+  },
+  {
+    "extra_walk_weight": 1.7777777777777777,
+    "id": "halton_004",
+    "transfer_seconds": 112.5
+  },
+  {
+    "extra_walk_weight": 3.1111111111111107,
+    "id": "halton_005",
+    "transfer_seconds": 562.5
+  },
+  {
+    "extra_walk_weight": 0.8888888888888888,
+    "id": "halton_006",
+    "transfer_seconds": 337.5
+  },
+  {
+    "extra_walk_weight": 2.2222222222222223,
+    "id": "halton_007",
+    "transfer_seconds": 787.5
+  },
+  {
+    "extra_walk_weight": 3.5555555555555554,
+    "id": "halton_008",
+    "transfer_seconds": 56.25
+  },
+  {
+    "extra_walk_weight": 0.14814814814814814,
+    "id": "halton_009",
+    "transfer_seconds": 506.25
+  },
+  {
+    "extra_walk_weight": 1.4814814814814814,
+    "id": "halton_010",
+    "transfer_seconds": 281.25
+  },
+  {
+    "extra_walk_weight": 2.814814814814815,
+    "id": "halton_011",
+    "transfer_seconds": 731.25
+  },
+  {
+    "extra_walk_weight": 0.5925925925925926,
+    "id": "halton_012",
+    "transfer_seconds": 168.75
+  },
+  {
+    "extra_walk_weight": 1.9259259259259258,
+    "id": "halton_013",
+    "transfer_seconds": 618.75
+  },
+  {
+    "extra_walk_weight": 3.2592592592592586,
+    "id": "halton_014",
+    "transfer_seconds": 393.75
+  },
+  {
+    "extra_walk_weight": 1.037037037037037,
+    "id": "halton_015",
+    "transfer_seconds": 843.75
+  },
+  {
+    "extra_walk_weight": 2.3703703703703702,
+    "id": "halton_016",
+    "transfer_seconds": 28.125
+  },
+  {
+    "extra_walk_weight": 3.7037037037037033,
+    "id": "halton_017",
+    "transfer_seconds": 478.125
+  },
+  {
+    "extra_walk_weight": 0.2962962962962963,
+    "id": "halton_018",
+    "transfer_seconds": 253.125
+  },
+  {
+    "extra_walk_weight": 1.6296296296296295,
+    "id": "halton_019",
+    "transfer_seconds": 703.125
+  },
+  {
+    "extra_walk_weight": 2.962962962962963,
+    "id": "halton_020",
+    "transfer_seconds": 140.625
+  },
+  {
+    "extra_walk_weight": 0.7407407407407407,
+    "id": "halton_021",
+    "transfer_seconds": 590.625
+  },
+  {
+    "extra_walk_weight": 2.074074074074074,
+    "id": "halton_022",
+    "transfer_seconds": 365.625
+  },
+  {
+    "extra_walk_weight": 3.407407407407407,
+    "id": "halton_023",
+    "transfer_seconds": 815.625
+  },
+  {
+    "extra_walk_weight": 1.1851851851851851,
+    "id": "halton_024",
+    "transfer_seconds": 84.375
+  },
+  {
+    "extra_walk_weight": 2.5185185185185186,
+    "id": "halton_025",
+    "transfer_seconds": 534.375
+  },
+  {
+    "extra_walk_weight": 3.8518518518518516,
+    "id": "halton_026",
+    "transfer_seconds": 309.375
+  },
+  {
+    "extra_walk_weight": 0.04938271604938271,
+    "id": "halton_027",
+    "transfer_seconds": 759.375
+  },
+  {
+    "extra_walk_weight": 1.382716049382716,
+    "id": "halton_028",
+    "transfer_seconds": 196.875
+  },
+  {
+    "extra_walk_weight": 2.716049382716049,
+    "id": "halton_029",
+    "transfer_seconds": 646.875
+  },
+  {
+    "extra_walk_weight": 0.49382716049382713,
+    "id": "halton_030",
+    "transfer_seconds": 421.875
+  },
+  {
+    "extra_walk_weight": 1.8271604938271604,
+    "id": "halton_031",
+    "transfer_seconds": 871.875
+  },
+  {
+    "extra_walk_weight": 3.1604938271604937,
+    "id": "halton_032",
+    "transfer_seconds": 14.0625
+  },
+  {
+    "extra_walk_weight": 0.9382716049382716,
+    "id": "halton_033",
+    "transfer_seconds": 464.0625
+  },
+  {
+    "extra_walk_weight": 2.2716049382716053,
+    "id": "halton_034",
+    "transfer_seconds": 239.0625
+  },
+  {
+    "extra_walk_weight": 3.6049382716049383,
+    "id": "halton_035",
+    "transfer_seconds": 689.0625
+  },
+  {
+    "extra_walk_weight": 0.19753086419753085,
+    "id": "halton_036",
+    "transfer_seconds": 126.5625
+  },
+  {
+    "extra_walk_weight": 1.5308641975308641,
+    "id": "halton_037",
+    "transfer_seconds": 576.5625
+  },
+  {
+    "extra_walk_weight": 2.864197530864198,
+    "id": "halton_038",
+    "transfer_seconds": 351.5625
+  },
+  {
+    "extra_walk_weight": 0.6419753086419753,
+    "id": "halton_039",
+    "transfer_seconds": 801.5625
+  },
+  {
+    "extra_walk_weight": 1.9753086419753085,
+    "id": "halton_040",
+    "transfer_seconds": 70.3125
+  },
+  {
+    "extra_walk_weight": 3.3086419753086416,
+    "id": "halton_041",
+    "transfer_seconds": 520.3125
+  },
+  {
+    "extra_walk_weight": 1.0864197530864197,
+    "id": "halton_042",
+    "transfer_seconds": 295.3125
+  },
+  {
+    "extra_walk_weight": 2.419753086419753,
+    "id": "halton_043",
+    "transfer_seconds": 745.3125
+  },
+  {
+    "extra_walk_weight": 3.753086419753086,
+    "id": "halton_044",
+    "transfer_seconds": 182.8125
+  },
+  {
+    "extra_walk_weight": 0.345679012345679,
+    "id": "halton_045",
+    "transfer_seconds": 632.8125
+  },
+  {
+    "extra_walk_weight": 1.6790123456790123,
+    "id": "halton_046",
+    "transfer_seconds": 407.8125
+  },
+  {
+    "extra_walk_weight": 3.0123456790123457,
+    "id": "halton_047",
+    "transfer_seconds": 857.8125
+  },
+  {
+    "extra_walk_weight": 0.7901234567901234,
+    "id": "halton_048",
+    "transfer_seconds": 42.1875
+  },
+  {
+    "extra_walk_weight": 2.1234567901234565,
+    "id": "halton_049",
+    "transfer_seconds": 492.1875
+  },
+  {
+    "extra_walk_weight": 3.4567901234567895,
+    "id": "halton_050",
+    "transfer_seconds": 267.1875
+  },
+  {
+    "extra_walk_weight": 1.2345679012345678,
+    "id": "halton_051",
+    "transfer_seconds": 717.1875
+  },
+  {
+    "extra_walk_weight": 2.567901234567901,
+    "id": "halton_052",
+    "transfer_seconds": 154.6875
+  },
+  {
+    "extra_walk_weight": 3.901234567901234,
+    "id": "halton_053",
+    "transfer_seconds": 604.6875
+  },
+  {
+    "extra_walk_weight": 0.09876543209876543,
+    "id": "halton_054",
+    "transfer_seconds": 379.6875
+  },
+  {
+    "extra_walk_weight": 1.4320987654320987,
+    "id": "halton_055",
+    "transfer_seconds": 829.6875
+  },
+  {
+    "extra_walk_weight": 2.765432098765432,
+    "id": "halton_056",
+    "transfer_seconds": 98.4375
+  },
+  {
+    "extra_walk_weight": 0.5432098765432098,
+    "id": "halton_057",
+    "transfer_seconds": 548.4375
+  },
+  {
+    "extra_walk_weight": 1.876543209876543,
+    "id": "halton_058",
+    "transfer_seconds": 323.4375
+  },
+  {
+    "extra_walk_weight": 3.209876543209876,
+    "id": "halton_059",
+    "transfer_seconds": 773.4375
+  },
+  {
+    "extra_walk_weight": 0.9876543209876543,
+    "id": "halton_060",
+    "transfer_seconds": 210.9375
+  },
+  {
+    "extra_walk_weight": 2.3209876543209877,
+    "id": "halton_061",
+    "transfer_seconds": 660.9375
+  },
+  {
+    "extra_walk_weight": 3.654320987654321,
+    "id": "halton_062",
+    "transfer_seconds": 435.9375
+  },
+  {
+    "extra_walk_weight": 0.24691358024691357,
+    "id": "halton_063",
+    "transfer_seconds": 885.9375
+  },
+  {
+    "extra_walk_weight": 1.5802469135802468,
+    "id": "halton_064",
+    "transfer_seconds": 7.03125
+  },
+  {
+    "extra_walk_weight": 2.9135802469135803,
+    "id": "halton_065",
+    "transfer_seconds": 457.03125
+  },
+  {
+    "extra_walk_weight": 0.691358024691358,
+    "id": "halton_066",
+    "transfer_seconds": 232.03125
+  },
+  {
+    "extra_walk_weight": 2.0246913580246915,
+    "id": "halton_067",
+    "transfer_seconds": 682.03125
+  },
+  {
+    "extra_walk_weight": 3.358024691358024,
+    "id": "halton_068",
+    "transfer_seconds": 119.53125
+  },
+  {
+    "extra_walk_weight": 1.1358024691358024,
+    "id": "halton_069",
+    "transfer_seconds": 569.53125
+  },
+  {
+    "extra_walk_weight": 2.4691358024691357,
+    "id": "halton_070",
+    "transfer_seconds": 344.53125
+  },
+  {
+    "extra_walk_weight": 3.8024691358024687,
+    "id": "halton_071",
+    "transfer_seconds": 794.53125
+  },
+  {
+    "extra_walk_weight": 0.3950617283950617,
+    "id": "halton_072",
+    "transfer_seconds": 63.28125
+  },
+  {
+    "extra_walk_weight": 1.728395061728395,
+    "id": "halton_073",
+    "transfer_seconds": 513.28125
+  },
+  {
+    "extra_walk_weight": 3.0617283950617282,
+    "id": "halton_074",
+    "transfer_seconds": 288.28125
+  },
+  {
+    "extra_walk_weight": 0.8395061728395061,
+    "id": "halton_075",
+    "transfer_seconds": 738.28125
+  },
+  {
+    "extra_walk_weight": 2.1728395061728394,
+    "id": "halton_076",
+    "transfer_seconds": 175.78125
+  },
+  {
+    "extra_walk_weight": 3.5061728395061724,
+    "id": "halton_077",
+    "transfer_seconds": 625.78125
+  },
+  {
+    "extra_walk_weight": 1.2839506172839505,
+    "id": "halton_078",
+    "transfer_seconds": 400.78125
+  },
+  {
+    "extra_walk_weight": 2.617283950617284,
+    "id": "halton_079",
+    "transfer_seconds": 850.78125
+  },
+  {
+    "extra_walk_weight": 3.950617283950617,
+    "id": "halton_080",
+    "transfer_seconds": 35.15625
+  },
+  {
+    "extra_walk_weight": 0.016460905349794237,
+    "id": "halton_081",
+    "transfer_seconds": 485.15625
+  },
+  {
+    "extra_walk_weight": 1.3497942386831274,
+    "id": "halton_082",
+    "transfer_seconds": 260.15625
+  },
+  {
+    "extra_walk_weight": 2.6831275720164607,
+    "id": "halton_083",
+    "transfer_seconds": 710.15625
+  },
+  {
+    "extra_walk_weight": 0.46090534979423864,
+    "id": "halton_084",
+    "transfer_seconds": 147.65625
+  },
+  {
+    "extra_walk_weight": 1.7942386831275718,
+    "id": "halton_085",
+    "transfer_seconds": 597.65625
+  },
+  {
+    "extra_walk_weight": 3.127572016460905,
+    "id": "halton_086",
+    "transfer_seconds": 372.65625
+  },
+  {
+    "extra_walk_weight": 0.9053497942386831,
+    "id": "halton_087",
+    "transfer_seconds": 822.65625
+  },
+  {
+    "extra_walk_weight": 2.2386831275720165,
+    "id": "halton_088",
+    "transfer_seconds": 91.40625
+  },
+  {
+    "extra_walk_weight": 3.5720164609053495,
+    "id": "halton_089",
+    "transfer_seconds": 541.40625
+  },
+  {
+    "extra_walk_weight": 0.1646090534979424,
+    "id": "halton_090",
+    "transfer_seconds": 316.40625
+  },
+  {
+    "extra_walk_weight": 1.4979423868312756,
+    "id": "halton_091",
+    "transfer_seconds": 766.40625
+  },
+  {
+    "extra_walk_weight": 2.831275720164609,
+    "id": "halton_092",
+    "transfer_seconds": 203.90625
+  },
+  {
+    "extra_walk_weight": 0.6090534979423868,
+    "id": "halton_093",
+    "transfer_seconds": 653.90625
+  },
+  {
+    "extra_walk_weight": 1.94238683127572,
+    "id": "halton_094",
+    "transfer_seconds": 428.90625
+  },
+  {
+    "extra_walk_weight": 3.275720164609053,
+    "id": "halton_095",
+    "transfer_seconds": 878.90625
+  },
+  {
+    "extra_walk_weight": 1.0534979423868311,
+    "id": "halton_096",
+    "transfer_seconds": 21.09375
+  },
+  {
+    "extra_walk_weight": 2.3868312757201644,
+    "id": "halton_097",
+    "transfer_seconds": 471.09375
+  },
+  {
+    "extra_walk_weight": 3.7201646090534974,
+    "id": "halton_098",
+    "transfer_seconds": 246.09375
+  },
+  {
+    "extra_walk_weight": 0.3127572016460905,
+    "id": "halton_099",
+    "transfer_seconds": 696.09375
+  },
+  {
+    "extra_walk_weight": 1.6460905349794237,
+    "id": "halton_100",
+    "transfer_seconds": 133.59375
+  },
+  {
+    "extra_walk_weight": 2.979423868312757,
+    "id": "halton_101",
+    "transfer_seconds": 583.59375
+  },
+  {
+    "extra_walk_weight": 0.757201646090535,
+    "id": "halton_102",
+    "transfer_seconds": 358.59375
+  },
+  {
+    "extra_walk_weight": 2.090534979423868,
+    "id": "halton_103",
+    "transfer_seconds": 808.59375
+  },
+  {
+    "extra_walk_weight": 3.423868312757201,
+    "id": "halton_104",
+    "transfer_seconds": 77.34375
+  },
+  {
+    "extra_walk_weight": 1.2016460905349793,
+    "id": "halton_105",
+    "transfer_seconds": 527.34375
+  },
+  {
+    "extra_walk_weight": 2.5349794238683128,
+    "id": "halton_106",
+    "transfer_seconds": 302.34375
+  },
+  {
+    "extra_walk_weight": 3.868312757201646,
+    "id": "halton_107",
+    "transfer_seconds": 752.34375
+  },
+  {
+    "extra_walk_weight": 0.06584362139917695,
+    "id": "halton_108",
+    "transfer_seconds": 189.84375
+  },
+  {
+    "extra_walk_weight": 1.3991769547325101,
+    "id": "halton_109",
+    "transfer_seconds": 639.84375
+  },
+  {
+    "extra_walk_weight": 2.732510288065843,
+    "id": "halton_110",
+    "transfer_seconds": 414.84375
+  },
+  {
+    "extra_walk_weight": 0.5102880658436214,
+    "id": "halton_111",
+    "transfer_seconds": 864.84375
+  },
+  {
+    "extra_walk_weight": 1.8436213991769546,
+    "id": "halton_112",
+    "transfer_seconds": 49.21875
+  },
+  {
+    "extra_walk_weight": 3.176954732510288,
+    "id": "halton_113",
+    "transfer_seconds": 499.21875
+  },
+  {
+    "extra_walk_weight": 0.9547325102880658,
+    "id": "halton_114",
+    "transfer_seconds": 274.21875
+  },
+  {
+    "extra_walk_weight": 2.2880658436213994,
+    "id": "halton_115",
+    "transfer_seconds": 724.21875
+  },
+  {
+    "extra_walk_weight": 3.6213991769547325,
+    "id": "halton_116",
+    "transfer_seconds": 161.71875
+  },
+  {
+    "extra_walk_weight": 0.2139917695473251,
+    "id": "halton_117",
+    "transfer_seconds": 611.71875
+  },
+  {
+    "extra_walk_weight": 1.5473251028806583,
+    "id": "halton_118",
+    "transfer_seconds": 386.71875
+  },
+  {
+    "extra_walk_weight": 2.880658436213992,
+    "id": "halton_119",
+    "transfer_seconds": 836.71875
+  },
+  {
+    "extra_walk_weight": 0.6584362139917695,
+    "id": "halton_120",
+    "transfer_seconds": 105.46875
+  },
+  {
+    "extra_walk_weight": 1.9917695473251027,
+    "id": "halton_121",
+    "transfer_seconds": 555.46875
+  },
+  {
+    "extra_walk_weight": 3.3251028806584357,
+    "id": "halton_122",
+    "transfer_seconds": 330.46875
+  },
+  {
+    "extra_walk_weight": 1.1028806584362139,
+    "id": "halton_123",
+    "transfer_seconds": 780.46875
+  },
+  {
+    "extra_walk_weight": 2.4362139917695473,
+    "id": "halton_124",
+    "transfer_seconds": 217.96875
+  },
+  {
+    "extra_walk_weight": 3.7695473251028804,
+    "id": "halton_125",
+    "transfer_seconds": 667.96875
+  },
+  {
+    "extra_walk_weight": 0.3621399176954732,
+    "id": "halton_126",
+    "transfer_seconds": 442.96875
+  },
+  {
+    "extra_walk_weight": 1.6954732510288064,
+    "id": "halton_127",
+    "transfer_seconds": 892.96875
+  },
+  {
+    "extra_walk_weight": 3.02880658436214,
+    "id": "halton_128",
+    "transfer_seconds": 3.515625
+  },
+  {
+    "extra_walk_weight": 0.8065843621399177,
+    "id": "halton_129",
+    "transfer_seconds": 453.515625
+  },
+  {
+    "extra_walk_weight": 2.1399176954732506,
+    "id": "halton_130",
+    "transfer_seconds": 228.515625
+  },
+  {
+    "extra_walk_weight": 3.4732510288065837,
+    "id": "halton_131",
+    "transfer_seconds": 678.515625
+  },
+  {
+    "extra_walk_weight": 1.251028806584362,
+    "id": "halton_132",
+    "transfer_seconds": 116.015625
+  },
+  {
+    "extra_walk_weight": 2.5843621399176953,
+    "id": "halton_133",
+    "transfer_seconds": 566.015625
+  },
+  {
+    "extra_walk_weight": 3.9176954732510283,
+    "id": "halton_134",
+    "transfer_seconds": 341.015625
+  },
+  {
+    "extra_walk_weight": 0.11522633744855966,
+    "id": "halton_135",
+    "transfer_seconds": 791.015625
+  },
+  {
+    "extra_walk_weight": 1.4485596707818928,
+    "id": "halton_136",
+    "transfer_seconds": 59.765625
+  },
+  {
+    "extra_walk_weight": 2.781893004115226,
+    "id": "halton_137",
+    "transfer_seconds": 509.765625
+  },
+  {
+    "extra_walk_weight": 0.5596707818930041,
+    "id": "halton_138",
+    "transfer_seconds": 284.765625
+  },
+  {
+    "extra_walk_weight": 1.8930041152263373,
+    "id": "halton_139",
+    "transfer_seconds": 734.765625
+  },
+  {
+    "extra_walk_weight": 3.2263374485596703,
+    "id": "halton_140",
+    "transfer_seconds": 172.265625
+  },
+  {
+    "extra_walk_weight": 1.0041152263374484,
+    "id": "halton_141",
+    "transfer_seconds": 622.265625
+  },
+  {
+    "extra_walk_weight": 2.337448559670782,
+    "id": "halton_142",
+    "transfer_seconds": 397.265625
+  },
+  {
+    "extra_walk_weight": 3.670781893004115,
+    "id": "halton_143",
+    "transfer_seconds": 847.265625
+  },
+  {
+    "extra_walk_weight": 0.2633744855967078,
+    "id": "halton_144",
+    "transfer_seconds": 31.640625
+  },
+  {
+    "extra_walk_weight": 1.596707818930041,
+    "id": "halton_145",
+    "transfer_seconds": 481.640625
+  },
+  {
+    "extra_walk_weight": 2.9300411522633745,
+    "id": "halton_146",
+    "transfer_seconds": 256.640625
+  },
+  {
+    "extra_walk_weight": 0.7078189300411523,
+    "id": "halton_147",
+    "transfer_seconds": 706.640625
+  },
+  {
+    "extra_walk_weight": 2.0411522633744856,
+    "id": "halton_148",
+    "transfer_seconds": 144.140625
+  },
+  {
+    "extra_walk_weight": 3.3744855967078182,
+    "id": "halton_149",
+    "transfer_seconds": 594.140625
+  },
+  {
+    "extra_walk_weight": 1.1522633744855966,
+    "id": "halton_150",
+    "transfer_seconds": 369.140625
+  },
+  {
+    "extra_walk_weight": 2.48559670781893,
+    "id": "halton_151",
+    "transfer_seconds": 819.140625
+  },
+  {
+    "extra_walk_weight": 3.818930041152263,
+    "id": "halton_152",
+    "transfer_seconds": 87.890625
+  },
+  {
+    "extra_walk_weight": 0.4115226337448559,
+    "id": "halton_153",
+    "transfer_seconds": 537.890625
+  },
+  {
+    "extra_walk_weight": 1.7448559670781891,
+    "id": "halton_154",
+    "transfer_seconds": 312.890625
+  },
+  {
+    "extra_walk_weight": 3.0781893004115224,
+    "id": "halton_155",
+    "transfer_seconds": 762.890625
+  },
+  {
+    "extra_walk_weight": 0.8559670781893004,
+    "id": "halton_156",
+    "transfer_seconds": 200.390625
+  },
+  {
+    "extra_walk_weight": 2.1893004115226335,
+    "id": "halton_157",
+    "transfer_seconds": 650.390625
+  },
+  {
+    "extra_walk_weight": 3.5226337448559666,
+    "id": "halton_158",
+    "transfer_seconds": 425.390625
+  },
+  {
+    "extra_walk_weight": 1.3004115226337447,
+    "id": "halton_159",
+    "transfer_seconds": 875.390625
+  },
+  {
+    "extra_walk_weight": 2.633744855967078,
+    "id": "halton_160",
+    "transfer_seconds": 17.578125
+  },
+  {
+    "extra_walk_weight": 3.9670781893004112,
+    "id": "halton_161",
+    "transfer_seconds": 467.578125
+  },
+  {
+    "extra_walk_weight": 0.03292181069958847,
+    "id": "halton_162",
+    "transfer_seconds": 242.578125
+  },
+  {
+    "extra_walk_weight": 1.3662551440329218,
+    "id": "halton_163",
+    "transfer_seconds": 692.578125
+  },
+  {
+    "extra_walk_weight": 2.699588477366255,
+    "id": "halton_164",
+    "transfer_seconds": 130.078125
+  },
+  {
+    "extra_walk_weight": 0.4773662551440329,
+    "id": "halton_165",
+    "transfer_seconds": 580.078125
+  },
+  {
+    "extra_walk_weight": 1.8106995884773662,
+    "id": "halton_166",
+    "transfer_seconds": 355.078125
+  },
+  {
+    "extra_walk_weight": 3.144032921810699,
+    "id": "halton_167",
+    "transfer_seconds": 805.078125
+  },
+  {
+    "extra_walk_weight": 0.9218106995884773,
+    "id": "halton_168",
+    "transfer_seconds": 73.828125
+  },
+  {
+    "extra_walk_weight": 2.2551440329218106,
+    "id": "halton_169",
+    "transfer_seconds": 523.828125
+  },
+  {
+    "extra_walk_weight": 3.5884773662551437,
+    "id": "halton_170",
+    "transfer_seconds": 298.828125
+  },
+  {
+    "extra_walk_weight": 0.1810699588477366,
+    "id": "halton_171",
+    "transfer_seconds": 748.828125
+  },
+  {
+    "extra_walk_weight": 1.51440329218107,
+    "id": "halton_172",
+    "transfer_seconds": 186.328125
+  },
+  {
+    "extra_walk_weight": 2.847736625514403,
+    "id": "halton_173",
+    "transfer_seconds": 636.328125
+  },
+  {
+    "extra_walk_weight": 0.625514403292181,
+    "id": "halton_174",
+    "transfer_seconds": 411.328125
+  },
+  {
+    "extra_walk_weight": 1.9588477366255144,
+    "id": "halton_175",
+    "transfer_seconds": 861.328125
+  },
+  {
+    "extra_walk_weight": 3.292181069958847,
+    "id": "halton_176",
+    "transfer_seconds": 45.703125
+  },
+  {
+    "extra_walk_weight": 1.0699588477366255,
+    "id": "halton_177",
+    "transfer_seconds": 495.703125
+  },
+  {
+    "extra_walk_weight": 2.4032921810699586,
+    "id": "halton_178",
+    "transfer_seconds": 270.703125
+  },
+  {
+    "extra_walk_weight": 3.7366255144032916,
+    "id": "halton_179",
+    "transfer_seconds": 720.703125
+  },
+  {
+    "extra_walk_weight": 0.3292181069958848,
+    "id": "halton_180",
+    "transfer_seconds": 158.203125
+  },
+  {
+    "extra_walk_weight": 1.662551440329218,
+    "id": "halton_181",
+    "transfer_seconds": 608.203125
+  },
+  {
+    "extra_walk_weight": 2.995884773662551,
+    "id": "halton_182",
+    "transfer_seconds": 383.203125
+  },
+  {
+    "extra_walk_weight": 0.7736625514403291,
+    "id": "halton_183",
+    "transfer_seconds": 833.203125
+  },
+  {
+    "extra_walk_weight": 2.1069958847736623,
+    "id": "halton_184",
+    "transfer_seconds": 101.953125
+  },
+  {
+    "extra_walk_weight": 3.4403292181069953,
+    "id": "halton_185",
+    "transfer_seconds": 551.953125
+  },
+  {
+    "extra_walk_weight": 1.2181069958847737,
+    "id": "halton_186",
+    "transfer_seconds": 326.953125
+  },
+  {
+    "extra_walk_weight": 2.551440329218107,
+    "id": "halton_187",
+    "transfer_seconds": 776.953125
+  },
+  {
+    "extra_walk_weight": 3.88477366255144,
+    "id": "halton_188",
+    "transfer_seconds": 214.453125
+  },
+  {
+    "extra_walk_weight": 0.08230452674897118,
+    "id": "halton_189",
+    "transfer_seconds": 664.453125
+  },
+  {
+    "extra_walk_weight": 1.4156378600823045,
+    "id": "halton_190",
+    "transfer_seconds": 439.453125
+  },
+  {
+    "extra_walk_weight": 2.7489711934156373,
+    "id": "halton_191",
+    "transfer_seconds": 889.453125
+  },
+  {
+    "extra_walk_weight": 0.5267489711934156,
+    "id": "halton_192",
+    "transfer_seconds": 10.546875
+  },
+  {
+    "extra_walk_weight": 1.860082304526749,
+    "id": "halton_193",
+    "transfer_seconds": 460.546875
+  },
+  {
+    "extra_walk_weight": 3.193415637860082,
+    "id": "halton_194",
+    "transfer_seconds": 235.546875
+  },
+  {
+    "extra_walk_weight": 0.97119341563786,
+    "id": "halton_195",
+    "transfer_seconds": 685.546875
+  },
+  {
+    "extra_walk_weight": 2.3045267489711936,
+    "id": "halton_196",
+    "transfer_seconds": 123.046875
+  },
+  {
+    "extra_walk_weight": 3.6378600823045266,
+    "id": "halton_197",
+    "transfer_seconds": 573.046875
+  },
+  {
+    "extra_walk_weight": 0.23045267489711932,
+    "id": "halton_198",
+    "transfer_seconds": 348.046875
+  },
+  {
+    "extra_walk_weight": 1.5637860082304527,
+    "id": "halton_199",
+    "transfer_seconds": 798.046875
+  },
+  {
+    "extra_walk_weight": 2.897119341563786,
+    "id": "halton_200",
+    "transfer_seconds": 66.796875
+  },
+  {
+    "extra_walk_weight": 0.6748971193415637,
+    "id": "halton_201",
+    "transfer_seconds": 516.796875
+  },
+  {
+    "extra_walk_weight": 2.008230452674897,
+    "id": "halton_202",
+    "transfer_seconds": 291.796875
+  },
+  {
+    "extra_walk_weight": 3.34156378600823,
+    "id": "halton_203",
+    "transfer_seconds": 741.796875
+  },
+  {
+    "extra_walk_weight": 1.1193415637860082,
+    "id": "halton_204",
+    "transfer_seconds": 179.296875
+  },
+  {
+    "extra_walk_weight": 2.4526748971193415,
+    "id": "halton_205",
+    "transfer_seconds": 629.296875
+  },
+  {
+    "extra_walk_weight": 3.7860082304526745,
+    "id": "halton_206",
+    "transfer_seconds": 404.296875
+  },
+  {
+    "extra_walk_weight": 0.3786008230452675,
+    "id": "halton_207",
+    "transfer_seconds": 854.296875
+  },
+  {
+    "extra_walk_weight": 1.7119341563786008,
+    "id": "halton_208",
+    "transfer_seconds": 38.671875
+  },
+  {
+    "extra_walk_weight": 3.045267489711934,
+    "id": "halton_209",
+    "transfer_seconds": 488.671875
+  },
+  {
+    "extra_walk_weight": 0.8230452674897119,
+    "id": "halton_210",
+    "transfer_seconds": 263.671875
+  },
+  {
+    "extra_walk_weight": 2.1563786008230448,
+    "id": "halton_211",
+    "transfer_seconds": 713.671875
+  },
+  {
+    "extra_walk_weight": 3.489711934156378,
+    "id": "halton_212",
+    "transfer_seconds": 151.171875
+  },
+  {
+    "extra_walk_weight": 1.2674897119341564,
+    "id": "halton_213",
+    "transfer_seconds": 601.171875
+  },
+  {
+    "extra_walk_weight": 2.6008230452674894,
+    "id": "halton_214",
+    "transfer_seconds": 376.171875
+  },
+  {
+    "extra_walk_weight": 3.9341563786008225,
+    "id": "halton_215",
+    "transfer_seconds": 826.171875
+  },
+  {
+    "extra_walk_weight": 0.1316872427983539,
+    "id": "halton_216",
+    "transfer_seconds": 94.921875
+  },
+  {
+    "extra_walk_weight": 1.4650205761316872,
+    "id": "halton_217",
+    "transfer_seconds": 544.921875
+  },
+  {
+    "extra_walk_weight": 2.7983539094650203,
+    "id": "halton_218",
+    "transfer_seconds": 319.921875
+  },
+  {
+    "extra_walk_weight": 0.5761316872427983,
+    "id": "halton_219",
+    "transfer_seconds": 769.921875
+  },
+  {
+    "extra_walk_weight": 1.9094650205761317,
+    "id": "halton_220",
+    "transfer_seconds": 207.421875
+  },
+  {
+    "extra_walk_weight": 3.2427983539094645,
+    "id": "halton_221",
+    "transfer_seconds": 657.421875
+  },
+  {
+    "extra_walk_weight": 1.0205761316872428,
+    "id": "halton_222",
+    "transfer_seconds": 432.421875
+  },
+  {
+    "extra_walk_weight": 2.353909465020576,
+    "id": "halton_223",
+    "transfer_seconds": 882.421875
+  },
+  {
+    "extra_walk_weight": 3.687242798353909,
+    "id": "halton_224",
+    "transfer_seconds": 24.609375
+  },
+  {
+    "extra_walk_weight": 0.27983539094650206,
+    "id": "halton_225",
+    "transfer_seconds": 474.609375
+  },
+  {
+    "extra_walk_weight": 1.6131687242798354,
+    "id": "halton_226",
+    "transfer_seconds": 249.609375
+  },
+  {
+    "extra_walk_weight": 2.9465020576131686,
+    "id": "halton_227",
+    "transfer_seconds": 699.609375
+  },
+  {
+    "extra_walk_weight": 0.7242798353909464,
+    "id": "halton_228",
+    "transfer_seconds": 137.109375
+  },
+  {
+    "extra_walk_weight": 2.05761316872428,
+    "id": "halton_229",
+    "transfer_seconds": 587.109375
+  },
+  {
+    "extra_walk_weight": 3.3909465020576124,
+    "id": "halton_230",
+    "transfer_seconds": 362.109375
+  },
+  {
+    "extra_walk_weight": 1.168724279835391,
+    "id": "halton_231",
+    "transfer_seconds": 812.109375
+  },
+  {
+    "extra_walk_weight": 2.502057613168724,
+    "id": "halton_232",
+    "transfer_seconds": 80.859375
+  },
+  {
+    "extra_walk_weight": 3.835390946502057,
+    "id": "halton_233",
+    "transfer_seconds": 530.859375
+  },
+  {
+    "extra_walk_weight": 0.4279835390946502,
+    "id": "halton_234",
+    "transfer_seconds": 305.859375
+  },
+  {
+    "extra_walk_weight": 1.7613168724279835,
+    "id": "halton_235",
+    "transfer_seconds": 755.859375
+  },
+  {
+    "extra_walk_weight": 3.0946502057613166,
+    "id": "halton_236",
+    "transfer_seconds": 193.359375
+  },
+  {
+    "extra_walk_weight": 0.8724279835390946,
+    "id": "halton_237",
+    "transfer_seconds": 643.359375
+  },
+  {
+    "extra_walk_weight": 2.2057613168724277,
+    "id": "halton_238",
+    "transfer_seconds": 418.359375
+  },
+  {
+    "extra_walk_weight": 3.5390946502057608,
+    "id": "halton_239",
+    "transfer_seconds": 868.359375
+  },
+  {
+    "extra_walk_weight": 1.316872427983539,
+    "id": "halton_240",
+    "transfer_seconds": 52.734375
+  },
+  {
+    "extra_walk_weight": 2.6502057613168724,
+    "id": "halton_241",
+    "transfer_seconds": 502.734375
+  },
+  {
+    "extra_walk_weight": 3.9835390946502054,
+    "id": "halton_242",
+    "transfer_seconds": 277.734375
+  },
+  {
+    "extra_walk_weight": 0.0054869684499314125,
+    "id": "halton_243",
+    "transfer_seconds": 727.734375
+  },
+  {
+    "extra_walk_weight": 1.3388203017832647,
+    "id": "halton_244",
+    "transfer_seconds": 165.234375
+  },
+  {
+    "extra_walk_weight": 2.6721536351165978,
+    "id": "halton_245",
+    "transfer_seconds": 615.234375
+  },
+  {
+    "extra_walk_weight": 0.4499314128943758,
+    "id": "halton_246",
+    "transfer_seconds": 390.234375
+  },
+  {
+    "extra_walk_weight": 1.7832647462277091,
+    "id": "halton_247",
+    "transfer_seconds": 840.234375
+  },
+  {
+    "extra_walk_weight": 3.116598079561042,
+    "id": "halton_248",
+    "transfer_seconds": 108.984375
+  },
+  {
+    "extra_walk_weight": 0.8943758573388203,
+    "id": "halton_249",
+    "transfer_seconds": 558.984375
+  },
+  {
+    "extra_walk_weight": 2.2277091906721536,
+    "id": "halton_250",
+    "transfer_seconds": 333.984375
+  },
+  {
+    "extra_walk_weight": 3.5610425240054866,
+    "id": "halton_251",
+    "transfer_seconds": 783.984375
+  },
+  {
+    "extra_walk_weight": 0.15363511659807955,
+    "id": "halton_252",
+    "transfer_seconds": 221.484375
+  },
+  {
+    "extra_walk_weight": 1.4869684499314129,
+    "id": "halton_253",
+    "transfer_seconds": 671.484375
+  },
+  {
+    "extra_walk_weight": 2.820301783264746,
+    "id": "halton_254",
+    "transfer_seconds": 446.484375
+  },
+  {
+    "extra_walk_weight": 0.598079561042524,
+    "id": "halton_255",
+    "transfer_seconds": 896.484375
+  },
+  {
+    "extra_walk_weight": 1.9314128943758573,
+    "id": "halton_256",
+    "transfer_seconds": 1.7578125
+  },
+  {
+    "extra_walk_weight": 3.26474622770919,
+    "id": "halton_257",
+    "transfer_seconds": 451.7578125
+  },
+  {
+    "extra_walk_weight": 0.06060606060606061,
+    "id": "edge_left_00",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 0.06060606060606061,
+    "id": "edge_right_00",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_00",
+    "transfer_seconds": 13.636363636363637
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_00",
+    "transfer_seconds": 13.636363636363637
+  },
+  {
+    "extra_walk_weight": 0.18181818181818182,
+    "id": "edge_left_01",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 0.18181818181818182,
+    "id": "edge_right_01",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_01",
+    "transfer_seconds": 40.909090909090914
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_01",
+    "transfer_seconds": 40.909090909090914
+  },
+  {
+    "extra_walk_weight": 0.30303030303030304,
+    "id": "edge_left_02",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 0.30303030303030304,
+    "id": "edge_right_02",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_02",
+    "transfer_seconds": 68.18181818181819
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_02",
+    "transfer_seconds": 68.18181818181819
+  },
+  {
+    "extra_walk_weight": 0.42424242424242425,
+    "id": "edge_left_03",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 0.42424242424242425,
+    "id": "edge_right_03",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_03",
+    "transfer_seconds": 95.45454545454545
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_03",
+    "transfer_seconds": 95.45454545454545
+  },
+  {
+    "extra_walk_weight": 0.5454545454545454,
+    "id": "edge_left_04",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 0.5454545454545454,
+    "id": "edge_right_04",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_04",
+    "transfer_seconds": 122.72727272727272
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_04",
+    "transfer_seconds": 122.72727272727272
+  },
+  {
+    "extra_walk_weight": 0.6666666666666666,
+    "id": "edge_left_05",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 0.6666666666666666,
+    "id": "edge_right_05",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_05",
+    "transfer_seconds": 150.0
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_05",
+    "transfer_seconds": 150.0
+  },
+  {
+    "extra_walk_weight": 0.7878787878787878,
+    "id": "edge_left_06",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 0.7878787878787878,
+    "id": "edge_right_06",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_06",
+    "transfer_seconds": 177.27272727272725
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_06",
+    "transfer_seconds": 177.27272727272725
+  },
+  {
+    "extra_walk_weight": 0.9090909090909091,
+    "id": "edge_left_07",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 0.9090909090909091,
+    "id": "edge_right_07",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_07",
+    "transfer_seconds": 204.54545454545453
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_07",
+    "transfer_seconds": 204.54545454545453
+  },
+  {
+    "extra_walk_weight": 1.0303030303030303,
+    "id": "edge_left_08",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 1.0303030303030303,
+    "id": "edge_right_08",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_08",
+    "transfer_seconds": 231.8181818181818
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_08",
+    "transfer_seconds": 231.8181818181818
+  },
+  {
+    "extra_walk_weight": 1.1515151515151516,
+    "id": "edge_left_09",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 1.1515151515151516,
+    "id": "edge_right_09",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_09",
+    "transfer_seconds": 259.0909090909091
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_09",
+    "transfer_seconds": 259.0909090909091
+  },
+  {
+    "extra_walk_weight": 1.2727272727272727,
+    "id": "edge_left_10",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 1.2727272727272727,
+    "id": "edge_right_10",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_10",
+    "transfer_seconds": 286.3636363636364
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_10",
+    "transfer_seconds": 286.3636363636364
+  },
+  {
+    "extra_walk_weight": 1.393939393939394,
+    "id": "edge_left_11",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 1.393939393939394,
+    "id": "edge_right_11",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_11",
+    "transfer_seconds": 313.6363636363637
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_11",
+    "transfer_seconds": 313.6363636363637
+  },
+  {
+    "extra_walk_weight": 1.5151515151515151,
+    "id": "edge_left_12",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 1.5151515151515151,
+    "id": "edge_right_12",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_12",
+    "transfer_seconds": 340.9090909090909
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_12",
+    "transfer_seconds": 340.9090909090909
+  },
+  {
+    "extra_walk_weight": 1.6363636363636365,
+    "id": "edge_left_13",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 1.6363636363636365,
+    "id": "edge_right_13",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_13",
+    "transfer_seconds": 368.1818181818182
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_13",
+    "transfer_seconds": 368.1818181818182
+  },
+  {
+    "extra_walk_weight": 1.7575757575757576,
+    "id": "edge_left_14",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 1.7575757575757576,
+    "id": "edge_right_14",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_14",
+    "transfer_seconds": 395.45454545454544
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_14",
+    "transfer_seconds": 395.45454545454544
+  },
+  {
+    "extra_walk_weight": 1.878787878787879,
+    "id": "edge_left_15",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 1.878787878787879,
+    "id": "edge_right_15",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_15",
+    "transfer_seconds": 422.72727272727275
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_15",
+    "transfer_seconds": 422.72727272727275
+  },
+  {
+    "extra_walk_weight": 2.0,
+    "id": "edge_left_16",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 2.0,
+    "id": "edge_right_16",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_16",
+    "transfer_seconds": 450.0
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_16",
+    "transfer_seconds": 450.0
+  },
+  {
+    "extra_walk_weight": 2.121212121212121,
+    "id": "edge_left_17",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 2.121212121212121,
+    "id": "edge_right_17",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_17",
+    "transfer_seconds": 477.27272727272725
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_17",
+    "transfer_seconds": 477.27272727272725
+  },
+  {
+    "extra_walk_weight": 2.242424242424242,
+    "id": "edge_left_18",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 2.242424242424242,
+    "id": "edge_right_18",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_18",
+    "transfer_seconds": 504.5454545454545
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_18",
+    "transfer_seconds": 504.5454545454545
+  },
+  {
+    "extra_walk_weight": 2.3636363636363638,
+    "id": "edge_left_19",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 2.3636363636363638,
+    "id": "edge_right_19",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_19",
+    "transfer_seconds": 531.8181818181819
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_19",
+    "transfer_seconds": 531.8181818181819
+  },
+  {
+    "extra_walk_weight": 2.484848484848485,
+    "id": "edge_left_20",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 2.484848484848485,
+    "id": "edge_right_20",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_20",
+    "transfer_seconds": 559.0909090909091
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_20",
+    "transfer_seconds": 559.0909090909091
+  },
+  {
+    "extra_walk_weight": 2.606060606060606,
+    "id": "edge_left_21",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 2.606060606060606,
+    "id": "edge_right_21",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_21",
+    "transfer_seconds": 586.3636363636364
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_21",
+    "transfer_seconds": 586.3636363636364
+  },
+  {
+    "extra_walk_weight": 2.727272727272727,
+    "id": "edge_left_22",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 2.727272727272727,
+    "id": "edge_right_22",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_22",
+    "transfer_seconds": 613.6363636363636
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_22",
+    "transfer_seconds": 613.6363636363636
+  },
+  {
+    "extra_walk_weight": 2.8484848484848486,
+    "id": "edge_left_23",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 2.8484848484848486,
+    "id": "edge_right_23",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_23",
+    "transfer_seconds": 640.909090909091
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_23",
+    "transfer_seconds": 640.909090909091
+  },
+  {
+    "extra_walk_weight": 2.9696969696969697,
+    "id": "edge_left_24",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 2.9696969696969697,
+    "id": "edge_right_24",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_24",
+    "transfer_seconds": 668.1818181818182
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_24",
+    "transfer_seconds": 668.1818181818182
+  },
+  {
+    "extra_walk_weight": 3.090909090909091,
+    "id": "edge_left_25",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 3.090909090909091,
+    "id": "edge_right_25",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_25",
+    "transfer_seconds": 695.4545454545454
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_25",
+    "transfer_seconds": 695.4545454545454
+  },
+  {
+    "extra_walk_weight": 3.212121212121212,
+    "id": "edge_left_26",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 3.212121212121212,
+    "id": "edge_right_26",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_26",
+    "transfer_seconds": 722.7272727272726
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_26",
+    "transfer_seconds": 722.7272727272726
+  },
+  {
+    "extra_walk_weight": 3.3333333333333335,
+    "id": "edge_left_27",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 3.3333333333333335,
+    "id": "edge_right_27",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_27",
+    "transfer_seconds": 750.0
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_27",
+    "transfer_seconds": 750.0
+  },
+  {
+    "extra_walk_weight": 3.4545454545454546,
+    "id": "edge_left_28",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 3.4545454545454546,
+    "id": "edge_right_28",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_28",
+    "transfer_seconds": 777.2727272727273
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_28",
+    "transfer_seconds": 777.2727272727273
+  },
+  {
+    "extra_walk_weight": 3.5757575757575757,
+    "id": "edge_left_29",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 3.5757575757575757,
+    "id": "edge_right_29",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_29",
+    "transfer_seconds": 804.5454545454545
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_29",
+    "transfer_seconds": 804.5454545454545
+  },
+  {
+    "extra_walk_weight": 3.696969696969697,
+    "id": "edge_left_30",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 3.696969696969697,
+    "id": "edge_right_30",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_30",
+    "transfer_seconds": 831.8181818181818
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_30",
+    "transfer_seconds": 831.8181818181818
+  },
+  {
+    "extra_walk_weight": 3.8181818181818183,
+    "id": "edge_left_31",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 3.8181818181818183,
+    "id": "edge_right_31",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_31",
+    "transfer_seconds": 859.0909090909091
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_31",
+    "transfer_seconds": 859.0909090909091
+  },
+  {
+    "extra_walk_weight": 3.9393939393939394,
+    "id": "edge_left_32",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 3.9393939393939394,
+    "id": "edge_right_32",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "edge_bottom_32",
+    "transfer_seconds": 886.3636363636364
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "edge_top_32",
+    "transfer_seconds": 886.3636363636364
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "corner_0_0",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "corner_0_4",
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 0,
+    "id": "corner_900_0",
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 4,
+    "id": "corner_900_4",
+    "transfer_seconds": 900
+  }
+]

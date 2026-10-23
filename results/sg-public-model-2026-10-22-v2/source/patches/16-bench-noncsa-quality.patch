@@ -1,0 +1,508 @@
+--- /dev/null
++++ b/cmd/familybench/local_walk_ties_test.go
+@@ -0,0 +1,32 @@
++package main
++
++import (
++	"context"
++	"testing"
++)
++
++func TestLocalWalkTiesScopedAdaptersLiteralAnswers(t *testing.T) {
++	b := scopedFixture(t)
++	for _, tc := range []struct{ name, config string }{{"ultra_capped_local_walk_ties", "ultra-control"}, {"ultra_subset_local_walk_ties", "ultra-subset"}} {
++		if !isScoped(tc.name) {
++			t.Fatal("unregistered quality adapter", tc.name)
++		}
++		r, e := prepareScoped(context.Background(), b.Dataset, tc.name, scopedInput(t, tc.config))
++		if e != nil {
++			t.Fatal(e)
++		}
++		cfg, ok := r.config.(map[string]any)
++		if !ok || cfg["native_contract"] != "arrival_boardings_2d_not_3d" || cfg["minimum_walking_representatives_complete"] != false {
++			t.Fatal("lost named contract", r.config)
++		}
++		for i, q := range b.Queries {
++			v := r.single(context.Background(), q)
++			if v.Err != nil || !v.Complete {
++				t.Fatal(tc.name, q.ID, v.Err)
++			}
++			if got := bestArrival(t, b.Dataset, q, v.Journeys); got != []int64{30, 20, -1}[i] {
++				t.Fatal("literal answer changed", tc.name, q.ID, got)
++			}
++		}
++	}
++}
+--- a/cmd/familybench/scoped.go
++++ b/cmd/familybench/scoped.go
+@@ -30,6 +30,8 @@
+ var scopedNames = []string{
+ 	"trip_based_capped",
+ 	"ultra_transfer_complete_capped",
++	"ultra_capped_local_walk_ties",
++	"ultra_subset_local_walk_ties",
+ 	"ultra_cap_safe_stay_witness_subset_v1",
+ 	"flash_tb_static_stop_pair_suffix_flags_role_caps_v1",
+ 	"tp_destination_fixed_caps_experimental",
+@@ -144,7 +146,7 @@
+ 			v, e := x.SearchCappedWalking(c, q)
+ 			return rawResult{v.Journeys, v.Complete, v, scopedOutcome(e)}
+ 		}
+-	case "ultra_transfer_complete_capped":
++	case "ultra_transfer_complete_capped", "ultra_capped_local_walk_ties":
+ 		if cfg.ULTRA == nil || cfg.ULTRAQuery == nil {
+ 			return r, fmt.Errorf("ultra and ultra_query configurations required")
+ 		}
+@@ -156,11 +158,19 @@
+ 			return r, scopedOutcome(err)
+ 		}
+ 		limits := *cfg.ULTRAQuery
+-		r.single = func(c context.Context, q model.Query) rawResult {
++		localTies := name == "ultra_capped_local_walk_ties" || name == "ultra_subset_local_walk_ties"
++		if localTies {
++			r.config = map[string]any{"preparation": cfg, "tie_refinement": "local_equal_time_stop_equal_trip_onboard_equal_arrival_answer", "minimum_walking_representatives_complete": false, "native_contract": "arrival_boardings_2d_not_3d"}
++		}
++		r.single = func(c context.Context, q model.Query) rawResult {
++			if localTies {
++				v, e := x.SearchLocalWalkTies(c, q, limits)
++				return rawResult{v.Journeys, v.Complete, v, scopedOutcome(e)}
++			}
+ 			v, e := x.Search(c, q, limits)
+ 			return rawResult{v.Journeys, v.Complete, v, scopedOutcome(e)}
+ 		}
+-	case "ultra_cap_safe_stay_witness_subset_v1":
++	case "ultra_cap_safe_stay_witness_subset_v1", "ultra_subset_local_walk_ties":
+ 		if cfg.Sparse == nil || cfg.ULTRAQuery == nil {
+ 			return r, fmt.Errorf("ultra_sparse and ultra_query configurations required")
+ 		}
+@@ -172,7 +182,15 @@
+ 			return r, scopedOutcome(err)
+ 		}
+ 		limits := *cfg.ULTRAQuery
+-		r.single = func(c context.Context, q model.Query) rawResult {
++		localTies := name == "ultra_capped_local_walk_ties" || name == "ultra_subset_local_walk_ties"
++		if localTies {
++			r.config = map[string]any{"preparation": cfg, "tie_refinement": "local_equal_time_stop_equal_trip_onboard_equal_arrival_answer", "minimum_walking_representatives_complete": false, "native_contract": "arrival_boardings_2d_not_3d"}
++		}
++		r.single = func(c context.Context, q model.Query) rawResult {
++			if localTies {
++				v, e := x.SearchLocalWalkTies(c, q, limits)
++				return rawResult{v.Journeys, v.Complete, v, scopedOutcome(e)}
++			}
+ 			v, e := x.Search(c, q, limits)
+ 			return rawResult{v.Journeys, v.Complete, v, scopedOutcome(e)}
+ 		}
+--- /dev/null
++++ b/regression/mcraptor/ultra_local_walk_ties_test.go
+@@ -0,0 +1,41 @@
++package mcraptor_test
++
++import (
++	"context"
++	"github.com/ertyoii/transit-routing-go/ultra"
++	"reflect"
++	"testing"
++)
++
++func TestCappedUltraLocalWalkTiesIndependentWords2D(t *testing.T) {
++	limits := ultra.Limits{MaxRuns: 10000, MaxConnectionVisits: 1000000, MaxWalkSettled: 1000000, MaxWalkEdges: 1000000, MaxShortcuts: 100000, MaxOutputLegs: 1000000}
++	for seed := uint64(0); seed < 96; seed++ {
++		d, q := generated(seed)
++		all := fullWords(d, q, 7)
++		want := objectives(all, q.MaxBoardings)
++		x, e := ultra.BuildCapped(context.Background(), d, ultra.CappedConfig{TransferWalkingLimit: q.Walking.Transfer, AccessibleOnly: q.AccessibleOnly, Limits: limits})
++		if e != nil {
++			t.Fatal(e)
++		}
++		sparse, e := ultra.BuildSparse(context.Background(), d, ultra.SparseConfig{Capped: ultra.CappedConfig{TransferWalkingLimit: q.Walking.Transfer, AccessibleOnly: q.AccessibleOnly, Limits: limits}, TransferBuffer: q.TransferBuffer, MaxProofChecks: 1000000})
++		if e != nil {
++			t.Fatal(e)
++		}
++		sr, e := sparse.SearchLocalWalkTies(context.Background(), q, limits)
++		if e != nil || !sr.Complete {
++			t.Fatal(seed, e, sr)
++		}
++		sg := objectives(metrics(t, d, q, sr.Journeys), q.MaxBoardings)
++		if !reflect.DeepEqual(sg, want) {
++			t.Fatalf("subset seed=%d want=%v got=%v", seed, want, sg)
++		}
++		r, e := x.SearchLocalWalkTies(context.Background(), q, limits)
++		if e != nil || !r.Complete {
++			t.Fatal(seed, e, r)
++		}
++		got := objectives(metrics(t, d, q, r.Journeys), q.MaxBoardings)
++		if !reflect.DeepEqual(got, want) {
++			t.Fatalf("seed=%d want=%v got=%v", seed, want, got)
++		}
++	}
++}
+--- a/routing.lock.json
++++ b/routing.lock.json
+@@ -97,6 +97,7 @@
+     "ultra/capped.go": "2cd79a4b4e1397bb6120f6d747798e53f5789f86a70d0094ecfb1e525f763fca",
+     "ultra/capped_search.go": "602c1378895e5400d986b45add793c54b8aa7c7e73d96961722519a952677176",
+     "ultra/index.go": "c826f9a3736693055267046b04639a18219badfbb3f1e6105caa11a288b60c04",
++    "ultra/local_walk_ties.go": "c6f19c96bde2bf9b9eaa41b3e700552fc38f67d10094fda978055dc5e5f45dda",
+     "ultra/reuse.go": "0acde4d1dce13c107465258a5d14fe6e4872e533110965ab58d077663caac4c0",
+     "ultra/routes.go": "f01d85ecf9b01b381cb0081e02bd958b1a65705d8988e971a3512de08e7ad283",
+     "ultra/search.go": "719be0b0fef669a83dece8f86ca5e4258399c48a1586f7158c2f431804d7cbfe",
+@@ -113,7 +114,7 @@
+     "walking/transit/graph.go": "07ec2ac36311597ed657b686be7bc222ef3ac7ec022473d1f55729f5754b6fbe"
+   },
+   "module": "github.com/ertyoii/transit-routing-go",
+-  "origin": "V2 local non-CSA candidate: ancestry 725520a (walking/RAPTOR) plus cd88c9c ULTRA; query-local round/route/dense-walking reuse, pointer-free Trip-Based retained links, separately named local walking ties. commit retains ancestry; full file hashes identify changes. No GitHub push.",
+-  "source_sha256": "5f0131d0170104085b1f9dbabe85f32b9f4b1b5da8f4f9a06fba00e750014850",
++  "origin": "Isolated V2 quality refinement qualification: capped ULTRA local walking ties, same2Dcontract; original commit retained as ancestry; full file hashes identify changes.",
++  "source_sha256": "8d7be3737be430fe98c5b9292d8bb40ac72fd902a82ba1cd4701c780e4fe5ef7",
+   "version": "v0.1.0-pre.3"
+ }
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/ultra/local_walk_ties.go
+@@ -0,0 +1,347 @@
++package ultra
++
++import (
++	"context"
++	"fmt"
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/paper"
++	"sort"
++)
++
++// SearchLocalWalkTies is a separately named 2D representative refinement. It
++// retains one ready label per stop and replaces only equal-time stop labels,
++// equal-trip onboard labels and equal-arrival answers toward less walking.
++// Later readiness/lower-walking alternatives remain discarded: no exhaustive
++// minimum-walking representative or 3D frontier is claimed.
++func (x *CappedIndex) SearchLocalWalkTies(ctx context.Context, q model.Query, limits Limits) (out CappedResult, err error) {
++	out.Journeys = []model.Journey{}
++	defer func() {
++		out.Complete = err == nil
++		if err != nil {
++			out.Error = err.Error()
++		}
++	}()
++	if x == nil || !x.Complete() {
++		return out, fmt.Errorf("ULTRA capped: incomplete index")
++	}
++	if !validLimits(limits) {
++		return out, fmt.Errorf("ULTRA capped: explicit positive query limits required")
++	}
++	if err = x.x.p.CheckContext(ctx, q); err != nil {
++		return
++	}
++	if q.AccessibleOnly != x.prep.Config.AccessibleOnly {
++		return out, fmt.Errorf("ULTRA capped capability: accessibility differs from prepared graph")
++	}
++	if q.Walking.Transfer > x.prep.Config.TransferWalkingLimit {
++		return out, fmt.Errorf("ULTRA capped capability: transfer cap exceeds prepared ceiling")
++	}
++	if err = ctx.Err(); err != nil {
++		return
++	}
++	p := x.x.p
++	n := len(x.stopIDs)
++	destination := x.stopIDs[q.Destination]
++	if !p.Accessible(q, q.Origin) || !p.Accessible(q, q.Destination) {
++		return
++	}
++	if q.Origin == q.Destination {
++		out.Journeys = append(out.Journeys, paper.Journey(nil))
++		return
++	}
++	w := work{ctx, limits, &out.Stats.Stats}
++	forward, e := x.walk(q.Origin, min(max(q.Walking.Access, q.Walking.Direct), q.LatestArrival-q.Departure), false, q.Destination, &w)
++	out.Stats.WalkSearches++
++	if e != nil {
++		return out, e
++	}
++	var backward rawSearch
++	if q.MaxBoardings > 0 {
++		backward, err = x.walk(q.Destination, min(q.Walking.Egress, q.LatestArrival-q.Departure), true, "", &w)
++		out.Stats.WalkSearches++
++		if err != nil {
++			return
++		}
++	}
++	emit := func(parent *paper.Node) error {
++		for n := parent; n != nil; n = n.Previous {
++			if e := w.leg(); e != nil {
++				return e
++			}
++		}
++		out.Journeys = append(out.Journeys, paper.Journey(parent))
++		return nil
++	}
++	previous := make([]paper.Label, n)
++	previousSet := make([]bool, n)
++	previousWalk := make([]int64, n)
++	previousStops := []int{}
++	next := make([]paper.Label, n)
++	nextSet := make([]bool, n)
++	nextWalk := make([]int64, n)
++	nextStops := []int{}
++	endpoints := []string{}
++	for stop := range forward.distance {
++		endpoints = append(endpoints, stop)
++	}
++	sort.Strings(endpoints)
++	bestArrival := paper.Infinity
++	for _, stop := range endpoints {
++		at := q.Departure + forward.distance[stop]
++		if at > q.LatestArrival {
++			continue
++		}
++		if stop == q.Destination {
++			if forward.distance[stop] <= q.Walking.Direct {
++				edges, e := x.path(forward, stop, &w)
++				if e != nil {
++					return out, e
++				}
++				bestArrival = at
++				if err = emit((paper.Path{Edges: edges}).Append(nil, q.Departure)); err != nil {
++					return
++				}
++			}
++		} else if q.MaxBoardings > 0 && x.transit[x.stopIDs[stop]] && forward.distance[stop] <= q.Walking.Access {
++			edges, e := x.path(forward, stop, &w)
++			if e != nil {
++				return out, e
++			}
++			id := x.stopIDs[stop]
++			previousStops = append(previousStops, id)
++			previousSet[id] = true
++			previousWalk[id] = forward.distance[stop]
++			previous[id] = paper.Label{Time: at, Parent: (paper.Path{Edges: edges}).Append(nil, q.Departure)}
++		}
++	}
++	rows := make([][]cappedPath, n)
++	rowSet := make([]bool, n)
++	getRow := func(from int, fromName string) ([]cappedPath, error) {
++		if rowSet[from] {
++			return rows[from], nil
++		}
++		out.Stats.RowUses++
++		r := []cappedPath{}
++		var detour *rawSearch
++		for _, path := range x.rows[from] {
++			if e := w.check(); e != nil {
++				return nil, e
++			}
++			if path.To == q.Destination || path.Duration > q.Walking.Transfer {
++				continue
++			}
++			crosses := false
++			for _, edge := range path.Edges {
++				if e := w.edge(); e != nil {
++					return nil, e
++				}
++				if edge.To == q.Destination {
++					crosses = true
++					break
++				}
++			}
++			if crosses {
++				if detour == nil {
++					d, e := x.walk(fromName, q.Walking.Transfer, false, q.Destination, &w)
++					out.Stats.WalkSearches++
++					out.Stats.DestinationRepairs++
++					if e != nil {
++						return nil, e
++					}
++					detour = &d
++				}
++				duration, ok := detour.distance[path.To]
++				if !ok {
++					continue
++				}
++				edges, e := x.path(*detour, path.To, &w)
++				if e != nil {
++					return nil, e
++				}
++				path.Path = paper.Path{To: path.To, Duration: duration, Edges: edges}
++			}
++			r = append(r, path)
++		}
++		rows[from] = r
++		rowSet[from] = true
++		return r, nil
++	}
++	egress := make([][]model.Footpath, n)
++	egressSet := make([]bool, n)
++	backwardDistance := make([]int64, n)
++	backwardSet := make([]bool, n)
++	for name, duration := range backward.distance {
++		id := x.stopIDs[name]
++		backwardDistance[id], backwardSet[id] = duration, true
++	}
++	selected := make([]int, len(x.x.routes))
++	routeIDs := []int{}
++	for boards := 1; boards <= q.MaxBoardings && len(previousStops) > 0; boards++ {
++		if err = w.check(); err != nil {
++			return
++		}
++		out.Stats.Rounds++
++		for _, ri := range routeIDs {
++			selected[ri] = 0
++		}
++		routeIDs = routeIDs[:0]
++		for _, stop := range previousStops {
++			for _, o := range x.at[stop] {
++				if err = w.connection(); err != nil {
++					return
++				}
++				out.Stats.RouteOccurrenceChecks++
++				if old := selected[o.route]; old == 0 || o.position+1 < old {
++					if old == 0 {
++						routeIDs = append(routeIDs, o.route)
++					}
++					selected[o.route] = o.position + 1
++				}
++			}
++		}
++		sort.Ints(routeIDs)
++		for _, stop := range nextStops {
++			nextSet[stop] = false
++		}
++		nextStops = nextStops[:0]
++		best := paper.Label{Time: bestArrival}
++		bestWalk := paper.Infinity
++		for _, ri := range routeIDs {
++			if err = w.check(); err != nil {
++				return
++			}
++			out.Stats.RouteScans++
++			r := x.x.routes[ri]
++			if q.AccessibleOnly && !x.tripAllowed[ri] {
++				continue
++			}
++			current := -1
++			currentWalk := int64(0)
++			var parent *paper.Node
++			for pos := selected[ri] - 1; pos < len(r.trips[0].cs); pos++ {
++				if err = w.connection(); err != nil {
++					return
++				}
++				proto := r.trips[0].cs[pos]
++				fromID := x.from[ri][pos]
++				if l := previous[fromID]; previousSet[fromID] && proto.Pickup && (!q.AccessibleOnly || x.accessible[fromID]) {
++					lo, hi := 0, len(r.trips)
++					if current >= 0 {
++						hi = current + 1
++					}
++					for lo < hi {
++						if err = w.connection(); err != nil {
++							return
++						}
++						out.Stats.TripProbes++
++						mid := lo + (hi-lo)/2
++						if r.trips[mid].cs[pos].Departure < l.Time {
++							lo = mid + 1
++						} else {
++							hi = mid
++						}
++					}
++					if lo < len(r.trips) && (current < 0 || lo < current || lo == current && previousWalk[fromID] < currentWalk) {
++						current = lo
++						parent = l.Parent
++						currentWalk = previousWalk[fromID]
++					}
++				}
++				if current < 0 {
++					continue
++				}
++				c := r.trips[current].cs[pos]
++				if c.Arrival > q.LatestArrival {
++					current = -1
++					continue
++				}
++				parent = paper.Ride(parent, c)
++				toID := x.to[ri][pos]
++				if !c.Dropoff || q.AccessibleOnly && !x.accessible[toID] {
++					continue
++				}
++				if toID == destination {
++					if c.Arrival < best.Time || c.Arrival == best.Time && currentWalk < bestWalk {
++						bestWalk = currentWalk
++						best = paper.Label{Time: c.Arrival, Parent: parent}
++					}
++					current = -1
++					continue
++				}
++				if duration := backwardDistance[toID]; backwardSet[toID] && (c.Arrival+duration < best.Time || c.Arrival+duration == best.Time && currentWalk+duration < bestWalk) && c.Arrival+duration <= q.LatestArrival {
++					edges := egress[toID]
++					if !egressSet[toID] {
++						edges, err = x.path(backward, c.To, &w)
++						if err != nil {
++							return
++						}
++						egress[toID] = edges
++						egressSet[toID] = true
++					}
++					bestWalk = currentWalk + duration
++					best = paper.Label{Time: c.Arrival + duration, Parent: (paper.Path{Edges: edges}).Append(parent, c.Arrival)}
++				}
++				if boards == q.MaxBoardings || c.Arrival >= best.Time {
++					continue
++				}
++				paths, e := getRow(toID, c.To)
++				if e != nil {
++					return out, e
++				}
++				for _, path := range paths {
++					if err = w.edge(); err != nil {
++						return
++					}
++					out.Stats.TransferPairVisits++
++					if path.ruleError != nil {
++						return out, path.ruleError
++					}
++					minimum := path.minimum
++					if minimum < 0 {
++						minimum = q.TransferBuffer
++					}
++					ready, allowed := c.Arrival+max(path.Duration, minimum), path.allowed
++					if !allowed || ready > q.LatestArrival || ready >= best.Time {
++						continue
++					}
++					old := next[path.to]
++					if !nextSet[path.to] || ready < old.Time || ready == old.Time && currentWalk+path.Duration < nextWalk[path.to] {
++						if !nextSet[path.to] {
++							nextStops = append(nextStops, path.to)
++							nextSet[path.to] = true
++						}
++						nextWalk[path.to] = currentWalk + path.Duration
++						next[path.to] = paper.Label{Time: ready, Parent: path.Path.Append(parent, c.Arrival)}
++					}
++				}
++			}
++		}
++		if best.Time < bestArrival {
++			if err = emit(best.Parent); err != nil {
++				return
++			}
++			bestArrival = best.Time
++		}
++		previous, next = next, previous
++		previousSet, nextSet = nextSet, previousSet
++		previousWalk, nextWalk = nextWalk, previousWalk
++		previousStops, nextStops = nextStops, previousStops
++	}
++	return
++}
++
++// SearchLocalWalkTies applies the separately named local tie refinement to the
++// cap-safe subset. The original preparation completeness and fixed-buffer
++// certificate requirements remain mandatory.
++func (x *SparseIndex) SearchLocalWalkTies(ctx context.Context, q model.Query, l Limits) (CappedResult, error) {
++	fail := func(e error) (CappedResult, error) {
++		return CappedResult{Journeys: []model.Journey{}, Error: e.Error()}, e
++	}
++	if !x.Complete() {
++		return fail(fmt.Errorf("ULTRA sparse: incomplete index"))
++	}
++	if q.TransferBuffer != x.prep.Config.TransferBuffer {
++		return fail(fmt.Errorf("ULTRA sparse capability: transfer buffer differs from proof"))
++	}
++	return x.index.SearchLocalWalkTies(ctx, q, l)
++}

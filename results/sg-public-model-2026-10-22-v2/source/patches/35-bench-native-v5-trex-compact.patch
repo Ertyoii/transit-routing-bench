@@ -1,0 +1,590 @@
+--- a/routing.lock.json
++++ b/routing.lock.json
+@@ -72,7 +72,7 @@
+     "tripbased/capped_retained.go": "d961cf22818d4a30a471313267c4b6123dcf9f8b025dde118889f9e0c309ef50",
+     "tripbased/capped_source_domain.go": "b65293af7afcc05e3c8fd6c25d07d4ee618d1e49e91ca53cf3a6b1c9757179f8",
+     "tripbased/compact_links.go": "85f66d312381ee13a9a8617e85edd664c4fc3351e6961304e1a3f2cfc251fc09",
+-    "tripbased/cost_summary.go": "41148da11b11ac8e38aca3150b847571bfa78a9bb06794ee70ca3dd701a60083",
++    "tripbased/cost_summary.go": "7892623f050bee51f1d38a7ff43ef6e0585140b028fdb7f5fcc26215ad891dbb",
+     "tripbased/flash.go": "fc6c1977c7952d31023106e2d651ed2dc9736fc2862ea412e795414f31cb2c28",
+     "tripbased/flash_breakpoints.go": "af8a66abc935a28445495a40a043b47d2f884a3b161779a254905f39e2af4bb3",
+     "tripbased/flash_capped.go": "4d0b3ae6b31ae1c0545e3db70339aefc1b8ae6fd4b0d9769004ab3bbb51d7cdb",
+@@ -105,17 +105,18 @@
+     "tripbased/testdata/trex_preprocessing/README.md": "adf2864b1c3b7cfdaeab663d5400b67e84fb47ea9b87b271b7f39513e2a99dae",
+     "tripbased/testdata/trex_preprocessing/fixtures.json": "3f90746a970f2d1303df8de5b7f15356e9e5f1b3937cbe7f36e6a462af9d487b",
+     "tripbased/transfer_storage.go": "5c3fff927b5143a367f5129e59701be4e2e9fe11e511a659c7e7078c12586c34",
+-    "tripbased/trex.go": "8490e05e837dfac1f4943dd524c273083554537f37e557f4d99b3c0126ef4f76",
++    "tripbased/trex.go": "9e600f8ab60366f7de16c239fd2281a1237a8571897b862ffbd52bf4ca935561",
+     "tripbased/trex_cap_certificate.go": "6a7e9889828bd1c8e40f6b70d4193ce7bc949e2708d9d6b8ba7e244fe9b749c8",
+-    "tripbased/trex_customization.go": "6b2014268e6b19b1ebb9d0744a23fafe745f3e6e2d591a712b8da0d8dbc89b40",
+-    "tripbased/trex_diagnostic.go": "d71a3c0c009a53e3fac7a9b30f654bc9710f0bcb18c9e18f3c71e9739f80bf89",
++    "tripbased/trex_compact.go": "418107b649dd467b74254ce8655e6bd1f9dcaf5ee3f7e4c70c3fc36536f50809",
++    "tripbased/trex_customization.go": "c013628d58e754f04961f893b96352133a4521f933f89b43e3caaf47bf6af40a",
++    "tripbased/trex_diagnostic.go": "6d3ac02a360d9741ac457d4ec31aae837792dc684fab795680bf29a14ab89ff6",
+     "tripbased/trex_fixed_transfer_cap_candidate.go": "0ee0759b01f95f839152f7b18659100e58ede0fe7926a02879898248aade50c4",
+-    "tripbased/trex_partition.go": "5593e6b73434b7055884d00a205ec1567dd34204527819d44ab0b1e1570f76d3",
+-    "tripbased/trex_proofs.go": "731aac977eeb4ddb81df4c6dd0c144e5f4b3a94697ce9a69814d4516210a60bd",
+-    "tripbased/trex_query.go": "86d8c09216d6051cf7c617ad19096f7124cba58792fb4c1656caa12f7b79f3cc",
++    "tripbased/trex_partition.go": "163d8d47e7aa020bd55ecd46bfd3fac1d4486925acde44f91dbda4be69cb5b01",
++    "tripbased/trex_proofs.go": "82e8819d86e69f71d22e28875b4f266be3fec7b0e39f2935c49bd0c925e34852",
++    "tripbased/trex_query.go": "13fff151e308e770839bb093bf952a0461d48874d5a784a88bf2472265f9ff64",
+     "tripbased/trex_role_cap_candidate.go": "cb9f721b5bb3b1f42b26545c50cfefb0a79a73a1beedaaaa1dd3e3f2c7d38ba5",
+     "tripbased/trex_static_cap_certificate.go": "f586f354b5c231dcc6f74cf14e1a16f6a3aa2d3c01aa56c34a94395cfe602a50",
+-    "tripbased/trex_storage.go": "05385e29ecb9dcb98baec226568f2a026b07a7c10149a38f5da0174102d74531",
++    "tripbased/trex_storage.go": "0fa08c43c341190e32c7200304fd62a6c6a1944e4434f79d72c0ab93d22c4832",
+     "tripbased/trex_walking_scope.go": "1f6dcbcdb3743866f5fa698805c5235e41d99136a4dca7b346c298d83da765ca",
+     "tripbased/trex_work.go": "d1019998737e5d5df302dfc6134d6a039eac1949facc62cc44e18152ff8d9cf7",
+     "ultra/active.go": "2ff9e41a15f9877dbc1e4f147c0999bec7db8455372ff632c4d825df355dec93",
+@@ -138,7 +139,7 @@
+     "walking/transit/graph.go": "07ec2ac36311597ed657b686be7bc222ef3ac7ec022473d1f55729f5754b6fbe"
+   },
+   "module": "github.com/ertyoii/transit-routing-go",
+-  "origin": "Native auxiliary prep; targeted V1 66b bounded closure only when declared; current seed-fixed common driver/checker/selector retained. Local ancestry only, no remote push.",
+-  "source_sha256": "6b4a5d13cbf915b8f184731c7b15ef989dedbcfa859cacb8e6da4fb444a2dea0",
++  "origin": "Native auxiliary trex-compact; targeted V1 66b bounded closure only when declared; current seed-fixed common driver/checker/selector retained. Local ancestry only, no remote push.",
++  "source_sha256": "0f7cd0bbdda8c76f2102a3f223ffb649709fc74fececc8085a02d2eddc0f7c26",
+   "version": "v0.1.0-pre.3"
+ }
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/cost_summary.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/cost_summary.go
+@@ -77,7 +77,7 @@
+ 	if x == nil {
+ 		return json.RawMessage("null")
+ 	}
+-	v := map[string]any{"complete": x.snap.Complete, "error": x.snap.Error, "stats": x.snap.Stats, "phases": x.snap.Phases, "lines": len(x.snap.Lines), "transfers": len(x.edges), "witnesses": x.proofs.count, "closure_diameter": x.snap.ClosureDiameter}
++	v := map[string]any{"complete": x.snap.Complete, "error": x.snap.Error, "stats": x.snap.Stats, "phases": x.snap.Phases, "lines": len(x.snap.Lines), "transfers": x.edgeCount(), "witnesses": x.proofs.count, "closure_diameter": x.snap.ClosureDiameter}
+ 	if x.snap.WalkingClosureLimit != nil {
+ 		v["walking_closure_limit"] = *x.snap.WalkingClosureLimit
+ 	}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex.go
+@@ -104,7 +104,14 @@
+ 	from, exit, to, board int
+ 	walk                  *paper.Path
+ }
+-type trexOverlay struct{ starts, edges []int }
++type trexEventRange struct{ begin, end int }
++type trexOverlay struct {
++	starts        []int
++	edges         []uint32
++	wide          []int
++	implicit      bool
++	implicitCount int
++}
+ type TREXIndex struct {
+ 	staticRulesCandidate bool   // opt-in qualification profile; legacy BuildTREX stays strict
+ 	transferWalkLimit    *int64 // fixed-cap ranked and separate unranked builders bind this policy
+@@ -117,9 +124,10 @@
+ 	walks                [][]paper.Path
+ 	walkMap              []map[int]*paper.Path
+ 	cells, offsets       []int
+-	edges                []trexEdge
++	edges                trexEdgeStore
+ 	ranks                []uint8 // levels are bounded by 12; verbose metadata is reconstructed on demand
+-	byEvent              [][][]int
++	byEvent              [][]trexEventRange
++	eventTrips           []int
+ 	overlays             []trexOverlay
+ 	successors           [][]int
+ }
+@@ -133,8 +141,9 @@
+ 		view.FixedTransferWalkingCap = &cap
+ 	}
+ 	view.Witnesses = x.expandTREXProofs()
+-	view.Transfers = make([]TREXTransfer, len(x.edges))
+-	for id, e := range x.edges {
++	view.Transfers = make([]TREXTransfer, x.edgeCount())
++	for id := 0; id < x.edgeCount(); id++ {
++		e := x.edgeAt(id)
+ 		raw := make([]string, len(e.walk.Edges))
+ 		for j, w := range e.walk.Edges {
+ 			raw[j] = w.ID
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_compact.go
+@@ -0,0 +1,146 @@
++package tripbased
++
++import "github.com/ertyoii/transit-routing-go/paper"
++
++const trexEdgeChunkBits = 16
++const trexEdgeChunkSize = 1 << trexEdgeChunkBits
++const trexWideEvent = ^uint32(0)
++
++// Ordinary retained transfers use 12 pointer-free bytes. Event IDs recover
++// trip/position through immutable timetable tables; the path ID preserves the
++// exact original Path pointer. The all-ones source event is a native escape,
++// with its full native-edge index encoded in the remaining two words.
++// No event, path, trip or boarding-index representability limit is added.
++type trexPackedEdge struct{ from, to, walk uint32 }
++
++type trexEdgeStore struct {
++	chunks          [][]trexPackedEdge
++	count, expected int
++	paths           []*paper.Path
++	wide            []trexEdge
++}
++
++type trexEdgeBuilder struct {
++	store  *trexEdgeStore
++	paths  map[*paper.Path]uint32
++	last   *paper.Path
++	lastID uint32
++	lastOK bool
++}
++
++func (b *trexEdgeBuilder) pack(v trexEdge, from, to int) trexPackedEdge {
++	const max = uint64(1<<32 - 1)
++	if from >= 0 && uint64(from) < max && to >= 0 && uint64(to) <= max {
++		if b.lastOK && b.last == v.walk {
++			return trexPackedEdge{uint32(from), uint32(to), b.lastID}
++		}
++		if b.paths == nil {
++			b.paths = make(map[*paper.Path]uint32)
++		}
++		if id, ok := b.paths[v.walk]; ok {
++			b.last, b.lastID, b.lastOK = v.walk, id, true
++			return trexPackedEdge{uint32(from), uint32(to), id}
++		}
++		if uint64(len(b.store.paths)) <= max {
++			id := uint32(len(b.store.paths))
++			b.store.paths = append(b.store.paths, v.walk)
++			b.paths[v.walk] = id
++			b.last, b.lastID, b.lastOK = v.walk, id, true
++			return trexPackedEdge{uint32(from), uint32(to), id}
++		}
++	}
++	id := uint64(len(b.store.wide))
++	b.store.wide = append(b.store.wide, v)
++	return trexEscapeEdge(id)
++}
++
++func trexEscapeEdge(id uint64) trexPackedEdge {
++	return trexPackedEdge{trexWideEvent, uint32(id >> 32), uint32(id)}
++}
++func (v trexPackedEdge) wideID() uint64 { return uint64(v.to)<<32 | uint64(v.walk) }
++
++func (s *trexEdgeStore) append(v trexPackedEdge) {
++	chunk, at := s.count>>trexEdgeChunkBits, s.count&(trexEdgeChunkSize-1)
++	if at == 0 {
++		capacity := trexEdgeChunkSize
++		if s.expected == 0 {
++			// Append-mode tiny indexes must not pay for an entire large chunk.
++			// Growth never replaces more than one bounded chunk.
++			capacity = 16
++		} else if s.expected-s.count < capacity {
++			capacity = s.expected - s.count
++		}
++		s.chunks = append(s.chunks, make([]trexPackedEdge, 0, capacity))
++	}
++	if len(s.chunks[chunk]) == cap(s.chunks[chunk]) {
++		capacity := 2 * cap(s.chunks[chunk])
++		if capacity > trexEdgeChunkSize {
++			capacity = trexEdgeChunkSize
++		}
++		grown := make([]trexPackedEdge, len(s.chunks[chunk]), capacity)
++		copy(grown, s.chunks[chunk])
++		s.chunks[chunk] = grown
++	}
++	s.chunks[chunk] = append(s.chunks[chunk], v)
++	s.count++
++}
++func (s *trexEdgeStore) at(id int) trexPackedEdge {
++	if id < 0 || id >= s.count {
++		panic("T-REX internal: invalid transfer ID")
++	}
++	return s.chunks[id>>trexEdgeChunkBits][id&(trexEdgeChunkSize-1)]
++}
++func (s *trexEdgeStore) capacity() int {
++	n := 0
++	for _, c := range s.chunks {
++		n += cap(c)
++	}
++	return n
++}
++func (x *TREXIndex) edgeCount() int { return x.edges.count }
++func (x *TREXIndex) edgeAt(id int) trexEdge {
++	v := x.edges.at(id)
++	if v.from == trexWideEvent {
++		return x.edges.wide[v.wideID()]
++	}
++	from, to := int(v.from), int(v.to)
++	ft, tt := x.eventTrips[from], x.eventTrips[to]
++	return trexEdge{ft, from - x.offsets[ft], tt, to - x.offsets[tt], x.edges.paths[v.walk]}
++}
++
++// Event-TB customization and ordinary overlay queries need the receiving
++// event/path only. Avoid decoding unused source-trip metadata on that hot path.
++func (x *TREXIndex) edgeTarget(id int) link {
++	v := x.edges.at(id)
++	if v.from == trexWideEvent {
++		e := x.edges.wide[v.wideID()]
++		return link{e.to, e.board, e.walk}
++	}
++	event := int(v.to)
++	trip := x.eventTrips[event]
++	return link{trip, event - x.offsets[trip], x.edges.paths[v.walk]}
++}
++func (o *trexOverlay) edgeAt(at int) int {
++	if o.implicit {
++		return at
++	}
++	if o.wide != nil {
++		return o.wide[at]
++	}
++	return int(o.edges[at])
++}
++func (o *trexOverlay) length() int {
++	if o.implicit {
++		return o.implicitCount
++	}
++	if o.wide != nil {
++		return len(o.wide)
++	}
++	return len(o.edges)
++}
++func (o *trexOverlay) capacity() int {
++	if o.wide != nil {
++		return cap(o.wide)
++	}
++	return cap(o.edges)
++}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_customization.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_customization.go
+@@ -70,7 +70,7 @@
+ 	for i, n := range nodes {
+ 		last := exit
+ 		if i+1 < len(nodes) {
+-			last = x.edges[nodes[i+1].edge].exit
++			last = x.edgeAt(nodes[i+1].edge).exit
+ 		}
+ 		if last < n.board || last >= len(x.base.trips[n.trip].cs) {
+ 			return ids, fmt.Errorf("T-REX internal: invalid witness segment")
+@@ -88,7 +88,7 @@
+ 		if i+1 < len(nodes) {
+ 			id := nodes[i+1].edge
+ 			ids = append(ids, id)
+-			if e := appendWalk(x.edges[id].walk, at); e != nil {
++			if e := appendWalk(x.edgeAt(id).walk, at); e != nil {
+ 				return ids, e
+ 			}
+ 		} else if e := appendWalk(egress, at); e != nil {
+@@ -268,15 +268,16 @@
+ 				if e := x.tick(ctx); e != nil {
+ 					return e
+ 				}
+-				for _, id := range x.byEvent[s.trip][p] {
++				row := x.byEvent[s.trip][p]
++				for id := row.begin; id < row.end; id++ {
+ 					if e := x.tick(ctx); e != nil {
+ 						return e
+ 					}
+ 					if int(x.ranks[id]) < level {
+ 						continue
+ 					}
+-					edge := x.edges[id]
+-					if e := enqueue(&next, edge.to, edge.board, id, s.node); e != nil {
++					edge := x.edgeTarget(id)
++					if e := enqueue(&next, edge.trip, edge.board, id, s.node); e != nil {
+ 						return e
+ 					}
+ 				}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_diagnostic.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_diagnostic.go
+@@ -23,7 +23,7 @@
+ 	s := x.snap
+ 	out := TREXDiagnostic{Profile: s.Profile, Complete: s.Complete, Error: s.Error,
+ 		Config: s.Config, Stats: s.Stats, ClosureDiameter: s.ClosureDiameter,
+-		RetainedTransfers: len(x.edges), RetainedWitnesses: x.proofs.count,
++		RetainedTransfers: x.edgeCount(), RetainedWitnesses: x.proofs.count,
+ 		PartitionStops: len(s.Partition.Cells), WalkingComponents: s.Partition.Components,
+ 		Phases: make(map[string]TREXPhase, len(s.Phases))}
+ 	if s.WalkingClosureLimit != nil {
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_partition.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_partition.go
+@@ -4,6 +4,7 @@
+ 	"context"
+ 	"fmt"
+ 	"sort"
++	"unsafe"
+ )
+ 
+ // Walking weak components are indivisible even for directed footpaths. Recursive
+@@ -185,21 +186,29 @@
+ func (x *TREXIndex) buildTREXOverlays(ctx context.Context) error {
+ 	n := x.offsets[len(x.offsets)-1]
+ 	for level := 0; level <= x.cfg.Levels; level++ {
+-		o := trexOverlay{starts: make([]int, n+1)}
++		o := trexOverlay{starts: make([]int, n+1), implicit: level == 0}
++		// A complete level-zero overlay is the identity sequence 0..m-1.
++		// Higher overlays use compact IDs when all IDs fit, else native ints.
++		nativeIDs := uint64(x.edgeCount()) > uint64(1<<32)
+ 		if x.cfg.ExactStorage {
+ 			count, e := x.exactOverlayCapacity(ctx, level)
+ 			if e != nil {
+ 				return e
+ 			}
+-			if count > 0 {
+-				o.edges = make([]int, 0, count)
++			if count > 0 && !o.implicit {
++				if nativeIDs {
++					o.wide = make([]int, 0, count)
++				} else {
++					o.edges = make([]uint32, 0, count)
++				}
+ 			}
+ 		}
+ 		for ti, t := range x.base.trips {
+ 			for i := range t.cs {
+ 				event := x.offsets[ti] + i
+-				o.starts[event] = len(o.edges)
+-				for _, id := range x.byEvent[ti][i] {
++				o.starts[event] = o.length()
++				row := x.byEvent[ti][i]
++				for id := row.begin; id < row.end; id++ {
+ 					if e := x.tick(ctx); e != nil {
+ 						return e
+ 					}
+@@ -207,20 +216,30 @@
+ 						if x.snap.Stats.OverlayEntries == x.cfg.Limits.MaxOverlayEntries {
+ 							return fmt.Errorf("T-REX incomplete: overlay entry budget exhausted")
+ 						}
+-						if x.cfg.ExactStorage && len(o.edges) == cap(o.edges) {
++						if x.cfg.ExactStorage && !o.implicit && o.length() == o.capacity() {
+ 							return fmt.Errorf("T-REX internal: exact overlay count/fill mismatch")
+ 						}
+-						o.edges = append(o.edges, id)
++						if o.implicit {
++							o.implicitCount++
++						} else if nativeIDs {
++							o.wide = append(o.wide, id)
++						} else {
++							o.edges = append(o.edges, uint32(id))
++						}
+ 						x.snap.Stats.OverlayEntries++
+ 					}
+ 				}
+ 			}
+ 		}
+-		o.starts[n] = len(o.edges)
+-		if x.cfg.ExactStorage && len(o.edges) != cap(o.edges) {
++		o.starts[n] = o.length()
++		if x.cfg.ExactStorage && !o.implicit && o.length() != o.capacity() {
+ 			return fmt.Errorf("T-REX internal: exact overlay count/fill mismatch")
+ 		}
+-		x.snap.Stats.Storage.OverlayCapacity += cap(o.edges)
++		x.snap.Stats.Storage.OverlayCapacity += o.capacity()
++		if o.implicit {
++			x.snap.Stats.Storage.ImplicitOverlayEntries += o.implicitCount
++		}
++		x.snap.Stats.Storage.OverlayBytes += uint64(cap(o.edges))*4 + uint64(cap(o.wide))*uint64(unsafe.Sizeof(int(0)))
+ 		x.overlays = append(x.overlays, o)
+ 		succ := make([]int, n)
+ 		for ti, t := range x.base.trips {
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_proofs.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_proofs.go
+@@ -88,18 +88,18 @@
+ 		return bad()
+ 	}
+ 	for _, id := range p.ids[:p.count] {
+-		if id < 0 || id >= len(x.edges) {
++		if id < 0 || id >= x.edgeCount() {
+ 			return bad()
+ 		}
+ 	}
+-	first := x.edges[p.ids[0]]
++	first := x.edgeAt(p.ids[0])
+ 	source := first.from
+ 	if source < 0 || source >= len(x.base.trips) || p.board < 0 || p.board >= len(x.base.trips[source].cs) {
+ 		return bad()
+ 	}
+ 	node := &trexNode{trip: source, board: p.board, edge: -1}
+ 	for _, id := range p.ids[:p.count] {
+-		e := x.edges[id]
++		e := x.edgeAt(id)
+ 		if e.from != node.trip || e.exit < node.board || e.exit >= len(x.base.trips[node.trip].cs) || e.to < 0 || e.to >= len(x.base.trips) || e.board < 0 || e.board >= len(x.base.trips[e.to].cs) {
+ 			return bad()
+ 		}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_query.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_query.go
+@@ -301,23 +301,25 @@
+ 			}
+ 			o := x.overlays[level]
+ 			begin, end := o.starts[x.offsets[s.trip]+s.begin], o.starts[x.offsets[s.trip]+s.end]
+-			for _, id := range o.edges[begin:end] {
++			for oi := begin; oi < end; oi++ {
++				id := o.edgeAt(oi)
+ 				if err = charge(); err != nil {
+ 					return
+ 				}
+ 				out.Stats.TransferVisits++
+-				edge := x.edges[id]
++				edge := x.edgeTarget(id)
+ 				if roleCaps && (edge.walk.Duration > q.Walking.Transfer || edge.walk.To == q.Destination) {
+ 					continue
+ 				}
+ 				if mode == "rank-test" {
+ 					out.Stats.RankTests++
+-					if int(x.ranks[id]) < relevant(x.base.trips[edge.from].cs[edge.exit].To) {
++					source := x.edgeAt(id)
++					if int(x.ranks[id]) < relevant(x.base.trips[source.from].cs[source.exit].To) {
+ 						out.Stats.RankRejected++
+ 						continue
+ 					}
+ 				}
+-				if err = enqueue(&next, edge.to, edge.board, id, s.node, nil); err != nil {
++				if err = enqueue(&next, edge.trip, edge.board, id, s.node, nil); err != nil {
+ 					return
+ 				}
+ 			}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_storage.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_storage.go
+@@ -4,29 +4,48 @@
+ 	"context"
+ 	"fmt"
+ 	"github.com/ertyoii/transit-routing-go/paper"
++	"unsafe"
+ )
+ 
+ // Count work is charged to the same construction-work budget as fill work.
+ // ExactStorage is opt-in: incomplete count passes retain no transfer prefix.
+ // Complete constructions retain the same ordered IDs and witnesses.
+ type TREXStorageWork struct {
+-	TransferCountWork      int  `json:"transfer_count_work"`
+-	CountedTransfers       int  `json:"counted_transfers"`
+-	CountSameLineDiscarded int  `json:"count_same_line_discarded"`
+-	TransferCountComplete  bool `json:"transfer_count_complete"`
+-	OverlayCountWork       int  `json:"overlay_count_work"`
+-	EdgeCapacity           int  `json:"edge_capacity"`
+-	RankCapacity           int  `json:"rank_capacity"`
+-	AdjacencyCapacity      int  `json:"adjacency_capacity"`
+-	OverlayCapacity        int  `json:"overlay_capacity"`
++	TransferCountWork      int    `json:"transfer_count_work"`
++	CountedTransfers       int    `json:"counted_transfers"`
++	CountSameLineDiscarded int    `json:"count_same_line_discarded"`
++	TransferCountComplete  bool   `json:"transfer_count_complete"`
++	OverlayCountWork       int    `json:"overlay_count_work"`
++	EdgeCapacity           int    `json:"edge_capacity"`
++	RankCapacity           int    `json:"rank_capacity"`
++	AdjacencyCapacity      int    `json:"adjacency_capacity"`
++	OverlayCapacity        int    `json:"overlay_capacity"`
++	ImplicitOverlayEntries int    `json:"implicit_overlay_entries"`
++	EdgeBytes              uint64 `json:"edge_bytes"`
++	PathPoolBytes          uint64 `json:"path_pool_bytes"`
++	NativeEscapeBytes      uint64 `json:"native_escape_bytes"`
++	EventTripBytes         uint64 `json:"event_trip_bytes"`
++	EventRangeBytes        uint64 `json:"event_range_bytes"`
++	OverlayBytes           uint64 `json:"overlay_bytes"`
++	ChunkHeaderBytes       uint64 `json:"chunk_header_bytes"`
++	RankBytes              uint64 `json:"rank_bytes"`
+ }
+ 
+ func (x *TREXIndex) buildTREXTransfers(ctx context.Context) error {
+-	x.byEvent = make([][][]int, len(x.base.trips))
++	x.byEvent = make([][]trexEventRange, len(x.base.trips))
+ 	x.offsets = make([]int, len(x.base.trips)+1)
+ 	for ti, t := range x.base.trips {
+ 		x.offsets[ti+1] = x.offsets[ti] + len(t.cs)
+-		x.byEvent[ti] = make([][]int, len(t.cs))
++		x.byEvent[ti] = make([]trexEventRange, len(t.cs))
++	}
++	x.eventTrips = make([]int, x.offsets[len(x.offsets)-1])
++	for ti, t := range x.base.trips {
++		for i := range t.cs {
++			if e := ctx.Err(); e != nil {
++				return e
++			}
++			x.eventTrips[x.offsets[ti]+i] = ti
++		}
+ 	}
+ 	if x.cfg.ExactStorage {
+ 		counts := make([]int, x.offsets[len(x.offsets)-1])
+@@ -54,9 +73,10 @@
+ 		if e = ctx.Err(); e != nil {
+ 			return e
+ 		}
+-		x.edges = make([]trexEdge, 0, count)
++		x.edges.expected = count
+ 		x.ranks = make([]uint8, 0, count)
+-		adjacency := make([]int, count)
++		// IDs are emitted in event-major order. Retain only event ranges,
++		// never a second adjacency ID for every transfer.
+ 		offset := 0
+ 		for ti, t := range x.base.trips {
+ 			for i := range t.cs {
+@@ -64,35 +84,61 @@
+ 					return e
+ 				}
+ 				n := counts[x.offsets[ti]+i]
+-				if n > 0 {
+-					x.byEvent[ti][i] = adjacency[offset : offset : offset+n]
+-				}
++				x.byEvent[ti][i] = trexEventRange{offset, offset}
+ 				offset += n
+ 			}
+ 		}
+ 	}
++	builder := trexEdgeBuilder{store: &x.edges}
+ 	e := x.scanTREXTransfers(ctx, func(ti, i, to, board int, p *paper.Path) error {
+-		if len(x.edges) >= x.cfg.Limits.MaxTransfers {
++		if x.edgeCount() >= x.cfg.Limits.MaxTransfers {
+ 			return fmt.Errorf("T-REX incomplete: transfer budget exhausted")
+ 		}
+-		if x.cfg.ExactStorage && (len(x.edges) == cap(x.edges) || len(x.byEvent[ti][i]) == cap(x.byEvent[ti][i])) {
+-			return fmt.Errorf("T-REX internal: exact transfer count/fill mismatch")
++		id := x.edgeCount()
++		row := &x.byEvent[ti][i]
++		if x.cfg.ExactStorage {
++			if id >= x.edges.expected || row.end != id {
++				return fmt.Errorf("T-REX internal: exact transfer count/fill mismatch")
++			}
++		} else if row.begin == row.end {
++			row.begin, row.end = id, id
+ 		}
+-		id := len(x.edges)
+-		x.edges = append(x.edges, trexEdge{ti, i, to, board, p})
+-		x.byEvent[ti][i] = append(x.byEvent[ti][i], id)
++		if row.end != id {
++			return fmt.Errorf("T-REX internal: transfer event order mismatch")
++		}
++		x.edges.append(builder.pack(trexEdge{ti, i, to, board, p}, x.offsets[ti]+i, x.offsets[to]+board))
++		row.end++
+ 		x.ranks = append(x.ranks, 0)
+ 		x.snap.Stats.Transfers++
+ 		return nil
+ 	})
+-	x.snap.Stats.Storage.EdgeCapacity = cap(x.edges)
+-	x.snap.Stats.Storage.RankCapacity = cap(x.ranks)
+-	for _, rows := range x.byEvent {
+-		for _, row := range rows {
+-			x.snap.Stats.Storage.AdjacencyCapacity += cap(row)
++	if !x.cfg.ExactStorage {
++		// Empty events emit no callback. Normalize their zero-length ranges to
++		// the same event-major boundary used by counted storage and overlays.
++		at := 0
++		for _, rows := range x.byEvent {
++			for i := range rows {
++				if rows[i].begin == rows[i].end {
++					rows[i] = trexEventRange{at, at}
++				} else {
++					at = rows[i].end
++				}
++			}
+ 		}
+ 	}
+-	if e == nil && x.cfg.ExactStorage && len(x.edges) != x.snap.Stats.Storage.CountedTransfers {
++	x.snap.Stats.Storage.EdgeCapacity = x.edges.capacity()
++	x.snap.Stats.Storage.RankCapacity = cap(x.ranks)
++	// AdjacencyCapacity is zero: event-major ranges make adjacency IDs implicit.
++	x.snap.Stats.Storage.EdgeBytes = uint64(x.edges.capacity()) * uint64(unsafe.Sizeof(trexPackedEdge{}))
++	x.snap.Stats.Storage.PathPoolBytes = uint64(cap(x.edges.paths)) * uint64(unsafe.Sizeof((*paper.Path)(nil)))
++	x.snap.Stats.Storage.NativeEscapeBytes = uint64(cap(x.edges.wide)) * uint64(unsafe.Sizeof(trexEdge{}))
++	x.snap.Stats.Storage.EventTripBytes = uint64(cap(x.eventTrips)) * uint64(unsafe.Sizeof(int(0)))
++	for _, rows := range x.byEvent {
++		x.snap.Stats.Storage.EventRangeBytes += uint64(cap(rows)) * uint64(unsafe.Sizeof(trexEventRange{}))
++	}
++	x.snap.Stats.Storage.ChunkHeaderBytes = uint64(cap(x.edges.chunks)) * uint64(unsafe.Sizeof([]trexPackedEdge(nil)))
++	x.snap.Stats.Storage.RankBytes = uint64(cap(x.ranks))
++	if e == nil && x.cfg.ExactStorage && x.edgeCount() != x.snap.Stats.Storage.CountedTransfers {
+ 		return fmt.Errorf("T-REX internal: exact transfer count/fill mismatch")
+ 	}
+ 	return e

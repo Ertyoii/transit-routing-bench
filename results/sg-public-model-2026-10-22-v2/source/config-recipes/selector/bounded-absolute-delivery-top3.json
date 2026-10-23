@@ -1,0 +1,20 @@
+{
+  "max_candidates": 1024,
+  "max_subsets": 200000,
+  "bounded": {
+    "min_transfer_seconds": 0,
+    "max_transfer_seconds": 900,
+    "min_extra_walk_weight": 0,
+    "max_extra_walk_weight": 4,
+    "objective": "absolute",
+    "limits": [
+      3
+    ],
+    "distinct_patterns": false,
+    "nested": false,
+    "max_critical_points": 100000,
+    "max_work": 50000000,
+    "max_matrix_bytes": 67108864,
+    "exact_subset_search": false
+  }
+}

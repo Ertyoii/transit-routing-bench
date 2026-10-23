@@ -1,0 +1,905 @@
+{
+  "files": {
+    ".gitignore": {
+      "bytes": 42,
+      "sha256": "9974b0356fd24da7a600b197652a8bad9922f7b41f3b61dd8281f5043fdb61c6"
+    },
+    "LICENSE": {
+      "bytes": 1064,
+      "sha256": "3c524d60abb36a8a9d25782594ea2f8665f56b5811b38c53ff62754b96f49da7"
+    },
+    "THIRD_PARTY_NOTICES.md": {
+      "bytes": 2105,
+      "sha256": "e1810956e71ee8069e84c56d9061dd4e6c7e6de1ab2f85fb54a0206343e1fe67"
+    },
+    "cmd/candidateprobe/main.go": {
+      "bytes": 3384,
+      "sha256": "b13aa36ee8853b8a2b3d3034960f35af0af1148454adca23a67334f6d1550800"
+    },
+    "cmd/corechbench/main.go": {
+      "bytes": 16315,
+      "sha256": "d13df6129ec53167ae548a19a3d2d44b628eb7ed624efd1dbfd611881010ba73"
+    },
+    "cmd/csabench/main.go": {
+      "bytes": 11568,
+      "sha256": "0958a8df6bff9f20c8caab0be6c011a88ddfd60663fffcbc206c63b8709e5b24"
+    },
+    "cmd/familybench/adapters.go": {
+      "bytes": 8439,
+      "sha256": "487acca7ba40008912d4b2fd5a0f470d785939adac117f5c7f792f3de15b83a1"
+    },
+    "cmd/familybench/main.go": {
+      "bytes": 24344,
+      "sha256": "8d7fa892996bee135e223be14e7db82290f52ffdc4b1cbab4260311318d0891c"
+    },
+    "cmd/familybench/preparation_config.go": {
+      "bytes": 3683,
+      "sha256": "d7ac3239f83033d5a68e3966de6faadc8839160f216fb585cfde170baa05ebe6"
+    },
+    "cmd/familybench/preparation_process_test.go": {
+      "bytes": 13718,
+      "sha256": "7c43e3f73d66a9999cec0f5f8cb58a1b7790c86aaa7ada595b7986b7b1f2faa8"
+    },
+    "cmd/familybench/scoped.go": {
+      "bytes": 8625,
+      "sha256": "c9d95e90913a9e205bb83db07a9dda705b3342931995a2591ec34b78fb1f088a"
+    },
+    "cmd/familybench/scoped_qualification_v2.go": {
+      "bytes": 5534,
+      "sha256": "ecfa79384e45ef698ed5ce07c5f17e5d7029ea2f54b3fc3bfb920d74e2ba1e67"
+    },
+    "cmd/familybench/scoped_qualification_v2_test.go": {
+      "bytes": 8973,
+      "sha256": "26ac55886c623a3b1285010d2224b614a9d7047499978e0a6c52dc2db9bcbf75"
+    },
+    "cmd/familybench/scoped_test.go": {
+      "bytes": 8451,
+      "sha256": "709cf977aa67e7fe3f00dd14a45d41f137d4a95f3b06312a9e1f7301cc3bb83d"
+    },
+    "cmd/familybench/stream.go": {
+      "bytes": 3670,
+      "sha256": "ca7a3f911ef4f979df65e1af34cdf3172fe4391648501238c4d5e031ced97c26"
+    },
+    "cmd/familybench/stream_test.go": {
+      "bytes": 5818,
+      "sha256": "6664c846d36f5c6b355661aa1db9b6ad46d1385a6ca9307b853854256e2a1b09"
+    },
+    "cmd/fixturecheck/main.go": {
+      "bytes": 1217,
+      "sha256": "cc7c9fb834ac1869ed75606991f94448aeea6854846523b461863ad461f1fc29"
+    },
+    "cmd/flashbench/main.go": {
+      "bytes": 14413,
+      "sha256": "b1366f5b4bbd53c3a1974be55aa0e330eafb81516d3d9e72231a064b590f5ff8"
+    },
+    "cmd/gtfsimport/main.go": {
+      "bytes": 2363,
+      "sha256": "1c8a5c0acecaa45aa478d9ba14f45d00b7b06d160c9d4853d5af06c32b540d86"
+    },
+    "cmd/legproof/main.go": {
+      "bytes": 2938,
+      "sha256": "4d3141341db58ec5fddf3af1c6c2527c72a128100994606fad1bf757c6d336a9"
+    },
+    "cmd/mcbench/main.go": {
+      "bytes": 13402,
+      "sha256": "ab87e794a99fce1972da75987ed67e55865c1739b2a328e924ac019d521dbab9"
+    },
+    "cmd/profilebench/main.go": {
+      "bytes": 14258,
+      "sha256": "96847b3062f5d428f24a56ac8cbf0263dedae2ad59743c908db98f5958d5c2e2"
+    },
+    "cmd/querygen/main.go": {
+      "bytes": 4471,
+      "sha256": "5efe417655b16c49295cd70233ab2eb0938dfdea2b750eb1fb38cc74cb14467b"
+    },
+    "cmd/routebench/main.go": {
+      "bytes": 23117,
+      "sha256": "cff55f94648df68165e546e40ba150bc35f215e846fe33337fe95c7f0f738f80"
+    },
+    "cmd/sourcehash/main.go": {
+      "bytes": 325,
+      "sha256": "54aa06b1a505d4f9a1d575f4e0db19378e6e216e93fbc3e8f38a81eda7ad2c5b"
+    },
+    "cmd/stpbench/main.go": {
+      "bytes": 20471,
+      "sha256": "050a49dc4f017f33daf801aea7493b3cfa2d0abee819d5469de9001452b324b8"
+    },
+    "cmd/tadbench/main.go": {
+      "bytes": 13294,
+      "sha256": "0fb3c50a02a1aa5b259528e907e05768b63875d60f5c838913dfd66541d7a405"
+    },
+    "cmd/tbbench/main.go": {
+      "bytes": 14224,
+      "sha256": "ac55952fba14a9ec02e19748d5ea498887c29da7bb5d4d53963470ed0776e89d"
+    },
+    "cmd/tpbench/main.go": {
+      "bytes": 15751,
+      "sha256": "7b33816e2aed792596009ebc6221605dc1d07460b0cf63fd4d9885c0bc5ead42"
+    },
+    "cmd/transitbench/main.go": {
+      "bytes": 2488,
+      "sha256": "0e0950ca9482c2ec16d605af769be8e84f2a6b27a109ab22faa27c841ed9d627"
+    },
+    "cmd/trexbench/main.go": {
+      "bytes": 17931,
+      "sha256": "7b6f75a3ff15f8d85241fbfcb7f3e6d8652803fcf416e6cc1609ee8708f30383"
+    },
+    "cmd/ultrabench/main.go": {
+      "bytes": 14937,
+      "sha256": "7c395ce423a6c4988501c8f66b6396bd138892b046d2713534b812031dce07a2"
+    },
+    "cmd/walkingparity/main.go": {
+      "bytes": 8928,
+      "sha256": "fa27b0853641b8c42eb36d4a8ca131e9cfddf6879b96cbeca4bd789acf137614"
+    },
+    "evaluation/quality.go": {
+      "bytes": 3781,
+      "sha256": "a494c95bd877e47cecfcb2237131b5367f6cc05091ba494b0a4dce76e011a8bf"
+    },
+    "evaluation/quality_test.go": {
+      "bytes": 1527,
+      "sha256": "14a76556ca710ff026b4156c16131dc5656c4b67cd481eca51ea5b8bf8140ab9"
+    },
+    "experiment/artifact.go": {
+      "bytes": 2272,
+      "sha256": "79c65a96ac4690bd44c9527cf068fecbfcb754e56dc5ea04fd27b2a35a0ac0a2"
+    },
+    "experiment/provenance.go": {
+      "bytes": 1743,
+      "sha256": "4f586c0ad8e8b5bb08b9345bd46c5f1bb439c4bc640409b19ed9ee045dfc7bd1"
+    },
+    "experiment/routing_lock.go": {
+      "bytes": 2868,
+      "sha256": "88d1e345cc851782bf92bd6206828824b2e343f244747fe8c8f606aff1464c80"
+    },
+    "experiment/routing_lock_test.go": {
+      "bytes": 1542,
+      "sha256": "e6c67ffe3e96f697242788108aec7a93777dfb612a28c49407fdc6ca7a5eaacb"
+    },
+    "experiment/run.go": {
+      "bytes": 10521,
+      "sha256": "3ce9a085303aeb0df5bbfdf8f7ddfa6e6950880e8106e9de21ce54dc5031d52c"
+    },
+    "experiment/run_test.go": {
+      "bytes": 2861,
+      "sha256": "38e29b000ebeb7e5c40bc1f0743561111032fe1887f79578593bfdf0c7dca499"
+    },
+    "experiment/source.go": {
+      "bytes": 1237,
+      "sha256": "c16e3759ff7104f7bb019d7ec35d5eadef2668e175580a6c2dc040169ee94ccb"
+    },
+    "experiment/usage_other.go": {
+      "bytes": 190,
+      "sha256": "50b06e8ebddf1837efe833e423587143ab0364f19f7b93b48c16963542f1a017"
+    },
+    "experiment/usage_unix.go": {
+      "bytes": 727,
+      "sha256": "7a63738d61687622005b34ceb199087331881a279bc848d400b7a810c3e496e9"
+    },
+    "fixtures/load.go": {
+      "bytes": 2627,
+      "sha256": "fd72d599e7b2a8e7d7c0151d8672d80f696f9a583f92e2475af3a75fb0174869"
+    },
+    "fixtures/load_test.go": {
+      "bytes": 2228,
+      "sha256": "cce7f3932aaa02137b4da86f8bcdb61284ffa904aa22369c3da6d46cf800ef22"
+    },
+    "go.mod": {
+      "bytes": 119,
+      "sha256": "1c1ae75cae0672c99eaf3ccfccb20b444956fa848349b3dcd6e125698f54310e"
+    },
+    "oracle/enumerate.go": {
+      "bytes": 6891,
+      "sha256": "13158b27d8d247076f92d2d08476c839aa43d880ab68746c549640b62793845c"
+    },
+    "oracle/enumerate_test.go": {
+      "bytes": 9217,
+      "sha256": "33f36dec9fc7c342735e19146bf8e9fb4628f068bf68271b11cc8bc9551bf261"
+    },
+    "provenance/SOURCES.md": {
+      "bytes": 1626,
+      "sha256": "fcd457994a85b277e5649ce3c0f2dfa3b46e6976f49973a606f9bce5f062986e"
+    },
+    "provenance/notices/Vorld-LICENSE.txt": {
+      "bytes": 1082,
+      "sha256": "80200b42cb14b64e61bfc761612a8e04655f4964bb3a1452e19eb66645e60b91"
+    },
+    "provenance/notices/Vorld-NOTICE.md": {
+      "bytes": 2015,
+      "sha256": "66cb7eda469eb1240050c815f660b5a667594e2f6d9d27e03b46dadf52f24834"
+    },
+    "provenance/notices/flash-tb-reference-LICENSE.txt": {
+      "bytes": 1088,
+      "sha256": "d5baa7300225514cda71dc7d69c842572112380be743e30d467ec03a37d1837d"
+    },
+    "provenance/notices/tad-reference-LICENSE.txt": {
+      "bytes": 1088,
+      "sha256": "d5baa7300225514cda71dc7d69c842572112380be743e30d467ec03a37d1837d"
+    },
+    "provenance/notices/trex-reference-LICENSE.txt": {
+      "bytes": 1126,
+      "sha256": "078388c378316a6c2a9407399b06a01be7cabe282be532b3d0fdae5d0f10fbea"
+    },
+    "provenance/notices/ultra-reference-LICENSE.txt": {
+      "bytes": 1088,
+      "sha256": "d5baa7300225514cda71dc7d69c842572112380be743e30d467ec03a37d1837d"
+    },
+    "provenance/source-pins.json": {
+      "bytes": 8088,
+      "sha256": "dc613746c291051037e3563030accd4e9c1be9cda4ea1fbaa9ac5b62b3356bfb"
+    },
+    "regression/boundedreview/review_test.go": {
+      "bytes": 12795,
+      "sha256": "582fa6019563cb848e95ec1df7db9e3b8daef3df757d417589163779cc9f4fd0"
+    },
+    "regression/comparison/binding_test.go": {
+      "bytes": 4886,
+      "sha256": "8618b1a62f34af16ae0bbbf56493cf8465bd68506c7336d9e745e8a99969017b"
+    },
+    "regression/comparison/ranked_test.go": {
+      "bytes": 5150,
+      "sha256": "8f6c593a80aef1ba566b17caed9a4b35a0dcba51a8dbd92e7c8131ad1235070d"
+    },
+    "regression/corech/core_test.go": {
+      "bytes": 10944,
+      "sha256": "652a9ee5389d4c0a73d6b9226b4a9b2c4e40527be981209cd44138647842d44c"
+    },
+    "regression/csa/scan_test.go": {
+      "bytes": 11456,
+      "sha256": "6a33d741854ce620c3f9838867bcc736c8150f2edbf3ddf4e603c5b97945cbc5"
+    },
+    "regression/csa/stratified_test.go": {
+      "bytes": 2948,
+      "sha256": "fe7d6c19294c5f386aaadb2d45059ef780b74e0cec4e246394770783e199f0dd"
+    },
+    "regression/csa/topk_test.go": {
+      "bytes": 4924,
+      "sha256": "5e2c0fcee6148b26571ff0aaa815ceb4569dc951fed1531c604bf5bfabd0d117"
+    },
+    "regression/earlyreview/review_test.go": {
+      "bytes": 8050,
+      "sha256": "c9d17ef88f120e29e1cf298bb30aeb437825c5f8532101024274e236e7e40626"
+    },
+    "regression/gtfs/import_test.go": {
+      "bytes": 8253,
+      "sha256": "0ffcca1b8250c00b47f7bcc32bd34e73e75fb733834534d748b1b832e5046e72"
+    },
+    "regression/mcraptor/early_pruning_test.go": {
+      "bytes": 7462,
+      "sha256": "a7e6a2320641ab46cc09a96faa9352a18cf3b57988acf73054615f00a3e2ba49"
+    },
+    "regression/mcraptor/independent_spec_test.go": {
+      "bytes": 5833,
+      "sha256": "4273775c929fc7eb9689a3602cbf4b7a84689860217e1f9a9c2a8b240ac624d8"
+    },
+    "regression/mcraptor/local_walk_ties_test.go": {
+      "bytes": 1204,
+      "sha256": "7351ed10cbb91afdf22e55a90b96eae52302a02c69c635929f8d80d2616bbee8"
+    },
+    "regression/mcraptor/multicriteria_test.go": {
+      "bytes": 7843,
+      "sha256": "b5c0b5149a5e14fd02b85044b0b5dedc095cde8acc55e55053eb678e8c693c3e"
+    },
+    "regression/model/model_test.go": {
+      "bytes": 1471,
+      "sha256": "7728f0066fe70f969410cb9774550bac41127bdffdfa61095c565edd79f19905"
+    },
+    "regression/paper/baselines_test.go": {
+      "bytes": 12035,
+      "sha256": "828bf1a7682ad3a67b7141e30a47975e270cbde0437335c3edffc9f4bc7f0549"
+    },
+    "regression/paper/walking_bound_test.go": {
+      "bytes": 1789,
+      "sha256": "de3007978de4bb097d109999a5041a10187e36ad310faaed414b35b6c701d884"
+    },
+    "regression/presentation/rank_test.go": {
+      "bytes": 907,
+      "sha256": "2e1e843f8e9be7548a6ea97d85c7c2bf30f1845cdb89ed4db9e93e885efb7862"
+    },
+    "regression/profilequery/independent_spec_test.go": {
+      "bytes": 5837,
+      "sha256": "f3ff611bd3e4a445685c7584095a371b7d9b7ed598b3177b2f0977bea54f1421"
+    },
+    "regression/profilequery/profiles_test.go": {
+      "bytes": 12088,
+      "sha256": "56877ff26ab1334bbaea405854249360838e332f1ab5f93851888e61cfc5ed3c"
+    },
+    "regression/recommend/choices_test.go": {
+      "bytes": 10238,
+      "sha256": "f48fec51aa39d7ab7808e432abdede694b96198d55de7f7e59af9e7cf4069a88"
+    },
+    "regression/recommend/quality_test.go": {
+      "bytes": 7255,
+      "sha256": "4b9fbf1566389e2743595bd2fd094621ad696b7d46513bdbe6e8e48c20031e7e"
+    },
+    "regression/recommend/route_identity_test.go": {
+      "bytes": 859,
+      "sha256": "61a6eea1983e66a2ac7b3752d10189e1822d4c67fc9bd2e83b664898b3e1d416"
+    },
+    "regression/selection/reserved_test.go": {
+      "bytes": 1361,
+      "sha256": "9a080ee794bc326c8d0622de2f63836eb22793e12d5ea8f37c90449b21454abf"
+    },
+    "regression/selection/select_test.go": {
+      "bytes": 2188,
+      "sha256": "b21ef3aa2b80f31dd20cdfaa2e1b968a570bed6c77db7b4cf86a64e9f5942ef8"
+    },
+    "regression/strictjson/decode_test.go": {
+      "bytes": 675,
+      "sha256": "27f4ce0af157b182fe2df1fd62267d13a26301166e5a17724e62e2bd163fea66"
+    },
+    "regression/tad/dijkstra_test.go": {
+      "bytes": 10634,
+      "sha256": "fbd9a4b4fe4582dc86188031c5376f78a0d6c8e2f474a0ce6f14f008208bb4b8"
+    },
+    "regression/tad/independent_spec_test.go": {
+      "bytes": 5828,
+      "sha256": "db8cd112b1d82d3aac629a036bb39d76b98cf2657ec0d83e679a80cb228555d6"
+    },
+    "regression/tad/raw_graph_test.go": {
+      "bytes": 3511,
+      "sha256": "047205c8f47aefc9780aff369d4420b8c1257f8907452e8547cb4036f96dc0f2"
+    },
+    "regression/transfer/rules_test.go": {
+      "bytes": 2460,
+      "sha256": "28e666e04a64e4408d5eecd7924c757ba3bf68dc8a2dc0329e5a793565adf05c"
+    },
+    "regression/tripbased/bounded_walking_test.go": {
+      "bytes": 8716,
+      "sha256": "7303b53006ce14b3dcb4ac13036462debd42b7aaaf20a51ce3434faef4ca4684"
+    },
+    "regression/tripbased/flash_cap_test.go": {
+      "bytes": 1359,
+      "sha256": "8f23ae34c7c1b16e0107c3f8e8e1580c1d9a860e73546024f90c1a1f2e9526ec"
+    },
+    "regression/tripbased/flash_test.go": {
+      "bytes": 10711,
+      "sha256": "127560575ad33056f7c989f2a67ec387e09671c175b88163e0ac2a01e6a4bda0"
+    },
+    "regression/tripbased/independent_spec_test.go": {
+      "bytes": 5834,
+      "sha256": "52b658d9a4c809391800d6e22e31445596bff3cf5758f18295970bdf079da3fd"
+    },
+    "regression/tripbased/patterns_test.go": {
+      "bytes": 9881,
+      "sha256": "cb0d12ba17d0a6d7d32737a0d29de80bd8f3528e7b9323656d7e9f47caed4984"
+    },
+    "regression/tripbased/scalable_next_test.go": {
+      "bytes": 4942,
+      "sha256": "3b4e8c01fa4489df106cb78d6c94540ea51a1a2d7793df1c55d547fe65768103"
+    },
+    "regression/tripbased/scalable_test.go": {
+      "bytes": 9214,
+      "sha256": "9474d3fc4371e60e30110c852d3079e849b700f3ff5b036f42641f2dc02ad3d7"
+    },
+    "regression/tripbased/scalable_v3_test.go": {
+      "bytes": 4923,
+      "sha256": "2c62ed6f8467cc2aaacec27ca16731417545acef77f2e9f12d899c243d9d0115"
+    },
+    "regression/tripbased/scalable_v4_test.go": {
+      "bytes": 7995,
+      "sha256": "01e80459f4c0007ec32c7c36e4423d28ed1da19b97610c6ddef69c423de705b7"
+    },
+    "regression/tripbased/trex_test.go": {
+      "bytes": 10675,
+      "sha256": "70146ef3c89f044d635984117e3d8cf0ebb716a4baf74271401ca8d4f31518c3"
+    },
+    "regression/tripbased/trex_witness_retention_test.go": {
+      "bytes": 1782,
+      "sha256": "ff34c46db8423e32282a4d86391017e7eb518eb56643436056b0f298922e6d58"
+    },
+    "regression/tripbased/tripbased_test.go": {
+      "bytes": 9769,
+      "sha256": "c1f0eaf7cda2b8e795aceba37c2858d4a0d93afc6a9832d798b857c6a7cca14e"
+    },
+    "regression/ultra/grouped_test.go": {
+      "bytes": 4068,
+      "sha256": "7fb3530feea8b27125ee54295ca5b7cf10f9cbf1eb07efd737587045061a691c"
+    },
+    "regression/ultra/reuse_adversarial_test.go": {
+      "bytes": 1350,
+      "sha256": "fa6d362d861c91812a4923e79ee7c1af9d86d179eaba0e30e3cd640a5d2f251f"
+    },
+    "regression/ultra/reuse_test.go": {
+      "bytes": 4924,
+      "sha256": "7481fdbb8be7f564f5b2597f5b326e6fd0ae09b6f903855767b2f860677326d6"
+    },
+    "regression/ultra/review_regression_test.go": {
+      "bytes": 2173,
+      "sha256": "d44b9ccd65fb72a38855c1b67353c3948c1035ecbd1d0f450502fe420aa7b7cd"
+    },
+    "regression/ultra/ultra_test.go": {
+      "bytes": 13027,
+      "sha256": "3517bfc6af5f5e835e94bd17249b455b233d6e8db99813a5e448735a9284d1f5"
+    },
+    "regression/validate/journey_test.go": {
+      "bytes": 4216,
+      "sha256": "bda60acc2a14dfd52f80553b2844d786842432a684f3a0c0d7e9c9dda541a4df"
+    },
+    "regression/walking/independent_test.go": {
+      "bytes": 3466,
+      "sha256": "9971f3b10b1e72e9693460529f047ae74ff5e9df9e82268f3cf270e2c9b1d705"
+    },
+    "routing.lock.json": {
+      "bytes": 11531,
+      "sha256": "76fd9ddcf40d08bf235e24f8d8b498d27361cce51c596e82b7c9b591e4a9c3a4"
+    },
+    "scripts/build.sh": {
+      "bytes": 795,
+      "sha256": "10e6b0bc1e73443e66c4975fe839d456c5e0d459bdebd28b0d15a1736259a25a"
+    },
+    "scripts/reproduce-checkpoint.py": {
+      "bytes": 3990,
+      "sha256": "46695a3d3dac23cb992b871535c699e123d2189a825bbd0e5d2a7fb38b3b0f03"
+    },
+    "scripts/reproduce-checkpoint.sh": {
+      "bytes": 125,
+      "sha256": "f714baa1168c7c1d345fccac8add694a2f324a18962e1a6e5327d562c4d8fb2a"
+    },
+    "testdata/LICENSE.synthetic.txt": {
+      "bytes": 443,
+      "sha256": "f19676686dd1eade85fd0fb4b14961c7e46676d5671f546d7ac95a0a0a4c634b"
+    },
+    "testdata/README.md": {
+      "bytes": 184,
+      "sha256": "64b8cf93430de009794f8c469e328f8e3c7fae8cc9882315721afd48b5f2ed42"
+    },
+    "testdata/scoped-config/flash.json": {
+      "bytes": 538,
+      "sha256": "21c963b0dcdc3384d74fde06e44c3190e5ffc8fd162a55cecc7d0737cb01a069"
+    },
+    "testdata/scoped-config/tb.json": {
+      "bytes": 134,
+      "sha256": "19fd97b6efe07d872c1a564d91c78c63f1141122b67a1b14362efe6b3e560497"
+    },
+    "testdata/scoped-config/tp-partial.json": {
+      "bytes": 1201,
+      "sha256": "0aa223f596aab387ca4ade8b06065d7e749c8f27d531a1bc9e4313e75dda18e0"
+    },
+    "testdata/scoped-config/tp-source-domain.json": {
+      "bytes": 1550,
+      "sha256": "00d534b49f5437570bfb9d3ffd9327fdf5f32b4c37c53a717390bec29365b397"
+    },
+    "testdata/scoped-config/tp.json": {
+      "bytes": 1202,
+      "sha256": "47f8d790d0bf7a43a728bf87b20404dbf5d76394d012c780df43d7eebc3d2b5c"
+    },
+    "testdata/scoped-config/trex-fixed-cap-defined-probe.json": {
+      "bytes": 722,
+      "sha256": "4d5ec5277f78cffd52334c747a16ccb66216fb38b04a7652ea0d083bef7c04ac"
+    },
+    "testdata/scoped-config/trex.json": {
+      "bytes": 576,
+      "sha256": "39c2faacdaadb625932d9c0322e60a860764350154966fdecd35f76bc8c68fdf"
+    },
+    "testdata/scoped-config/ultra-control.json": {
+      "bytes": 503,
+      "sha256": "fb4999be5147b5826b9b55032c36781fc819260c8cf930504c78522950e8c084"
+    },
+    "testdata/scoped-config/ultra-subset.json": {
+      "bytes": 610,
+      "sha256": "b6ff794414663ee45faed1bfd27923153239215320a65309fda74171ebc09004"
+    },
+    "testdata/scoped.json": {
+      "bytes": 2631,
+      "sha256": "d960df4a93d8c73d4edc8dd505ee3c6cd97d9a968c2e9a27a0d89a24d85e5c78"
+    },
+    "testdata/scoped.manifest.json": {
+      "bytes": 565,
+      "sha256": "341f30a3f6279c00747ac6b6f4248ec7d051fdfd1e444b45920c2c2b25ec441e"
+    },
+    "testdata/tiny.json": {
+      "bytes": 2615,
+      "sha256": "82e5fc2cbdb6460605599ba3da9d59b04c98825a977101e5a96dfa5e7fbef5d7"
+    },
+    "testdata/tiny.manifest.json": {
+      "bytes": 512,
+      "sha256": "2704c6442a35a4fd06861644e3828926b40a87be7302f06229715d6a99006919"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/LICENSE": {
+      "bytes": 1064,
+      "sha256": "3c524d60abb36a8a9d25782594ea2f8665f56b5811b38c53ff62754b96f49da7"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/THIRD_PARTY_NOTICES.md": {
+      "bytes": 1979,
+      "sha256": "6016bae242130d6a43b111a0457427b43f047f4bd0aa607cccda2000577bce0b"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/comparison/binding.go": {
+      "bytes": 784,
+      "sha256": "4fd42d34b858963eae916a9128ccdadea94d3e9ce9f4e7d98ff86f22b7f40b9a"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/comparison/ranked.go": {
+      "bytes": 3413,
+      "sha256": "8449c35c043726c0227e96a6b95a00e73d55aa7a93888b0d923fb9c036fc54a6"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/corech/core.go": {
+      "bytes": 10899,
+      "sha256": "ba0e68aba190cdea80b708895687b5bf4461accc35187159af399023e3576681"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/corech/query.go": {
+      "bytes": 4904,
+      "sha256": "55b98ea5d0fa4bca7702d30b017d85a266e50023af6b587a65cddcb3177e672f"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/csa/bounds.go": {
+      "bytes": 2458,
+      "sha256": "ff1126448a2113d83eaf58a2d92c362d2babecfbe89c3c01084937b480e02b29"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/csa/scan.go": {
+      "bytes": 15538,
+      "sha256": "6954115220c25ca7adef3b308b872faa0b7cd1830dc369e6d9cb1b7ccd26f0cd"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/csa/stratified.go": {
+      "bytes": 4062,
+      "sha256": "b3c14867b7b360f20dfefd983cf4ce56a39ab4dd6de542bb8d16a2145aa095a2"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/csa/topk.go": {
+      "bytes": 3132,
+      "sha256": "66920572e1d2c86de18ed4b336007452f2d562702738dee02eac6522a1934a6e"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/csa/trace.go": {
+      "bytes": 1786,
+      "sha256": "076300f8a651677e1b75f6074b932267ca08c71dce8db3e6df7e54badbb140e9"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/eacsa/scan.go": {
+      "bytes": 4448,
+      "sha256": "9c82785e51d311e66b36c463dcd2ecb3338f3747165e1f1b4c7def96936a9d06"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/gtfs/import.go": {
+      "bytes": 23214,
+      "sha256": "d2fb180f26394f35feae163ad83d53c2ffe8aee504dff4a0260cde2e13fa8584"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/internal/capverify/enumerate.go": {
+      "bytes": 7438,
+      "sha256": "a5b79d48444815f6042b592bd8aac0adce8a732bc10a676d923491155736b40c"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/internal/capverify/frontier.go": {
+      "bytes": 2268,
+      "sha256": "d381db7923af16899a3454be5e1440c306f5eb8e4c13f93c3e7e0d31cd45202f"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/internal/capverify/prepared.go": {
+      "bytes": 8587,
+      "sha256": "b8cc466e7a30faa55d910e37f99ca3122c00897674b06c3dc57852bcc1d8514c"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/internal/capverify/prepared_enumerate.go": {
+      "bytes": 7630,
+      "sha256": "0f8804ea88d2c4c29e51486ca83e9885eea86974715ff5847d4fbc37af8956d5"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/internal/capverify/shadow.go": {
+      "bytes": 1439,
+      "sha256": "affe1dff61ce1444e0055272d71bd569d66e71e3377a7bbb0d55104053261ac0"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/model/binding.go": {
+      "bytes": 2127,
+      "sha256": "0c9cbef951029a396931a7a8af204d1d34e8b5ce4777fee8d1c9d3d3d0379b0a"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/model/model.go": {
+      "bytes": 10778,
+      "sha256": "ff1ad33cb87e072171d4a4844d89b0e159773dacf9dd85b6c17979c5809f6a7d"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/model/query_validator.go": {
+      "bytes": 983,
+      "sha256": "a05147dc2d502100e4f9e8b90f9ec29742cffa6fb0f3ba846634c1b089810213"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/paper/node_arena.go": {
+      "bytes": 1218,
+      "sha256": "70dbf5f5133e7939beac7dd12e1dbd90b14200d9295f2f7e6740496c5b828241"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/paper/profile.go": {
+      "bytes": 9953,
+      "sha256": "96f9ed6c4ef844dd0e761bcc13f78064fbf5c3c61d440b44c2e952db687913fb"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/paper/walking_bound.go": {
+      "bytes": 5130,
+      "sha256": "5b1d0638fcdbbb839313346bd85d9841dcaad490c9340f79f73b74b5da97f419"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/presentation/rank.go": {
+      "bytes": 1941,
+      "sha256": "5723df6970f463db4b5445ad685e90d1667f673c940f5201ac055a643835da7e"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/profilecsa/scan.go": {
+      "bytes": 6178,
+      "sha256": "84779bd360aa0a5bd4aa37854d3f36cb3f150c81214563438a583478341af349"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/profilequery/profile.go": {
+      "bytes": 4920,
+      "sha256": "b046d425b117b5b486fa9388e3eaf9779de0181915b7f3ce8daf701437431c2a"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/raptor/early_pruning.go": {
+      "bytes": 1448,
+      "sha256": "a0ae73b3306cc58a72c1474476e7ecad94ae614c3c47aacbd479201b4e49329d"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/raptor/indexed_walks.go": {
+      "bytes": 2304,
+      "sha256": "6607b6be2ce94ef6ec22348d04ca03fa85a1917ad4dc5694f5636bde87ec2c8b"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/raptor/local_walk_ties.go": {
+      "bytes": 6352,
+      "sha256": "a421d1457d7d960d835420783bc859a1d4186c5a01d146f965996e6569e1f9ff"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/raptor/multicriteria.go": {
+      "bytes": 9603,
+      "sha256": "7bcb4922d0b4bee980a2be58181d1017119a10e1d0e5e7a7e961c4f7a75a9ea0"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/raptor/range.go": {
+      "bytes": 7044,
+      "sha256": "81f63bb9d674bd0e9955b4aa493b1657ed9c8c7992d04c9fc76960ef92805a15"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/raptor/raptor.go": {
+      "bytes": 8706,
+      "sha256": "85e8bb804971f1768910952bbe1c9a59928061b54acd64eaed8288f9ddc26d75"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/raptor/round_queue.go": {
+      "bytes": 1348,
+      "sha256": "1f86bcfbed13072e69aa7fb04783d1fd916e824e697956bfdf7c128cbdcfa55a"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/recommend/choices.go": {
+      "bytes": 10165,
+      "sha256": "f92dc795483533d0c7d1bbfeecff3c56a8b9e516d30c85cfc48a92c515a9e8d2"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/recommend/quality.go": {
+      "bytes": 10693,
+      "sha256": "0305ce81032f25cb01a721a7567330d8339babbcebdf889ad61404b35e70d627"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/selection/reserved.go": {
+      "bytes": 1511,
+      "sha256": "180080a439d9aadb56b5245cd614d850751352026f1ea3c4e1ce2c8f8de246ca"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/selection/select.go": {
+      "bytes": 3513,
+      "sha256": "6d0531acccf41a7348f7f0e18ace5242459ec72f168da9c8248023c0b387edfb"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/strictjson/decode.go": {
+      "bytes": 1889,
+      "sha256": "9a47b1a00708ca467f650ecdf192d794d0e7bf4cf7ff0082ba1f2fc4a699a163"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tad/dijkstra.go": {
+      "bytes": 8581,
+      "sha256": "8a78e2f6a92f182aed85fb061e793b94243afd1219f6664a6de47895cc35fb99"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/transfer/rules.go": {
+      "bytes": 3153,
+      "sha256": "7cdd1b1fa67cdc27b6e16d00a51e52b5e8532dce3d35a1957b2e2da3b3e72172"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/bounded_walking.go": {
+      "bytes": 3923,
+      "sha256": "e071918fcd8db1941a791108d0f54c787420fe76d3df161ae3ee7cc5e2e64eb9"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_patterns.go": {
+      "bytes": 17523,
+      "sha256": "640b9cd381f4995d3591315d11a3860e18cb7f8cd89db68a5a0d9641cea83c71"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_query.go": {
+      "bytes": 3270,
+      "sha256": "507df1a5dbafc58bee3c06eeb6ee2220889611f9efc24677f0933fae694ff8e2"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_retained.go": {
+      "bytes": 14746,
+      "sha256": "d961cf22818d4a30a471313267c4b6123dcf9f8b025dde118889f9e0c309ef50"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_source_domain.go": {
+      "bytes": 10191,
+      "sha256": "b65293af7afcc05e3c8fd6c25d07d4ee618d1e49e91ca53cf3a6b1c9757179f8"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/compact_links.go": {
+      "bytes": 3120,
+      "sha256": "85f66d312381ee13a9a8617e85edd664c4fc3351e6961304e1a3f2cfc251fc09"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/cost_summary.go": {
+      "bytes": 3816,
+      "sha256": "d686016f8800364ad351da9bab8a440d4daa50042b5c59164ea526c168ec649c"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash.go": {
+      "bytes": 19531,
+      "sha256": "4888ff851c113d1ba9378166601bdf53accab7de1171428125dbac3d7ffaf7d0"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_breakpoints.go": {
+      "bytes": 3405,
+      "sha256": "af8a66abc935a28445495a40a043b47d2f884a3b161779a254905f39e2af4bb3"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_capped.go": {
+      "bytes": 1576,
+      "sha256": "4d0b3ae6b31ae1c0545e3db70339aefc1b8ae6fd4b0d9769004ab3bbb51d7cdb"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_graph.go": {
+      "bytes": 6809,
+      "sha256": "00206c170c2e0dd1b05126d5efd02d75ff05d6873c0434e57254b3620ee0914e"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_profile.go": {
+      "bytes": 9271,
+      "sha256": "69a2a37340fe46c29ea70645b7e68457000bc73a1e9a806f9173be10d0c7fd5b"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_retained.go": {
+      "bytes": 8942,
+      "sha256": "217ab3ffdcc071e44e3499fae1049fd0149132211f4fda60e6bd57a7fd5a95a8"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_rules.go": {
+      "bytes": 9931,
+      "sha256": "ee3eced244a67a3e9f5007c16272a395c06f4da4bf830e936fe1b94dd9d063bc"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_transfers.go": {
+      "bytes": 6848,
+      "sha256": "f504d676424c3733c5a03c00eb1b929afa9ee3c13df8ddb988d9ed9efced1205"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/index.go": {
+      "bytes": 8013,
+      "sha256": "b0503beb184bf7e89f4b8ac16b6e9d427fafe809b348016c993b29930e12e607"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/patterns.go": {
+      "bytes": 11196,
+      "sha256": "9a3a6fd29ad1d7a3d55c09da141df02a31ae833d32dd7d50b60da890e564e945"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/patterns_query.go": {
+      "bytes": 13521,
+      "sha256": "37485d9bf79815bc21e07f46e34788c4c7f1cfbb20344cd92addc2aaddd36767"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/query.go": {
+      "bytes": 8103,
+      "sha256": "454c9313f2b02518d4542857e74b7077ad25ce4de32a4944e1d0a1ab1e937cc3"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/scalable.go": {
+      "bytes": 26997,
+      "sha256": "84a071f41b7586cc70fac46cdb84a8f079f564f4ba0ed7ba01ec0d0d1f8f8f7e"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/scalable_border.go": {
+      "bytes": 7391,
+      "sha256": "38f9c17113bda9836ede4f51b783b2c87628414e4cc27f38bb1718788f27d7c5"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/scalable_cache.go": {
+      "bytes": 2036,
+      "sha256": "80e8292354f838c04e05cda40b404104af4732fe4125832fccf4f88a11e27d8d"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/scalable_dags.go": {
+      "bytes": 8815,
+      "sha256": "48d71b93e34c5f4d5798c4723764891dd073aefe0037f2577ea40bda69a9b5e0"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/scalable_direct.go": {
+      "bytes": 2173,
+      "sha256": "c595fee1261a02e220dae9c60cc8db9a7d1e2100777dad941422f892264cd429"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/scalable_hierarchy.go": {
+      "bytes": 9628,
+      "sha256": "56c98501fbce4faa6ff75d3347a9fdf47f3992f8ac1a91eab87ba666e29f1e89"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/scalable_partition.go": {
+      "bytes": 4429,
+      "sha256": "c156bf61ccb7808b900199c113f3115f527a3d48e723b233903abd155d44624d"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/scalable_reduce.go": {
+      "bytes": 3055,
+      "sha256": "4e40925a72332a37c41b6fc33defb28b0627854bcc80c04a2ab16b4ebe9a3f19"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/transfer_storage.go": {
+      "bytes": 1359,
+      "sha256": "5c3fff927b5143a367f5129e59701be4e2e9fe11e511a659c7e7078c12586c34"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex.go": {
+      "bytes": 15454,
+      "sha256": "0cb573f7cf9cedcee86931596b67f2e9333bdf911d6b80ec34d6f359e49d1801"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_cap_certificate.go": {
+      "bytes": 4878,
+      "sha256": "6a7e9889828bd1c8e40f6b70d4193ce7bc949e2708d9d6b8ba7e244fe9b749c8"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_customization.go": {
+      "bytes": 8658,
+      "sha256": "6b2014268e6b19b1ebb9d0744a23fafe745f3e6e2d591a712b8da0d8dbc89b40"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_diagnostic.go": {
+      "bytes": 1999,
+      "sha256": "6051dc45d12e3a535ab2f02bf31090d0cd386d5e22c408132dca13a6f43ac0d7"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_fixed_transfer_cap_candidate.go": {
+      "bytes": 8406,
+      "sha256": "0ee0759b01f95f839152f7b18659100e58ede0fe7926a02879898248aade50c4"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_partition.go": {
+      "bytes": 6449,
+      "sha256": "5593e6b73434b7055884d00a205ec1567dd34204527819d44ab0b1e1570f76d3"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_proofs.go": {
+      "bytes": 4632,
+      "sha256": "731aac977eeb4ddb81df4c6dd0c144e5f4b3a94697ce9a69814d4516210a60bd"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_query.go": {
+      "bytes": 8133,
+      "sha256": "b4ef29a963f239feb16b08e42a91dfc479c90c3ab479b7abea9df4b941cd7913"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_role_cap_candidate.go": {
+      "bytes": 5118,
+      "sha256": "cb9f721b5bb3b1f42b26545c50cfefb0a79a73a1beedaaaa1dd3e3f2c7d38ba5"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_static_cap_certificate.go": {
+      "bytes": 4647,
+      "sha256": "f586f354b5c231dcc6f74cf14e1a16f6a3aa2d3c01aa56c34a94395cfe602a50"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_storage.go": {
+      "bytes": 3937,
+      "sha256": "05385e29ecb9dcb98baec226568f2a026b07a7c10149a38f5da0174102d74531"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/tripbased/trex_work.go": {
+      "bytes": 1127,
+      "sha256": "d1019998737e5d5df302dfc6134d6a039eac1949facc62cc44e18152ff8d9cf7"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/ultra/active.go": {
+      "bytes": 1203,
+      "sha256": "2ff9e41a15f9877dbc1e4f147c0999bec7db8455372ff632c4d825df355dec93"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/ultra/capped.go": {
+      "bytes": 10955,
+      "sha256": "2cd79a4b4e1397bb6120f6d747798e53f5789f86a70d0094ecfb1e525f763fca"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/ultra/capped_search.go": {
+      "bytes": 8637,
+      "sha256": "602c1378895e5400d986b45add793c54b8aa7c7e73d96961722519a952677176"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/ultra/index.go": {
+      "bytes": 12141,
+      "sha256": "c826f9a3736693055267046b04639a18219badfbb3f1e6105caa11a288b60c04"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/ultra/reuse.go": {
+      "bytes": 6577,
+      "sha256": "0acde4d1dce13c107465258a5d14fe6e4872e533110965ab58d077663caac4c0"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/ultra/routes.go": {
+      "bytes": 5306,
+      "sha256": "f01d85ecf9b01b381cb0081e02bd958b1a65705d8988e971a3512de08e7ad283"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/ultra/search.go": {
+      "bytes": 12423,
+      "sha256": "719be0b0fef669a83dece8f86ca5e4258399c48a1586f7158c2f431804d7cbfe"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/ultra/sparse.go": {
+      "bytes": 8575,
+      "sha256": "f87a6d7953394cd64d87b9ec2ef68949e49f4495c78d851213080af6183a03ed"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/validate/journey.go": {
+      "bytes": 7617,
+      "sha256": "467b568a761fb7e1bbb45da32d54fa1539f9fceca1e6cbb6a7e04d3d71e298ef"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/walking/cache.go": {
+      "bytes": 1922,
+      "sha256": "a6ce8c4ca31beba49587aa1d4a00f10aafc4994c9531e53a98caff5baec73f3d"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/walking/contract.go": {
+      "bytes": 7713,
+      "sha256": "03921ca99783454f3f4556782e6421257bb149e2708cb22af4a376216a86445f"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/walking/graph/graph.go": {
+      "bytes": 16220,
+      "sha256": "5fcc482edb45eb11d01928e8dffb148f00dd2a32f4649a0bb0f6cf27109cd998"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/walking/graph/reach_session.go": {
+      "bytes": 4484,
+      "sha256": "8403f7669c2e6a5058b929d8b424b81110b1297aa6101cb80a857579b6fa9436"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/walking/httpapi/handler.go": {
+      "bytes": 3729,
+      "sha256": "cc718267008fc54375517601939c35b5fc4a1f86ce069d4c57f7d6772a36e539"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/walking/osm/load.go": {
+      "bytes": 3733,
+      "sha256": "7ef78a3ca7827eb0ca8563a829149e95416559ec8b13e673144d64f82c8d0019"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/walking/transit/bindings.go": {
+      "bytes": 4005,
+      "sha256": "01f4535d6a97e6838c71e44176f2555183e70ed8e45d4b91493c86be1b353c71"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/walking/transit/catalog.go": {
+      "bytes": 8714,
+      "sha256": "b20f53c78b38bf6426d4180f89bf6545bee3638d7ae46d909847dddc734a0fa8"
+    },
+    "vendor/github.com/ertyoii/transit-routing-go/walking/transit/graph.go": {
+      "bytes": 1377,
+      "sha256": "07ec2ac36311597ed657b686be7bc222ef3ac7ec022473d1f55729f5754b6fbe"
+    },
+    "vendor/modules.txt": {
+      "bytes": 1269,
+      "sha256": "d1e689aafd73e79e1c9e4437acc3673debbec043886ad4ab4fa3579d282304e5"
+    }
+  },
+  "projection_hash_convention": "SHA256 compact sorted JSON mapping path to {bytes,sha256}; code/config/fixture projection only.",
+  "runtime_hash_convention": "SHA256 sorted relative Go paths plus go.mod, routing.lock.json and vendor/modules.txt; each contributes UTF8 byte-length:path:content-length: followed by exact bytes, as experiment.SourceHash specifies.",
+  "runtime_source_sha256": "57a35582225b86f826c53c04fe851fb9753b5a92aea74f5b1491cd1cc882d503",
+  "schema": "sg-v2-source-projection-hashes-v1",
+  "tree": "bench-noncsa"
+}

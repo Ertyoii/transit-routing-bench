@@ -1,0 +1,337 @@
+--- a/cmd/profilebench/main.go
++++ b/cmd/profilebench/main.go
+@@ -22,6 +22,7 @@
+ 	"path/filepath"
+ 	"reflect"
+ 	"runtime"
++	"slices"
+ 	"strings"
+ 	"time"
+ )
+@@ -149,8 +150,11 @@
+ 	return nil
+ }
+ func run() error {
++	selected := flag.String("algorithms", "profile_csa,range_raptor", "comma separated native algorithms; v2 non-CSA uses range_raptor only")
+ 	dataset := flag.String("dataset", "", "normalized dataset")
+-	queries := flag.String("queries", "", "frozen profile queries")
++	queries := flag.String("queries", "", "frozen profile queries, or registered point queries with -point-workload")
++	pointWorkload := flag.Bool("point-workload", false, "derive whole ready windows from exact supplied registered point-query bytes")
++	readySpan := flag.Int64("ready-span-seconds", 60, "fixed inclusive profile span when -point-workload is set")
+ 	out := flag.String("out-dir", "", "new directory")
+ 	warmups := flag.Int("warmups", 1, "retained warmups")
+ 	reps := flag.Int("repetitions", 3, "measured repetitions")
+@@ -161,6 +165,17 @@
+ 	maxSpan := flag.Int64("max-window-seconds", 600, "bounded complete integer-grid validation span")
+ 	hardware := flag.String("hardware", "unrecorded", "verified host description")
+ 	flag.Parse()
++	names := strings.Split(*selected, ",")
++	if len(names) == 0 || len(names) > 2 {
++		return fmt.Errorf("invalid algorithms")
++	}
++	seenNames := map[string]bool{}
++	for _, name := range names {
++		if seenNames[name] || (name != "profile_csa" && name != "range_raptor") {
++			return fmt.Errorf("invalid algorithm %q", name)
++		}
++		seenNames[name] = true
++	}
+ 	if *dataset == "" || *queries == "" || *out == "" || *reps < 1 || *warmups < 0 || *timeout <= 0 || *maxSpan < 0 {
+ 		return fmt.Errorf("invalid arguments")
+ 	}
+@@ -174,7 +189,16 @@
+ 	if e != nil {
+ 		return e
+ 	}
+-	qh, e := read(*queries, &w)
++	var qh string
++	if *pointWorkload {
++		var points pointInput
++		qh, e = read(*queries, &points)
++		if e == nil {
++			w, e = profilesFromPoints(points, *readySpan)
++		}
++	} else {
++		qh, e = read(*queries, &w)
++	}
+ 	if e != nil {
+ 		return e
+ 	}
+@@ -199,6 +223,9 @@
+ 	provenance, e := experiment.Identify(".")
+ 	if e != nil {
+ 		return e
++	}
++	if !provenance.RuntimeMatchesBuild {
++		return fmt.Errorf("build through scripts/build.sh")
+ 	}
+ 	var before, after runtime.MemStats
+ 	prep := map[string]any{}
+@@ -218,8 +245,10 @@
+ 	var csa *profilecsa.Index
+ 	var rap *raptor.Index
+ 	var checker *validate.Checker
+-	if e = measure("profile_csa", func() error { var e error; csa, e = profilecsa.New(d); return e }); e != nil {
+-		return e
++	if slices.Contains(names, "profile_csa") {
++		if e = measure("profile_csa", func() error { var e error; csa, e = profilecsa.New(d); return e }); e != nil {
++			return e
++		}
+ 	}
+ 	if e = measure("range_raptor", func() error { var e error; rap, e = raptor.New(d); return e }); e != nil {
+ 		return e
+@@ -235,12 +264,12 @@
+ 		items := append([]item{}, w.Items...)
+ 		rng := rand.New(rand.NewPCG(w.Seed.Uint64(), uint64(rep)))
+ 		rng.Shuffle(len(items), func(i, j int) { items[i], items[j] = items[j], items[i] })
+-		names := []string{"profile_csa", "range_raptor"}
+-		if rep%2 == 1 {
+-			names[0], names[1] = names[1], names[0]
++		order := append([]string{}, names...)
++		if rep%2 == 1 && len(order) == 2 {
++			order[0], order[1] = order[1], order[0]
+ 		}
+ 		paired := map[string]map[string]record{}
+-		for _, name := range names {
++		for _, name := range order {
+ 			p := pass{Algorithm: name, Repetition: rep, Warmup: rep < *warmups, Records: []record{}}
+ 			paired[name] = map[string]record{}
+ 			beginPass := time.Now()
+@@ -308,14 +337,16 @@
+ 			summaries = append(summaries, s)
+ 			fmt.Printf("%s rep=%d profiles=%d errors=%d grid=%d core p50/p95 %.2f/%.2fms response %.2f/%.2fms\n", name, rep, s.Queries, s.Errors, s.ReadyTimes, s.Core.P50/1e6, s.Core.P95/1e6, s.Response.P50/1e6, s.Response.P95/1e6)
+ 		}
+-		for _, i := range items {
+-			a, b := paired["profile_csa"][i.Query.Base.ID], paired["range_raptor"][i.Query.Base.ID]
+-			assessed := a.Complete && a.Error == "" && b.Complete && b.Error == ""
+-			equal := assessed && reflect.DeepEqual(a.Grid, b.Grid)
+-			if !equal {
+-				allOK = false
+-			}
+-			comparisons = append(comparisons, map[string]any{"query_id": i.Query.Base.ID, "repetition": rep, "warmup": rep < *warmups, "assessed": assessed, "equal_whole_window": equal, "window_integer_seconds": i.Query.End - i.Query.Base.Departure + 1, "profile_csa_error": a.Error, "range_raptor_error": b.Error})
++		if len(names) == 2 {
++			for _, i := range items {
++				a, b := paired["profile_csa"][i.Query.Base.ID], paired["range_raptor"][i.Query.Base.ID]
++				assessed := a.Complete && a.Error == "" && b.Complete && b.Error == ""
++				equal := assessed && reflect.DeepEqual(a.Grid, b.Grid)
++				if !equal {
++					allOK = false
++				}
++				comparisons = append(comparisons, map[string]any{"query_id": i.Query.Base.ID, "repetition": rep, "warmup": rep < *warmups, "assessed": assessed, "equal_whole_window": equal, "window_integer_seconds": i.Query.End - i.Query.Base.Departure + 1, "profile_csa_error": a.Error, "range_raptor_error": b.Error})
++			}
+ 		}
+ 	}
+ 	samples := map[string][]float64{}
+@@ -335,7 +366,7 @@
+ 			intervals[name] = ci
+ 		}
+ 	}
+-	m := map[string]any{"success": allOK, "contract": "ready_window_arrival_boardings_v1", "dataset_sha256": dh, "workload_sha256": qh, "workload": w, "seed_metadata": w.Seed.Metadata(), "provenance": provenance, "go_version": runtime.Version(), "goos": runtime.GOOS, "goarch": runtime.GOARCH, "gomaxprocs": runtime.GOMAXPROCS(0), "hardware": *hardware, "created_utc": time.Now().UTC().Format(time.RFC3339Nano), "input_load_ns": loadNS, "preparation": prep, "raptor_preparation": rap.Preparation(), "limits": limits, "core_timeout_ns": timeout.Nanoseconds(), "max_verification_window_seconds": *maxSpan, "warmups": *warmups, "repetitions": *reps, "summaries": summaries, "comparisons": comparisons, "throughput_intervals": intervals, "resources_final": experiment.SnapshotResources(), "notes": []string{"Both algorithms solve identical full ready-time windows with a fixed arrival horizon, separate direct affine branch, and arrival/boarding objective. Not strict top-k.", "Core includes candidate-time construction, walking, search, reconstruction and profile normalization. Response adds complete point/direct witness validation and every integer-ready-time lookup/witness validation. Both exclude input/index preparation and result serialization; IO sidecars retained.", "Saved compact raw profiles and validated points reconstruct every grid answer. Every materialized grid witness is validated; grid files store vectors, not redundant copies of those itineraries.", "Profile query latency is not divided by grid size. Throughput uses actual sequential profile-pass makespan. Failures retain original request denominators; paired coverage is explicit.", "Common preprocessing and materialization are shared and require independent specification/review. Allocations are cumulative deltas; peak RSS is whole-process cumulative, not isolated by algorithm. Three repetitions and uncontrolled shared host limit inference.", "Modeled frequency timetable and unverified OSM connectors do not establish actual Singapore service validity. Regional gate remains closed."}}
++	m := map[string]any{"success": allOK, "contract": "ready_window_arrival_boardings_v1", "dataset_sha256": dh, "workload_sha256": qh, "workload": w, "seed_metadata": w.Seed.Metadata(), "derived_from_point_workload": *pointWorkload, "ready_span_seconds": *readySpan, "provenance": provenance, "go_version": runtime.Version(), "goos": runtime.GOOS, "goarch": runtime.GOARCH, "gomaxprocs": runtime.GOMAXPROCS(0), "hardware": *hardware, "created_utc": time.Now().UTC().Format(time.RFC3339Nano), "input_load_ns": loadNS, "preparation": prep, "raptor_preparation": rap.Preparation(), "limits": limits, "core_timeout_ns": timeout.Nanoseconds(), "max_verification_window_seconds": *maxSpan, "warmups": *warmups, "repetitions": *reps, "summaries": summaries, "comparisons": comparisons, "throughput_intervals": intervals, "resources_final": experiment.SnapshotResources(), "notes": []string{"Selected native algorithms solve full ready-time windows with a fixed arrival horizon, separate direct affine branch, and arrival/boarding objective. Not strict top-k.", "Core includes candidate-time construction, walking, search, reconstruction and profile normalization. Response adds complete point/direct witness validation and every integer-ready-time lookup/witness validation. Both exclude input/index preparation and result serialization; IO sidecars retained.", "Saved compact raw profiles and validated points reconstruct every grid answer. Every materialized grid witness is validated; grid files store vectors, not redundant copies of those itineraries.", "Profile query latency is not divided by grid size. Throughput uses actual sequential profile-pass makespan. Failures retain original request denominators; paired coverage is explicit.", "Common preprocessing and materialization are shared and require independent specification/review. Allocations are cumulative deltas; peak RSS is whole-process cumulative, not isolated by algorithm. Three repetitions and uncontrolled shared host limit inference.", "Modeled frequency timetable and unverified OSM connectors do not establish actual Singapore service validity. Latest-official authenticity/eligibility is unqualified; this run is explicitly public-model diagnostic."}}
+ 	if _, e = experiment.WriteArtifact(filepath.Join(*out, "manifest.json"), m); e != nil {
+ 		return e
+ 	}
+--- /dev/null
++++ b/cmd/profilebench/point_input.go
+@@ -0,0 +1,35 @@
++package main
++
++import (
++	"fmt"
++	"github.com/ertyoii/transit-routing-bench/workloadseed"
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/profilequery"
++)
++
++type pointInput struct {
++	Seed          workloadseed.Seed `json:"seed"`
++	Method        string            `json:"method"`
++	DatasetSHA256 string            `json:"dataset_sha256"`
++	Items         []struct {
++		Stratum string      `json:"stratum"`
++		Query   model.Query `json:"query"`
++	} `json:"items"`
++}
++
++// profilesFromPoints preserves each query, including its fixed latest arrival
++// horizon and all hard limits. Only readiness becomes a complete inclusive
++// interval. The original point workload bytes remain the recorded query hash.
++func profilesFromPoints(points pointInput, span int64) (workload, error) {
++	if span < 0 {
++		return workload{}, fmt.Errorf("negative ready span")
++	}
++	out := workload{Seed: points.Seed, Method: fmt.Sprintf("fixed_inclusive_ready_span_%ds_from:%s", span, points.Method), DatasetSHA256: points.DatasetSHA256, Items: []item{}}
++	for _, p := range points.Items {
++		if p.Query.Departure < 0 || p.Query.LatestArrival < p.Query.Departure || span > p.Query.LatestArrival-p.Query.Departure {
++			return workload{}, fmt.Errorf("ready span exceeds fixed horizon: %s", p.Query.ID)
++		}
++		out.Items = append(out.Items, item{Stratum: p.Stratum, Query: profilequery.Query{Base: p.Query, End: p.Query.Departure + span}})
++	}
++	return out, nil
++}
+--- /dev/null
++++ b/cmd/profilebench/point_input_test.go
+@@ -0,0 +1,30 @@
++package main
++
++import (
++	"github.com/ertyoii/transit-routing-bench/workloadseed"
++	"github.com/ertyoii/transit-routing-go/model"
++	"reflect"
++	"testing"
++)
++
++func TestPointInputPreservesHardLimitsAndFixedHorizon(t *testing.T) {
++	q := model.Query{ID: "tune-only", Origin: "A", Destination: "B", Departure: 100, LatestArrival: 200, MaxBoardings: 4, MaxWalkSeconds: 600, MaxLegs: 99, TransferBuffer: 7}
++	points := pointInput{Seed: workloadseed.Numeric(9), Method: "registered_tune", DatasetSHA256: "bound"}
++	points.Items = append(points.Items, struct {
++		Stratum string      `json:"stratum"`
++		Query   model.Query `json:"query"`
++	}{"uniform", q})
++	got, err := profilesFromPoints(points, 60)
++	if err != nil || len(got.Items) != 1 || !reflect.DeepEqual(got.Items[0].Query.Base, q) || got.Items[0].Query.End != 160 || got.Items[0].Stratum != "uniform" || got.Seed.Uint64() != 9 || got.DatasetSHA256 != "bound" {
++		t.Fatalf("got %+v err %v", got, err)
++	}
++	for _, span := range []int64{-1, 101} {
++		if _, err := profilesFromPoints(points, span); err == nil {
++			t.Fatal("invalid span accepted", span)
++		}
++	}
++	zero, err := profilesFromPoints(points, 0)
++	if err != nil || zero.Items[0].Query.End != q.Departure {
++		t.Fatal(zero, err)
++	}
++}
+--- a/cmd/tadbench/main.go
++++ b/cmd/tadbench/main.go
+@@ -21,6 +21,7 @@
+ 	"path/filepath"
+ 	"reflect"
+ 	"runtime"
++	"slices"
+ 	"strings"
+ 	"time"
+ )
+@@ -88,6 +89,7 @@
+ 	return best
+ }
+ func run() error {
++	selected := flag.String("algorithms", "ea_csa,raptor,tad", "comma separated native algorithms; v2 non-CSA uses tad or raptor,tad")
+ 	dataset := flag.String("dataset", "", "normalized model")
+ 	queries := flag.String("queries", "", "frozen workload")
+ 	out := flag.String("out-dir", "", "new output directory")
+@@ -99,6 +101,17 @@
+ 	maxWalkVisits := flag.Int("max-walk-visits", 10000000, "TAD raw walking-edge visit budget")
+ 	hardware := flag.String("hardware", "unrecorded", "verified host description")
+ 	flag.Parse()
++	names := strings.Split(*selected, ",")
++	if len(names) == 0 || len(names) > 3 {
++		return fmt.Errorf("invalid algorithms")
++	}
++	seenNames := map[string]bool{}
++	for _, name := range names {
++		if seenNames[name] || (name != "ea_csa" && name != "raptor" && name != "tad") {
++			return fmt.Errorf("invalid algorithm %q", name)
++		}
++		seenNames[name] = true
++	}
+ 	if *dataset == "" || *queries == "" || *out == "" || *reps < 1 || *warmups < 0 || *timeout <= 0 {
+ 		return fmt.Errorf("invalid arguments")
+ 	}
+@@ -133,6 +146,9 @@
+ 	provenance, e := experiment.Identify(".")
+ 	if e != nil {
+ 		return e
++	}
++	if !provenance.RuntimeMatchesBuild {
++		return fmt.Errorf("build through scripts/build.sh")
+ 	}
+ 	prep := map[string]any{}
+ 	var before, after runtime.MemStats
+@@ -153,14 +169,20 @@
+ 	var rap *raptor.Index
+ 	var td *tad.Index
+ 	var checker *validate.Checker
+-	if e = measure("ea_csa", func() error { var e error; ea, e = eacsa.New(d); return e }); e != nil {
+-		return e
+-	}
+-	if e = measure("raptor", func() error { var e error; rap, e = raptor.New(d); return e }); e != nil {
+-		return e
+-	}
+-	if e = measure("tad", func() error { var e error; td, e = tad.New(d); return e }); e != nil {
+-		return e
++	if slices.Contains(names, "ea_csa") {
++		if e = measure("ea_csa", func() error { var e error; ea, e = eacsa.New(d); return e }); e != nil {
++			return e
++		}
++	}
++	if slices.Contains(names, "raptor") {
++		if e = measure("raptor", func() error { var e error; rap, e = raptor.New(d); return e }); e != nil {
++			return e
++		}
++	}
++	if slices.Contains(names, "tad") {
++		if e = measure("tad", func() error { var e error; td, e = tad.New(d); return e }); e != nil {
++			return e
++		}
+ 	}
+ 	if e = measure("independent_checker", func() error { var e error; checker, e = validate.New(d); return e }); e != nil {
+ 		return e
+@@ -174,10 +196,11 @@
+ 		items := append([]Item{}, w.Items...)
+ 		rng := rand.New(rand.NewPCG(w.Seed.Uint64(), uint64(rep)))
+ 		rng.Shuffle(len(items), func(i, j int) { items[i], items[j] = items[j], items[i] })
+-		names := []string{"ea_csa", "raptor", "tad"}
+-		names = append(names[rep%3:], names[:rep%3]...)
++		order := append([]string{}, names...)
++		offset := rep % len(order)
++		order = append(order[offset:], order[:offset]...)
+ 		paired := map[string]map[string]Record{}
+-		for _, name := range names {
++		for _, name := range order {
+ 			p := Pass{Algorithm: name, Repetition: rep, Warmup: rep < *warmups, Records: []Record{}}
+ 			paired[name] = map[string]Record{}
+ 			passBegin := time.Now()
+@@ -266,16 +289,23 @@
+ 			summaries = append(summaries, s)
+ 			fmt.Printf("%s rep=%d queries=%d errors=%d p50=%.2fms p95=%.2fms\n", name, rep, s.Queries, s.Errors, s.Response.P50/1e6, s.Response.P95/1e6)
+ 		}
+-		for _, i := range items {
+-			a, b, c := paired["ea_csa"][i.Query.ID], paired["raptor"][i.Query.ID], paired["tad"][i.Query.ID]
+-			available := a.Complete && a.Error == "" && b.Complete && b.Error == "" && reflect.DeepEqual(objective(i.Query, a.Final), objective(i.Query, b.Final))
+-			assessed := available && c.Complete && c.Error == ""
+-			equal := assessed && reflect.DeepEqual(objective(i.Query, a.Final), objective(i.Query, c.Final))
+-			if !available || !assessed || !equal {
+-				allOK = false
+-			}
+-			comparisons = append(comparisons, map[string]any{"repetition": rep, "warmup": rep < *warmups, "query_id": i.Query.ID, "reference_available": available, "tad_earliest_arrival_assessed": assessed, "equal_earliest_arrival": equal, "reference_minimum_arrival": objective(i.Query, a.Final), "tad_minimum_arrival": objective(i.Query, c.Final), "tad_error": c.Error})
+-		}
++		if slices.Contains(names, "tad") && (slices.Contains(names, "raptor") || slices.Contains(names, "ea_csa")) {
++			ref := "raptor"
++			if !slices.Contains(names, ref) {
++				ref = "ea_csa"
++			}
++			for _, i := range items {
++				a, c := paired[ref][i.Query.ID], paired["tad"][i.Query.ID]
++				available := a.Complete && a.Error == ""
++				assessed := available && c.Complete && c.Error == ""
++				equal := assessed && reflect.DeepEqual(objective(i.Query, a.Final), objective(i.Query, c.Final))
++				if !available || !assessed || !equal {
++					allOK = false
++				}
++				comparisons = append(comparisons, map[string]any{"repetition": rep, "warmup": rep < *warmups, "query_id": i.Query.ID, "reference_algorithm": ref, "reference_available": available, "tad_earliest_arrival_assessed": assessed, "equal_earliest_arrival": equal, "reference_minimum_arrival": objective(i.Query, a.Final), "tad_minimum_arrival": objective(i.Query, c.Final), "tad_error": c.Error})
++			}
++		}
++
+ 	}
+ 	intervals := map[string]experiment.Interval{}
+ 	samples := map[string][]float64{}
+@@ -304,7 +334,7 @@
+ 		"summaries": summaries, "comparisons": comparisons, "throughput_intervals": intervals, "resources_final": experiment.SnapshotResources(),
+ 		"notes": []string{
+ 			"TAD scans whole trip suffixes and relaxes raw walking edges. Stop-pair transfer and walking resources use declared expanded states; no scalar penalty or strict top-k applies.",
+-			"EA-CSA and RAPTOR are projected to minimum arrival under identical feasibility. Their additional Pareto output is different work; no equal-work performance claim. Large-model agreement is not independent oracle proof.",
++			"Selected reference frontiers are projected to minimum arrival under identical feasibility. Their additional Pareto output is different work; no equal-work performance claim. Large-model agreement is not independent oracle proof.",
+ 			"Core includes raw walking/trip scans/reconstruction; response includes independent complete witness checking. Loading, all three separate indices, checker and serialization costs are recorded. Current Singapore input contains proxy/OSM closure edges, not the full raw street graph.",
+ 			"Actual pass makespan determines throughput; never divide it to invent individual latency. Failures remain in every denominator. Allocations are cumulative deltas, peak RSS includes all algorithms and previous operations.",
+ 			"Three repeated passes on an uncontrolled shared host and a reused modeled workload cannot establish population performance or Singapore service validity. Unknown accessibility and unverified street connectors remain limitations.",

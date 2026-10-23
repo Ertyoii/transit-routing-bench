@@ -1,0 +1,38 @@
+[
+  {
+    "extra_walk_weight": 0,
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 0,
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 4,
+    "transfer_seconds": 0
+  },
+  {
+    "extra_walk_weight": 4,
+    "transfer_seconds": 900
+  },
+  {
+    "extra_walk_weight": 0.375,
+    "transfer_seconds": 73.125
+  },
+  {
+    "extra_walk_weight": 1.125,
+    "transfer_seconds": 241.75
+  },
+  {
+    "extra_walk_weight": 2.625,
+    "transfer_seconds": 463.375
+  },
+  {
+    "extra_walk_weight": 0.875,
+    "transfer_seconds": 691.625
+  },
+  {
+    "extra_walk_weight": 3.375,
+    "transfer_seconds": 827.875
+  }
+]

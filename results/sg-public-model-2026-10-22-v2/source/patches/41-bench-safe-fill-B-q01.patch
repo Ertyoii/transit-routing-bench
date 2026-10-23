@@ -1,0 +1,875 @@
+--- a/HYBRID_FILL_MATRIX.json
++++ b/HYBRID_FILL_MATRIX.json
+@@ -5,7 +5,608 @@
+     5
+   ],
+   "no393_optimizer_inputs": true,
+-  "policies": [],
++  "policies": [
++    {
++      "config": {
++        "absolute_hybrid_fill": {
++          "base": {
++            "bounded": {
++              "distinct_patterns": false,
++              "exact_subset_search": false,
++              "exact_when_feasible": true,
++              "limits": [
++                3
++              ],
++              "max_critical_points": 100000,
++              "max_extra_walk_weight": 4,
++              "max_matrix_bytes": 67108864,
++              "max_transfer_seconds": 900,
++              "max_work": 50000000,
++              "min_extra_walk_weight": 0,
++              "min_transfer_seconds": 0,
++              "nested": false,
++              "objective": "absolute"
++            },
++            "max_candidates": 1024,
++            "max_subsets": 200000
++          },
++          "finite20": {
++            "delivery_limits": [
++              3
++            ],
++            "delivery_policy": "finite_preferences_v2",
++            "groups": [
++              {
++                "description": "Fixed20 nonnegative score hypotheses from the preexisting evaluator; not learned rider preferences or population probabilities.",
++                "name": "explicit_twenty_hypotheses",
++                "preferences": [
++                  {
++                    "extra_walk_weight": 0,
++                    "id": "t0_w0",
++                    "transfer_seconds": 0
++                  },
++                  {
++                    "extra_walk_weight": 1,
++                    "id": "t0_w1",
++                    "transfer_seconds": 0
++                  },
++                  {
++                    "extra_walk_weight": 2,
++                    "id": "t0_w2",
++                    "transfer_seconds": 0
++                  },
++                  {
++                    "extra_walk_weight": 4,
++                    "id": "t0_w4",
++                    "transfer_seconds": 0
++                  },
++                  {
++                    "extra_walk_weight": 0,
++                    "id": "t150_w0",
++                    "transfer_seconds": 150
++                  },
++                  {
++                    "extra_walk_weight": 1,
++                    "id": "t150_w1",
++                    "transfer_seconds": 150
++                  },
++                  {
++                    "extra_walk_weight": 2,
++                    "id": "t150_w2",
++                    "transfer_seconds": 150
++                  },
++                  {
++                    "extra_walk_weight": 4,
++                    "id": "t150_w4",
++                    "transfer_seconds": 150
++                  },
++                  {
++                    "extra_walk_weight": 0,
++                    "id": "t300_w0",
++                    "transfer_seconds": 300
++                  },
++                  {
++                    "extra_walk_weight": 1,
++                    "id": "t300_w1",
++                    "transfer_seconds": 300
++                  },
++                  {
++                    "extra_walk_weight": 2,
++                    "id": "t300_w2",
++                    "transfer_seconds": 300
++                  },
++                  {
++                    "extra_walk_weight": 4,
++                    "id": "t300_w4",
++                    "transfer_seconds": 300
++                  },
++                  {
++                    "extra_walk_weight": 0,
++                    "id": "t600_w0",
++                    "transfer_seconds": 600
++                  },
++                  {
++                    "extra_walk_weight": 1,
++                    "id": "t600_w1",
++                    "transfer_seconds": 600
++                  },
++                  {
++                    "extra_walk_weight": 2,
++                    "id": "t600_w2",
++                    "transfer_seconds": 600
++                  },
++                  {
++                    "extra_walk_weight": 4,
++                    "id": "t600_w4",
++                    "transfer_seconds": 600
++                  },
++                  {
++                    "extra_walk_weight": 0,
++                    "id": "t900_w0",
++                    "transfer_seconds": 900
++                  },
++                  {
++                    "extra_walk_weight": 1,
++                    "id": "t900_w1",
++                    "transfer_seconds": 900
++                  },
++                  {
++                    "extra_walk_weight": 2,
++                    "id": "t900_w2",
++                    "transfer_seconds": 900
++                  },
++                  {
++                    "extra_walk_weight": 4,
++                    "id": "t900_w4",
++                    "transfer_seconds": 900
++                  }
++                ]
++              }
++            ],
++            "lean_delivery": true,
++            "max_candidates": 1024,
++            "max_subsets": 200000
++          },
++          "max_fill_matrix_bytes": 8388608,
++          "max_fill_subsets": 200000,
++          "max_fill_work": 20000000
++        },
++        "delivery_limits": [
++          3
++        ],
++        "delivery_policy": "bounded_absolute_hybrid_fill_v1",
++        "lean_delivery": true,
++        "max_candidates": 1024,
++        "max_subsets": 200000
++      },
++      "feature_config": {
++        "base": {
++          "bounded": {
++            "distinct_patterns": false,
++            "exact_subset_search": false,
++            "exact_when_feasible": true,
++            "limits": [
++              3
++            ],
++            "max_critical_points": 100000,
++            "max_extra_walk_weight": 4,
++            "max_matrix_bytes": 67108864,
++            "max_transfer_seconds": 900,
++            "max_work": 50000000,
++            "min_extra_walk_weight": 0,
++            "min_transfer_seconds": 0,
++            "nested": false,
++            "objective": "absolute"
++          },
++          "max_candidates": 1024,
++          "max_subsets": 200000
++        },
++        "finite20": {
++          "delivery_limits": [
++            3
++          ],
++          "delivery_policy": "finite_preferences_v2",
++          "groups": [
++            {
++              "description": "Fixed20 nonnegative score hypotheses from the preexisting evaluator; not learned rider preferences or population probabilities.",
++              "name": "explicit_twenty_hypotheses",
++              "preferences": [
++                {
++                  "extra_walk_weight": 0,
++                  "id": "t0_w0",
++                  "transfer_seconds": 0
++                },
++                {
++                  "extra_walk_weight": 1,
++                  "id": "t0_w1",
++                  "transfer_seconds": 0
++                },
++                {
++                  "extra_walk_weight": 2,
++                  "id": "t0_w2",
++                  "transfer_seconds": 0
++                },
++                {
++                  "extra_walk_weight": 4,
++                  "id": "t0_w4",
++                  "transfer_seconds": 0
++                },
++                {
++                  "extra_walk_weight": 0,
++                  "id": "t150_w0",
++                  "transfer_seconds": 150
++                },
++                {
++                  "extra_walk_weight": 1,
++                  "id": "t150_w1",
++                  "transfer_seconds": 150
++                },
++                {
++                  "extra_walk_weight": 2,
++                  "id": "t150_w2",
++                  "transfer_seconds": 150
++                },
++                {
++                  "extra_walk_weight": 4,
++                  "id": "t150_w4",
++                  "transfer_seconds": 150
++                },
++                {
++                  "extra_walk_weight": 0,
++                  "id": "t300_w0",
++                  "transfer_seconds": 300
++                },
++                {
++                  "extra_walk_weight": 1,
++                  "id": "t300_w1",
++                  "transfer_seconds": 300
++                },
++                {
++                  "extra_walk_weight": 2,
++                  "id": "t300_w2",
++                  "transfer_seconds": 300
++                },
++                {
++                  "extra_walk_weight": 4,
++                  "id": "t300_w4",
++                  "transfer_seconds": 300
++                },
++                {
++                  "extra_walk_weight": 0,
++                  "id": "t600_w0",
++                  "transfer_seconds": 600
++                },
++                {
++                  "extra_walk_weight": 1,
++                  "id": "t600_w1",
++                  "transfer_seconds": 600
++                },
++                {
++                  "extra_walk_weight": 2,
++                  "id": "t600_w2",
++                  "transfer_seconds": 600
++                },
++                {
++                  "extra_walk_weight": 4,
++                  "id": "t600_w4",
++                  "transfer_seconds": 600
++                },
++                {
++                  "extra_walk_weight": 0,
++                  "id": "t900_w0",
++                  "transfer_seconds": 900
++                },
++                {
++                  "extra_walk_weight": 1,
++                  "id": "t900_w1",
++                  "transfer_seconds": 900
++                },
++                {
++                  "extra_walk_weight": 2,
++                  "id": "t900_w2",
++                  "transfer_seconds": 900
++                },
++                {
++                  "extra_walk_weight": 4,
++                  "id": "t900_w4",
++                  "transfer_seconds": 900
++                }
++              ]
++            }
++          ],
++          "lean_delivery": true,
++          "max_candidates": 1024,
++          "max_subsets": 200000
++        },
++        "max_fill_matrix_bytes": 8388608,
++        "max_fill_subsets": 200000,
++        "max_fill_work": 20000000
++      },
++      "id": "bounded_absolute_hybrid_fill_v1_top3",
++      "limit": 3,
++      "policy": "bounded_absolute_hybrid_fill_v1"
++    },
++    {
++      "config": {
++        "absolute_hybrid_fill": {
++          "base": {
++            "bounded": {
++              "distinct_patterns": false,
++              "exact_subset_search": false,
++              "exact_when_feasible": true,
++              "limits": [
++                5
++              ],
++              "max_critical_points": 100000,
++              "max_extra_walk_weight": 4,
++              "max_matrix_bytes": 67108864,
++              "max_transfer_seconds": 900,
++              "max_work": 50000000,
++              "min_extra_walk_weight": 0,
++              "min_transfer_seconds": 0,
++              "nested": false,
++              "objective": "absolute"
++            },
++            "max_candidates": 1024,
++            "max_subsets": 200000
++          },
++          "finite20": {
++            "delivery_limits": [
++              5
++            ],
++            "delivery_policy": "finite_preferences_v2",
++            "groups": [
++              {
++                "description": "Fixed20 nonnegative score hypotheses from the preexisting evaluator; not learned rider preferences or population probabilities.",
++                "name": "explicit_twenty_hypotheses",
++                "preferences": [
++                  {
++                    "extra_walk_weight": 0,
++                    "id": "t0_w0",
++                    "transfer_seconds": 0
++                  },
++                  {
++                    "extra_walk_weight": 1,
++                    "id": "t0_w1",
++                    "transfer_seconds": 0
++                  },
++                  {
++                    "extra_walk_weight": 2,
++                    "id": "t0_w2",
++                    "transfer_seconds": 0
++                  },
++                  {
++                    "extra_walk_weight": 4,
++                    "id": "t0_w4",
++                    "transfer_seconds": 0
++                  },
++                  {
++                    "extra_walk_weight": 0,
++                    "id": "t150_w0",
++                    "transfer_seconds": 150
++                  },
++                  {
++                    "extra_walk_weight": 1,
++                    "id": "t150_w1",
++                    "transfer_seconds": 150
++                  },
++                  {
++                    "extra_walk_weight": 2,
++                    "id": "t150_w2",
++                    "transfer_seconds": 150
++                  },
++                  {
++                    "extra_walk_weight": 4,
++                    "id": "t150_w4",
++                    "transfer_seconds": 150
++                  },
++                  {
++                    "extra_walk_weight": 0,
++                    "id": "t300_w0",
++                    "transfer_seconds": 300
++                  },
++                  {
++                    "extra_walk_weight": 1,
++                    "id": "t300_w1",
++                    "transfer_seconds": 300
++                  },
++                  {
++                    "extra_walk_weight": 2,
++                    "id": "t300_w2",
++                    "transfer_seconds": 300
++                  },
++                  {
++                    "extra_walk_weight": 4,
++                    "id": "t300_w4",
++                    "transfer_seconds": 300
++                  },
++                  {
++                    "extra_walk_weight": 0,
++                    "id": "t600_w0",
++                    "transfer_seconds": 600
++                  },
++                  {
++                    "extra_walk_weight": 1,
++                    "id": "t600_w1",
++                    "transfer_seconds": 600
++                  },
++                  {
++                    "extra_walk_weight": 2,
++                    "id": "t600_w2",
++                    "transfer_seconds": 600
++                  },
++                  {
++                    "extra_walk_weight": 4,
++                    "id": "t600_w4",
++                    "transfer_seconds": 600
++                  },
++                  {
++                    "extra_walk_weight": 0,
++                    "id": "t900_w0",
++                    "transfer_seconds": 900
++                  },
++                  {
++                    "extra_walk_weight": 1,
++                    "id": "t900_w1",
++                    "transfer_seconds": 900
++                  },
++                  {
++                    "extra_walk_weight": 2,
++                    "id": "t900_w2",
++                    "transfer_seconds": 900
++                  },
++                  {
++                    "extra_walk_weight": 4,
++                    "id": "t900_w4",
++                    "transfer_seconds": 900
++                  }
++                ]
++              }
++            ],
++            "lean_delivery": true,
++            "max_candidates": 1024,
++            "max_subsets": 200000
++          },
++          "max_fill_matrix_bytes": 8388608,
++          "max_fill_subsets": 200000,
++          "max_fill_work": 20000000
++        },
++        "delivery_limits": [
++          5
++        ],
++        "delivery_policy": "bounded_absolute_hybrid_fill_v1",
++        "lean_delivery": true,
++        "max_candidates": 1024,
++        "max_subsets": 200000
++      },
++      "feature_config": {
++        "base": {
++          "bounded": {
++            "distinct_patterns": false,
++            "exact_subset_search": false,
++            "exact_when_feasible": true,
++            "limits": [
++              5
++            ],
++            "max_critical_points": 100000,
++            "max_extra_walk_weight": 4,
++            "max_matrix_bytes": 67108864,
++            "max_transfer_seconds": 900,
++            "max_work": 50000000,
++            "min_extra_walk_weight": 0,
++            "min_transfer_seconds": 0,
++            "nested": false,
++            "objective": "absolute"
++          },
++          "max_candidates": 1024,
++          "max_subsets": 200000
++        },
++        "finite20": {
++          "delivery_limits": [
++            5
++          ],
++          "delivery_policy": "finite_preferences_v2",
++          "groups": [
++            {
++              "description": "Fixed20 nonnegative score hypotheses from the preexisting evaluator; not learned rider preferences or population probabilities.",
++              "name": "explicit_twenty_hypotheses",
++              "preferences": [
++                {
++                  "extra_walk_weight": 0,
++                  "id": "t0_w0",
++                  "transfer_seconds": 0
++                },
++                {
++                  "extra_walk_weight": 1,
++                  "id": "t0_w1",
++                  "transfer_seconds": 0
++                },
++                {
++                  "extra_walk_weight": 2,
++                  "id": "t0_w2",
++                  "transfer_seconds": 0
++                },
++                {
++                  "extra_walk_weight": 4,
++                  "id": "t0_w4",
++                  "transfer_seconds": 0
++                },
++                {
++                  "extra_walk_weight": 0,
++                  "id": "t150_w0",
++                  "transfer_seconds": 150
++                },
++                {
++                  "extra_walk_weight": 1,
++                  "id": "t150_w1",
++                  "transfer_seconds": 150
++                },
++                {
++                  "extra_walk_weight": 2,
++                  "id": "t150_w2",
++                  "transfer_seconds": 150
++                },
++                {
++                  "extra_walk_weight": 4,
++                  "id": "t150_w4",
++                  "transfer_seconds": 150
++                },
++                {
++                  "extra_walk_weight": 0,
++                  "id": "t300_w0",
++                  "transfer_seconds": 300
++                },
++                {
++                  "extra_walk_weight": 1,
++                  "id": "t300_w1",
++                  "transfer_seconds": 300
++                },
++                {
++                  "extra_walk_weight": 2,
++                  "id": "t300_w2",
++                  "transfer_seconds": 300
++                },
++                {
++                  "extra_walk_weight": 4,
++                  "id": "t300_w4",
++                  "transfer_seconds": 300
++                },
++                {
++                  "extra_walk_weight": 0,
++                  "id": "t600_w0",
++                  "transfer_seconds": 600
++                },
++                {
++                  "extra_walk_weight": 1,
++                  "id": "t600_w1",
++                  "transfer_seconds": 600
++                },
++                {
++                  "extra_walk_weight": 2,
++                  "id": "t600_w2",
++                  "transfer_seconds": 600
++                },
++                {
++                  "extra_walk_weight": 4,
++                  "id": "t600_w4",
++                  "transfer_seconds": 600
++                },
++                {
++                  "extra_walk_weight": 0,
++                  "id": "t900_w0",
++                  "transfer_seconds": 900
++                },
++                {
++                  "extra_walk_weight": 1,
++                  "id": "t900_w1",
++                  "transfer_seconds": 900
++                },
++                {
++                  "extra_walk_weight": 2,
++                  "id": "t900_w2",
++                  "transfer_seconds": 900
++                },
++                {
++                  "extra_walk_weight": 4,
++                  "id": "t900_w4",
++                  "transfer_seconds": 900
++                }
++              ]
++            }
++          ],
++          "lean_delivery": true,
++          "max_candidates": 1024,
++          "max_subsets": 200000
++        },
++        "max_fill_matrix_bytes": 8388608,
++        "max_fill_subsets": 200000,
++        "max_fill_work": 20000000
++      },
++      "id": "bounded_absolute_hybrid_fill_v1_top5",
++      "limit": 5,
++      "policy": "bounded_absolute_hybrid_fill_v1"
++    }
++  ],
+   "priority": "historical finite20,pattern envelope300,default Feature less order; never remove base IDs",
+   "schema": "sg-one-absolute-hybrid-fill-preregistration-v1"
+ }
+--- a/cmd/familybench/main.go
++++ b/cmd/familybench/main.go
+@@ -362,7 +362,7 @@
+ 	qualityPrepStart := time.Now()
+ 	var qualityIndex *recommend.Index
+ 	if *quality {
+-		if choiceConfig != nil && (choiceConfig.Bounded != nil || choiceConfig.FiniteSafe != nil || choiceConfig.LeanDelivery) {
++		if choiceConfig != nil && (choiceConfig.Bounded != nil || choiceConfig.FiniteSafe != nil || choiceConfig.HybridFill != nil || choiceConfig.LeanDelivery) {
+ 			qualityIndex, e = recommend.NewBoundedFromChecker(checker)
+ 		} else {
+ 			qualityIndex, e = recommend.New(d)
+@@ -376,7 +376,7 @@
+ 	qualityMode := "disabled"
+ 	if *quality {
+ 		qualityMode = "legacy_full_recovery"
+-		if choiceConfig != nil && (choiceConfig.Bounded != nil || choiceConfig.FiniteSafe != nil || choiceConfig.LeanDelivery) {
++		if choiceConfig != nil && (choiceConfig.Bounded != nil || choiceConfig.FiniteSafe != nil || choiceConfig.HybridFill != nil || choiceConfig.LeanDelivery) {
+ 			qualityMode = "bounded_shared_checker_no_recovery"
+ 		}
+ 	}
+--- /dev/null
++++ b/cmd/hybridfillprobe/main.go
+@@ -0,0 +1,4 @@
++package main
++// STATIC STAGING ONLY. Source-bound offline feature CLI, never serving timing.
++import("context";"encoding/json";"fmt";"io";"os";"github.com/ertyoii/transit-routing-go/recommend";"github.com/ertyoii/transit-routing-bench/experiment")
++func main(){dec:=json.NewDecoder(os.Stdin);dec.DisallowUnknownFields();enc:=json.NewEncoder(os.Stdout);seen:=map[string]bool{};for{var q struct{ID string `json:"request_id"`;Features []recommend.Feature `json:"features"`;Config recommend.HybridFillConfig `json:"config"`};err:=dec.Decode(&q);if err==io.EOF{return};if err!=nil{fmt.Fprintln(os.Stderr,err);os.Exit(2)};if q.ID==""||seen[q.ID]{fmt.Fprintln(os.Stderr,"duplicate/empty request ID");os.Exit(2)};seen[q.ID]=true;r,e:=recommend.SelectHybridFill(context.Background(),q.Features,q.Config);message:="";if e!=nil{message=e.Error()};var control *recommend.ContinuousChoices;controlError:="";if e==nil{var ce error;control,ce=recommend.SelectBounded(context.Background(),q.Features,q.Config.Base);if ce!=nil{controlError=ce.Error()}};if err=enc.Encode(map[string]any{"request_id":q.ID,"result":r,"error":message,"base_control":control,"base_control_error":controlError,"build_source_sha256":experiment.BuildSourceSHA256});err!=nil{fmt.Fprintln(os.Stderr,err);os.Exit(2)}}}
+--- /dev/null
++++ b/regression/hybrid_fill_lean_test.go
+@@ -0,0 +1,5 @@
++package regression
++// STATIC STAGING ONLY. Source/serving qualification on a literal tiny model.
++import("context";"testing";"github.com/ertyoii/transit-routing-go/model";"github.com/ertyoii/transit-routing-go/recommend";"github.com/ertyoii/transit-routing-go/validate")
++func fillServingConfig(k int)recommend.ChoiceConfig{safe:=safeServingConfig("absolute");finite:=safe.FiniteSafe.Baseline;finite.DeliveryLimits=[]int{k};base:=recommend.ChoiceConfig{MaxCandidates:1024,MaxSubsets:200000,Bounded:&recommend.BoundedConfig{MinTransfer:0,MaxTransfer:900,MinWalk:0,MaxWalk:4,Objective:"absolute",Limits:[]int{k},MaxCriticalPoints:100000,MaxWork:50000000,MaxMatrixBytes:67108864,ExactWhenFeasible:true}};fill:=&recommend.HybridFillConfig{Base:base,Finite20:finite,MaxFillSubsets:200000,MaxFillWork:20000000,MaxFillMatrixBytes:8388608};return recommend.ChoiceConfig{MaxCandidates:1024,MaxSubsets:200000,LeanDelivery:true,DeliveryPolicy:"bounded_absolute_hybrid_fill_v1",DeliveryLimits:[]int{k},HybridFill:fill}}
++func TestHybridFillLeanServingExactTop3Top5AndBasePrefix(t *testing.T){d:=model.Dataset{SchemaVersion:"0.2",ID:"fill-lean-toy",TimeZone:"Asia/Singapore",ServiceDate:"2026-10-20",Stops:[]model.Stop{{ID:"a",Accessible:model.Yes},{ID:"b",Accessible:model.Yes}},Trips:[]model.Trip{{ID:"t1",RouteID:"r1",Accessible:model.Yes},{ID:"t2",RouteID:"r2",Accessible:model.Yes},{ID:"t3",RouteID:"r3",Accessible:model.Yes}},Connections:[]model.Connection{{ID:"c1",TripID:"t1",From:"a",To:"b",Departure:10,Arrival:20,Pickup:true,Dropoff:true},{ID:"c2",TripID:"t2",From:"a",To:"b",Departure:10,Arrival:30,Pickup:true,Dropoff:true},{ID:"c3",TripID:"t3",From:"a",To:"b",Departure:10,Arrival:40,Pickup:true,Dropoff:true}},Footpaths:[]model.Footpath{}};checker,err:=validate.New(d);if err!=nil{t.Fatal(err)};lean,err:=recommend.NewBoundedFromChecker(checker);if err!=nil{t.Fatal(err)};q:=model.Query{ID:"q",Origin:"a",Destination:"b",Departure:0,LatestArrival:100,MaxBoardings:1,MaxLegs:3};js:=[]model.Journey{{Legs:[]model.Leg{{Kind:"ride",Ref:"c1",Departure:10,Arrival:20}}},{Legs:[]model.Leg{{Kind:"ride",Ref:"c2",Departure:10,Arrival:30}}},{Legs:[]model.Leg{{Kind:"ride",Ref:"c3",Departure:10,Arrival:40}}}};for _,k:=range []int{3,5}{out,e:=lean.EvaluateChoices(context.Background(),q,js,fillServingConfig(k));if e!=nil||out.HybridFillChoices==nil||!out.HybridFillChoices.Complete||out.FiniteSafeChoices!=nil||out.ContinuousChoices!=nil||out.Choices!=nil||len(out.Selections)!=0{t.Fatalf("serving dispatch or controls %+v %v",out,e)};r:=out.HybridFillChoices;if !r.FillRequired||r.Selection.Limit!=k||len(r.Selection.Selected)!=3||len(r.Selection.BaseSelected)!=1||r.Selection.Selected[0]!=r.Selection.BaseSelected[0]||r.Selection.FilledSubsetOptimalClaim{t.Fatalf("inclusion/cardinality failed %+v",r)}}}
+--- a/routing.lock.json
++++ b/routing.lock.json
+@@ -69,12 +69,15 @@
+     "raptor/v2_frozen_test.go": "6e4d8214d90c4ee52c1591d9d0b7128dd6b9fa4b571418d973b353dd9be29a9f",
+     "raptor/v2_storage_test.go": "f2df5310c9b1656963bbddf7e0eb9a87f88f872faad59f905c81e3ceeaf73c85",
+     "recommend/bounded.go": "b23345b9e8899b6275a833f64ca90f8e5bfb743960b7fc9e960a5d8d831d5e56",
+-    "recommend/choices.go": "b2223d075788edb645083682d4ecb5e12e34d66e747393673fcbda9549dd94d5",
++    "recommend/choices.go": "f6e4fbf04d5c00cc4d25d0cfde3e86ebf3c87831b742ee5abd0f1d9a03b002dc",
+     "recommend/finite_safe.go": "22be30f8c399ab6b4e615995a8e1ed9dd966d3254ca53f333de1f6128de722a7",
+     "recommend/finite_safe_evaluate.go": "9078311f3529533abce60caa2e6f64f329458aaddd54e7e35d1ea8f13107c28a",
+     "recommend/finite_safe_test.go": "0b175f9d38d6396f3f62eac9154b68019d8a12c7f7a35e0c9f26185e23e81ce8",
++    "recommend/hybrid_fill.go": "13916c3e2c63555688d59a72235e51c83b381ecaacea34a5ec8489ce55f2c2ca",
++    "recommend/hybrid_fill_evaluate.go": "c10555d3b4bb4cf2e29d203b8ef51304647218ecd0c37c9e700fcc17b7b8def5",
++    "recommend/hybrid_fill_test.go": "e1ae05bf1cc4a5bd76948b250e19c21a896b5d12091154dc75f42e2f88885773",
+     "recommend/lean.go": "9db7855a5cea9469e039fe8bfa5c543df8d0183d9cd3c5bb57b453b75b6a5927",
+-    "recommend/quality.go": "86627124f80d29833aeca397328f51aae79346927ee13c5d9954b59888fd5157",
++    "recommend/quality.go": "232de68d0b4a0d45e2506c839a9af2cb5702abd3c042f3ea63af96e0533b93d2",
+     "selection/reserved.go": "180080a439d9aadb56b5245cd614d850751352026f1ea3c4e1ce2c8f8de246ca",
+     "selection/select.go": "6d0531acccf41a7348f7f0e18ace5242459ec72f168da9c8248023c0b387edfb",
+     "strictjson/decode.go": "9a47b1a00708ca467f650ecdf192d794d0e7bf4cf7ff0082ba1f2fc4a699a163",
+@@ -203,6 +206,6 @@
+   },
+   "module": "github.com/ertyoii/transit-routing-go",
+   "origin": "TB-answer-tie common source plus NEW Sparse scalar cost summary; previous native vendor bytes unchanged. Full same-index proof evidence retained after serving; diagnostics-only, not a query-kernel speedup. Additive finite20-safe V1 offline feature probe only, not serving qualification.",
+-  "source_sha256": "96b6db8bea03c0fadff1394dc54182ba7ef99eda6d28026f1c9490c11588c745",
++  "source_sha256": "658b04c4a1893c6835814a3149977e20eaacf6a58777b11c3e4e624b9de9182d",
+   "version": "v0.1.0-pre.3"
+ }
+--- a/vendor/github.com/ertyoii/transit-routing-go/recommend/choices.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/recommend/choices.go
+@@ -22,6 +22,7 @@
+ }
+ type ChoiceConfig struct {
+ 	FiniteSafe *FiniteSafeConfig `json:"finite20_safe,omitempty"`
++	HybridFill *HybridFillConfig `json:"absolute_hybrid_fill,omitempty"`
+ 	LeanDelivery   bool              `json:"lean_delivery,omitempty"`
+ 	DeliveryPolicy string            `json:"delivery_policy,omitempty"`
+ 	DeliveryLimits []int             `json:"delivery_limits,omitempty"`
+@@ -31,12 +32,18 @@
+ 	Groups         []PreferenceGroup `json:"groups"`
+ }
+ 
+-func nestedDeliveryConfig(c ChoiceConfig) bool { return c.FiniteSafe != nil }
++func nestedDeliveryConfig(c ChoiceConfig) bool { return c.FiniteSafe != nil || c.HybridFill != nil }
+ 
+ func (c ChoiceConfig) Validate() error {
+  if c.FiniteSafe != nil {
+-  if c.Bounded != nil || !c.LeanDelivery || c.DeliveryPolicy != "finite20_safe_v1" || len(c.DeliveryLimits) != 1 || c.DeliveryLimits[0] != 3 || len(c.Groups) != 0 || c.MaxCandidates != c.FiniteSafe.MaxCandidates || c.MaxSubsets != c.FiniteSafe.MaxStates { return fmt.Errorf("finite20-safe named config/limits/guards are inconsistent") }
++  if c.HybridFill != nil || c.Bounded != nil || !c.LeanDelivery || c.DeliveryPolicy != "finite20_safe_v1" || len(c.DeliveryLimits) != 1 || c.DeliveryLimits[0] != 3 || len(c.Groups) != 0 || c.MaxCandidates != c.FiniteSafe.MaxCandidates || c.MaxSubsets != c.FiniteSafe.MaxStates { return fmt.Errorf("finite20-safe named config/limits/guards are inconsistent") }
+   return c.FiniteSafe.Validate()
++ }
++ if c.HybridFill != nil {
++  if c.Bounded != nil || !c.LeanDelivery || c.DeliveryPolicy != "bounded_absolute_hybrid_fill_v1" || len(c.DeliveryLimits) != 1 || len(c.Groups) != 0 || c.MaxCandidates != c.HybridFill.Base.MaxCandidates || c.MaxSubsets != c.HybridFill.Base.MaxSubsets { return fmt.Errorf("absolute-hybrid fill named config/limits/guards are inconsistent") }
++  if err:=c.HybridFill.Validate();err!=nil{return err}
++  if c.DeliveryLimits[0]!=c.HybridFill.Base.Bounded.Limits[0]{return fmt.Errorf("absolute-hybrid fill outer/base requested limits differ")}
++  return nil
+  }
+ 
+ 	if c.Bounded != nil && c.LeanDelivery {
+@@ -132,6 +139,7 @@
+ 		return
+ 	}
+ 	if cfg.FiniteSafe != nil { return x.EvaluateFiniteSafe(ctx, q, js, cfg) }
++	if cfg.HybridFill != nil { return x.EvaluateHybridFill(ctx, q, js, cfg) }
+ 	if cfg.Bounded != nil {
+ 		return x.EvaluateBounded(ctx, q, js, cfg)
+ 	}
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/recommend/hybrid_fill.go
+@@ -0,0 +1,124 @@
++package recommend
++
++// STATIC STAGING ONLY. This is a separately named delivery policy, never a silent
++// change to bounded hybrid. Every successful filled display contains its base.
++import (
++ "context"
++ "crypto/sha256"
++ "encoding/hex"
++ "encoding/json"
++ "fmt"
++ "sort"
++)
++type HybridFillConfig struct {
++ Base ChoiceConfig `json:"base"`
++ Finite20 ChoiceConfig `json:"finite20"`
++ MaxFillSubsets int `json:"max_fill_subsets"`
++ MaxFillWork int64 `json:"max_fill_work"`
++ MaxFillMatrixBytes int64 `json:"max_fill_matrix_bytes"`
++}
++type HybridFillPreflight struct {
++ CandidateCount int `json:"candidate_count"`
++ Limit int `json:"limit"`
++ StatesUpperBound int64 `json:"states_upper_bound"`
++ WorkUpperBound int64 `json:"work_upper_bound"`
++ MatrixBytesUpperBound int64 `json:"matrix_bytes_upper_bound"`
++ Feasible bool `json:"resource_feasible"`
++}
++type FillAddition struct {Identity string `json:"identity"`;Source string `json:"source"`}
++type HybridFilledSelection struct {
++ Limit int `json:"limit"`
++ BaseSelected []string `json:"base_selected"`
++ Added []FillAddition `json:"added"`
++ Selected []string `json:"selected"`
++ Complete bool `json:"complete"`
++ SetInclusionVerified bool `json:"set_inclusion_verified"`
++ RequestedCardinality int `json:"requested_cardinality"`
++ FillCardinalitySatisfied bool `json:"fill_cardinality_satisfied"`
++ BaseSubsetOptimal bool `json:"base_subset_optimal"`
++ FilledSubsetOptimalClaim bool `json:"filled_subset_optimal_claim"`
++ BasePatterns int `json:"base_patterns"`
++ AddedPatterns int `json:"added_patterns"`
++ FinalPatterns int `json:"final_patterns"`
++ WorstAbsoluteUpperBound *float64 `json:"worst_pool_absolute_regret_upper_bound,omitempty"`
++ WorstNormalizedUpperBound *float64 `json:"worst_pool_normalized_regret_upper_bound,omitempty"`
++}
++type HybridFillResult struct {
++ Policy string `json:"policy"`
++ Config HybridFillConfig `json:"config"`
++ ConfigValueCanonicalJSON string `json:"config_value_canonical_json"`
++ ConfigValueSHA256 string `json:"config_value_sha256"`
++ BaseConfigValueCanonicalJSON string `json:"base_config_value_canonical_json"`
++ BaseConfigValueSHA256 string `json:"base_config_value_sha256"`
++ ConfigHashScope string `json:"config_hash_scope"`
++ Complete bool `json:"complete"`
++ Error string `json:"error,omitempty"`
++ FailureStage string `json:"failure_stage,omitempty"`
++ InputCandidates int `json:"input_candidates"`
++ InputPatterns int `json:"input_patterns"`
++ Base *ContinuousChoices `json:"base"`
++ FillRequired bool `json:"fill_required"`
++ Preflight *HybridFillPreflight `json:"fill_preflight,omitempty"`
++ ChargedFillWork int64 `json:"charged_fill_work_upper_bound"`
++ Finite20 *Choice `json:"finite20_control,omitempty"`
++ Pattern *Selection `json:"pattern_control,omitempty"`
++ Selection *HybridFilledSelection `json:"selection,omitempty"`
++ GuaranteeScope string `json:"guarantee_scope"`
++}
++func (c HybridFillConfig) Validate()error{
++ if c.Base.FiniteSafe!=nil||c.Base.HybridFill!=nil||c.Finite20.FiniteSafe!=nil||c.Finite20.HybridFill!=nil{return fmt.Errorf("hybrid fill recursive/mixed base or control is forbidden")}
++ if err:=c.Base.Validate();err!=nil{return err};if err:=c.Finite20.Validate();err!=nil{return err}
++ b:=c.Base.Bounded
++ if b==nil||c.Base.LeanDelivery||len(c.Base.Groups)!=0||b.Objective!="absolute"||b.MinTransfer!=0||b.MaxTransfer!=900||b.MinWalk!=0||b.MaxWalk!=4||b.Exact||!b.ExactWhenFeasible||b.Nested||b.DistinctPatterns||len(b.Limits)!=1||(b.Limits[0]!=3&&b.Limits[0]!=5){return fmt.Errorf("hybrid fill requires the unchanged single-limit absolute resource-hybrid base")}
++ if b.MaxWork!=50000000||b.MaxCriticalPoints!=100000||b.MaxMatrixBytes!=67108864||c.Base.MaxSubsets!=200000||c.Base.MaxCandidates!=1024{return fmt.Errorf("hybrid fill base guard changed; no historical-base parity assumed")}
++ f:=c.Finite20
++ if f.Bounded!=nil||!f.LeanDelivery||f.DeliveryPolicy!="finite_preferences_v2"||len(f.DeliveryLimits)!=1||f.DeliveryLimits[0]!=b.Limits[0]||len(f.Groups)!=1||len(f.Groups[0].Preferences)!=20||f.MaxCandidates!=c.Base.MaxCandidates||f.MaxSubsets!=c.MaxFillSubsets{return fmt.Errorf("hybrid fill historical finite20 control differs")}
++ pos:=0;for _,t:=range []int64{0,150,300,600,900}{for _,w:=range []int64{0,1,2,4}{p:=f.Groups[0].Preferences[pos];if p.ID!=fmt.Sprintf("t%d_w%d",t,w)||p.TransferSeconds!=t||p.ExtraWalkWeight!=w{return fmt.Errorf("hybrid fill historical20 changed")};pos++}}
++ if c.MaxFillSubsets<1||c.MaxFillSubsets>200000||c.MaxFillWork<1||c.MaxFillWork>20000000||c.MaxFillMatrixBytes<1||c.MaxFillMatrixBytes>8388608{return fmt.Errorf("hybrid fill resource bounds outside preregistration")};return nil
++}
++func hybridFillChoose(n,k int)int64{if k<0||k>n{return 0};if k>n-k{k=n-k};v:=int64(1);for i:=1;i<=k;i++{v=v*int64(n-k+i)/int64(i)};return v}
++func hybridFillResource(n,k int,c HybridFillConfig)HybridFillPreflight{
++ var states,weighted int64;for s:=1;s<=min(n,k);s++{count:=hybridFillChoose(n,s);states+=count;weighted+=count*int64(s)}
++ // n<=1024,k<=5 keeps these conservative integer bounds below int64 overflow.
++ work:=7*int64(n*n)+20*int64(n)+states*int64(n*(k+1)*(k+1))+20*weighted+4*int64(n)
++ matrix:=8*20*int64(n)
++ return HybridFillPreflight{CandidateCount:n,Limit:k,StatesUpperBound:states,WorkUpperBound:work,MatrixBytesUpperBound:matrix,Feasible:states<=int64(c.MaxFillSubsets)&&work<=c.MaxFillWork&&matrix<=c.MaxFillMatrixBytes}
++}
++func hybridFillCanonical(v any)(string,string,error){
++ raw,err:=json.Marshal(v);if err!=nil{return "","",err};var value any;if err=json.Unmarshal(raw,&value);err!=nil{return "","",err};raw,err=json.Marshal(value);if err!=nil{return "","",err};hash:=sha256.Sum256(raw);return string(raw),hex.EncodeToString(hash[:]),nil
++}
++// SelectHybridFill measures all base/control/fill work in the caller's request.
++// Failure never silently publishes an otherwise complete base as a filled answer.
++func SelectHybridFill(ctx context.Context,features []Feature,cfg HybridFillConfig)(out *HybridFillResult,err error){
++ if err=cfg.Validate();err!=nil{return nil,err}
++ out=&HybridFillResult{Policy:"bounded_absolute_hybrid_fill_v1",Config:cfg,InputCandidates:len(features),ConfigHashScope:"SHA256 of recursively key-sorted Go JSON value; emitted canonical strings are independently normalizable to requested config, not raw config-file hashes",GuaranteeScope:"completed filled set contains every unchanged hybrid base identity and at most requested3/5 native candidates; therefore min affine score cannot worsen at any weight versus its own base; no finite20 dominance, authentic utility, reliability, new filled-set exact maximum, global journey, or latency claim"}
++ defer func(){if err!=nil{out.Error=err.Error();out.Complete=false;out.Selection=nil}}()
++ out.FailureStage="config_hash"
++ out.ConfigValueCanonicalJSON,out.ConfigValueSHA256,err=hybridFillCanonical(cfg);if err!=nil{return}
++ out.BaseConfigValueCanonicalJSON,out.BaseConfigValueSHA256,err=hybridFillCanonical(cfg.Base);if err!=nil{return}
++ out.FailureStage="unchanged_hybrid_base"
++ out.Base,err=SelectBounded(ctx,features,cfg.Base);if err!=nil{return};if out.Base==nil||!out.Base.Complete||len(out.Base.Selections)!=1||!out.Base.Selections[0].Complete{err=fmt.Errorf("hybrid fill base did not complete exactly requested selection");return}
++ base:=out.Base.Selections[0];k:=cfg.Base.Bounded.Limits[0];if base.Limit!=k{err=fmt.Errorf("hybrid fill base limit invariant");return};out.InputPatterns=out.Base.InputPatterns
++ fs:=append([]Feature{},features...);by:=map[string]Feature{};for _,f:=range fs{by[f.Identity]=f};target:=min(k,len(fs));ids:=append([]string{},base.Selected...);seen:=map[string]bool{};basePatterns:=map[string]bool{}
++ for _,id:=range ids{f,ok:=by[id];if !ok||seen[id]{err=fmt.Errorf("hybrid fill base membership/uniqueness invariant");return};seen[id]=true;basePatterns[f.Pattern]=true};if len(ids)>target{err=fmt.Errorf("hybrid fill base exceeds requested cardinality");return}
++ selection:=&HybridFilledSelection{Limit:k,BaseSelected:append([]string{},base.Selected...),Added:[]FillAddition{},Selected:ids,RequestedCardinality:target,BaseSubsetOptimal:base.SubsetOptimal,FilledSubsetOptimalClaim:false,BasePatterns:len(basePatterns),WorstAbsoluteUpperBound:base.WorstAbsolute,WorstNormalizedUpperBound:base.WorstNormalized}
++ out.FillRequired=len(ids)<target
++ if out.FillRequired{
++  out.FailureStage="fill_resource_preflight";p:=hybridFillResource(len(fs),k,cfg);out.Preflight=&p
++  if !p.Feasible{err=fmt.Errorf("hybrid_fill_resource_preflight_infeasible: %w",ErrSelectionBudget);return};out.ChargedFillWork=p.WorkUpperBound
++  if err=ctx.Err();err!=nil{return};out.FailureStage="finite20_control"
++  excluded:=map[string]string{};pool:=choiceRepresentatives(fs,excluded);prefs:=cfg.Finite20.Groups[0].Preferences;var chosen []int;var states int
++  chosen,states,err=minimax(ctx,pool,prefs,k,cfg.MaxFillSubsets);if err!=nil{return};f:=describeChoice(pool,prefs,chosen,"preference_minimax",k);f.Complete=true;f.PoolOptimal=true;f.EvaluatedSubsets=states;out.Finite20=&f
++  if err=ctx.Err();err!=nil{return};out.FailureStage="pattern_control";pattern:=selectFeatures(fs,k,300);out.Pattern=&pattern
++  out.FailureStage="deterministic_fill";sort.Slice(fs,func(i,j int)bool{return less(fs[i],fs[j])});remaining:=[]string{};for _,f:=range fs{remaining=append(remaining,f.Identity)}
++  for _,stream:=range []struct{source string;ids []string}{{"historical_finite20",f.Selected},{"pattern_anchor_300",pattern.Selected},{"default_feature_order",remaining}}{
++   for _,id:=range stream.ids{if err=ctx.Err();err!=nil{return};if len(selection.Selected)>=target{break};if seen[id]{continue};if _,ok:=by[id];!ok{err=fmt.Errorf("hybrid fill priority stream has foreign identity");return};seen[id]=true;selection.Selected=append(selection.Selected,id);selection.Added=append(selection.Added,FillAddition{Identity:id,Source:stream.source})}
++   if len(selection.Selected)>=target{break}
++  }
++ }
++ out.FailureStage="final_inclusion_check";if err=ctx.Err();err!=nil{return}
++ if len(selection.Selected)!=target{err=fmt.Errorf("hybrid fill did not satisfy requested native cardinality");return}
++ finalPatterns:=map[string]bool{};addedPatterns:=map[string]bool{};for _,id:=range selection.Selected{finalPatterns[by[id].Pattern]=true};for _,a:=range selection.Added{addedPatterns[by[a.Identity].Pattern]=true}
++ for i,id:=range base.Selected{if selection.Selected[i]!=id{err=fmt.Errorf("hybrid fill replaced or reordered a base identity");return}}
++ selection.FinalPatterns=len(finalPatterns);selection.AddedPatterns=len(addedPatterns);selection.SetInclusionVerified=true;selection.FillCardinalitySatisfied=true;selection.Complete=true;out.Selection=selection;out.Complete=true;out.FailureStage="";return
++}
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/recommend/hybrid_fill_evaluate.go
+@@ -0,0 +1,9 @@
++package recommend
++// STATIC STAGING ONLY: all base,control,fill and hash work remains inside serving.
++import("context";"fmt";"sort";"github.com/ertyoii/transit-routing-go/model")
++func (x *Index) EvaluateHybridFill(ctx context.Context,q model.Query,js []model.Journey,cfg ChoiceConfig)(out Result,err error){
++ if err=cfg.Validate();err!=nil{return};if cfg.HybridFill==nil{return out,fmt.Errorf("missing absolute-hybrid fill config")};if !x.lean{return out,fmt.Errorf("absolute-hybrid fill requires shared-checker lean index")}
++ out=Result{Policy:"bounded_absolute_hybrid_fill_v1",FeatureMode:"validated_objective_pattern_slack_no_recovery",Features:[]Feature{},Selections:[]Selection{}};if _,err=x.checker.Binding(q);err!=nil{return};seen:=map[string]bool{}
++ for _,j:=range js{if err=ctx.Err();err!=nil{return};var v model.Validated;v,err=x.checker.Check(q,j);if err!=nil{return};if seen[v.Identity]{continue};seen[v.Identity]=true;var f Feature;f,err=x.measure(q,v,false);if err!=nil{return};out.Features=append(out.Features,f)}
++ sort.Slice(out.Features,func(i,j int)bool{return out.Features[i].Identity<out.Features[j].Identity});out.HybridFillChoices,err=SelectHybridFill(ctx,out.Features,*cfg.HybridFill);return
++}
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/recommend/hybrid_fill_test.go
+@@ -0,0 +1,9 @@
++package recommend
++// STATIC STAGING ONLY. No tests have run.
++import("context";"errors";"reflect";"testing")
++func fillTestConfig(k int)HybridFillConfig{safe:=finiteSafeTestConfig("absolute");finite:=safe.Baseline;finite.DeliveryLimits=[]int{k};base:=ChoiceConfig{MaxCandidates:1024,MaxSubsets:200000,Bounded:&BoundedConfig{MinTransfer:0,MaxTransfer:900,MinWalk:0,MaxWalk:4,Objective:"absolute",Limits:[]int{k},MaxCriticalPoints:100000,MaxWork:50000000,MaxMatrixBytes:67108864,ExactWhenFeasible:true}};return HybridFillConfig{Base:base,Finite20:finite,MaxFillSubsets:200000,MaxFillWork:20000000,MaxFillMatrixBytes:8388608}}
++func fillTestFeatures()[]Feature{return []Feature{finiteSafeFeature("a","a",100,0,0),finiteSafeFeature("b","b",200,1,10),finiteSafeFeature("c","c",300,2,20)}}
++func TestHybridFillPreservesUnchangedBaseAndRequestedCardinality(t *testing.T){for _,k:=range []int{3,5}{cfg:=fillTestConfig(k);fs:=fillTestFeatures();base,err:=SelectBounded(context.Background(),fs,cfg.Base);if err!=nil{t.Fatal(err)};got,err:=SelectHybridFill(context.Background(),fs,cfg);if err!=nil||!got.Complete||!got.FillRequired||got.Selection==nil||len(got.Selection.Selected)!=3||!got.Selection.SetInclusionVerified||!got.Selection.FillCardinalitySatisfied||got.Selection.FilledSubsetOptimalClaim{t.Fatalf("fill failed %+v %v",got,err)};if !reflect.DeepEqual(base.Selections[0].Selected,got.Base.Selections[0].Selected)||!reflect.DeepEqual(base.Selections[0].Selected,got.Selection.BaseSelected){t.Fatal("base changed")};for i,id:=range base.Selections[0].Selected{if got.Selection.Selected[i]!=id{t.Fatal("base identity dropped/reordered")}};if got.Selection.WorstAbsoluteUpperBound==nil||*got.Selection.WorstAbsoluteUpperBound!=*base.Selections[0].WorstAbsolute{t.Fatal("base upper bound corrupted")};if got.ConfigValueSHA256==""||got.BaseConfigValueSHA256==""||got.ConfigValueCanonicalJSON==""{t.Fatal("missing config provenance")}}}
++func TestHybridFillSetInclusionWorksOutsideRectangle(t *testing.T){cfg:=fillTestConfig(3);fs:=fillTestFeatures();r,err:=SelectHybridFill(context.Background(),fs,cfg);if err!=nil{t.Fatal(err)};by:=map[string]Feature{};for _,f:=range fs{by[f.Identity]=f};for _,w:=range []WeightPoint{{0,0},{1800,8},{-500,-10},{0,-100}}{scoreAt:=func(ids []string)float64{best:=1e30;for _,id:=range ids{f:=by[id];v:=float64(f.Duration)+w.Transfer*float64(f.Metrics.Transfers)+w.Walk*float64(f.Metrics.WalkingSeconds);if v<best{best=v}};return best};if scoreAt(r.Selection.Selected)>scoreAt(r.Selection.BaseSelected){t.Fatal("set inclusion inequality failed")}}}
++func TestHybridFillNoFallbackAndConditionalWork(t *testing.T){cfg:=fillTestConfig(3);cfg.MaxFillWork=1;r,err:=SelectHybridFill(context.Background(),fillTestFeatures(),cfg);if !errors.Is(err,ErrSelectionBudget)||r==nil||r.Complete||r.Selection!=nil||r.Base==nil||!r.Base.Complete{t.Fatalf("hidden base fallback %+v %v",r,err)};r,err=SelectHybridFill(context.Background(),fillTestFeatures()[:1],cfg);if err!=nil||!r.Complete||r.FillRequired||r.Preflight!=nil||r.Finite20!=nil||r.Pattern!=nil||r.ChargedFillWork!=0{t.Fatalf("unrequested fill controls evaluated %+v %v",r,err)};r,err=SelectHybridFill(context.Background(),nil,cfg);if err!=nil||!r.Complete||len(r.Selection.Selected)!=0{t.Fatalf("empty failed %+v %v",r,err)}}
++func TestHybridFillPermutationCancelAndRecursiveRejection(t *testing.T){cfg:=fillTestConfig(3);fs:=fillTestFeatures();a,err:=SelectHybridFill(context.Background(),fs,cfg);if err!=nil{t.Fatal(err)};fs[0],fs[2]=fs[2],fs[0];b,err:=SelectHybridFill(context.Background(),fs,cfg);if err!=nil||!reflect.DeepEqual(a.Selection.Selected,b.Selection.Selected){t.Fatal("permutation changed fill")};ctx,cancel:=context.WithCancel(context.Background());cancel();r,err:=SelectHybridFill(ctx,fs,cfg);if !errors.Is(err,context.Canceled)||r==nil||r.Complete||r.Selection!=nil{t.Fatal("cancel falsely complete")};cfg.Base.HybridFill=&cfg;if _,err=SelectHybridFill(context.Background(),fs,cfg);err==nil{t.Fatal("recursive base accepted")}}
+--- a/vendor/github.com/ertyoii/transit-routing-go/recommend/quality.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/recommend/quality.go
+@@ -46,6 +46,7 @@
+ }
+ type Result struct {
+ 	FiniteSafeChoices *FiniteSafeResult `json:"finite20_safe_choices,omitempty"`
++	HybridFillChoices *HybridFillResult `json:"absolute_hybrid_fill_choices,omitempty"`
+ 	ContinuousChoices *ContinuousChoices `json:"continuous_choices,omitempty"`
+ 	FeatureMode       string             `json:"feature_mode,omitempty"`
+ 	Choices           *Choices           `json:"choices,omitempty"`

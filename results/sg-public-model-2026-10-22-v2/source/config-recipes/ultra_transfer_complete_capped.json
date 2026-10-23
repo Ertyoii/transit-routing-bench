@@ -1,0 +1,22 @@
+{
+  "ultra": {
+    "transfer_walking_limit": 600,
+    "accessible_only": false,
+    "limits": {
+      "max_runs": 200000,
+      "max_connection_visits": 2000000000,
+      "max_walk_settled": 2000000,
+      "max_walk_edges": 2000000000,
+      "max_shortcuts": 5000000,
+      "max_output_legs": 2000000
+    }
+  },
+  "ultra_query": {
+    "max_runs": 200000,
+    "max_connection_visits": 2000000000,
+    "max_walk_settled": 2000000,
+    "max_walk_edges": 2000000000,
+    "max_shortcuts": 5000000,
+    "max_output_legs": 2000000
+  }
+}

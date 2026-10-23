@@ -1,0 +1,54 @@
+{
+  "schema": "sg-v2-public-compact-evidence-bindings-v1",
+  "status": "SANITIZED_METADATA_ONLY_NOT_PRIVATE_PROOF_PUBLICATION",
+  "references": [
+    {
+      "label": "final_all4_quality_composition_acceptance",
+      "sha256": "f6669a715c8af4d4b2fb79d39fd69b6e6dbdddb1fde8af3d82466af8d14da7ca",
+      "bytes": 30988,
+      "distribution": "hash_and_byte_count_only; original artifact withheld"
+    },
+    {
+      "label": "final_all18_descriptive_report",
+      "sha256": "89a3adf6b22c0f11e890709da3972946cb2fe70df5bdfe30c717c2360a3fc939",
+      "bytes": 7840273,
+      "distribution": "hash_and_byte_count_only; original artifact withheld"
+    },
+    {
+      "label": "new_arithmetic_report_reader",
+      "sha256": "8c9b727d03b078a24aef05cc6b6ccbc0507d4f024a20bc69175919a395d56493",
+      "bytes": 25192,
+      "distribution": "hash_and_byte_count_only; original artifact withheld"
+    },
+    {
+      "label": "final_descriptive_report_independent_numerical_source_boundary_acceptance",
+      "sha256": "d0797b43e259dc4e25cd34d8cb6126a7545733459f7be1c4409ed5c821a2c6d0",
+      "bytes": 8053,
+      "distribution": "hash_and_byte_count_only; original artifact withheld"
+    },
+    {
+      "label": "original_tune_protocol",
+      "sha256": "50e0555f317d25f3e787ec4f11f2731097318a3397d7abc49999e99ca8685858",
+      "bytes": 14417,
+      "distribution": "hash_and_byte_count_only; original artifact withheld"
+    },
+    {
+      "label": "preoutcome_continuation_addendum",
+      "sha256": "cc7f7fa1cae51106b41d9588f7e0444e9d8815e17ab5a1758f9531a1f8440bef",
+      "bytes": 3762,
+      "distribution": "hash_and_byte_count_only; original artifact withheld"
+    },
+    {
+      "label": "heldout_input_access_protocol_deviation_independent_review",
+      "sha256": "c2b0cf7cb542e77383c13d733e5d987e544e67731e45120c8ee0355237933a31",
+      "bytes": 18194,
+      "distribution": "hash_and_byte_count_only; original artifact withheld"
+    }
+  ],
+  "interpretation": [
+    "Underlying scientific receipts and arithmetic report are independently accepted; acceptance does not itself publish private payloads or approve this public release.",
+    "No private source locations, model, query, witness, certificate or raw proof values are copied.",
+    "The new arithmetic reader is separately reviewed source, not validation-interpreter reuse, and is not included in this payload.",
+    "Original source byte review was packager self-review; no historical independent source-publication receipt is asserted."
+  ]
+}

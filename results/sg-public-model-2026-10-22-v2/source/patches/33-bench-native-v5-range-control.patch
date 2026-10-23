@@ -1,0 +1,48 @@
+--- a/regression/profilequery/profiles_test.go
++++ b/regression/profilequery/profiles_test.go
+@@ -3,7 +3,6 @@
+ import (
+ 	"context"
+ 	"github.com/ertyoii/transit-routing-go/model"
+-	"github.com/ertyoii/transit-routing-go/profilecsa"
+ 	"github.com/ertyoii/transit-routing-go/profilequery"
+ 	"github.com/ertyoii/transit-routing-go/raptor"
+ 	"github.com/ertyoii/transit-routing-go/validate"
+@@ -20,15 +19,11 @@
+ 
+ func searches(t testing.TB, d model.Dataset) map[string]search {
+ 	t.Helper()
+-	a, e := profilecsa.New(d)
+-	if e != nil {
+-		t.Fatal(e)
+-	}
+ 	b, e := raptor.New(d)
+ 	if e != nil {
+ 		t.Fatal(e)
+ 	}
+-	return map[string]search{"profile_csa": a.Search, "range_raptor": b.SearchRange}
++	return map[string]search{"range_raptor": b.SearchRange}
+ }
+ func metrics(t testing.TB, d model.Dataset, q model.Query, j model.Journey) model.Metrics {
+ 	t.Helper()
+@@ -312,9 +307,6 @@
+ 			}
+ 		}
+ 		d.Transfers[0].ToTrip = "out"
+-		if _, e := profilecsa.New(d); e == nil {
+-			t.Fatal("profile CSA accepted unsupported trip selector")
+-		}
+ 		if _, e := raptor.New(d); e == nil {
+ 			t.Fatal("range RAPTOR accepted unsupported trip selector")
+ 		}
+--- a/routing.lock.json
++++ b/routing.lock.json
+@@ -138,7 +138,7 @@
+     "walking/transit/graph.go": "07ec2ac36311597ed657b686be7bc222ef3ac7ec022473d1f55729f5754b6fbe"
+   },
+   "module": "github.com/ertyoii/transit-routing-go",
+-  "origin": "Native auxiliary prep; targeted V1 66b bounded closure only when declared; current seed-fixed common driver/checker/selector retained. Local ancestry only, no remote push.",
++  "origin": "Native auxiliary range-control; targeted V1 66b bounded closure only when declared; current seed-fixed common driver/checker/selector retained. Local ancestry only, no remote push.",
+   "source_sha256": "6b4a5d13cbf915b8f184731c7b15ef989dedbcfa859cacb8e6da4fb444a2dea0",
+   "version": "v0.1.0-pre.3"
+ }

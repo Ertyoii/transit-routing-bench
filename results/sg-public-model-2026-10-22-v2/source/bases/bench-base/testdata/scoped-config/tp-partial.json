@@ -1,0 +1,45 @@
+{
+  "patterns": {
+    "patterns": {
+      "profile": {
+        "cells": 1,
+        "max_boardings": 2,
+        "semantics": "static_stop_pair_v1",
+        "limits": {
+          "max_stops": 100,
+          "max_trips": 100,
+          "max_closure_paths": 10000,
+          "max_walk_settled": 100000,
+          "max_transfers": 10000,
+          "max_runs": 10000,
+          "max_work": 1000000,
+          "max_flag_bytes": 1000000,
+          "max_suffix_bytes": 1000000,
+          "max_witnesses": 100000,
+          "max_query_segments": 100000,
+          "max_snapshot_transfers": 10000
+        }
+      },
+      "max_patterns": 10000,
+      "max_nodes": 10000,
+      "max_edges": 10000,
+      "max_direct_entries": 10000,
+      "max_build_work": 1000000,
+      "max_query_work": 100000,
+      "max_query_labels": 10000
+    },
+    "destination": "D",
+    "walking_limits": {
+      "access_seconds": 0,
+      "egress_seconds": 0,
+      "transfer_seconds": 10,
+      "direct_seconds": 0
+    },
+    "profile_max_legs": 32,
+    "profile_max_walking_seconds": 20,
+    "max_profile_records": 100,
+    "max_profile_sources": 1,
+    "max_profile_queries": 10000,
+    "max_profile_queued_segments": 100000
+  }
+}

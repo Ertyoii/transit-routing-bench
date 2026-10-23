@@ -1,0 +1,539 @@
+--- a/cmd/familybench/adapters.go
++++ b/cmd/familybench/adapters.go
+@@ -17,11 +17,12 @@
+ 	Err      error
+ }
+ type router struct {
+-	single func(context.Context, model.Query) rawResult
+-	shared func(context.Context, []model.Query) ([]rawResult, any)
+-	config any
+-	cost   func() any
+-	kind   string
++	single   func(context.Context, model.Query) rawResult
++	shared   func(context.Context, []model.Query) ([]rawResult, any)
++	config   any
++	fullCost func() any // compact Sparse diagnostics retains full same-index evidence after serving
++	cost     func() any
++	kind     string
+ }
+ 
+ var names = []string{"csa_arrival_single", "csa_arrival_shared", "csa_score_single", "csa_score_shared", "ea_csa_layered", "raptor", "mc_raptor", "trip_based", "flash_tb", "transfer_patterns", "scalable_tp", "trex", "raptor_early", "mc_raptor_early", "raptor_local_walk_ties", "raptor_early_local_walk_ties"}
+--- /dev/null
++++ b/cmd/familybench/diagnostics.go
+@@ -0,0 +1,68 @@
++package main
++
++import (
++	"github.com/ertyoii/transit-routing-bench/experiment"
++	"path/filepath"
++	"runtime"
++	"time"
++)
++
++type diagnosticsExport struct {
++	Enabled           bool                 `json:"enabled"`
++	ElapsedNS         int64                `json:"elapsed_ns"`
++	AllocatedBytes    uint64               `json:"allocated_bytes"`
++	WholePhaseNS      int64                `json:"whole_phase_ns"`
++	InstrumentationNS int64                `json:"instrumentation_ns"`
++	Scope             string               `json:"scope"`
++	ResourcesAfter    experiment.Resources `json:"resources_after"`
++}
++
++func measureDiagnostics(export func() any) (any, diagnosticsExport) {
++	if export == nil {
++		return nil, diagnosticsExport{}
++	}
++	phaseBegin := time.Now()
++	var before, after runtime.MemStats
++	runtime.ReadMemStats(&before)
++	begin := time.Now()
++	value := export()
++	elapsed := time.Since(begin).Nanoseconds()
++	runtime.ReadMemStats(&after)
++	resources := experiment.SnapshotResources()
++	whole := time.Since(phaseBegin).Nanoseconds()
++	return value, diagnosticsExport{Enabled: true, ElapsedNS: elapsed, AllocatedBytes: after.TotalAlloc - before.TotalAlloc,
++		WholePhaseNS: whole, InstrumentationNS: whole - elapsed,
++		Scope:          "elapsed_ns/allocation delta cover export only; whole_phase_ns additionally includes MemStats and resource snapshots; outside native prepNS/checker prep/historical response clocks; process-start availability includes the prequery phase",
++		ResourcesAfter: resources}
++}
++func sparseDiagnosticsName(name string) bool {
++	return name == "ultra_cap_safe_stay_witness_subset_v1" || name == "ultra_subset_local_walk_ties"
++}
++
++type fullDiagnosticsEvidence struct {
++	File           string                `json:"file"`
++	Export         diagnosticsExport     `json:"owned_preparation_export"`
++	IO             experiment.ArtifactIO `json:"artifact_io"`
++	ElapsedNS      int64                 `json:"whole_evidence_phase_ns"`
++	AllocatedBytes uint64                `json:"whole_evidence_phase_allocated_bytes"`
++	Scope          string                `json:"scope"`
++}
++
++// Compact mode still retains the FULL ORIGINAL owned Preparation evidence from
++// THIS exact index after serving. It is source/data/config bound and excluded
++// from query clocks, not suppressed or used to provide route answers.
++func writeFullDiagnostics(out string, export func() any, binding map[string]any) (*fullDiagnosticsEvidence, error) {
++	if export == nil {
++		return nil, nil
++	}
++	var before, after runtime.MemStats
++	runtime.ReadMemStats(&before)
++	begin := time.Now()
++	value, stats := measureDiagnostics(export)
++	payload := map[string]any{"binding": binding, "preparation": value, "scope": "original full owned SparseIndex.Preparation evidence; emitted after all queries; not a substitute for native proof construction/validity or a served answer"}
++	file := "sparse-full-preparation.json"
++	record, e := experiment.WriteArtifact(filepath.Join(out, file), payload)
++	runtime.ReadMemStats(&after)
++	return &fullDiagnosticsEvidence{File: file, Export: stats, IO: record, ElapsedNS: time.Since(begin).Nanoseconds(), AllocatedBytes: after.TotalAlloc - before.TotalAlloc,
++		Scope: "full same-index proof evidence retained after serving; JSON serialization is NOT streaming and may retain a large buffer/peak; no whole-process memory or kernel speed claim"}, e
++}
+--- /dev/null
++++ b/cmd/familybench/diagnostics_test.go
+@@ -0,0 +1,256 @@
++package main
++
++import (
++	"context"
++	"encoding/json"
++	"github.com/ertyoii/transit-routing-bench/fixtures"
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/ultra"
++	"os"
++	"os/exec"
++	"path/filepath"
++	"reflect"
++	"strings"
++	"testing"
++)
++
++func sparseCostParity(t *testing.T, full ultra.SparsePreparation, cost ultra.SparseCostSummary) {
++	t.Helper()
++	f, c := reflect.ValueOf(full), reflect.ValueOf(cost)
++	for i := 0; i < f.NumField(); i++ {
++		name := f.Type().Field(i).Name
++		if name == "Certificates" {
++			continue
++		}
++		if !reflect.DeepEqual(f.Field(i).Interface(), c.FieldByName(name).Interface()) {
++			t.Fatal("scalar cost mismatch", name)
++		}
++	}
++	proofs := 0
++	for _, v := range full.Certificates {
++		proofs += len(v.Proofs)
++	}
++	if cost.CertificateCount != len(full.Certificates) || cost.ProofRecordCount != proofs {
++		t.Fatal("exact proof/certificate counts changed")
++	}
++}
++func TestSparseDiagnosticsAdapterModesPreserveFullNativeOutput(t *testing.T) {
++	b := scopedFixture(t)
++	cfg := scopedInput(t, "ultra-subset")
++	for _, name := range []string{"ultra_cap_safe_stay_witness_subset_v1", "ultra_subset_local_walk_ties"} {
++		full, e := prepareScopedDiagnostics(context.Background(), b.Dataset, name, cfg, "full")
++		if e != nil {
++			t.Fatal(e)
++		}
++		lean, e := prepareScopedDiagnostics(context.Background(), b.Dataset, name, cfg, "compact")
++		if e != nil {
++			t.Fatal(e)
++		}
++		if !reflect.DeepEqual(full.config, lean.config) || full.fullCost != nil || lean.fullCost == nil {
++			t.Fatal("native config/evidence mode changed")
++		}
++		original := full.cost().(ultra.SparsePreparation)
++		compact, measurement := measureDiagnostics(lean.cost)
++		if !measurement.Enabled || measurement.ElapsedNS < 0 {
++			t.Fatal("prequery export clock missing")
++		}
++		sparseCostParity(t, original, compact.(ultra.SparseCostSummary))
++		if !reflect.DeepEqual(original, lean.fullCost().(ultra.SparsePreparation)) {
++			t.Fatal("full same-index evidence changed")
++		}
++		for _, q := range b.Queries {
++			a, c := full.single(context.Background(), q), lean.single(context.Background(), q)
++			if !reflect.DeepEqual(a, c) {
++				t.Fatalf("diagnostic mode changed complete/raw/stats/error:%s", q.ID)
++			}
++		}
++	}
++
++}
++func diagnosticsRecordProjection(v record) any {
++	return struct {
++		Raw                                       []model.Journey
++		Final                                     []model.Validated
++		Completed, Attempted, ValidEmpty, Transit bool
++		Status, Error                             string
++		Detail, Display, Quality, Certificates    any
++	}{v.Raw, v.Final, v.Completed, v.Attempted, v.ValidEmpty, v.Transit, v.Status, v.Error, v.Detail, v.Display, v.Quality, v.Certificates}
++}
++func TestSparseDiagnosticsProcessFullVersusCompactEvidenceParity(t *testing.T) {
++	root, e := filepath.Abs("../..")
++	if e != nil {
++		t.Fatal(e)
++	}
++	binary := filepath.Join(t.TempDir(), "familybench-sparse-lean-diagnostics")
++	env := append(os.Environ(), "GOTOOLCHAIN=local", "GOWORK=off", "GOPROXY=off", "GOSUMDB=off", "GOMAXPROCS=2")
++	logSparseBuildAdmission(t, "before-test-sourcehash")
++	hashCmd := exec.Command("go", "run", "-buildvcs=false", "-mod=vendor", "./cmd/sourcehash")
++	hashCmd.Dir, hashCmd.Env = root, env
++	hashOut, e := hashCmd.CombinedOutput()
++	if e != nil {
++		t.Fatalf("source hash:%v\n%s", e, hashOut)
++	}
++	fingerprint := strings.TrimSpace(string(hashOut))
++	logSparseBuildAdmission(t, "before-test-build")
++	build := exec.Command("go", "build", "-buildvcs=false", "-mod=vendor", "-trimpath", "-ldflags", "-X github.com/ertyoii/transit-routing-bench/experiment.BuildSourceSHA256="+fingerprint, "-o", binary, "./cmd/familybench")
++	build.Dir, build.Env = root, env
++	if out, e := build.CombinedOutput(); e != nil {
++		t.Fatalf("source-bound build:%v\n%s", e, out)
++	}
++	for _, algorithm := range []string{"ultra_cap_safe_stay_witness_subset_v1", "ultra_subset_local_walk_ties"} {
++		var control []record
++		var fullBefore, fullAfter ultra.SparsePreparation
++		for _, mode := range []string{"full", "compact"} {
++			out := filepath.Join(t.TempDir(), "artifact")
++			args := []string{"-fixture", "testdata/scoped.manifest.json", "-algorithm", algorithm, "-scoped-config", "testdata/scoped-config/ultra-subset.json", "-sparse-diagnostics", mode, "-warmups", "0", "-repetitions", "1", "-batch-size", "1", "-stream-responses", "-out-dir", out}
++			cmd := exec.Command(binary, args...)
++			cmd.Dir, cmd.Env = root, env
++			if logs, e := cmd.CombinedOutput(); e != nil {
++				t.Fatalf("%s/%s:%v\n%s", algorithm, mode, e, logs)
++			}
++			read := func(name string, v any) {
++				b, e := os.ReadFile(filepath.Join(out, name))
++				if e != nil {
++					t.Fatal(e)
++				}
++				if e = json.Unmarshal(b, v); e != nil {
++					t.Fatal(e)
++				}
++			}
++			var p pass
++			read("pass-00.json", &p)
++			var summary struct {
++				Dataset string `json:"dataset_sha256"`
++				Scoped  string `json:"scoped_configuration_sha256"`
++				Prep    struct {
++					Cost   json.RawMessage   `json:"index_cost_summary"`
++					Export diagnosticsExport `json:"diagnostics_export"`
++				} `json:"preparation"`
++				Final       json.RawMessage          `json:"index_cost_final"`
++				FinalExport diagnosticsExport        `json:"final_diagnostics_export"`
++				Evidence    *fullDiagnosticsEvidence `json:"full_index_evidence"`
++			}
++			read("summary.json", &summary)
++			if !summary.Prep.Export.Enabled || !summary.FinalExport.Enabled {
++				t.Fatal("export phase instrumentation missing")
++			}
++			if mode == "full" {
++				control = p.Records
++				json.Unmarshal(summary.Prep.Cost, &fullBefore)
++				json.Unmarshal(summary.Final, &fullAfter)
++				if summary.Evidence != nil {
++					t.Fatal("legacy full diagnostics unexpectedly deferred")
++				}
++			} else {
++				if len(p.Records) != len(control) {
++					t.Fatal("offered denominator changed")
++				}
++				for i := range p.Records {
++					if !reflect.DeepEqual(diagnosticsRecordProjection(p.Records[i]), diagnosticsRecordProjection(control[i])) {
++						t.Fatal("full/compact raw/final/native status/detail changed")
++					}
++				}
++				var c0, c1 ultra.SparseCostSummary
++				json.Unmarshal(summary.Prep.Cost, &c0)
++				json.Unmarshal(summary.Final, &c1)
++				sparseCostParity(t, fullBefore, c0)
++				sparseCostParity(t, fullAfter, c1)
++				if summary.Evidence == nil {
++					t.Fatal("full original evidence discarded")
++				}
++				var retained struct {
++					Binding     map[string]any          `json:"binding"`
++					Preparation ultra.SparsePreparation `json:"preparation"`
++				}
++				read(summary.Evidence.File, &retained)
++				if !reflect.DeepEqual(retained.Preparation, fullBefore) || retained.Binding["dataset_sha256"] != summary.Dataset || retained.Binding["scoped_configuration_sha256"] != summary.Scoped {
++					t.Fatal("full same-index evidence identity/parity lost")
++				}
++				data, _ := os.ReadFile(filepath.Join(out, summary.Evidence.File))
++				if fixtures.Sum(data) != summary.Evidence.IO.SHA256 || len(data) != summary.Evidence.IO.Bytes {
++					t.Fatal("full evidence content binding wrong")
++				}
++				var shape map[string]any
++				json.Unmarshal(summary.Prep.Cost, &shape)
++				if _, ok := shape["certificates"]; ok {
++					t.Fatal("compact prequery cost contains certificates")
++				}
++			}
++		}
++	}
++}
++
++// Compact mode is intentionally a no-op for non-Sparse native adapters. This
++// common source preserves both original kernels and separately named local ties.
++func TestSparseDiagnosticsCommonPrimaryRosterParity(t *testing.T) {
++	b := scopedFixture(t)
++	for _, tc := range []struct{ name, config string }{{"trip_based_capped", "tb"}, {"trip_based_capped_answer_walk_ties", "tb"}, {"ultra_transfer_complete_capped", "ultra-control"}, {"ultra_capped_local_walk_ties", "ultra-control"}} {
++		full, e := prepareScopedDiagnostics(context.Background(), b.Dataset, tc.name, scopedInput(t, tc.config), "full")
++		if e != nil {
++			t.Fatal(tc.name, e)
++		}
++		lean, e := prepareScopedDiagnostics(context.Background(), b.Dataset, tc.name, scopedInput(t, tc.config), "compact")
++		if e != nil {
++			t.Fatal(tc.name, e)
++		}
++		if full.fullCost != nil || lean.fullCost != nil || !reflect.DeepEqual(full.config, lean.config) || !reflect.DeepEqual(full.cost(), lean.cost()) {
++			t.Fatal("non-Sparse native diagnostics/config changed", tc.name)
++		}
++		for _, q := range b.Queries {
++			if !reflect.DeepEqual(full.single(context.Background(), q), lean.single(context.Background(), q)) {
++				t.Fatal("non-Sparse raw/complete/native detail changed", tc.name, q.ID)
++			}
++		}
++	}
++	for _, name := range []string{"raptor", "raptor_early", "raptor_local_walk_ties", "raptor_early_local_walk_ties", "mc_raptor", "mc_raptor_early"} {
++		// main keeps this exact original prepare branch regardless of diagnostics mode.
++		a, e := prepare(context.Background(), b.Dataset, name, 10, 10000, 10000, 1000000, 10000)
++		if e != nil {
++			t.Fatal(name, e)
++		}
++		c, e := prepare(context.Background(), b.Dataset, name, 10, 10000, 10000, 1000000, 10000)
++		if e != nil {
++			t.Fatal(name, e)
++		}
++		if !reflect.DeepEqual(a.config, c.config) {
++			t.Fatal("native runtime/caps changed", name)
++		}
++		for _, q := range b.Queries {
++			if !reflect.DeepEqual(a.single(context.Background(), q), c.single(context.Background(), q)) {
++				t.Fatal("native point output changed", name, q.ID)
++			}
++		}
++	}
++}
++
++func logSparseBuildAdmission(t *testing.T, stage string) {
++	t.Helper()
++	observed := map[string]string{}
++	for _, path := range []string{"/proc/meminfo", "/proc/self/limits", "/proc/self/cgroup", "/sys/fs/cgroup/memory.current", "/sys/fs/cgroup/memory.max", "/sys/fs/cgroup/memory.events"} {
++		value, e := os.ReadFile(path)
++		if e != nil {
++			observed[path] = "unavailable: " + e.Error()
++		} else {
++			observed[path] = string(value)
++		}
++	}
++	t.Logf("actual memory/limits before %s: %+v", stage, observed)
++	if dir := os.Getenv("SPARSE_QUALIFICATION_EVIDENCE_DIR"); dir != "" {
++		payload, e := json.MarshalIndent(observed, "", "  ")
++		if e != nil {
++			t.Fatal(e)
++		}
++		f, e := os.OpenFile(filepath.Join(dir, stage+".json"), os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0600)
++		if e != nil {
++			t.Fatal(e)
++		}
++		_, e = f.Write(append(payload, '\n'))
++		ce := f.Close()
++		if e != nil {
++			t.Fatal(e)
++		}
++		if ce != nil {
++			t.Fatal(ce)
++		}
++	}
++}
+--- a/cmd/familybench/main.go
++++ b/cmd/familybench/main.go
+@@ -9,6 +9,7 @@
+ 	"github.com/ertyoii/transit-routing-bench/evaluation"
+ 	"github.com/ertyoii/transit-routing-bench/experiment"
+ 	"github.com/ertyoii/transit-routing-bench/fixtures"
++	"github.com/ertyoii/transit-routing-bench/nativeinputprobe"
+ 	"github.com/ertyoii/transit-routing-bench/workloadseed"
+ 	"github.com/ertyoii/transit-routing-go/comparison"
+ 	"github.com/ertyoii/transit-routing-go/csa"
+@@ -176,7 +177,12 @@
+ 	quality := flag.Bool("quality", false, "measure validated candidates and pattern_anchors_v1 selection; included in response time")
+ 	streamResponses := flag.Bool("stream-responses", false, "write each measured ordinary validated answer immediately to available-responses.jsonl; separately time publication")
+ 	preferencesPath := flag.String("preference-scenarios", "", "explicit finite choice scenarios; requires quality; measured within response")
++	inputOnly := flag.Bool("input-only", false, "actual consuming-driver strict parsing and source/input binding only; no constructor/checker/search")
++	sparseDiagnostics := flag.String("sparse-diagnostics", "full", "full preserves original diagnostics; compact changes only Sparse diagnostics to scalar costs before serving plus full same-index proof evidence after serving; other adapters retain unchanged native diagnostics")
+ 	flag.Parse()
++	if *sparseDiagnostics != "full" && *sparseDiagnostics != "compact" {
++		return fmt.Errorf("invalid sparse diagnostics mode")
++	}
+ 	if *displayK < -1 || *displayK > 10 {
+ 		return fmt.Errorf("invalid display-k")
+ 	}
+@@ -315,6 +321,9 @@
+ 	} else if *scopedPath != "" {
+ 		return fmt.Errorf("scoped configuration supplied for a legacy adapter")
+ 	}
++	if *inputOnly {
++		return nativeinputprobe.Emit("familybench", "point", dh, qh, scopedSHA, w.Seed, len(w.Items), map[string]any{"algorithm": *alg, "sparse_diagnostics": *sparseDiagnostics, "compact_applied": *sparseDiagnostics == "compact" && sparseDiagnosticsName(*alg)})
++	}
+ 	runtime.GC()
+ 	var before, after runtime.MemStats
+ 	runtime.ReadMemStats(&before)
+@@ -323,7 +332,7 @@
+ 	var r *router
+ 	var prepErr error
+ 	if isScoped(*alg) {
+-		r, prepErr = prepareScoped(ctx, d, *alg, scoped)
++		r, prepErr = prepareScopedDiagnostics(ctx, d, *alg, scoped, *sparseDiagnostics)
+ 	} else {
+ 		r, prepErr = prepare(ctx, d, *alg, *k, *labels, *transfers, *workLimit, *witnesses)
+ 	}
+@@ -335,9 +344,11 @@
+ 	runtime.ReadMemStats(&after)
+ 	prepStatus, preparationFatal := preparationOutcome(prepErr)
+ 	prep := map[string]any{"elapsed_ns": prepNS, "allocated_bytes": after.TotalAlloc - before.TotalAlloc, "complete": prepErr == nil, "status": prepStatus, "expected_skip": prepErr != nil && !preparationFatal, "process_fatal": preparationFatal, "error": fmt.Sprint(prepErr), "resources": experiment.SnapshotResources()}
++	prequeryCost, prequeryDiagnostics := measureDiagnostics(r.cost)
+ 	if r.cost != nil {
+-		prep["index_cost_summary"] = r.cost()
+-	}
++		prep["index_cost_summary"] = prequeryCost
++	}
++	prep["diagnostics_export"] = prequeryDiagnostics
+ 	runtime.ReadMemStats(&before)
+ 	t = time.Now()
+ 	checker, e := validate.New(d)
+@@ -647,11 +658,12 @@
+ 		}
+ 		ci = v
+ 	}
+-	var finalCost any
+-	if r.cost != nil {
+-		finalCost = r.cost()
+-	}
+-	_, e = experiment.WriteArtifact(filepath.Join(*out, "summary.json"), map[string]any{"success": !fatal, "success_scope": "No malformed route/adapter/unknown routing failure; budget/unsupported/deadline rows retained. Cross-process quality audited separately.", "algorithm": *alg, "kind": r.kind, "configuration": r.config, "quality_preparation": qualityPrep, "quality_enabled": *quality, "preference_config": choiceConfig, "preference_config_sha256": preferenceSHA, "candidate_k": *k, "display_k": displayLimits, "penalty": 300, "batch_size": *size, "repetitions": *reps, "warmups": *warm, "batch_deadline_ns": deadline.Nanoseconds(), "preparation_deadline_ns": prepTimeout.Nanoseconds(), "rss_sampled_safety_stop_bytes": *rssStop, "rss_sampling_interval_ns": int64(100000000), "hard_memory_cap": false, "hard_cpu_confinement": false, "gomaxprocs": runtime.GOMAXPROCS(0), "go_version": runtime.Version(), "goos": runtime.GOOS, "goarch": runtime.GOARCH, "hardware": os.Getenv("TRANSIT_BENCH_HARDWARE"), "provenance": prov, "dataset_sha256": dh, "queries_sha256": qh, "fixture_manifest_sha256": fixtureSHA, "scoped_configuration_sha256": scopedSHA, "seed": w.Seed, "seed_metadata": w.Seed.Metadata(), "method": w.Method, "input_load_ns": loadNS, "preparation": prep, "checker_preparation": checkPrep, "passes": summaries, "throughput_interval": ci, "index_cost_final": finalCost, "response_stream": publisher.summary(), "resources_final": experiment.SnapshotResources(), "scope": "Native development with recorded resources;8GB/four cores is a cost reference, not an acceptance gate. One router/process. Common batch submission deadline includes queue/search/validation/ranking. No divided shared-core latency; process RSS separate from cumulative allocations; no worker subprocesses."})
++	finalCost, finalDiagnostics := measureDiagnostics(r.cost)
++	fullEvidence, evidenceErr := writeFullDiagnostics(*out, r.fullCost, map[string]any{"algorithm": *alg, "dataset_sha256": dh, "queries_sha256": qh, "scoped_configuration_sha256": scopedSHA, "provenance": prov})
++	if evidenceErr != nil {
++		return fmt.Errorf("full same-index diagnostics evidence not retained: %w", evidenceErr)
++	}
++	_, e = experiment.WriteArtifact(filepath.Join(*out, "summary.json"), map[string]any{"success": !fatal, "success_scope": "No malformed route/adapter/unknown routing failure; budget/unsupported/deadline rows retained. Cross-process quality audited separately.", "algorithm": *alg, "kind": r.kind, "configuration": r.config, "quality_preparation": qualityPrep, "quality_enabled": *quality, "preference_config": choiceConfig, "preference_config_sha256": preferenceSHA, "candidate_k": *k, "display_k": displayLimits, "penalty": 300, "batch_size": *size, "repetitions": *reps, "warmups": *warm, "batch_deadline_ns": deadline.Nanoseconds(), "preparation_deadline_ns": prepTimeout.Nanoseconds(), "rss_sampled_safety_stop_bytes": *rssStop, "rss_sampling_interval_ns": int64(100000000), "hard_memory_cap": false, "hard_cpu_confinement": false, "gomaxprocs": runtime.GOMAXPROCS(0), "go_version": runtime.Version(), "goos": runtime.GOOS, "goarch": runtime.GOARCH, "hardware": os.Getenv("TRANSIT_BENCH_HARDWARE"), "provenance": prov, "dataset_sha256": dh, "queries_sha256": qh, "fixture_manifest_sha256": fixtureSHA, "scoped_configuration_sha256": scopedSHA, "seed": w.Seed, "seed_metadata": w.Seed.Metadata(), "method": w.Method, "input_load_ns": loadNS, "preparation": prep, "checker_preparation": checkPrep, "passes": summaries, "throughput_interval": ci, "index_cost_final": finalCost, "diagnostics_profile": map[string]any{"driver_variant": "common_sparse_lean_diagnostics_candidate_v2", "mode": *sparseDiagnostics, "compact_applied": *sparseDiagnostics == "compact" && sparseDiagnosticsName(*alg), "non_sparse_policy": "unchanged_native_diagnostics", "native_search_unchanged": true, "query_kernel_speedup_claim": false}, "final_diagnostics_export": finalDiagnostics, "full_index_evidence": fullEvidence, "response_stream": publisher.summary(), "resources_final": experiment.SnapshotResources(), "scope": "Native development with recorded resources;8GB/four cores is a cost reference, not an acceptance gate. One router/process. Common batch submission deadline includes queue/search/validation/ranking. No divided shared-core latency; process RSS separate from cumulative allocations; no worker subprocesses."})
+ 	if e != nil {
+ 		return e
+ 	}
+--- a/cmd/familybench/scoped.go
++++ b/cmd/familybench/scoped.go
+@@ -109,6 +109,13 @@
+ }
+ 
+ func prepareScoped(ctx context.Context, d model.Dataset, name string, cfg scopedConfig) (*router, error) {
++	return prepareScopedDiagnostics(ctx, d, name, cfg, "full")
++}
++
++func prepareScopedDiagnostics(ctx context.Context, d model.Dataset, name string, cfg scopedConfig, diagnosticsMode string) (*router, error) {
++	if diagnosticsMode != "full" && diagnosticsMode != "compact" {
++		return nil, fmt.Errorf("invalid sparse diagnostics mode")
++	}
+ 	r := &router{kind: "pareto", config: cfg}
+ 	present := 0
+ 	for _, v := range []bool{cfg.TripBased != nil, cfg.Flash != nil, cfg.ULTRA != nil, cfg.Sparse != nil, cfg.Patterns != nil, cfg.TREX != nil, cfg.SourceDomainPatterns != nil} {
+@@ -185,7 +192,12 @@
+ 		}
+ 		x, err := ultra.BuildSparse(ctx, d, *cfg.Sparse)
+ 		if x != nil {
+-			r.cost = func() any { return x.Preparation() }
++			if diagnosticsMode == "compact" {
++				r.cost = func() any { return x.CostSummary() }
++				r.fullCost = func() any { return x.Preparation() }
++			} else {
++				r.cost = func() any { return x.Preparation() }
++			}
+ 		}
+ 		if err != nil {
+ 			return r, scopedOutcome(err)
+--- /dev/null
++++ b/nativeinputprobe/probe.go
+@@ -0,0 +1,22 @@
++// Package nativeinputprobe reports only strict parsing/binding on the actual
++// consuming driver path. It constructs no routing, checking or quality index.
++package nativeinputprobe
++
++import (
++	"encoding/json"
++	"fmt"
++	"github.com/ertyoii/transit-routing-bench/experiment"
++	"github.com/ertyoii/transit-routing-bench/workloadseed"
++	"os"
++)
++
++func Emit(driver, schema, datasetHash, queriesHash, configHash string, seed workloadseed.Seed, count int, selection any) error {
++	p, e := experiment.Identify(".")
++	if e != nil {
++		return e
++	}
++	if !p.RuntimeMatchesBuild {
++		return fmt.Errorf("input-only requires source-bound build")
++	}
++	return json.NewEncoder(os.Stdout).Encode(map[string]any{"event": "input_only_acceptance", "accepted": true, "driver": driver, "schema": schema, "dataset_sha256": datasetHash, "queries_sha256": queriesHash, "scoped_configuration_sha256": configHash, "seed_metadata": seed.Metadata(), "query_count": count, "selection": selection, "argv": os.Args[1:], "provenance": p, "scope": "actual_consuming_driver_parser_only_no_router_constructor_no_search_no_quality_no_outcomes"})
++}
+--- a/routing.lock.json
++++ b/routing.lock.json
+@@ -179,6 +179,7 @@
+     "ultra/routes.go": "f01d85ecf9b01b381cb0081e02bd958b1a65705d8988e971a3512de08e7ad283",
+     "ultra/search.go": "719be0b0fef669a83dece8f86ca5e4258399c48a1586f7158c2f431804d7cbfe",
+     "ultra/sparse.go": "f87a6d7953394cd64d87b9ec2ef68949e49f4495c78d851213080af6183a03ed",
++    "ultra/sparse_cost.go": "f530048bc21a9ac0e4ce7f26d3ca61f1eeb625f1a821880c0daefa171ac370b9",
+     "validate/journey.go": "18a068d4feedf9390f212a13d34859bdc2d57b9b5d8a82a49631e0f5c35e9f89",
+     "walking/cache.go": "a6ce8c4ca31beba49587aa1d4a00f10aafc4994c9531e53a98caff5baec73f3d",
+     "walking/cache_test.go": "f0e30628e8d515792d2c642bb6588428cccc93900f7903296da679c28ed06c4b",
+@@ -198,7 +199,7 @@
+     "walking/transit/graph.go": "07ec2ac36311597ed657b686be7bc222ef3ac7ec022473d1f55729f5754b6fbe"
+   },
+   "module": "github.com/ertyoii/transit-routing-go",
+-  "origin": "V2 capped TB equal-arrival answer walk ties; native-prep ancestry, explicit named API/adapter; v3-quality shared checker/selector/driver preserved. Exact local source hashes, not a remote commit or speed claim. No remote push.",
+-  "source_sha256": "675cde129c41fe99e1432e752c61877fd4f84aa4f2fc5e337bf7957e7ed1e6a9",
++  "origin": "TB-answer-tie common source plus NEW Sparse scalar cost summary; previous native vendor bytes unchanged. Full same-index proof evidence retained after serving; diagnostics-only, not a query-kernel speedup.",
++  "source_sha256": "01b92621fd413ccfa5f9659954b8c3f3a7d0c0b2951b3fb60a40a85b4c7861dd",
+   "version": "v0.1.0-pre.3"
+ }
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/ultra/sparse_cost.go
+@@ -0,0 +1,37 @@
++package ultra
++
++// SparseCostSummary is an owned scalar-only view. Native proof construction,
++// storage, validity gates and Search are unchanged. Full owned certificates
++// remain available through the original Preparation method.
++type SparseCostSummary struct {
++	Complete             bool              `json:"complete"`
++	Error                string            `json:"error,omitempty"`
++	Profile              string            `json:"profile"`
++	Config               SparseConfig      `json:"config"`
++	Control              CappedPreparation `json:"transfer_complete_preparation"`
++	RetainedPairs        int               `json:"retained_nonempty_pairs"`
++	PrunedPairs          int               `json:"pruned_nonempty_pairs"`
++	ProofChecks          int               `json:"proof_checks"`
++	CertificateCount     int               `json:"certificate_count"`
++	ProofRecordCount     int               `json:"proof_record_count"`
++	CertificatesExported bool              `json:"certificates_exported"`
++	ProofRecordsExported bool              `json:"proof_records_exported"`
++	DiagnosticsProfile   string            `json:"diagnostics_profile"`
++}
++
++// CostSummary visits certificate HEADERS only to sum proof-slice lengths. It
++// never clones, traverses or returns a certificate/proof slice, changes a guard,
++// mutates index state, or substitutes counts for native safety validation.
++func (x *SparseIndex) CostSummary() SparseCostSummary {
++	if x == nil {
++		return SparseCostSummary{Error: "ULTRA sparse: nil index", DiagnosticsProfile: "sparse_scalar_cost_summary_v1"}
++	}
++	p := &x.prep
++	s := SparseCostSummary{Complete: p.Complete, Error: p.Error, Profile: p.Profile, Config: p.Config, Control: p.Control,
++		RetainedPairs: p.RetainedPairs, PrunedPairs: p.PrunedPairs, ProofChecks: p.ProofChecks,
++		CertificateCount: len(p.Certificates), DiagnosticsProfile: "sparse_scalar_cost_summary_v1"}
++	for i := range p.Certificates {
++		s.ProofRecordCount += len(p.Certificates[i].Proofs)
++	}
++	return s
++}

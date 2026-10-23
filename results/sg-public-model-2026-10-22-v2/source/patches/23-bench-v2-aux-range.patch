@@ -1,0 +1,1092 @@
+--- a/routing.lock.json
++++ b/routing.lock.json
+@@ -33,6 +33,7 @@
+     "model/binding.go": "0c9cbef951029a396931a7a8af204d1d34e8b5ce4777fee8d1c9d3d3d0379b0a",
+     "model/model.go": "ff1ad33cb87e072171d4a4844d89b0e159773dacf9dd85b6c17979c5809f6a7d",
+     "model/query_validator.go": "a05147dc2d502100e4f9e8b90f9ec29742cffa6fb0f3ba846634c1b089810213",
++    "paper/node_arena.go": "70dbf5f5133e7939beac7dd12e1dbd90b14200d9295f2f7e6740496c5b828241",
+     "paper/profile.go": "96f9ed6c4ef844dd0e761bcc13f78064fbf5c3c61d440b44c2e952db687913fb",
+     "paper/walking_bound.go": "5b1d0638fcdbbb839313346bd85d9841dcaad490c9340f79f73b74b5da97f419",
+     "presentation/rank.go": "5723df6970f463db4b5445ad685e90d1667f673c940f5201ac055a643835da7e",
+@@ -49,11 +50,12 @@
+     "provenance/notices/ultra-reference-LICENSE.txt": "d5baa7300225514cda71dc7d69c842572112380be743e30d467ec03a37d1837d",
+     "provenance/source-pins.json": "8b451a972b3a1927d22587cc0ff9f47115e216fb99a1ec5b8b04d1fc70bf0490",
+     "raptor/early_pruning.go": "a0ae73b3306cc58a72c1474476e7ecad94ae614c3c47aacbd479201b4e49329d",
+-    "raptor/indexed_walks.go": "59e0d8149cd8948d5a29e87d770971947f49e971f30899e604d3ed3b7e3ba827",
+-    "raptor/multicriteria.go": "31a9d899fdfa9c03a8d2dd05512a1676074d9b639196eb1543a03fce6937989b",
+-    "raptor/range.go": "81f63bb9d674bd0e9955b4aa493b1657ed9c8c7992d04c9fc76960ef92805a15",
+-    "raptor/raptor.go": "bec19d510d5cd339f5d3314e62c828cfccf380fc8d0e7430301e45e9ef734f07",
+-    "raptor/round_queue.go": "3319c9839c727e512d7eef37a5d078c4c4438769dc7254622bac040bdf535a70",
++    "raptor/indexed_walks.go": "6607b6be2ce94ef6ec22348d04ca03fa85a1917ad4dc5694f5636bde87ec2c8b",
++    "raptor/local_walk_ties.go": "a421d1457d7d960d835420783bc859a1d4186c5a01d146f965996e6569e1f9ff",
++    "raptor/multicriteria.go": "7bcb4922d0b4bee980a2be58181d1017119a10e1d0e5e7a7e961c4f7a75a9ea0",
++    "raptor/range.go": "7ec5ea24bb15492972580f61d326fc299b3665ce5b3aa7857d853610967365fc",
++    "raptor/raptor.go": "85e8bb804971f1768910952bbe1c9a59928061b54acd64eaed8288f9ddc26d75",
++    "raptor/round_queue.go": "1f86bcfbed13072e69aa7fb04783d1fd916e824e697956bfdf7c128cbdcfa55a",
+     "recommend/choices.go": "f92dc795483533d0c7d1bbfeecff3c56a8b9e516d30c85cfc48a92c515a9e8d2",
+     "recommend/quality.go": "0305ce81032f25cb01a721a7567330d8339babbcebdf889ad61404b35e70d627",
+     "selection/reserved.go": "180080a439d9aadb56b5245cd614d850751352026f1ea3c4e1ce2c8f8de246ca",
+@@ -64,21 +66,22 @@
+     "tripbased/bounded_walking.go": "e071918fcd8db1941a791108d0f54c787420fe76d3df161ae3ee7cc5e2e64eb9",
+     "tripbased/capped_patterns.go": "640b9cd381f4995d3591315d11a3860e18cb7f8cd89db68a5a0d9641cea83c71",
+     "tripbased/capped_query.go": "507df1a5dbafc58bee3c06eeb6ee2220889611f9efc24677f0933fae694ff8e2",
+-    "tripbased/capped_retained.go": "c05ebc389999a70546748f2e9aadd415e92b2af2b57b117ef8a6ab866acd5c9e",
++    "tripbased/capped_retained.go": "d961cf22818d4a30a471313267c4b6123dcf9f8b025dde118889f9e0c309ef50",
+     "tripbased/capped_source_domain.go": "b65293af7afcc05e3c8fd6c25d07d4ee618d1e49e91ca53cf3a6b1c9757179f8",
++    "tripbased/compact_links.go": "85f66d312381ee13a9a8617e85edd664c4fc3351e6961304e1a3f2cfc251fc09",
+     "tripbased/cost_summary.go": "d686016f8800364ad351da9bab8a440d4daa50042b5c59164ea526c168ec649c",
+-    "tripbased/flash.go": "1ea53260bdf2dedb271f269c738b271895aeb389a0275917c17923ed7ef5829b",
++    "tripbased/flash.go": "4888ff851c113d1ba9378166601bdf53accab7de1171428125dbac3d7ffaf7d0",
+     "tripbased/flash_breakpoints.go": "af8a66abc935a28445495a40a043b47d2f884a3b161779a254905f39e2af4bb3",
+     "tripbased/flash_capped.go": "4d0b3ae6b31ae1c0545e3db70339aefc1b8ae6fd4b0d9769004ab3bbb51d7cdb",
+     "tripbased/flash_graph.go": "00206c170c2e0dd1b05126d5efd02d75ff05d6873c0434e57254b3620ee0914e",
+-    "tripbased/flash_profile.go": "6b5d85fb4b14390529ef2a01d1c91ed5a2c7d39c7957834286d79cbe7e75acab",
+-    "tripbased/flash_retained.go": "e65439c050357c31fc7b00b974b16e9fe488a9380d56779efb089e3de59655d3",
+-    "tripbased/flash_rules.go": "1d0e6061c3cfafc2c7a2cbc1bdca5854ca77e03b3cd43b754c6dd502f53ad80e",
+-    "tripbased/flash_transfers.go": "fd36b6c2e2259448928383ce8e7efb403027c980880770f7f9eaf97decd1c06e",
+-    "tripbased/index.go": "cf39823376309fb08f5c091caeeb95a79aca06316738673c49db1e76d9ac28e5",
++    "tripbased/flash_profile.go": "69a2a37340fe46c29ea70645b7e68457000bc73a1e9a806f9173be10d0c7fd5b",
++    "tripbased/flash_retained.go": "217ab3ffdcc071e44e3499fae1049fd0149132211f4fda60e6bd57a7fd5a95a8",
++    "tripbased/flash_rules.go": "ee3eced244a67a3e9f5007c16272a395c06f4da4bf830e936fe1b94dd9d063bc",
++    "tripbased/flash_transfers.go": "f504d676424c3733c5a03c00eb1b929afa9ee3c13df8ddb988d9ed9efced1205",
++    "tripbased/index.go": "b0503beb184bf7e89f4b8ac16b6e9d427fafe809b348016c993b29930e12e607",
+     "tripbased/patterns.go": "9a3a6fd29ad1d7a3d55c09da141df02a31ae833d32dd7d50b60da890e564e945",
+     "tripbased/patterns_query.go": "37485d9bf79815bc21e07f46e34788c4c7f1cfbb20344cd92addc2aaddd36767",
+-    "tripbased/query.go": "b85fd359a5362825de485da9015fcab9a08a361f9913eac749402f330284c91b",
++    "tripbased/query.go": "454c9313f2b02518d4542857e74b7077ad25ce4de32a4944e1d0a1ab1e937cc3",
+     "tripbased/scalable.go": "84a071f41b7586cc70fac46cdb84a8f079f564f4ba0ed7ba01ec0d0d1f8f8f7e",
+     "tripbased/scalable_border.go": "38f9c17113bda9836ede4f51b783b2c87628414e4cc27f38bb1718788f27d7c5",
+     "tripbased/scalable_cache.go": "80e8292354f838c04e05cda40b404104af4732fe4125832fccf4f88a11e27d8d",
+@@ -98,7 +101,7 @@
+     "tripbased/testdata/trex_fixed_transfer_cap/rank-loss.json": "a034bfb37691ec030b7fcbbf7e26a03b3aadcd8fd77284d56e168fc6d5f897ab",
+     "tripbased/testdata/trex_preprocessing/README.md": "adf2864b1c3b7cfdaeab663d5400b67e84fb47ea9b87b271b7f39513e2a99dae",
+     "tripbased/testdata/trex_preprocessing/fixtures.json": "3f90746a970f2d1303df8de5b7f15356e9e5f1b3937cbe7f36e6a462af9d487b",
+-    "tripbased/transfer_storage.go": "d6c0b99c764e6603598bec90088e10466bf9943802a2b2180e7a2d5e3e005190",
++    "tripbased/transfer_storage.go": "5c3fff927b5143a367f5129e59701be4e2e9fe11e511a659c7e7078c12586c34",
+     "tripbased/trex.go": "0cb573f7cf9cedcee86931596b67f2e9333bdf911d6b80ec34d6f359e49d1801",
+     "tripbased/trex_cap_certificate.go": "6a7e9889828bd1c8e40f6b70d4193ce7bc949e2708d9d6b8ba7e244fe9b749c8",
+     "tripbased/trex_customization.go": "6b2014268e6b19b1ebb9d0744a23fafe745f3e6e2d591a712b8da0d8dbc89b40",
+@@ -113,7 +116,7 @@
+     "tripbased/trex_work.go": "d1019998737e5d5df302dfc6134d6a039eac1949facc62cc44e18152ff8d9cf7",
+     "ultra/active.go": "2ff9e41a15f9877dbc1e4f147c0999bec7db8455372ff632c4d825df355dec93",
+     "ultra/capped.go": "2cd79a4b4e1397bb6120f6d747798e53f5789f86a70d0094ecfb1e525f763fca",
+-    "ultra/capped_search.go": "d1faea97db872ab8d89ec08de66f08b916f4809a85193c5e48b1311232581f27",
++    "ultra/capped_search.go": "602c1378895e5400d986b45add793c54b8aa7c7e73d96961722519a952677176",
+     "ultra/index.go": "c826f9a3736693055267046b04639a18219badfbb3f1e6105caa11a288b60c04",
+     "ultra/reuse.go": "0acde4d1dce13c107465258a5d14fe6e4872e533110965ab58d077663caac4c0",
+     "ultra/routes.go": "f01d85ecf9b01b381cb0081e02bd958b1a65705d8988e971a3512de08e7ad283",
+@@ -131,7 +134,7 @@
+     "walking/transit/graph.go": "07ec2ac36311597ed657b686be7bc222ef3ac7ec022473d1f55729f5754b6fbe"
+   },
+   "module": "github.com/ertyoii/transit-routing-go",
+-  "origin": "V2 auxiliary native aux-control, full file lock. No CSA execution in selected range/tad contract. Not equal point/profile work.",
+-  "source_sha256": "de95038665401a57828971e4d92e3947eb1569d69d3b4ce28d27381cc9f8c7dd",
++  "origin": "V2 auxiliary native aux-range, full file lock. No CSA execution in selected range/tad contract. Not equal point/profile work.",
++  "source_sha256": "87fc7f578cd602dafc245be6198e8590779078e6dfac2630598a1ec1a0a372e6",
+   "version": "v0.1.0-pre.3"
+ }
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/paper/node_arena.go
+@@ -0,0 +1,39 @@
++package paper
++
++import "github.com/ertyoii/transit-routing-go/model"
++
++// NodeArena amortizes witness-node allocation within a single query. Every
++// returned node has a stable address and remains owned by its parent chain;
++// slabs are never reset or reused while any node may still be referenced.
++// The arena must not be shared between concurrent queries.
++type NodeArena struct {
++	slab []Node
++	used int
++}
++
++const nodeSlabSize = 32
++
++func (a *NodeArena) node(parent *Node, leg model.Leg) *Node {
++	if a.used == len(a.slab) {
++		a.slab = make([]Node, nodeSlabSize)
++		a.used = 0
++	}
++	n := &a.slab[a.used]
++	a.used++
++	*n = Node{Previous: parent, Leg: leg}
++	return n
++}
++
++// Ride records exactly the same leg as Ride, without a per-leg allocation.
++func (a *NodeArena) Ride(parent *Node, c model.Connection) *Node {
++	return a.node(parent, model.Leg{Kind: "ride", Ref: c.ID, Departure: c.Departure, Arrival: c.Arrival})
++}
++
++// Append records the same ordered walking legs and timestamps as Path.Append.
++func (a *NodeArena) Append(p Path, n *Node, start int64) *Node {
++	for _, w := range p.Edges {
++		n = a.node(n, model.Leg{Kind: "walk", Ref: w.ID, Departure: start, Arrival: start + w.Duration})
++		start += w.Duration
++	}
++	return n
++}
+--- a/vendor/github.com/ertyoii/transit-routing-go/raptor/indexed_walks.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/raptor/indexed_walks.go
+@@ -2,6 +2,7 @@
+ 
+ import (
+ 	"context"
++	"sort"
+ 
+ 	"github.com/ertyoii/transit-routing-go/model"
+ 	"github.com/ertyoii/transit-routing-go/paper"
+@@ -18,37 +19,55 @@
+ 	allowed bool
+ }
+ 
++type indexedClosure struct {
++	paths  []paper.Path
++	states []pathState
++}
++
+ type indexedWalks struct {
+ 	index  *Index
+ 	query  model.Query
+-	walks  orderedWalks
+-	states [][]pathState
++	walker *paper.Walker
++	early  bool
++	rows   []indexedClosure
+ }
+ 
+ func (x *Index) indexedWalks(walker *paper.Walker, q model.Query, early bool) indexedWalks {
+ 	return indexedWalks{
+ 		index:  x,
+ 		query:  q,
+-		walks:  orderedWalks{walker: walker, enabled: early, cache: map[string][]paper.Path{}},
+-		states: make([][]pathState, len(x.atStop)),
++		walker: walker,
++		early:  early,
++		rows:   make([]indexedClosure, len(x.atStop)),
+ 	}
+ }
+ 
+ func (w *indexedWalks) paths(ctx context.Context, from string, source int) ([]paper.Path, []pathState, error) {
+-	// Do not bypass the original lookup: its Context.Err poll (also on a cached
+-	// closure) is observable in cancellation and partial-result boundaries.
+-	paths, err := w.walks.paths(ctx, from)
++	// A cached native path lookup polls Context.Err exactly once. Dense rows
++	// preserve that poll and the first-lookup reconstruction/sort order without
++	// repeating either walking-cache string-map lookup on every route label.
++	row := &w.rows[source]
++	if row.paths != nil {
++		return row.paths, row.states, ctx.Err()
++	}
++	paths, err := w.walker.Paths(ctx, from)
+ 	if err != nil {
+ 		return nil, nil, err
+ 	}
+-	states := w.states[source]
+-	if states == nil {
+-		states = make([]pathState, len(paths))
+-		for i, p := range paths {
+-			states[i].stop = w.index.stopIDs[p.To]
+-		}
+-		w.states[source] = states
++	if w.early {
++		paths = append([]paper.Path(nil), paths...)
++		sort.Slice(paths, func(i, j int) bool {
++			if paths[i].Duration != paths[j].Duration {
++				return paths[i].Duration < paths[j].Duration
++			}
++			return paths[i].To < paths[j].To
++		})
+ 	}
++	states := make([]pathState, len(paths))
++	for i, p := range paths {
++		states[i].stop = w.index.stopIDs[p.To]
++	}
++	row.paths, row.states = paths, states
+ 	return paths, states, nil
+ }
+ 
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/raptor/local_walk_ties.go
+@@ -0,0 +1,209 @@
++package raptor
++
++import (
++	"context"
++	"github.com/ertyoii/transit-routing-go/model"
++	"github.com/ertyoii/transit-routing-go/paper"
++	"sort"
++)
++
++// SearchLocalWalkTies retains the native 2D arrival/boardings frontier and one
++// readiness label per stop. It refines equal-time stop labels, equal-trip
++// onboard alternatives and equal-arrival answers toward less total walking.
++// Later readiness/lower-walking states are still discarded: this is NOT an
++// exhaustive minimum-walking representative algorithm or a 3D McRAPTOR fallback.
++// It is separately named because witness ties and work counters may change.
++func (x *Index) SearchLocalWalkTies(ctx context.Context, q model.Query, early bool) (paper.Result, EarlyPruningStats, error) {
++	return x.searchLocalWalkTies(ctx, q, early)
++}
++
++func (x *Index) searchLocalWalkTies(ctx context.Context, q model.Query, early bool) (out paper.Result, pruning EarlyPruningStats, err error) {
++	out.Journeys = []model.Journey{}
++	defer func() {
++		out.Complete = err == nil
++		if err != nil {
++			out.Error = err.Error()
++		}
++	}()
++	if err = x.p.CheckContext(ctx, q); err != nil {
++		return
++	}
++	if err = ctx.Err(); err != nil {
++		return
++	}
++	if !x.p.Accessible(q, q.Origin) || !x.p.Accessible(q, q.Destination) {
++		return
++	}
++	if q.Origin == q.Destination {
++		out.Journeys = append(out.Journeys, paper.Journey(nil))
++		return
++	}
++	walker := x.p.Walker(q)
++	walks := x.indexedWalks(walker, q, early)
++	defer func() { out.Stats.WalkClosures = walker.Count }()
++	previous := make([]paper.Label, len(x.atStop))
++	previousSet := make([]bool, len(x.atStop))
++	previousWalk := make([]int64, len(x.atStop))
++	previousStops := []int{}
++	bestArrival := paper.Infinity
++	paths, states, e := walks.paths(ctx, q.Origin, x.stopIDs[q.Origin])
++	if e != nil {
++		err = e
++		return
++	}
++	for i, w := range paths {
++		at := q.Departure + w.Duration
++		if early {
++			pruning.Checks++
++			if at >= bestArrival {
++				pruning.skip(len(paths) - i)
++				break
++			}
++		}
++		if at > q.LatestArrival {
++			continue
++		}
++		n := w.Append(nil, q.Departure)
++		if w.To == q.Destination {
++			if w.Duration <= q.Walking.Direct {
++				bestArrival = at
++				out.Journeys = append(out.Journeys, paper.Journey(n))
++			}
++			continue
++		}
++		if w.Duration <= q.Walking.Access {
++			stop := states[i].stop
++			if !previousSet[stop] {
++				previousStops = append(previousStops, stop)
++			}
++			previousSet[stop] = true
++			previous[stop] = paper.Label{Time: at, Parent: n}
++			previousWalk[stop] = w.Duration
++		}
++	}
++	next := make([]paper.Label, len(x.atStop))
++	nextSet := make([]bool, len(x.atStop))
++	nextWalk := make([]int64, len(x.atStop))
++	nextStops := []int{}
++	queue := make([]int, len(x.routes))
++	routes := []int{}
++	// Exact-round readiness is kept separate from raw alighting and access
++	// labels: role caps and stop-pair rules make ordinary stop-local pruning unsafe.
++	for b := 1; b <= q.MaxBoardings && len(previousStops) > 0; b++ {
++		if err = ctx.Err(); err != nil {
++			return
++		}
++		out.Stats.Rounds++
++		queue, routes = x.collectRoutesInto(previousStops, queue, routes)
++		for _, stop := range nextStops {
++			nextSet[stop] = false
++			next[stop] = paper.Label{}
++		}
++		nextStops = nextStops[:0]
++		best := paper.Label{Time: paper.Infinity}
++		bestWalk := paper.Infinity
++		for _, r := range routes {
++			if err = ctx.Err(); err != nil {
++				return
++			}
++			out.Stats.Routes++
++			route := x.routes[r]
++			current := -1
++			currentWalk := int64(0)
++			var parent *paper.Node
++			for i := queue[r] - 1; i < len(route.trips[0].cs); i++ {
++				if err = ctx.Err(); err != nil {
++					return
++				}
++				prototype := route.trips[0].cs[i]
++				if label := previous[route.from[i]]; previousSet[route.from[i]] && prototype.Pickup && x.p.Accessible(q, prototype.From) {
++					hi := len(route.trips)
++					if current >= 0 {
++						hi = current + 1
++					}
++					t := sort.Search(hi, func(j int) bool { return route.trips[j].cs[i].Departure >= label.Time })
++					if t < len(route.trips) && (current < 0 || t < current || t == current && previousWalk[route.from[i]] < currentWalk) && x.p.TripAllowed(q, route.trips[t].id) {
++						current = t
++						parent = label.Parent
++						currentWalk = previousWalk[route.from[i]]
++					}
++				}
++				if current < 0 {
++					continue
++				}
++				c := route.trips[current].cs[i]
++				out.Stats.Connections++
++				if c.Arrival > q.LatestArrival {
++					current = -1
++					continue
++				}
++				parent = paper.Ride(parent, c)
++				if !c.Dropoff || !x.p.Accessible(q, c.To) {
++					continue
++				}
++				if c.To == q.Destination {
++					if c.Arrival < best.Time || c.Arrival == best.Time && currentWalk < bestWalk {
++						bestWalk = currentWalk
++						best = paper.Label{Time: c.Arrival, Parent: parent}
++					}
++					current = -1
++					continue
++				}
++				paths, states, e := walks.paths(ctx, c.To, route.to[i])
++				if e != nil {
++					err = e
++					return
++				}
++				for i, w := range paths {
++					at := c.Arrival + w.Duration
++					if early {
++						pruning.Checks++
++						if at >= bestArrival || at > best.Time {
++							pruning.skip(len(paths) - i)
++							break
++						}
++					}
++					if at > q.LatestArrival {
++						continue
++					}
++					if w.To == q.Destination {
++						if w.Duration <= q.Walking.Egress && (at < best.Time || at == best.Time && currentWalk+w.Duration < bestWalk) {
++							bestWalk = currentWalk + w.Duration
++							best = paper.Label{Time: at, Parent: w.Append(parent, c.Arrival)}
++						}
++						continue
++					}
++					if b == q.MaxBoardings || w.Duration > q.Walking.Transfer {
++						continue
++					}
++					at, allowed, e := walks.readyTime(&states[i], c.To, w, c.Arrival)
++					if e != nil {
++						err = e
++						return
++					}
++					if !allowed || at > q.LatestArrival {
++						continue
++					}
++					stop := states[i].stop
++					if !nextSet[stop] || at < next[stop].Time || at == next[stop].Time && currentWalk+w.Duration < nextWalk[stop] {
++						if !nextSet[stop] {
++							nextStops = append(nextStops, stop)
++						}
++						nextSet[stop] = true
++						nextWalk[stop] = currentWalk + w.Duration
++						next[stop] = paper.Label{Time: at, Parent: w.Append(parent, c.Arrival)}
++					}
++				}
++			}
++		}
++		if best.Time < bestArrival {
++			bestArrival = best.Time
++			out.Journeys = append(out.Journeys, paper.Journey(best.Parent))
++		}
++		previous, next = next, previous
++		previousSet, nextSet = nextSet, previousSet
++		previousWalk, nextWalk = nextWalk, previousWalk
++		previousStops, nextStops = nextStops, previousStops
++	}
++	return
++}
+--- a/vendor/github.com/ertyoii/transit-routing-go/raptor/multicriteria.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/raptor/multicriteria.go
+@@ -208,18 +208,27 @@
+ 			}
+ 		}
+ 	}
++	next := make([][]multiLabel, len(x.atStop))
++	nextStops := []int{}
++	queue := make([]int, len(x.routes))
++	routes := []int{}
++	bag := []routeLabel{}
+ 	for boards := 1; boards <= q.MaxBoardings && len(previousStops) > 0; boards++ {
+ 		if err = ctx.Err(); err != nil {
+ 			return
+ 		}
+ 		out.Stats.Rounds++
+-		queue, routes := x.collectRoutes(previousStops)
+-		next := make([][]multiLabel, len(x.atStop))
+-		nextStops := []int{}
++		queue, routes = x.collectRoutesInto(previousStops, queue, routes)
++		for _, stop := range nextStops {
++			clear(next[stop][:cap(next[stop])])
++			next[stop] = next[stop][:0]
++		}
++		nextStops = nextStops[:0]
+ 		for _, r := range routes {
+ 			out.Stats.Routes++
+ 			route := x.routes[r]
+-			bag := []routeLabel{}
++			clear(bag[:cap(bag)])
++			bag = bag[:0]
+ 			for i := queue[r] - 1; i < len(route.trips[0].cs); i++ {
+ 				if err = ctx.Err(); err != nil {
+ 					return
+@@ -321,7 +330,8 @@
+ 				bag = continuing
+ 			}
+ 		}
+-		previous, previousStops = next, nextStops
++		previous, next = next, previous
++		previousStops, nextStops = nextStops, previousStops
+ 	}
+ 	return
+ }
+--- a/vendor/github.com/ertyoii/transit-routing-go/raptor/range.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/raptor/range.go
+@@ -45,18 +45,24 @@
+ 		err = e
+ 		return
+ 	}
+-	access := map[string]paper.Path{}
+-	for _, w := range paths {
++	type accessStop struct{ stop, path int }
++	accessStops := []accessStop{}
++	for i, w := range paths {
+ 		if w.To == bq.Destination {
+ 			if w.Duration <= bq.Walking.Direct && bq.Departure+w.Duration <= bq.LatestArrival {
+ 				out.Direct = &profilequery.Direct{Duration: w.Duration, Journey: paper.Journey(w.Append(nil, bq.Departure))}
+ 			}
+ 		} else if w.Duration <= bq.Walking.Access {
+-			access[w.To] = w
++			accessStops = append(accessStops, accessStop{x.stopIDs[w.To], i})
+ 		}
+ 	}
+ 	if bq.Origin == bq.Destination || bq.MaxBoardings == 0 {
+ 		return
++	}
++	// Zero means absent; other entries reference the immutable origin closure.
++	accessPath := make([]int, len(x.atStop))
++	for _, a := range accessStops {
++		accessPath[a.stop] = a.path + 1
+ 	}
+ 	// The upper ready boundary also represents all useful first departures after
+ 	// that boundary. Other critical times are vehicle departure minus access walk.
+@@ -66,11 +72,12 @@
+ 			return
+ 		}
+ 		out.Stats.DepartureEventChecks++
+-		w, ok := access[c.From]
+-		if !ok || !c.Pickup || c.Arrival > bq.LatestArrival || !x.p.TripAllowed(bq, c.TripID) {
++		stop := x.stopIDs[c.From]
++		path := accessPath[stop]
++		if path == 0 || !c.Pickup || c.Arrival > bq.LatestArrival || !x.p.TripAllowed(bq, c.TripID) {
+ 			continue
+ 		}
+-		t := c.Departure - w.Duration
++		t := c.Departure - paths[path-1].Duration
+ 		if t >= bq.Departure && t <= q.End {
+ 			times[t] = true
+ 		}
+@@ -84,10 +91,12 @@
+ 		err = fmt.Errorf("range RAPTOR incomplete: departure iteration budget exhausted")
+ 		return
+ 	}
+-	ready := make([]map[string]rangeLabel, bq.MaxBoardings+1)
++	// Exact-round readiness persists across descending departure iterations. Rows
++	// are allocated lazily, so an unused boarding round has no stop-sized cost.
++	ready := make([][]rangeLabel, bq.MaxBoardings+1)
++	readySet := make([][]bool, bq.MaxBoardings+1)
+ 	best := make([]rangeLabel, bq.MaxBoardings+1)
+ 	for b := range ready {
+-		ready[b] = map[string]rangeLabel{}
+ 		best[b].time = paper.Infinity
+ 	}
+ 	spend := func() error {
+@@ -108,19 +117,26 @@
+ 		out.Points = append(out.Points, profilequery.Point{LatestReady: start, Arrival: arrival, Boardings: b, Journey: paper.Journey(parent)})
+ 		return nil
+ 	}
+-	accessStops := []string{}
+-	for s := range access {
+-		accessStops = append(accessStops, s)
+-	}
+-	sort.Strings(accessStops)
++	// Native access insertion is stop-name sorted; retain that witness/budget order.
++	sort.Slice(accessStops, func(i, j int) bool {
++		return paths[accessStops[i].path].To < paths[accessStops[j].path].To
++	})
++	walks := x.indexedWalks(walker, bq, false)
++	ready[0] = make([]rangeLabel, len(x.atStop))
++	readySet[0] = make([]bool, len(x.atStop))
++	changed, nextChanged := []int{}, []int{}
++	nextSet := make([]bool, len(x.atStop))
++	queue := make([]int, len(x.routes))
++	routes := []int{}
+ 	for _, departure := range departures {
+ 		if err = ctx.Err(); err != nil {
+ 			return
+ 		}
+ 		out.Stats.Departures++
+-		changed := map[string]bool{}
+-		for _, s := range accessStops {
+-			w := access[s]
++		changed = changed[:0]
++		for _, a := range accessStops {
++			s := a.stop
++			w := paths[a.path]
+ 			at := departure + w.Duration
+ 			if at > bq.LatestArrival {
+ 				continue
+@@ -129,37 +145,27 @@
+ 				return
+ 			}
+ 			ready[0][s] = rangeLabel{at, departure, w.Append(nil, departure)}
+-			changed[s] = true
++			readySet[0][s] = true
++			changed = append(changed, s)
+ 		}
+ 		for b := 1; b <= bq.MaxBoardings && len(changed) > 0; b++ {
+ 			out.Stats.Rounds++
+-			queue := map[int]int{}
+-			for s := range changed {
+-				for _, o := range x.at[s] {
+-					p, ok := queue[o.route]
+-					if !ok || o.position < p {
+-						queue[o.route] = o.position
+-					}
+-				}
+-			}
+-			routes := []int{}
+-			for r := range queue {
+-				routes = append(routes, r)
+-			}
+-			sort.Ints(routes)
+-			nextChanged := map[string]bool{}
++			// Only touched routes reset. Sorting retains the native route scan order.
++			queue, routes = x.collectRoutesInto(changed, queue, routes)
++			nextChanged = nextChanged[:0]
+ 			for _, r := range routes {
+ 				out.Stats.Routes++
+ 				route := x.routes[r]
+ 				current := -1
+ 				var parent *paper.Node
+ 				var start int64
+-				for i := queue[r]; i < len(route.trips[0].cs); i++ {
++				for i := queue[r] - 1; i < len(route.trips[0].cs); i++ {
+ 					if err = ctx.Err(); err != nil {
+ 						return
+ 					}
+ 					prototype := route.trips[0].cs[i]
+-					if label, ok := ready[b-1][prototype.From]; ok && prototype.Pickup && x.p.Accessible(bq, prototype.From) {
++					stop := route.from[i]
++					if label := ready[b-1][stop]; readySet[b-1][stop] && prototype.Pickup && x.p.Accessible(bq, prototype.From) {
+ 						t := sort.Search(len(route.trips), func(j int) bool { return route.trips[j].cs[i].Departure >= label.time })
+ 						if t < len(route.trips) && (current < 0 || t < current || t == current && label.start > start) && x.p.TripAllowed(bq, route.trips[t].id) {
+ 							// This exact continuation has already been scanned in b-1;
+@@ -196,12 +202,12 @@
+ 						current = -1
+ 						continue
+ 					}
+-					ws, e := walker.Paths(ctx, c.To)
++					ws, states, e := walks.paths(ctx, c.To, route.to[i])
+ 					if e != nil {
+ 						err = e
+ 						return
+ 					}
+-					for _, w := range ws {
++					for wi, w := range ws {
+ 						if w.To == bq.Destination {
+ 							if w.Duration <= bq.Walking.Egress {
+ 								if err = offer(b, c.Arrival+w.Duration, start, w.Append(parent, c.Arrival)); err != nil {
+@@ -213,7 +219,7 @@
+ 						if b == bq.MaxBoardings || w.Duration > bq.Walking.Transfer {
+ 							continue
+ 						}
+-						at, allowed, e := x.p.ReadyTime(bq, c.To, w.To, c.Arrival, w.Duration)
++						at, allowed, e := walks.readyTime(&states[wi], c.To, w, c.Arrival)
+ 						if e != nil {
+ 							err = e
+ 							return
+@@ -221,18 +227,30 @@
+ 						if !allowed || at > bq.LatestArrival {
+ 							continue
+ 						}
+-						old, ok := ready[b][w.To]
+-						if !ok || at < old.time || at == old.time && start > old.start {
++						stop := states[wi].stop
++						if ready[b] == nil {
++							ready[b] = make([]rangeLabel, len(x.atStop))
++							readySet[b] = make([]bool, len(x.atStop))
++						}
++						old := ready[b][stop]
++						if !readySet[b][stop] || at < old.time || at == old.time && start > old.start {
+ 							if err = spend(); err != nil {
+ 								return
+ 							}
+-							ready[b][w.To] = rangeLabel{at, start, w.Append(parent, c.Arrival)}
+-							nextChanged[w.To] = true
++							ready[b][stop] = rangeLabel{at, start, w.Append(parent, c.Arrival)}
++							readySet[b][stop] = true
++							if !nextSet[stop] {
++								nextSet[stop] = true
++								nextChanged = append(nextChanged, stop)
++							}
+ 						}
+ 					}
+ 				}
+ 			}
+-			changed = nextChanged
++			for _, stop := range nextChanged {
++				nextSet[stop] = false
++			}
++			changed, nextChanged = nextChanged, changed
+ 		}
+ 	}
+ 	return
+--- a/vendor/github.com/ertyoii/transit-routing-go/raptor/raptor.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/raptor/raptor.go
+@@ -194,6 +194,11 @@
+ 			previous[stop] = paper.Label{Time: at, Parent: n}
+ 		}
+ 	}
++	next := make([]paper.Label, len(x.atStop))
++	nextSet := make([]bool, len(x.atStop))
++	nextStops := []int{}
++	queue := make([]int, len(x.routes))
++	routes := []int{}
+ 	// Exact-round readiness is kept separate from raw alighting and access
+ 	// labels: role caps and stop-pair rules make ordinary stop-local pruning unsafe.
+ 	for b := 1; b <= q.MaxBoardings && len(previousStops) > 0; b++ {
+@@ -201,10 +206,12 @@
+ 			return
+ 		}
+ 		out.Stats.Rounds++
+-		queue, routes := x.collectRoutes(previousStops)
+-		next := make([]paper.Label, len(x.atStop))
+-		nextSet := make([]bool, len(x.atStop))
+-		nextStops := []int{}
++		queue, routes = x.collectRoutesInto(previousStops, queue, routes)
++		for _, stop := range nextStops {
++			nextSet[stop] = false
++			next[stop] = paper.Label{}
++		}
++		nextStops = nextStops[:0]
+ 		best := paper.Label{Time: paper.Infinity}
+ 		for _, r := range routes {
+ 			if err = ctx.Err(); err != nil {
+@@ -220,7 +227,11 @@
+ 				}
+ 				prototype := route.trips[0].cs[i]
+ 				if label := previous[route.from[i]]; previousSet[route.from[i]] && prototype.Pickup && x.p.Accessible(q, prototype.From) {
+-					t := sort.Search(len(route.trips), func(j int) bool { return route.trips[j].cs[i].Departure >= label.Time })
++					hi := len(route.trips)
++					if current >= 0 {
++						hi = current
++					}
++					t := sort.Search(hi, func(j int) bool { return route.trips[j].cs[i].Departure >= label.Time })
+ 					if t < len(route.trips) && (current < 0 || t < current) && x.p.TripAllowed(q, route.trips[t].id) {
+ 						current = t
+ 						parent = label.Parent
+@@ -295,7 +306,9 @@
+ 			bestArrival = best.Time
+ 			out.Journeys = append(out.Journeys, paper.Journey(best.Parent))
+ 		}
+-		previous, previousSet, previousStops = next, nextSet, nextStops
++		previous, next = next, previous
++		previousSet, nextSet = nextSet, previousSet
++		previousStops, nextStops = nextStops, previousStops
+ 	}
+ 	return
+ }
+--- a/vendor/github.com/ertyoii/transit-routing-go/raptor/round_queue.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/raptor/round_queue.go
+@@ -22,3 +22,25 @@
+ 	sort.Ints(routes)
+ 	return
+ }
++
++// collectRoutesInto preserves collectRoutes order and minima but reuses
++// query-local storage. Only the previous touched entries need clearing.
++func (x *Index) collectRoutesInto(stops, positions, routes []int) ([]int, []int) {
++	for _, r := range routes {
++		positions[r] = 0
++	}
++	routes = routes[:0]
++	for _, s := range stops {
++		for _, o := range x.atStop[s] {
++			p := o.position + 1
++			if positions[o.route] == 0 {
++				routes = append(routes, o.route)
++				positions[o.route] = p
++			} else if p < positions[o.route] {
++				positions[o.route] = p
++			}
++		}
++	}
++	sort.Ints(routes)
++	return positions, routes
++}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_retained.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/capped_retained.go
+@@ -343,7 +343,8 @@
+ 				if n == k {
+ 					continue
+ 				}
+-				for _, tr := range b.cp.links[seg.trip][i] {
++				for _, packed := range b.cp.links[seg.trip][i] {
++					tr := b.cp.linkData.unpack(packed)
+ 					if e := x.p.tick(s.ctx); e != nil {
+ 						return e
+ 					}
+--- /dev/null
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/compact_links.go
+@@ -0,0 +1,85 @@
++package tripbased
++
++import "github.com/ertyoii/transit-routing-go/paper"
++
++// compactLink is the immutable retained representation, not a query label.
++// Ordinary links occupy 12 pointer-free bytes: a nonnegative trip index, a
++// boarding position, and an ID in the owning index's immutable path pool.
++// Decoding restores the original native-int link and the exact Path pointer.
++// In particular, destination repairs remain query-local and never edit a pool.
++type compactLink struct {
++	trip        int32
++	board, walk uint32
++}
++
++type transferLinkData struct {
++	paths []*paper.Path
++	wide  []link
++}
++
++func (d *transferLinkData) unpack(v compactLink) link {
++	if v.trip >= 0 {
++		return link{int(v.trip), int(v.board), d.paths[v.walk]}
++	}
++	// A negative trip is an escape, with the native-link index in the other
++	// two words. The escape retains the full native domain without introducing
++	// a dataset-size limit or silently narrowing an index/path count.
++	return d.wide[uint64(v.board)<<32|uint64(v.walk)]
++}
++
++// transferLinkBuilder is construction-local. Its identity map is discarded
++// after preparation; only one pointer per distinct retained Path stays alive.
++// Paths are interned by pointer, not value, preserving ownership and identity.
++type transferLinkBuilder struct {
++	data     *transferLinkData
++	paths    map[*paper.Path]uint32
++	owned    bool
++	lastPath *paper.Path
++	lastID   uint32
++	lastOK   bool
++}
++
++func (b *transferLinkBuilder) pack(v link) compactLink {
++	// Transfer emission visits all receiving lines for one walking path at a
++	// time. Repeated links for that path need neither a hash lookup nor any
++	// additional allocation. Keep this small fast path inlineable.
++	if uint64(v.trip) <= 1<<31-1 && uint64(v.board) <= 1<<32-1 && b.lastOK && v.walk == b.lastPath {
++		return compactLink{int32(v.trip), uint32(v.board), b.lastID}
++	}
++	return b.packSlow(v)
++}
++
++func (b *transferLinkBuilder) packSlow(v link) compactLink {
++	if !b.owned {
++		// An Index may be shallow-copied for FLASH. Appending to its private pool
++		// must not overwrite a neighbouring owner's unused backing capacity.
++		b.data.paths = b.data.paths[:len(b.data.paths):len(b.data.paths)]
++		b.data.wide = b.data.wide[:len(b.data.wide):len(b.data.wide)]
++		b.owned = true
++	}
++	const maxTrip = uint64(1<<31 - 1)
++	const maxWord = uint64(1<<32 - 1)
++	if v.trip >= 0 && uint64(v.trip) <= maxTrip && v.board >= 0 && uint64(v.board) <= maxWord {
++		if b.paths == nil {
++			b.paths = make(map[*paper.Path]uint32, len(b.data.paths))
++			for i, path := range b.data.paths {
++				b.paths[path] = uint32(i)
++			}
++		}
++		id, exists := b.paths[v.walk]
++		if exists {
++			b.lastPath, b.lastID, b.lastOK = v.walk, id, true
++			return compactLink{int32(v.trip), uint32(v.board), id}
++		}
++		if uint64(len(b.data.paths)) <= maxWord {
++			id = uint32(len(b.data.paths))
++			b.data.paths = append(b.data.paths, v.walk)
++			b.paths[v.walk] = id
++			b.lastPath, b.lastID, b.lastOK = v.walk, id, true
++			return compactLink{int32(v.trip), uint32(v.board), id}
++		}
++	}
++	id := uint64(len(b.data.wide))
++	b.data.wide = append(b.data.wide, v)
++	return compactLink{-1, uint32(id >> 32), uint32(id)}
++}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash.go
+@@ -341,9 +341,9 @@
+ 	}
+ 	cp := *x.base
+ 	if c.Semantics == "" {
+-		cp.links = make([][][]link, len(cp.trips))
++		cp.links = make([][][]compactLink, len(cp.trips))
+ 		for ti, t := range cp.trips {
+-			cp.links[ti] = make([][]link, len(t.cs))
++			cp.links[ti] = make([][]compactLink, len(t.cs))
+ 		}
+ 	}
+ 	x.cp = &cp
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_profile.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_profile.go
+@@ -235,7 +235,8 @@
+ 						x.snap.Stats.LocalPruned++
+ 						continue
+ 					}
+-					for ei, tr := range x.cp.links[seg.trip][i] {
++					for ei, packed := range x.cp.links[seg.trip][i] {
++						tr := x.cp.linkData.unpack(packed)
+ 						if e := p.w.tick(); e != nil {
+ 							return e
+ 						}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_retained.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_retained.go
+@@ -259,7 +259,8 @@
+ 				if n == k {
+ 					continue
+ 				}
+-				for _, tr := range x.cp.links[seg.trip][i] {
++				for _, packed := range x.cp.links[seg.trip][i] {
++					tr := x.cp.linkData.unpack(packed)
+ 					if e := p.w.tick(); e != nil {
+ 						return e
+ 					}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_rules.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_rules.go
+@@ -31,7 +31,8 @@
+ 		x.ruleOffsets[ti] = make([]int, len(t.cs))
+ 		for i, links := range x.cp.links[ti] {
+ 			x.ruleOffsets[ti][i] = x.ruleTransferCount
+-			for _, tr := range links {
++			for _, packed := range links {
++				tr := x.cp.linkData.unpack(packed)
+ 				if e := w.tick(); e != nil {
+ 					return e
+ 				}
+@@ -84,7 +85,8 @@
+ 	out := make([]FlashTransfer, 0, x.ruleTransferCount)
+ 	for ti, t := range x.cp.trips {
+ 		for i, links := range x.cp.links[ti] {
+-			for j, tr := range links {
++			for j, packed := range links {
++				tr := x.cp.linkData.unpack(packed)
+ 				raw := []string{}
+ 				for _, e := range tr.walk.Edges {
+ 					raw = append(raw, e.ID)
+@@ -151,7 +153,8 @@
+ 				dst[cell/64] |= uint64(1) << uint(cell%64)
+ 			}
+ 		}
+-		for _, tr := range x.cp.links[ev.trip][ev.pos] {
++		for _, packed := range x.cp.links[ev.trip][ev.pos] {
++			tr := x.cp.linkData.unpack(packed)
+ 			if e := w.tick(); e != nil {
+ 				return e
+ 			}
+@@ -169,7 +172,8 @@
+ 	}
+ 	for ti, exits := range x.cp.links {
+ 		for i, links := range exits {
+-			for j, tr := range links {
++			for j, packed := range links {
++				tr := x.cp.linkData.unpack(packed)
+ 				if e := w.tick(); e != nil {
+ 					return e
+ 				}
+@@ -287,7 +291,8 @@
+ 				if n == k {
+ 					continue
+ 				}
+-				for _, tr := range x.cp.links[ti][i] {
++				for _, packed := range x.cp.links[ti][i] {
++					tr := x.cp.linkData.unpack(packed)
+ 					if e := enqueue(n+1, tr.trip, tr.board, path, tr.walk); e != nil {
+ 						return e
+ 					}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_transfers.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/flash_transfers.go
+@@ -137,6 +137,7 @@
+ type flashKey struct{ from, exit, to, board int }
+ 
+ func (x *FlashIndex) transULTRA(w *flashWork) error {
++	linkBuilder := transferLinkBuilder{data: &x.cp.linkData}
+ 	keys := map[flashKey]int{}
+ 	x.transferIDs = make([][][]int, len(x.base.trips))
+ 	for i, t := range x.base.trips {
+@@ -200,7 +201,7 @@
+ 				}
+ 				id := len(x.snap.Transfers)
+ 				keys[k] = id
+-				x.cp.links[k.from][k.exit] = append(x.cp.links[k.from][k.exit], link{k.to, k.board, walk})
++				x.cp.links[k.from][k.exit] = append(x.cp.links[k.from][k.exit], linkBuilder.pack(link{k.to, k.board, walk}))
+ 				x.transferIDs[k.from][k.exit] = append(x.transferIDs[k.from][k.exit], id)
+ 				raw := []string{}
+ 				for _, e := range walk.Edges {
+@@ -219,10 +220,10 @@
+ 				order[j] = j
+ 			}
+ 			sort.Slice(order, func(a, b int) bool {
+-				u, v := links[order[a]], links[order[b]]
++				u, v := x.cp.linkData.unpack(links[order[a]]), x.cp.linkData.unpack(links[order[b]])
+ 				return x.eventOffset[u.trip]+u.board < x.eventOffset[v.trip]+v.board
+ 			})
+-			ll := make([]link, len(links))
++			ll := make([]compactLink, len(links))
+ 			ii := make([]int, len(ids))
+ 			for j, k := range order {
+ 				ll[j] = links[k]
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/index.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/index.go
+@@ -47,13 +47,14 @@
+ 	walk        *paper.Path
+ }
+ type Index struct {
+-	p     *paper.Profile
+-	cfg   Config
+-	trips []trip
+-	lines []line
+-	at    map[string][]occurrence
+-	links [][][]link
+-	prep  Preparation
++	p        *paper.Profile
++	cfg      Config
++	trips    []trip
++	lines    []line
++	at       map[string][]occurrence
++	links    [][][]compactLink
++	linkData transferLinkData
++	prep     Preparation
+ }
+ 
+ func (x *Index) Preparation() Preparation { return x.prep }
+@@ -174,8 +175,9 @@
+ 	if !transfers {
+ 		return x, nil
+ 	}
+-	x.links = make([][][]link, len(x.trips))
++	x.links = make([][][]compactLink, len(x.trips))
+ 	storage := transferLinkStorage{limit: cfg.MaxTransfers}
++	linkBuilder := transferLinkBuilder{data: &x.linkData}
+ 	// Query-independent closure: no destination is absorbing during preparation.
+ 	// Legacy Search requires egress >= intermediate walk so a path passing its
+ 	// destination is dominated by terminating there. SearchCappedWalking instead
+@@ -183,7 +185,7 @@
+ 	prepQuery := model.Query{AccessibleOnly: cfg.AccessibleOnly, TransferBuffer: cfg.TransferBuffer, Walking: &model.WalkingLimits{Transfer: cfg.TransferWalkingLimit}}
+ 	walker := p.Walker(prepQuery)
+ 	for ti, t := range x.trips {
+-		x.links[ti] = make([][]link, len(t.cs))
++		x.links[ti] = make([][]compactLink, len(t.cs))
+ 		if !p.TripAllowed(prepQuery, t.id) {
+ 			continue
+ 		}
+@@ -232,7 +234,7 @@
+ 					if x.prep.Transfers == cfg.MaxTransfers {
+ 						return nil, fmt.Errorf("Trip-Based preprocessing incomplete: transfer budget %d exhausted", cfg.MaxTransfers)
+ 					}
+-					storage.append(link{u, o.position, w})
++					storage.append(linkBuilder.pack(link{u, o.position, w}))
+ 					x.prep.Transfers++
+ 				}
+ 			}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/query.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/query.go
+@@ -198,7 +198,7 @@
+ 				if boards == q.MaxBoardings || i >= s.end || c.Arrival >= best.Time {
+ 					continue
+ 				}
+-				for ei, tr := range x.links[s.trip][i] {
++				for ei, packed := range x.links[s.trip][i] {
+ 					out.Stats.Transfers++
+ 					if filter != nil && !filter(s.trip, i, ei) {
+ 						out.Stats.FlagRejected++
+@@ -210,6 +210,7 @@
+ 							return
+ 						}
+ 					}
++					tr := x.linkData.unpack(packed)
+ 					if tr.walk.Duration > q.Walking.Transfer || c.Arrival+tr.walk.Duration > q.LatestArrival || x.trips[tr.trip].cs[tr.board].Arrival > q.LatestArrival {
+ 						continue
+ 					}
+--- a/vendor/github.com/ertyoii/transit-routing-go/tripbased/transfer_storage.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/tripbased/transfer_storage.go
+@@ -6,14 +6,14 @@
+ // A finished row has no spare capacity, so a later append cannot overwrite
+ // a neighbouring row. The builder is construction-local, not a shared cache.
+ type transferLinkStorage struct {
+-	data                  []link
++	data                  []compactLink
+ 	start, emitted, limit int
+ }
+ 
+ const transferLinkChunk = 4096
+ 
+ func (s *transferLinkStorage) begin() { s.start = len(s.data) }
+-func (s *transferLinkStorage) append(v link) {
++func (s *transferLinkStorage) append(v compactLink) {
+ 	if len(s.data) == cap(s.data) {
+ 		n := len(s.data) - s.start
+ 		// No row can exceed the remaining declared transfer count. Multiplication
+@@ -26,7 +26,7 @@
+ 				capacity = 2 * n
+ 			}
+ 		}
+-		next := make([]link, n, capacity)
++		next := make([]compactLink, n, capacity)
+ 		copy(next, s.data[s.start:])
+ 		s.data = next
+ 		s.start = 0
+@@ -34,7 +34,7 @@
+ 	s.data = append(s.data, v)
+ 	s.emitted++
+ }
+-func (s *transferLinkStorage) finish() []link {
++func (s *transferLinkStorage) finish() []compactLink {
+ 	if s.start == len(s.data) {
+ 		return nil
+ 	}
+--- a/vendor/github.com/ertyoii/transit-routing-go/ultra/capped_search.go
++++ b/vendor/github.com/ertyoii/transit-routing-go/ultra/capped_search.go
+@@ -299,7 +299,7 @@
+ 							nextStops = append(nextStops, path.to)
+ 							nextSet[path.to] = true
+ 						}
+-						next[path.to] = paper.Label{Time: ready, Parent: path.Append(parent, c.Arrival)}
++						next[path.to] = paper.Label{Time: ready, Parent: path.Path.Append(parent, c.Arrival)}
+ 					}
+ 				}
+ 			}
